@@ -1,4 +1,5 @@
 pluginManagement {
+    includeBuild("build-logic")
     repositories {
         google()
         mavenCentral()
@@ -15,4 +16,14 @@ dependencyResolutionManagement {
 
 rootProject.name = "GOMS-Android-V2"
 include(":app")
- 
+
+include(":core")
+
+include(":feature")
+include(":core:data")
+include(":core:domain")
+include(":core:design-system")
+include(":core:model")
+include(":core:data:repository")
+include(":feature:login")
+include(":feature:sign-up")
