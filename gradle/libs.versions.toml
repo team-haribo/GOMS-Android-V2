@@ -47,6 +47,7 @@ retrofitKotlinxSerializableJson = "1.0.0"
 room = "2.6.1"
 org-jetbrains-kotlin-android = "1.8.10"
 lifecycle-runtime-ktx = "2.6.2"
+gauth = "v1.1.2"
 
 [libraries]
 #Define Library
@@ -103,6 +104,7 @@ retrofit-kotlin-serialization = { group = "com.jakewharton.retrofit", name = "re
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+gauth = { group = "com.github.GSM-MSG", name = "GAuth-Signin-Android", version.ref = "gauth" }
 
 #Define Dependeicies used in build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
