@@ -12,12 +12,12 @@ fun ApplySystemUi(isDarkTheme: Boolean) {
     val view = LocalView.current
     val context = view.context as? Activity ?: return
 
-    val statusBarColor = Color.Transparent
+    val statusBarColor = if (isDarkTheme) Color.Black else Color.White
     val navigationBarColor = if (isDarkTheme) Color.Black else Color.White
 
     WindowCompat.setDecorFitsSystemWindows(context.window, false)
     val insetsController = WindowCompat.getInsetsController(context.window, view)
-    insetsController.isAppearanceLightStatusBars = isDarkTheme
+    insetsController.isAppearanceLightStatusBars = !isDarkTheme
     context.window.statusBarColor = statusBarColor.toArgb()
     context.window.navigationBarColor = navigationBarColor.toArgb()
 }
