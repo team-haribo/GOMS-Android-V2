@@ -1,5 +1,6 @@
 package com.goms.login
 
+import android.content.pm.ActivityInfo
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -21,6 +22,7 @@ import com.goms.design_system.component.text.LinkText
 import com.goms.design_system.component.view.GAuthWebView
 import com.goms.design_system.icon.GomsIcon
 import com.goms.design_system.theme.GomsTheme
+import com.goms.design_system.util.lockScreenOrientation
 import com.goms.login.component.LoginText
 
 @Composable
@@ -40,6 +42,7 @@ fun LoginScreen(
 ) {
     var webViewVisible by remember { mutableStateOf(false) }
 
+    lockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_LOCKED)
     GomsTheme { colors, typography ->
         Column(
             modifier = Modifier
