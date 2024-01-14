@@ -3,11 +3,16 @@ package com.goms.design_system.component.textfield
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
@@ -17,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusManager
@@ -26,9 +32,12 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.goms.design_system.component.modifier.gomsClickable
 import com.goms.design_system.theme.GomsTheme
 
 @Composable
@@ -61,7 +70,9 @@ fun GomsTextField(
             OutlinedTextField(
                 value = setText,
                 onValueChange = {
-                    onValueChange(it)
+                    if (it.length <= 4) {
+                        onValueChange(it)
+                    }
                 },
                 keyboardOptions = keyboardOptions,
                 keyboardActions = keyboardActions,
@@ -121,10 +132,117 @@ fun GomsTextField(
                     Text(
                         text = errorText,
                         color = colors.N5,
-                        style = typography.caption
+                        style = typography.buttonLarge
                     )
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun NumberTextField(
+    text: String,
+    isError: Boolean,
+    errorText: String = "",
+    onValueChange: (String) -> Unit,
+    onResendClick: () -> Unit,
+    content: @Composable ColumnScope.() -> Unit
+) {
+    GomsTheme { colors, typography ->
+        Column {
+            BasicTextField(
+                value = text.take(4),
+                onValueChange = {
+                    onValueChange(it)
+                },
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                decorationBox = {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        text.forEachIndexed { index, char ->
+                            NumberTextFieldCharContainer(
+                                modifier = Modifier.weight(1f),
+                                text = char,
+                                isError = isError
+                            )
+                        }
+                        repeat(4 - text.length) {
+                            NumberTextFieldCharContainer(
+                                modifier = Modifier.weight(1f),
+                                text = ' ',
+                                isError = isError
+                            )
+                        }
+                    }
+                },
+                singleLine = true
+            )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(32.dp)
+                    .padding(horizontal = 8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                if (isError) {
+                    Text(
+                        text = errorText,
+                        color = colors.N5,
+                        style = typography.buttonLarge
+                    )
+                } else {
+                    Column {
+                        content()
+                    }
+                }
+                Text(
+                    modifier = Modifier.gomsClickable { onResendClick() },
+                    text = "재발송",
+                    color = colors.I5,
+                    style = typography.buttonLarge
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun NumberTextFieldCharContainer(
+    modifier: Modifier,
+    text: Char,
+    isError: Boolean,
+) {
+    val shape = remember { RoundedCornerShape(12.dp) }
+
+    GomsTheme { colors, typography ->
+        Box(
+            modifier = modifier
+                .size(
+                    width = 74.dp,
+                    height = 64.dp,
+                )
+                .background(
+                    color = colors.G1,
+                    shape = shape,
+                )
+                .border(
+                    width = 1.dp,
+                    color = if (isError) colors.N5 else colors.WHITE.copy(0.15f),
+                    shape = shape
+                ),
+            contentAlignment = Alignment.Center,
+        ) {
+            Text(
+                text = text.toString(),
+                color = colors.WHITE,
+                style = typography.titleSmall,
+                fontWeight = FontWeight.SemiBold,
+                textAlign = TextAlign.Center
+            )
         }
     }
 }
@@ -142,7 +260,6 @@ fun GomsTextFieldPreview() {
             onValueChange = {},
             setText = ""
         )
-
         GomsTextField(
             modifier = Modifier.fillMaxWidth(),
             placeHolder = "Test",
@@ -150,6 +267,21 @@ fun GomsTextFieldPreview() {
             errorText = "오류",
             onValueChange = {},
             setText = ""
+        )
+        NumberTextField(
+            text = "1234",
+            isError = false,
+            onValueChange = {},
+            onResendClick = {},
+            content = {}
+        )
+        NumberTextField(
+            text = "1234",
+            isError = true,
+            errorText = "오류",
+            onValueChange = {},
+            onResendClick = {},
+            content = {}
         )
     }
 }
