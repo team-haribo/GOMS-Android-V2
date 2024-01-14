@@ -4,8 +4,8 @@ import android.content.pm.ActivityInfo
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -27,17 +27,17 @@ import com.goms.login.component.LoginText
 
 @Composable
 fun LoginRoute(
-    onNumberLoginClick: () -> Unit
+    onEmailLoginClick: () -> Unit
 ) {
     LoginScreen(
-        onNumberLoginClick = onNumberLoginClick,
+        onEmailLoginClick = onEmailLoginClick,
         loginCallBack = {}
     )
 }
 
 @Composable
 fun LoginScreen(
-    onNumberLoginClick: () -> Unit,
+    onEmailLoginClick: () -> Unit,
     loginCallBack: (code: String) -> Unit
 ) {
     var webViewVisible by remember { mutableStateOf(false) }
@@ -57,12 +57,12 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(48.dp))
             LoginText()
             Spacer(modifier = Modifier.height(136.dp))
-            AuthButton {
+            AuthButton(modifier = Modifier.fillMaxWidth()) {
                 webViewVisible = true
             }
             Spacer(modifier = Modifier.height(16.dp))
             LinkText(text = "인증번호로 로그인하기") {
-                onNumberLoginClick()
+                onEmailLoginClick()
             }
             Spacer(modifier = Modifier.height(16.dp))
         }
