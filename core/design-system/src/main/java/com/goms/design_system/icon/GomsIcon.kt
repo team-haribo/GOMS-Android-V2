@@ -12,7 +12,18 @@ fun GomsIcon(
 ) {
     Image(
         painter = painterResource(id = R.drawable.ic_goms),
-        contentDescription = "Miso Color Icon",
+        contentDescription = "Goms Icon",
+        modifier = modifier
+    )
+}
+
+@Composable
+fun GAuthIcon(
+    modifier: Modifier = Modifier,
+) {
+    Image(
+        painter = painterResource(id = R.drawable.ic_gauth),
+        contentDescription = "GAuth Icon",
         modifier = modifier
     )
 }
