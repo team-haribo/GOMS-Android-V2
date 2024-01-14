@@ -18,6 +18,50 @@ import com.goms.design_system.icon.GAuthIcon
 import com.goms.design_system.theme.GomsTheme
 
 @Composable
+fun GomsButton(
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    text: String,
+    state: ButtonState = ButtonState.Normal,
+    onClick: () -> Unit,
+) {
+    GomsTheme { colors, typography ->
+        val backgroundColor: (buttonState: ButtonState) -> Color = {
+            when (it) {
+                ButtonState.Enable -> Color(0xFFB2B2B2)
+                ButtonState.Normal -> colors.P5
+                ButtonState.Logout -> colors.N5
+            }
+        }
+
+        val contentColor: (buttonState: ButtonState) -> Color = {
+            when (it) {
+                ButtonState.Enable -> Color(0xFF666666)
+                ButtonState.Normal -> Color.White
+                ButtonState.Logout -> Color.White
+            }
+        }
+
+        Button(
+            modifier = modifier.height(48.dp),
+            enabled = enabled,
+            shape = RoundedCornerShape(12.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = backgroundColor(state),
+                contentColor = contentColor(state),
+            ),
+            onClick = { if (state != ButtonState.Enable) onClick() }
+        ) {
+            Text(
+                text = text,
+                style = typography.buttonLarge,
+                fontWeight = FontWeight.SemiBold
+            )
+        }
+    }
+}
+
+@Composable
 fun AuthButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit
@@ -40,5 +84,31 @@ fun AuthButton(
                 fontWeight = FontWeight.SemiBold
             )
         }
+    }
+}
+
+@Composable
+@Preview(showBackground = true)
+fun GomsButtonPreview() {
+    Column {
+        GomsButton(
+            modifier = Modifier.fillMaxWidth(),
+            text = "버튼",
+            state = ButtonState.Enable,
+            onClick = {}
+        )
+        GomsButton(
+            modifier = Modifier.fillMaxWidth(),
+            text = "버튼",
+            state = ButtonState.Normal,
+            onClick = {}
+        )
+        GomsButton(
+            modifier = Modifier.fillMaxWidth(),
+            text = "버튼",
+            state = ButtonState.Logout,
+            onClick = {}
+        )
+        AuthButton(modifier = Modifier.fillMaxWidth()) {}
     }
 }
