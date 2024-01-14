@@ -19,7 +19,7 @@ object DarkColor : ColorTheme() {
     override val I3 = Color(0xFF0947AA)
     override val I4 = Color(0xFF0B5BDA)
     override val I5 = Color(0xFF2573F3)
-    override val I6 = Color(0xFF558EF6)
+    override val I6 = Color(0xFF2E80CC)
     override val I7 = Color(0xFF86B2F9)
     override val I8 = Color(0xFFB6D1FB)
     override val I9 = Color(0xFFE7F0FE)
