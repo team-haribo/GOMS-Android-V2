@@ -1,16 +1,15 @@
-@Suppress("DSL_SCOPE_VIOLATION")
+@Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
-    id("goms.android.core")
-    id("goms.android.hilt")
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.org.jetbrains.kotlin.android)
 }
 
 android {
-    namespace = "com.goms.data"
+    namespace = "com.goms.network"
 }
 
 dependencies {
     implementation(project(":core:model"))
-    implementation(project(":core:network"))
 
     implementation(libs.kotlinx.datetime)
     implementation(libs.kotlinx.serialization.json)
