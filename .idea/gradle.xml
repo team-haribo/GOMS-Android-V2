@@ -34,7 +34,6 @@
             <option value="$PROJECT_DIR$/core/model" />
             <option value="$PROJECT_DIR$/feature" />
             <option value="$PROJECT_DIR$/feature/login" />
-            <option value="$PROJECT_DIR$/feature/sign-up" />
           </set>
         </option>
       </GradleProjectSettings>
