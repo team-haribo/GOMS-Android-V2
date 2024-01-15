@@ -9,6 +9,8 @@ import com.goms.login.navigation.loginRoute
 import com.goms.login.navigation.loginScreen
 import com.goms.login.navigation.navigateToEmailLogin
 import com.goms.login.navigation.navigateToLogin
+import com.goms.login.navigation.navigateToNumberLogin
+import com.goms.login.navigation.numberLoginScreen
 
 @Composable
 fun GomsNavHost(
@@ -27,7 +29,8 @@ fun GomsNavHost(
         )
         emailLoginScreen(
             onLoginClick = navController::navigateToLogin,
-            onNumberLoginClick = navController::navigateToLogin
+            onNumberLoginClick = navController::navigateToNumberLogin
         )
+        numberLoginScreen()
     }
 }

@@ -1,6 +1,5 @@
 package com.goms.login
 
-import android.annotation.SuppressLint
 import android.content.pm.ActivityInfo
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
@@ -36,7 +35,7 @@ import com.goms.design_system.util.lockScreenOrientation
 import com.goms.login.component.NumberLoginText
 
 @Composable
-fun EmailRoute(
+fun EmailLoginRoute(
     onLoginClick: () -> Unit,
     onNumberLoginClick: () -> Unit
 ) {
@@ -46,7 +45,6 @@ fun EmailRoute(
     )
 }
 
-@SuppressLint("UnusedContentLambdaTargetStateParameter")
 @Composable
 fun EmailLoginScreen(
     onLoginClick: () -> Unit,
@@ -58,8 +56,8 @@ fun EmailLoginScreen(
     val animatedSpacerHeight by animateDpAsState(targetValue = if (isHidden) 16.dp else 160.dp)
 
     var email by remember { mutableStateOf("") }
-    var isEmailError by remember { mutableStateOf(true) }
-    var errorText by remember { mutableStateOf("에러") }
+    var isEmailError by remember { mutableStateOf(false) }
+    var errorText by remember { mutableStateOf("") }
 
     LaunchedEffect(isKeyboardOpen) {
         if (isKeyboardOpen) {
