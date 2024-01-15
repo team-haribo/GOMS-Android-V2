@@ -1,4 +1,4 @@
-package com.goms.network.exception
+package com.goms.common.exception
 
 // 400: 올바르지 않은 요청
 class BadRequestException(

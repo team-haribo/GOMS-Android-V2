@@ -1,4 +1,4 @@
-package com.goms.network.exception
+package com.goms.common.exception
 
 class NoInternetException : RuntimeException() {
     override val message: String

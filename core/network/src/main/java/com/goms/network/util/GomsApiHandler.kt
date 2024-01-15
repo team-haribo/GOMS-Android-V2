@@ -1,7 +1,7 @@
 package com.goms.network.util
 
 import android.util.Log
-import com.goms.network.exception.*
+import com.goms.common.exception.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException

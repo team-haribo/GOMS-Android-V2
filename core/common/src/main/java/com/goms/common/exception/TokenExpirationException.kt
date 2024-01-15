@@ -1,4 +1,4 @@
-package com.goms.network.exception
+package com.goms.common.exception
 
 import java.io.IOException
 
