@@ -37,7 +37,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.goms.design_system.component.modifier.gomsClickable
+import com.goms.design_system.component.timer.CountdownTimer
 import com.goms.design_system.theme.GomsTheme
 
 @Composable
@@ -147,8 +147,11 @@ fun NumberTextField(
     errorText: String = "",
     onValueChange: (String) -> Unit,
     onResendClick: () -> Unit,
-    content: @Composable ColumnScope.() -> Unit
 ) {
+    val isFocused = remember { mutableStateOf(false) }
+    val isError = remember { mutableStateOf(isError) }
+    val errorText = remember { mutableStateOf(errorText) }
+
     GomsTheme { colors, typography ->
         Column {
             BasicTextField(
@@ -164,48 +167,35 @@ fun NumberTextField(
                     ) {
                         text.forEachIndexed { index, char ->
                             NumberTextFieldCharContainer(
-                                modifier = Modifier.weight(1f),
+                                modifier = Modifier,
                                 text = char,
-                                isError = isError
+                                isError = isError.value
                             )
                         }
                         repeat(4 - text.length) {
                             NumberTextFieldCharContainer(
-                                modifier = Modifier.weight(1f),
+                                modifier = Modifier,
                                 text = ' ',
-                                isError = isError
+                                isError = isError.value
                             )
                         }
                     }
                 },
                 singleLine = true
             )
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(32.dp)
-                    .padding(horizontal = 8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                if (isError) {
-                    Text(
-                        text = errorText,
-                        color = colors.N5,
-                        style = typography.buttonLarge
-                    )
-                } else {
-                    Column {
-                        content()
-                    }
+            CountdownTimer(
+                isError = isError.value,
+                errorText = errorText.value,
+                onTimerFinish = {
+                    isError.value = true
+                    errorText.value = "시간이 만료되었습니다"
+                },
+                onTimerReset = {
+                    isError.value = false
+                    errorText.value = ""
+                    onResendClick()
                 }
-                Text(
-                    modifier = Modifier.gomsClickable { onResendClick() },
-                    text = "재발송",
-                    color = colors.I5,
-                    style = typography.buttonLarge
-                )
-            }
+            )
         }
     }
 }
@@ -273,7 +263,6 @@ fun GomsTextFieldPreview() {
             isError = false,
             onValueChange = {},
             onResendClick = {},
-            content = {}
         )
         NumberTextField(
             text = "1234",
@@ -281,7 +270,6 @@ fun GomsTextFieldPreview() {
             errorText = "오류",
             onValueChange = {},
             onResendClick = {},
-            content = {}
         )
     }
 }
