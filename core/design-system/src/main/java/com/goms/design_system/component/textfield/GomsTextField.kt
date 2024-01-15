@@ -70,9 +70,7 @@ fun GomsTextField(
             OutlinedTextField(
                 value = setText,
                 onValueChange = {
-                    if (it.length <= 4) {
-                        onValueChange(it)
-                    }
+                    onValueChange(it)
                 },
                 keyboardOptions = keyboardOptions,
                 keyboardActions = keyboardActions,
@@ -148,7 +146,6 @@ fun NumberTextField(
     onValueChange: (String) -> Unit,
     onResendClick: () -> Unit,
 ) {
-    val isFocused = remember { mutableStateOf(false) }
     val isError = remember { mutableStateOf(isError) }
     val errorText = remember { mutableStateOf(errorText) }
 
@@ -157,7 +154,9 @@ fun NumberTextField(
             BasicTextField(
                 value = text.take(4),
                 onValueChange = {
-                    onValueChange(it)
+                    if (it.length <= 4) {
+                        onValueChange(it)
+                    }
                 },
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
                 decorationBox = {
