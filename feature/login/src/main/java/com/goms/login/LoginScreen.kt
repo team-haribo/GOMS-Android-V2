@@ -17,6 +17,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.goms.common.Event
 import com.goms.design_system.component.button.AuthButton
 import com.goms.design_system.component.text.LinkText
 import com.goms.design_system.component.view.GAuthWebView
@@ -24,15 +26,29 @@ import com.goms.design_system.icon.GomsIcon
 import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.util.lockScreenOrientation
 import com.goms.login.component.LoginText
+import com.goms.login.viewmodel.AuthViewModel
+import com.goms.model.request.auth.LoginRequest
 
 @Composable
 fun LoginRoute(
-    onEmailLoginClick: () -> Unit
+    onEmailLoginClick: () -> Unit,
+    viewModel: AuthViewModel = hiltViewModel()
 ) {
     LoginScreen(
         onEmailLoginClick = onEmailLoginClick,
-        loginCallBack = {}
+        loginCallBack = { code ->
+            viewModel.login(body = LoginRequest(code))
+        }
     )
+}
+
+suspend fun login(viewModel: AuthViewModel) {
+    viewModel.loginResponse.collect {
+        when (it) {
+            is Event.Success -> {}
+            else -> {}
+        }
+    }
 }
 
 @Composable
