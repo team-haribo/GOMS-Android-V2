@@ -1,9 +1,13 @@
 package com.goms.model.response.auth
 
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
+
+@JsonClass(generateAdapter = true)
 data class LoginResponse(
-    val accessToken: String,
-    val refreshToken: String,
-    val accessTokenExp: String,
-    val refreshTokenExp: String,
-    val authority: String
+    @Json(name = "accessToken") val accessToken: String,
+    @Json(name = "refreshToken") val refreshToken: String,
+    @Json(name = "accessTokenExp") val accessTokenExp: String,
+    @Json(name = "refreshTokenExp") val refreshTokenExp: String,
+    @Json(name = "authority") val authority: String
 )
