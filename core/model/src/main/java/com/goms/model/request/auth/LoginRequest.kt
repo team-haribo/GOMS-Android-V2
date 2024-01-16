@@ -1,5 +1,9 @@
 package com.goms.model.request.auth
 
+import com.squareup.moshi.JsonClass
+import com.squareup.moshi.Json
+
+@JsonClass(generateAdapter = true)
 data class LoginRequest(
-    val code: String
+    @Json(name = "code") val code: String
 )
