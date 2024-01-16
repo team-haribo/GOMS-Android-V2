@@ -6,4 +6,5 @@ plugins {
 dependencies {
     implementation(libs.kotlinx.datetime)
     implementation(libs.moshi)
+    ksp(libs.retrofit.moshi.codegen)
 }
