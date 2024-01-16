@@ -3,6 +3,7 @@ package com.goms.network.di
 import android.util.Log
 import com.goms.network.BuildConfig
 import com.goms.network.api.AuthAPI
+import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -39,20 +40,26 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideConverterFactory(): MoshiConverterFactory {
-        return MoshiConverterFactory.create()
+    fun provideMoshiInstance(): Moshi {
+        return Moshi.Builder().build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideConverterFactory(moshi: Moshi): MoshiConverterFactory {
+        return MoshiConverterFactory.create(moshi)
     }
 
     @Provides
     @Singleton
     fun provideRetrofitInstance(
         okHttpClient: OkHttpClient,
-        gsonConverterFactory: MoshiConverterFactory,
+        moshiConverterFactory: MoshiConverterFactory,
     ): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL)
             .client(okHttpClient)
-            .addConverterFactory(gsonConverterFactory)
+            .addConverterFactory(moshiConverterFactory)
             .build()
     }
 
