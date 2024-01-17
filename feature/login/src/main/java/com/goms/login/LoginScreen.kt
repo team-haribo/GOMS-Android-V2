@@ -1,6 +1,7 @@
 package com.goms.login
 
 import android.content.pm.ActivityInfo
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -18,7 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.goms.common.Event
+import com.goms.common.result.Result
 import com.goms.design_system.component.button.AuthButton
 import com.goms.design_system.component.text.LinkText
 import com.goms.design_system.component.view.GAuthWebView
@@ -45,8 +46,10 @@ fun LoginRoute(
 suspend fun login(viewModel: AuthViewModel) {
     viewModel.loginResponse.collect {
         when (it) {
-            is Event.Success -> {}
-            else -> {}
+            is Result.Success -> {
+                viewModel.saveToken(token = it.data)
+            }
+            else -> { Log.d("testt", "$it") }
         }
     }
 }
