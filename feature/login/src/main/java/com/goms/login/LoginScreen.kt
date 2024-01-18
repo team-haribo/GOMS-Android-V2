@@ -21,6 +21,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.goms.common.result.Result
 import com.goms.design_system.component.button.AuthButton
+import com.goms.design_system.component.button.ButtonState
+import com.goms.design_system.component.button.GomsButton
 import com.goms.design_system.component.text.LinkText
 import com.goms.design_system.component.view.GAuthWebView
 import com.goms.design_system.icon.GomsIcon
@@ -59,8 +61,6 @@ fun LoginScreen(
     onEmailLoginClick: () -> Unit,
     loginCallBack: (code: String) -> Unit
 ) {
-    var webViewVisible by remember { mutableStateOf(false) }
-
     lockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_LOCKED)
     GomsTheme { colors, typography ->
         Column(
@@ -76,19 +76,16 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(48.dp))
             LoginText()
             Spacer(modifier = Modifier.height(136.dp))
-            AuthButton(modifier = Modifier.fillMaxWidth()) {
-                webViewVisible = true
-            }
+            GomsButton(
+                modifier = Modifier.fillMaxWidth(),
+                text = "로그인",
+                state = ButtonState.Normal
+            ) {}
             Spacer(modifier = Modifier.height(16.dp))
-            LinkText(text = "인증번호로 로그인하기") {
+            LinkText(text = "회원가입") {
                 onEmailLoginClick()
             }
             Spacer(modifier = Modifier.height(16.dp))
         }
-        GAuthWebView(
-            webViewVisible = webViewVisible,
-            onChangeWebViewVisible = { webViewVisible = it },
-            loginCallBack = { loginCallBack(it) }
-        )
     }
 }
