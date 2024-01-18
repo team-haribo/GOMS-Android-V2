@@ -49,7 +49,7 @@ suspend fun login(viewModel: AuthViewModel) {
             is Result.Success -> {
                 viewModel.saveToken(token = it.data)
             }
-            else -> { Log.d("testt", "$it") }
+            else -> {}
         }
     }
 }
