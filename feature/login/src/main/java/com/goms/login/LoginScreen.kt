@@ -34,11 +34,11 @@ import com.goms.model.request.auth.LoginRequest
 
 @Composable
 fun LoginRoute(
-    onEmailLoginClick: () -> Unit,
+    onSignUpClick: () -> Unit,
     viewModel: AuthViewModel = hiltViewModel()
 ) {
     LoginScreen(
-        onEmailLoginClick = onEmailLoginClick,
+        onSignUpClick = onSignUpClick,
         loginCallBack = { code ->
             viewModel.login(body = LoginRequest(code))
         }
@@ -58,10 +58,10 @@ suspend fun login(viewModel: AuthViewModel) {
 
 @Composable
 fun LoginScreen(
-    onEmailLoginClick: () -> Unit,
+    onSignUpClick: () -> Unit,
     loginCallBack: (code: String) -> Unit
 ) {
-    lockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_LOCKED)
+    lockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
     GomsTheme { colors, typography ->
         Column(
             modifier = Modifier
@@ -83,7 +83,7 @@ fun LoginScreen(
             ) {}
             Spacer(modifier = Modifier.height(16.dp))
             LinkText(text = "회원가입") {
-                onEmailLoginClick()
+                onSignUpClick()
             }
             Spacer(modifier = Modifier.height(16.dp))
         }
