@@ -27,3 +27,14 @@ fun GAuthIcon(
         modifier = modifier
     )
 }
+
+@Composable
+fun BackIcon(
+    modifier: Modifier = Modifier,
+) {
+    Image(
+        painter = painterResource(id = R.drawable.ic_back),
+        contentDescription = "Back Icon",
+        modifier = modifier
+    )
+}
