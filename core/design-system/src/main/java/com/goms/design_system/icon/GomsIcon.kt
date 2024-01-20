@@ -3,6 +3,8 @@ package com.goms.design_system.icon
 import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import com.goms.design_system.R
 
@@ -36,5 +38,18 @@ fun BackIcon(
         painter = painterResource(id = R.drawable.ic_back),
         contentDescription = "Back Icon",
         modifier = modifier
+    )
+}
+
+@Composable
+fun CloseIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+) {
+    Image(
+        painter = painterResource(id = R.drawable.ic_close),
+        contentDescription = "Close Icon",
+        modifier = modifier,
+        colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
     )
 }
