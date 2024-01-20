@@ -44,7 +44,7 @@ class MainActivity : ComponentActivity() {
         } else {
             doubleBackToExitPressedOnce = true
             backPressedTimestamp = currentTime
-            Toast.makeText(this, "'뒤로' 버튼 한 번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "'뒤로'버튼 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show()
         }
     }
 }
