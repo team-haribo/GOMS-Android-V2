@@ -4,8 +4,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import com.goms.goms_android_v2.ui.GomsAppState
+import com.goms.login.navigation.inputLoginScreen
 import com.goms.login.navigation.loginRoute
 import com.goms.login.navigation.loginScreen
+import com.goms.login.navigation.navigateToInputLogin
+import com.goms.login.navigation.navigateToLogin
 import com.goms.sign_up.navigation.navigateToNumber
 import com.goms.sign_up.navigation.navigateToPassword
 import com.goms.sign_up.navigation.navigateToSignUp
@@ -26,7 +29,11 @@ fun GomsNavHost(
         modifier = modifier
     ) {
         loginScreen(
-            onSignUpClick = navController::navigateToSignUp
+            onSignUpClick = navController::navigateToSignUp,
+            onInputLoginClick = navController::navigateToInputLogin
+        )
+        inputLoginScreen(
+            onBackClick = navController::popBackStack
         )
         signUpScreen(
             onBackClick = navController::popBackStack,
@@ -37,7 +44,8 @@ fun GomsNavHost(
             onPasswordClick = navController::navigateToPassword
         )
         passwordScreen(
-            onBackClick = navController::popBackStack
+            onBackClick = navController::popBackStack,
+            onLoginClick = navController::navigateToLogin
         )
     }
 }
