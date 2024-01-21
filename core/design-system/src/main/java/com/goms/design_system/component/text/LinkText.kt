@@ -40,7 +40,7 @@ fun LinkText(
                 )
                 Text(
                     modifier = Modifier.padding(horizontal = 4.dp),
-                    text = "또는",
+                    text = "처음이라면?",
                     style = typography.caption,
                     fontWeight = FontWeight.Normal,
                     color = colors.G4

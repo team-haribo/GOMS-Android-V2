@@ -21,6 +21,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.goms.common.result.Result
 import com.goms.design_system.component.button.AuthButton
+import com.goms.design_system.component.button.ButtonState
+import com.goms.design_system.component.button.GomsButton
 import com.goms.design_system.component.text.LinkText
 import com.goms.design_system.component.view.GAuthWebView
 import com.goms.design_system.icon.GomsIcon
@@ -32,11 +34,11 @@ import com.goms.model.request.auth.LoginRequest
 
 @Composable
 fun LoginRoute(
-    onEmailLoginClick: () -> Unit,
+    onSignUpClick: () -> Unit,
     viewModel: AuthViewModel = hiltViewModel()
 ) {
     LoginScreen(
-        onEmailLoginClick = onEmailLoginClick,
+        onSignUpClick = onSignUpClick,
         loginCallBack = { code ->
             viewModel.login(body = LoginRequest(code))
         }
@@ -49,19 +51,17 @@ suspend fun login(viewModel: AuthViewModel) {
             is Result.Success -> {
                 viewModel.saveToken(token = it.data)
             }
-            else -> { Log.d("testt", "$it") }
+            else -> {}
         }
     }
 }
 
 @Composable
 fun LoginScreen(
-    onEmailLoginClick: () -> Unit,
+    onSignUpClick: () -> Unit,
     loginCallBack: (code: String) -> Unit
 ) {
-    var webViewVisible by remember { mutableStateOf(false) }
-
-    lockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_LOCKED)
+    lockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
     GomsTheme { colors, typography ->
         Column(
             modifier = Modifier
@@ -76,19 +76,16 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(48.dp))
             LoginText()
             Spacer(modifier = Modifier.height(136.dp))
-            AuthButton(modifier = Modifier.fillMaxWidth()) {
-                webViewVisible = true
-            }
+            GomsButton(
+                modifier = Modifier.fillMaxWidth(),
+                text = "로그인",
+                state = ButtonState.Normal
+            ) {}
             Spacer(modifier = Modifier.height(16.dp))
-            LinkText(text = "인증번호로 로그인하기") {
-                onEmailLoginClick()
+            LinkText(text = "회원가입") {
+                onSignUpClick()
             }
             Spacer(modifier = Modifier.height(16.dp))
         }
-        GAuthWebView(
-            webViewVisible = webViewVisible,
-            onChangeWebViewVisible = { webViewVisible = it },
-            loginCallBack = { loginCallBack(it) }
-        )
     }
 }

@@ -1,4 +1,4 @@
-package com.goms.login
+package com.goms.sign_up
 
 import android.content.pm.ActivityInfo
 import androidx.compose.animation.core.animateDpAsState
@@ -9,8 +9,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -25,39 +27,34 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.goms.design_system.component.button.ButtonState
+import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.button.GomsButton
-import com.goms.design_system.component.text.LinkText
+import com.goms.design_system.component.textfield.GomsPasswordTextField
 import com.goms.design_system.component.textfield.GomsTextField
-import com.goms.design_system.icon.GomsIcon
 import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.util.keyboardAsState
 import com.goms.design_system.util.lockScreenOrientation
-import com.goms.login.component.NumberLoginText
+import com.goms.sign_up.component.PasswordText
 
 @Composable
-fun EmailLoginRoute(
-    onLoginClick: () -> Unit,
-    onNumberLoginClick: () -> Unit
+fun PasswordRoute(
+    onBackClick: () -> Unit
 ) {
-    EmailLoginScreen(
-        onLoginClick = onLoginClick,
-        onNumberLoginClick = onNumberLoginClick
+    PasswordScreen(
+        onBackClick = onBackClick
     )
 }
 
 @Composable
-fun EmailLoginScreen(
-    onLoginClick: () -> Unit,
-    onNumberLoginClick: () -> Unit
+fun PasswordScreen(
+    onBackClick: () -> Unit
 ) {
     val focusManager = LocalFocusManager.current
     val isKeyboardOpen by keyboardAsState()
     var isHidden by remember { mutableStateOf(false) }
-    val animatedSpacerHeight by animateDpAsState(targetValue = if (isHidden) 16.dp else 160.dp)
+    val animatedSpacerHeight by animateDpAsState(targetValue = if (isHidden) 100.dp else 16.dp)
 
-    var email by remember { mutableStateOf("") }
-    var isEmailError by remember { mutableStateOf(false) }
-    var errorText by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
 
     LaunchedEffect(isKeyboardOpen) {
         if (isKeyboardOpen) {
@@ -68,51 +65,48 @@ fun EmailLoginScreen(
         }
     }
 
-    lockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_LOCKED)
+    lockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
     GomsTheme { colors, typography ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .background(colors.BLACK)
+                .statusBarsPadding()
+                .navigationBarsPadding()
+                .imePadding()
                 .pointerInput(Unit) {
                     detectTapGestures {
                         focusManager.clearFocus()
                     }
                 }
-                .background(colors.BLACK)
-                .padding(start = 20.dp, end = 20.dp, top = 50.dp)
-                .navigationBarsPadding(),
-            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.weight(1f))
-            GomsIcon()
-            Spacer(modifier = Modifier.height(48.dp))
-            NumberLoginText()
-            Spacer(modifier = Modifier.height(40.dp))
-            GomsTextField(
-                modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                placeHolder = "이메일",
-                setText = email,
-                isError = isEmailError,
-                errorText = errorText,
-                onValueChange = { emailChange ->
-                    email = emailChange
-                },
-                singleLine = true
-            )
-            Spacer(modifier = Modifier.height(58.5.dp))
-            GomsButton(
-                modifier = Modifier.fillMaxWidth(),
-                text = "인증번호 받기",
-                state = if (email.isNotBlank()) ButtonState.Normal else ButtonState.Enable
+            GomsBackButton {
+                onBackClick()
+            }
+            Column(
+                modifier = Modifier.padding(horizontal = 20.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                onNumberLoginClick()
+                PasswordText(modifier = Modifier.align(Alignment.Start))
+                Spacer(modifier = Modifier.weight(1.1f))
+                GomsPasswordTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                    placeHolder = "비밀번호",
+                    setText = password,
+                    onValueChange = { passwordChange ->
+                        password = passwordChange
+                    },
+                    singleLine = true
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                GomsButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "회원가입",
+                    state = if (password.isNotBlank()) ButtonState.Normal else ButtonState.Enable
+                ) {}
+                Spacer(modifier = Modifier.height(animatedSpacerHeight))
             }
-            Spacer(modifier = Modifier.height(animatedSpacerHeight))
-            LinkText(text = "GAuth로 로그인하기") {
-                onLoginClick()
-            }
-            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }

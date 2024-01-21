@@ -1,4 +1,4 @@
-package com.goms.login
+package com.goms.sign_up
 
 import android.content.pm.ActivityInfo
 import androidx.compose.animation.core.animateDpAsState
@@ -9,8 +9,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -23,25 +25,34 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import com.goms.design_system.component.button.ButtonState
+import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.button.GomsButton
 import com.goms.design_system.component.textfield.NumberTextField
-import com.goms.design_system.icon.GomsIcon
 import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.util.keyboardAsState
 import com.goms.design_system.util.lockScreenOrientation
-import com.goms.login.component.NumberLoginText
+import com.goms.sign_up.component.NumberText
 
 @Composable
-fun NumberLoginRoute() {
-    NumberLoginScreen()
+fun NumberRoute(
+    onBackClick: () -> Unit,
+    onPasswordClick: () -> Unit
+) {
+    NumberScreen(
+        onBackClick = onBackClick,
+        onPasswordClick = onPasswordClick
+    )
 }
 
 @Composable
-fun NumberLoginScreen() {
+fun NumberScreen(
+    onBackClick: () -> Unit,
+    onPasswordClick: () -> Unit
+) {
     val focusManager = LocalFocusManager.current
     val isKeyboardOpen by keyboardAsState()
     var isHidden by remember { mutableStateOf(false) }
-    val animatedSpacerHeight by animateDpAsState(targetValue = if (isHidden) 100.dp else 244.dp)
+    val animatedSpacerHeight by animateDpAsState(targetValue = if (isHidden) 100.dp else 16.dp)
 
     var number by remember { mutableStateOf("") }
     var isNumberError by remember { mutableStateOf(false) }
@@ -61,37 +72,44 @@ fun NumberLoginScreen() {
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .background(colors.BLACK)
+                .statusBarsPadding()
+                .navigationBarsPadding()
+                .imePadding()
                 .pointerInput(Unit) {
                     detectTapGestures {
                         focusManager.clearFocus()
                     }
                 }
-                .background(colors.BLACK)
-                .padding(start = 20.dp, end = 20.dp, top = 50.dp)
-                .navigationBarsPadding(),
-            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.weight(1f))
-            GomsIcon()
-            Spacer(modifier = Modifier.height(48.dp))
-            NumberLoginText()
-            Spacer(modifier = Modifier.height(40.dp))
-            NumberTextField(
-                text = number,
-                isError = isNumberError,
-                errorText = errorText,
-                onValueChange = {
-                    number = it
-                },
-                onResendClick = {}
-            )
-            Spacer(modifier = Modifier.height(58.5.dp))
-            GomsButton(
-                modifier = Modifier.fillMaxWidth(),
-                text = "로그인",
-                state = if (number.isNotBlank()) ButtonState.Normal else ButtonState.Enable
-            ) {}
-            Spacer(modifier = Modifier.height(animatedSpacerHeight))
+            GomsBackButton {
+                onBackClick()
+            }
+            Column(
+                modifier = Modifier.padding(horizontal = 20.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                NumberText(modifier = Modifier.align(Alignment.Start))
+                Spacer(modifier = Modifier.weight(2.1f))
+                NumberTextField(
+                    text = number,
+                    isError = isNumberError,
+                    errorText = errorText,
+                    onValueChange = {
+                        number = it
+                    },
+                    onResendClick = {}
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                GomsButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "인증",
+                    state = if (number.isNotBlank()) ButtonState.Normal else ButtonState.Enable
+                ) {
+                    onPasswordClick()
+                }
+                Spacer(modifier = Modifier.height(animatedSpacerHeight))
+            }
         }
     }
 }

@@ -4,13 +4,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import com.goms.goms_android_v2.ui.GomsAppState
-import com.goms.login.navigation.emailLoginScreen
 import com.goms.login.navigation.loginRoute
 import com.goms.login.navigation.loginScreen
-import com.goms.login.navigation.navigateToEmailLogin
-import com.goms.login.navigation.navigateToLogin
-import com.goms.login.navigation.navigateToNumberLogin
-import com.goms.login.navigation.numberLoginScreen
+import com.goms.sign_up.navigation.navigateToNumber
+import com.goms.sign_up.navigation.navigateToPassword
+import com.goms.sign_up.navigation.navigateToSignUp
+import com.goms.sign_up.navigation.numberScreen
+import com.goms.sign_up.navigation.passwordScreen
+import com.goms.sign_up.navigation.signUpScreen
 
 @Composable
 fun GomsNavHost(
@@ -25,12 +26,18 @@ fun GomsNavHost(
         modifier = modifier
     ) {
         loginScreen(
-            onEmailLoginClick = navController::navigateToEmailLogin
+            onSignUpClick = navController::navigateToSignUp
         )
-        emailLoginScreen(
-            onLoginClick = navController::navigateToLogin,
-            onNumberLoginClick = navController::navigateToNumberLogin
+        signUpScreen(
+            onBackClick = navController::popBackStack,
+            onNumberClick = navController::navigateToNumber
         )
-        numberLoginScreen()
+        numberScreen(
+            onBackClick = navController::popBackStack,
+            onPasswordClick = navController::navigateToPassword
+        )
+        passwordScreen(
+            onBackClick = navController::popBackStack
+        )
     }
 }

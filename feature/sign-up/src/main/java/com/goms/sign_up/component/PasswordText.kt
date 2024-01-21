@@ -1,17 +1,19 @@
-package com.goms.login.component
+package com.goms.sign_up.component
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import com.goms.design_system.theme.GomsTheme
 
 @Composable
-fun NumberLoginText() {
+fun PasswordText(modifier: Modifier) {
     GomsTheme { colors, typography ->
         Text(
-            text = "인증번호로 로그인하기",
-            style = typography.titleSmall,
-            fontWeight = FontWeight.SemiBold,
+            modifier = modifier,
+            text = "비밀번호 설정",
+            style = typography.titleLarge,
+            fontWeight = FontWeight.Bold,
             color = colors.WHITE
         )
     }
