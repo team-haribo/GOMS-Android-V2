@@ -38,16 +38,19 @@ import com.goms.sign_up.component.PasswordText
 
 @Composable
 fun PasswordRoute(
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onLoginClick: () -> Unit
 ) {
     PasswordScreen(
-        onBackClick = onBackClick
+        onBackClick = onBackClick,
+        onLoginClick = onLoginClick
     )
 }
 
 @Composable
 fun PasswordScreen(
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onLoginClick: () -> Unit
 ) {
     val focusManager = LocalFocusManager.current
     val isKeyboardOpen by keyboardAsState()
@@ -104,7 +107,9 @@ fun PasswordScreen(
                     modifier = Modifier.fillMaxWidth(),
                     text = "회원가입",
                     state = if (password.isNotBlank()) ButtonState.Normal else ButtonState.Enable
-                ) {}
+                ) {
+                    onLoginClick()
+                }
                 Spacer(modifier = Modifier.height(animatedSpacerHeight))
             }
         }
