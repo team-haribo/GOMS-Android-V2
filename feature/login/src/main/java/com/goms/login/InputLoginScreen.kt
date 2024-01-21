@@ -1,4 +1,4 @@
-package com.goms.sign_up
+package com.goms.login
 
 import android.content.pm.ActivityInfo
 import androidx.compose.animation.core.animateDpAsState
@@ -25,39 +25,40 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import com.goms.design_system.component.button.ButtonState
 import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.button.GomsButton
-import com.goms.design_system.component.textfield.GomsPasswordTextField
 import com.goms.design_system.component.textfield.GomsTextField
 import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.util.keyboardAsState
 import com.goms.design_system.util.lockScreenOrientation
-import com.goms.sign_up.component.PasswordText
+import com.goms.login.component.InputLoginText
 
 @Composable
-fun PasswordRoute(
-    onBackClick: () -> Unit,
-    onLoginClick: () -> Unit
+fun InputLoginRoute(
+    onBackClick: () -> Unit
 ) {
-    PasswordScreen(
-        onBackClick = onBackClick,
-        onLoginClick = onLoginClick
+    InputLoginScreen(
+        onBackClick = onBackClick
     )
 }
 
 @Composable
-fun PasswordScreen(
-    onBackClick: () -> Unit,
-    onLoginClick: () -> Unit
+fun InputLoginScreen(
+    onBackClick: () -> Unit
 ) {
     val focusManager = LocalFocusManager.current
     val isKeyboardOpen by keyboardAsState()
     var isHidden by remember { mutableStateOf(false) }
     val animatedSpacerHeight by animateDpAsState(targetValue = if (isHidden) 100.dp else 16.dp)
 
+    var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var isEmailError by remember { mutableStateOf(false) }
+    var isPasswordError by remember { mutableStateOf(false) }
+    var errorText by remember { mutableStateOf("") }
 
     LaunchedEffect(isKeyboardOpen) {
         if (isKeyboardOpen) {
@@ -90,26 +91,41 @@ fun PasswordScreen(
                 modifier = Modifier.padding(horizontal = 20.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                PasswordText(modifier = Modifier.align(Alignment.Start))
+                InputLoginText(modifier = Modifier.align(Alignment.Start))
                 Spacer(modifier = Modifier.weight(1.1f))
-                GomsPasswordTextField(
+                GomsTextField(
                     modifier = Modifier.fillMaxWidth(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                    placeHolder = "이메일",
+                    setText = email,
+                    onValueChange = { emailChange ->
+                        email = emailChange
+                    },
+                    isError = isEmailError,
+                    errorText = errorText,
+                    singleLine = true
+                )
+                GomsTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    isEmail = false,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                     placeHolder = "비밀번호",
                     setText = password,
                     onValueChange = { passwordChange ->
                         password = passwordChange
                     },
-                    singleLine = true
+                    isError = isPasswordError,
+                    errorText = errorText,
+                    singleLine = true,
+                    visualTransformation = PasswordVisualTransformation()
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 GomsButton(
                     modifier = Modifier.fillMaxWidth(),
-                    text = "회원가입",
-                    state = if (password.isNotBlank()) ButtonState.Normal else ButtonState.Enable
-                ) {
-                    onLoginClick()
-                }
+                    text = "로그인",
+                    state = if (email.isNotBlank() && password.isNotBlank()) ButtonState.Normal
+                    else ButtonState.Enable
+                ) {}
                 Spacer(modifier = Modifier.height(animatedSpacerHeight))
             }
         }

@@ -48,10 +48,14 @@ fun NavController.navigateToPassword(navOptions: NavOptions? = null) {
     this.navigate(passwordRoute, navOptions)
 }
 
-fun NavGraphBuilder.passwordScreen(onBackClick: () -> Unit, ) {
+fun NavGraphBuilder.passwordScreen(
+    onBackClick: () -> Unit,
+    onLoginClick: () -> Unit
+) {
     composable(route = passwordRoute) {
         PasswordRoute(
-            onBackClick = onBackClick
+            onBackClick = onBackClick,
+            onLoginClick = onLoginClick
         )
     }
 }

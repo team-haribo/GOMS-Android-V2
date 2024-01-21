@@ -35,10 +35,12 @@ import com.goms.model.request.auth.LoginRequest
 @Composable
 fun LoginRoute(
     onSignUpClick: () -> Unit,
+    onInputLoginClick: () -> Unit,
     viewModel: AuthViewModel = hiltViewModel()
 ) {
     LoginScreen(
         onSignUpClick = onSignUpClick,
+        onInputLoginClick = onInputLoginClick,
         loginCallBack = { code ->
             viewModel.login(body = LoginRequest(code))
         }
@@ -59,6 +61,7 @@ suspend fun login(viewModel: AuthViewModel) {
 @Composable
 fun LoginScreen(
     onSignUpClick: () -> Unit,
+    onInputLoginClick: () -> Unit,
     loginCallBack: (code: String) -> Unit
 ) {
     lockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
@@ -80,7 +83,9 @@ fun LoginScreen(
                 modifier = Modifier.fillMaxWidth(),
                 text = "로그인",
                 state = ButtonState.Normal
-            ) {}
+            ) {
+                onInputLoginClick()
+            }
             Spacer(modifier = Modifier.height(16.dp))
             LinkText(text = "회원가입") {
                 onSignUpClick()
