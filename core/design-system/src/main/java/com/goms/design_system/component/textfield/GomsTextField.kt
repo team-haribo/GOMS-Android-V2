@@ -5,8 +5,8 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -33,10 +33,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.goms.design_system.component.modifier.gomsClickable
 import com.goms.design_system.component.timer.CountdownTimer
 import com.goms.design_system.theme.GomsTheme
 
@@ -44,6 +46,7 @@ import com.goms.design_system.theme.GomsTheme
 fun GomsTextField(
     modifier: Modifier = Modifier,
     isError: Boolean = false,
+    isEmail: Boolean = true,
     placeHolder: String = "",
     readOnly: Boolean = false,
     focusManager: FocusManager = LocalFocusManager.current,
@@ -109,13 +112,15 @@ fun GomsTextField(
                     cursorColor = colors.I5
                 ),
                 trailingIcon = {
-                    Text(
-                        modifier = Modifier.padding(end = 16.dp),
-                        text = "@gsm.hs.kr",
-                        style = typography.textMedium,
-                        fontWeight = FontWeight.Normal,
-                        color = if (isError) colors.N5 else colors.G4
-                    )
+                    if (isEmail) {
+                        Text(
+                            modifier = Modifier.padding(end = 16.dp),
+                            text = "@gsm.hs.kr",
+                            style = typography.textMedium,
+                            fontWeight = FontWeight.Normal,
+                            color = if (isError) colors.N5 else colors.G4
+                        )
+                    }
                 },
                 readOnly = readOnly,
                 visualTransformation = visualTransformation
@@ -232,6 +237,198 @@ private fun NumberTextFieldCharContainer(
                 fontWeight = FontWeight.SemiBold,
                 textAlign = TextAlign.Center
             )
+        }
+    }
+}
+
+@Composable
+fun GomsBottomSheetTextField(
+    modifier: Modifier = Modifier,
+    isError: Boolean = false,
+    placeHolder: String = "",
+    readOnly: Boolean = false,
+    focusManager: FocusManager = LocalFocusManager.current,
+    focusRequester: FocusRequester = FocusRequester(),
+    errorText: String = "",
+    setText: String,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    maxLines: Int = Int.MAX_VALUE,
+    singleLine: Boolean = false,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    onValueChange: (String) -> Unit = {},
+    onClick: () -> Unit
+) {
+    val isFocused = remember { mutableStateOf(false) }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            focusManager.clearFocus()
+        }
+    }
+
+    GomsTheme { colors, typography ->
+        Box(modifier = modifier) {
+            Column {
+                OutlinedTextField(
+                    value = setText,
+                    onValueChange = {
+                        onValueChange(it)
+                    },
+                    keyboardOptions = keyboardOptions,
+                    keyboardActions = keyboardActions,
+                    placeholder = {
+                        Text(
+                            text = placeHolder,
+                            style = typography.textMedium,
+                            fontWeight = FontWeight.Normal,
+                            color = if (isError) colors.N5 else colors.G4
+                        )
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(64.dp)
+                        .focusRequester(focusRequester)
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(colors.G1)
+                        .border(
+                            width = 1.dp,
+                            color = if (isError) colors.N5 else colors.WHITE.copy(0.15f),
+                            shape = RoundedCornerShape(12.dp)
+                        )
+                        .onFocusChanged {
+                            isFocused.value = it.isFocused
+                        },
+                    maxLines = maxLines,
+                    singleLine = singleLine,
+                    textStyle = typography.textMedium,
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedTextColor = if (isError) colors.N5 else colors.WHITE,
+                        unfocusedTextColor = if (isError) colors.N5 else colors.WHITE,
+                        focusedPlaceholderColor = if (isError) colors.N5 else colors.G4,
+                        unfocusedPlaceholderColor = if (isError) colors.N5 else colors.G4,
+                        focusedBorderColor = Color.Transparent,
+                        unfocusedBorderColor = Color.Transparent,
+                        cursorColor = colors.I5
+                    ),
+                    readOnly = readOnly,
+                    visualTransformation = visualTransformation
+                )
+                Column(
+                    modifier = Modifier
+                        .height(32.dp)
+                        .padding(start = 8.dp),
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    if (isError) {
+                        Text(
+                            text = errorText,
+                            color = colors.N5,
+                            style = typography.buttonLarge
+                        )
+                    }
+                }
+            }
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(64.dp)
+                    .gomsClickable { onClick() }
+            )
+        }
+    }
+}
+
+@Composable
+fun GomsPasswordTextField(
+    modifier: Modifier = Modifier,
+    isError: Boolean = false,
+    placeHolder: String = "",
+    readOnly: Boolean = false,
+    focusManager: FocusManager = LocalFocusManager.current,
+    focusRequester: FocusRequester = FocusRequester(),
+    setText: String,
+    errorText: String = "",
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    maxLines: Int = Int.MAX_VALUE,
+    singleLine: Boolean = false,
+    onValueChange: (String) -> Unit = {},
+) {
+    val isFocused = remember { mutableStateOf(false) }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            focusManager.clearFocus()
+        }
+    }
+
+    GomsTheme { colors, typography ->
+        Column {
+            OutlinedTextField(
+                value = setText,
+                onValueChange = {
+                    onValueChange(it)
+                },
+                keyboardOptions = keyboardOptions,
+                keyboardActions = keyboardActions,
+                placeholder = {
+                    Text(
+                        text = placeHolder,
+                        style = typography.textMedium,
+                        fontWeight = FontWeight.Normal,
+                        color = if (isError) colors.N5 else colors.G4
+                    )
+                },
+                modifier = modifier
+                    .fillMaxWidth()
+                    .height(64.dp)
+                    .focusRequester(focusRequester)
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(colors.G1)
+                    .border(
+                        width = 1.dp,
+                        color = if (isError) colors.N5 else colors.WHITE.copy(0.15f),
+                        shape = RoundedCornerShape(12.dp)
+                    )
+                    .onFocusChanged {
+                        isFocused.value = it.isFocused
+                    },
+                maxLines = maxLines,
+                singleLine = singleLine,
+                textStyle = typography.textMedium,
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedTextColor = if (isError) colors.N5 else colors.WHITE,
+                    unfocusedTextColor = if (isError) colors.N5 else colors.WHITE,
+                    focusedPlaceholderColor = if (isError) colors.N5 else colors.G4,
+                    unfocusedPlaceholderColor = if (isError) colors.N5 else colors.G4,
+                    focusedBorderColor = Color.Transparent,
+                    unfocusedBorderColor = Color.Transparent,
+                    cursorColor = colors.I5
+                ),
+                readOnly = readOnly,
+                visualTransformation = PasswordVisualTransformation()
+            )
+            Column(
+                modifier = Modifier
+                    .height(32.dp)
+                    .padding(start = 8.dp),
+                verticalArrangement = Arrangement.Center
+            ) {
+                if (isError) {
+                    Text(
+                        text = errorText,
+                        color = colors.N5,
+                        style = typography.buttonLarge
+                    )
+                } else if (!isFocused.value) {
+                    Text(
+                        text = "대/소문자, 특수문자 12자 이상",
+                        color = colors.G4,
+                        style = typography.buttonLarge
+                    )
+                }
+            }
         }
     }
 }
