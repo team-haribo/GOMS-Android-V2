@@ -16,10 +16,10 @@ fun NavController.navigateToLogin(navOptions: NavOptions? = null) {
     this.navigate(loginRoute, navOptions)
 }
 
-fun NavGraphBuilder.loginScreen(onEmailLoginClick: () -> Unit) {
+fun NavGraphBuilder.loginScreen(onSignUpClick: () -> Unit) {
     composable(route = loginRoute) {
         LoginRoute(
-            onEmailLoginClick = onEmailLoginClick
+            onSignUpClick = onSignUpClick
         )
     }
 }
