@@ -27,6 +27,8 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goms.design_system.component.button.ButtonState
 import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.button.GomsButton
@@ -35,19 +37,47 @@ import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.util.keyboardAsState
 import com.goms.design_system.util.lockScreenOrientation
 import com.goms.login.component.InputLoginText
+import com.goms.login.viewmodel.AuthViewModel
+import com.goms.login.viewmodel.LoginUiState
+import com.goms.model.request.auth.LoginRequest
 
 @Composable
 fun InputLoginRoute(
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    viewModel: AuthViewModel = hiltViewModel(),
 ) {
+    val loginResponse = viewModel.loginResponse.collectAsStateWithLifecycle()
+    var isError by remember { mutableStateOf(false) }
+    var errorText by remember { mutableStateOf("") }
+
+    when (val state = loginResponse.value) {
+        is LoginUiState.Loading -> Unit
+        is LoginUiState.Success -> {
+            viewModel.saveToken(token = state.loginResponse)
+        }
+        is LoginUiState.Error -> {
+            isError = true
+            errorText = "로그인에 실패하였습니다."
+        }
+    }
+
     InputLoginScreen(
-        onBackClick = onBackClick
+        onBackClick = onBackClick,
+        isError = isError,
+        errorText = errorText,
+        loginCallBack = { email, password ->
+            viewModel.login(body = LoginRequest(email, password))
+        }
     )
 }
 
+
 @Composable
 fun InputLoginScreen(
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    isError: Boolean,
+    errorText: String,
+    loginCallBack: (email: String, password: String) -> Unit
 ) {
     val focusManager = LocalFocusManager.current
     val isKeyboardOpen by keyboardAsState()
@@ -56,9 +86,6 @@ fun InputLoginScreen(
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var isEmailError by remember { mutableStateOf(false) }
-    var isPasswordError by remember { mutableStateOf(false) }
-    var errorText by remember { mutableStateOf("") }
 
     LaunchedEffect(isKeyboardOpen) {
         if (isKeyboardOpen) {
@@ -101,8 +128,7 @@ fun InputLoginScreen(
                     onValueChange = { emailChange ->
                         email = emailChange
                     },
-                    isError = isEmailError,
-                    errorText = errorText,
+                    isError = isError,
                     singleLine = true
                 )
                 GomsTextField(
@@ -114,7 +140,7 @@ fun InputLoginScreen(
                     onValueChange = { passwordChange ->
                         password = passwordChange
                     },
-                    isError = isPasswordError,
+                    isError = isError,
                     errorText = errorText,
                     singleLine = true,
                     visualTransformation = PasswordVisualTransformation()
@@ -125,7 +151,9 @@ fun InputLoginScreen(
                     text = "로그인",
                     state = if (email.isNotBlank() && password.isNotBlank()) ButtonState.Normal
                     else ButtonState.Enable
-                ) {}
+                ) {
+                    loginCallBack("$email@gsm.hs.kr", password)
+                }
                 Spacer(modifier = Modifier.height(animatedSpacerHeight))
             }
         }
