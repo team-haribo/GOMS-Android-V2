@@ -20,7 +20,7 @@ class AuthViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
     private val saveTokenUseCase: SaveTokenUseCase
 ) : ViewModel() {
-    private val _loginResponse = MutableStateFlow<Result<LoginResponse>>(Result.Loading)
+    private val _loginResponse = MutableStateFlow<LoginUiState>(LoginUiState.Loading)
     val loginResponse = _loginResponse.asStateFlow()
 
     private val _saveTokenResponse = MutableStateFlow<Result<Unit>>(Result.Loading)
@@ -29,8 +29,12 @@ class AuthViewModel @Inject constructor(
     fun login(body: LoginRequest) = viewModelScope.launch {
         loginUseCase(body = body)
             .asResult()
-            .collectLatest { result ->
-                _loginResponse.value = result
+            .collectLatest{ result ->
+                when (result) {
+                    is Result.Loading -> _loginResponse.value = LoginUiState.Loading
+                    is Result.Success -> _loginResponse.value = LoginUiState.Success(result.data)
+                    is Result.Error -> _loginResponse.value = LoginUiState.Error(result.exception)
+                }
             }
     }
 

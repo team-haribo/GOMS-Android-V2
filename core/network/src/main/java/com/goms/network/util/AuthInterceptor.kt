@@ -71,7 +71,7 @@ class AuthInterceptor @Inject constructor(
                     dataSource.setRefreshToken(token.refreshToken)
                     dataSource.setAccessTokenExp(token.accessTokenExp)
                     dataSource.setRefreshTokenExp(token.refreshTokenExp)
-                    dataSource.setAuthority(token.authority)
+                    dataSource.setAuthority(token.authority.name)
                 } else throw TokenExpirationException()
             }
             val accessToken = dataSource.getAccessToken().first().replace("\"", "")
