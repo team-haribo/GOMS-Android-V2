@@ -62,10 +62,8 @@ class GomsAppState(
         trace("Navigation: ${topLevelDestination.name}") {
             val topLevelNavOptions = navOptions {
                 popUpTo(navController.graph.findStartDestination().id) {
-                    saveState = true
+                    inclusive = true
                 }
-                launchSingleTop = true
-                restoreState = true
             }
 
             when (topLevelDestination) {
