@@ -1,7 +1,6 @@
 package com.goms.sign_up
 
 import android.content.pm.ActivityInfo
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
@@ -17,7 +16,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -26,6 +24,9 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.goms.common.result.Result
 import com.goms.design_system.component.bottomsheet.SelectorBottomSheet
 import com.goms.design_system.component.button.ButtonState
 import com.goms.design_system.component.button.GomsBackButton
@@ -37,32 +38,63 @@ import com.goms.design_system.util.keyboardAsState
 import com.goms.design_system.util.lockScreenOrientation
 import com.goms.model.enum.Gender
 import com.goms.model.enum.Major
+import com.goms.model.request.auth.SendNumberRequest
 import com.goms.sign_up.component.SignUpText
+import com.goms.sign_up.viewmodel.SignUpViewModelProvider
 
 @Composable
 fun SignUpRoute(
+    viewModelStoreOwner: ViewModelStoreOwner,
     onBackClick: () -> Unit,
-    onNumberClick: () -> Unit
+    onNumberClick: () -> Unit,
 ) {
-    SignUpScreen(
-        onBackClick = onBackClick,
-        onNumberClick = onNumberClick
-    )
+    SignUpViewModelProvider(viewModelStoreOwner = viewModelStoreOwner) { viewModel ->
+        val sendNumberResponse = viewModel.sendNumberResponse.collectAsStateWithLifecycle()
+        val name by viewModel.name.collectAsStateWithLifecycle()
+        val email by viewModel.email.collectAsStateWithLifecycle()
+        val gender by viewModel.gender.collectAsStateWithLifecycle()
+        val major by viewModel.major.collectAsStateWithLifecycle()
+
+        when (sendNumberResponse.value) {
+            is Result.Loading -> Unit
+            is Result.Success -> {
+                onNumberClick()
+                viewModel.initSendNumber()
+            }
+            is Result.Error -> {}
+        }
+
+        SignUpScreen(
+            name = name,
+            email = email,
+            gender = gender,
+            major = major,
+            onNameChange = viewModel::onNameChange,
+            onEmailChange = viewModel::onEmailChange,
+            onGenderChange = viewModel::onGenderChange,
+            onMajorChange =  viewModel::onMajorChange,
+            onBackClick = onBackClick,
+            signUpCallBack = { viewModel.sendNumber(body = SendNumberRequest("${viewModel.email.value}@gsm.hs.kr")) }
+        )
+    }
 }
 
 
 @Composable
 fun SignUpScreen(
+    name: String,
+    email: String,
+    gender: String,
+    major: String,
+    onNameChange: (String) -> Unit,
+    onEmailChange: (String) -> Unit,
+    onGenderChange: (String) -> Unit,
+    onMajorChange: (String) -> Unit,
     onBackClick: () -> Unit,
-    onNumberClick: () -> Unit
+    signUpCallBack: () -> Unit
 ) {
     val focusManager = LocalFocusManager.current
     val isKeyboardOpen by keyboardAsState()
-
-    var name by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var gender by remember { mutableStateOf("") }
-    var major by remember { mutableStateOf("") }
 
     var onGenderBottomSheetOpenClick by rememberSaveable { mutableStateOf(false) }
     var onMajorBottomSheetOpenClick by rememberSaveable { mutableStateOf(false) }
@@ -101,9 +133,7 @@ fun SignUpScreen(
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                     placeHolder = "이름",
                     setText = name,
-                    onValueChange = { nameChange ->
-                        name = nameChange
-                    },
+                    onValueChange = onNameChange,
                     isEmail = false,
                     singleLine = true
                 )
@@ -112,9 +142,7 @@ fun SignUpScreen(
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                     placeHolder = "이메일",
                     setText = email,
-                    onValueChange = { emailChange ->
-                        email = emailChange
-                    },
+                    onValueChange = onEmailChange,
                     singleLine = true
                 )
                 GomsBottomSheetTextField(
@@ -122,9 +150,7 @@ fun SignUpScreen(
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                     placeHolder = "성별",
                     setText = gender,
-                    onValueChange = { genderChange ->
-                        gender = genderChange
-                    },
+                    onValueChange = onGenderChange,
                     readOnly = true,
                     singleLine = true
                 ) {
@@ -136,9 +162,7 @@ fun SignUpScreen(
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                     placeHolder = "과",
                     setText = major,
-                    onValueChange = { majorChange ->
-                        major = majorChange
-                    },
+                    onValueChange = onMajorChange,
                     readOnly = true,
                     singleLine = true
                 ) {
@@ -152,7 +176,7 @@ fun SignUpScreen(
                     state = if (name.isNotBlank() && email.isNotBlank() && gender.isNotBlank() && major.isNotBlank()) ButtonState.Normal
                     else ButtonState.Enable
                 ) {
-                    onNumberClick()
+                    signUpCallBack()
                 }
                 Spacer(modifier = Modifier.height(100.dp))
             }
@@ -163,10 +187,7 @@ fun SignUpScreen(
                 title = "성별",
                 list = listOf(Gender.MAN.value, Gender.WOMAN.value),
                 selected = gender,
-                itemChange = {
-                    gender = it
-                    Log.d("testt", gender)
-                },
+                itemChange = onGenderChange,
                 closeSheet = {
                     onGenderBottomSheetOpenClick = false
                 }
@@ -178,9 +199,7 @@ fun SignUpScreen(
                 title = "과",
                 list = listOf(Major.SW_DEVELOP.value, Major.SMART_IOT.value, Major.AI.value),
                 selected = major,
-                itemChange = {
-                    major = it
-                },
+                itemChange = onMajorChange,
                 closeSheet = {
                     onMajorBottomSheetOpenClick = false
                 }

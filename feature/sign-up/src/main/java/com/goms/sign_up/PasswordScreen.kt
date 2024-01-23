@@ -26,38 +26,90 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.goms.common.result.Result
 import com.goms.design_system.component.button.ButtonState
 import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.button.GomsButton
 import com.goms.design_system.component.textfield.GomsPasswordTextField
-import com.goms.design_system.component.textfield.GomsTextField
 import com.goms.design_system.theme.GomsTheme
+import com.goms.design_system.util.isStrongPassword
 import com.goms.design_system.util.keyboardAsState
 import com.goms.design_system.util.lockScreenOrientation
+import com.goms.model.enum.Gender
+import com.goms.model.enum.Major
+import com.goms.model.request.auth.SignUpRequest
 import com.goms.sign_up.component.PasswordText
+import com.goms.sign_up.viewmodel.SignUpViewModelProvider
 
 @Composable
 fun PasswordRoute(
+    viewModelStoreOwner: ViewModelStoreOwner,
     onBackClick: () -> Unit,
-    onLoginClick: () -> Unit
+    onLoginClick: () -> Unit,
 ) {
-    PasswordScreen(
-        onBackClick = onBackClick,
-        onLoginClick = onLoginClick
-    )
+    SignUpViewModelProvider(viewModelStoreOwner = viewModelStoreOwner) { viewModel ->
+        val signUpResponse = viewModel.signUpResponse.collectAsStateWithLifecycle()
+        val password by viewModel.password.collectAsStateWithLifecycle()
+        var isError by remember { mutableStateOf(false) }
+        var errorText by remember { mutableStateOf("") }
+
+        when (signUpResponse.value) {
+            is Result.Loading -> Unit
+            is Result.Success -> {
+                onLoginClick()
+            }
+            is Result.Error -> {
+                isError = true
+                errorText = "오류가 발생하였습니다"
+            }
+        }
+
+        PasswordScreen(
+            password = password,
+            isError = isError,
+            errorText = errorText,
+            onPasswordChange = viewModel::onPasswordChange,
+            onBackClick = onBackClick,
+            passwordCallback = {
+                if (isStrongPassword(viewModel.password.value)) {
+                    viewModel.signUp(
+                        body = SignUpRequest(
+                            email = "${viewModel.email.value}@gsm.hs.kr",
+                            password = viewModel.password.value,
+                            name = viewModel.name.value,
+                            gender = if (viewModel.gender.value == Gender.MAN.value) Gender.MAN.name else Gender.WOMAN.name,
+                            major = when (viewModel.major.value) {
+                                Major.SW_DEVELOP.value -> Major.SW_DEVELOP.name
+                                Major.SMART_IOT.value -> Major.SMART_IOT.name
+                                Major.AI.value -> Major.AI.name
+                                else -> ""
+                            },
+                        )
+                    )
+                } else {
+                    isError = true
+                    errorText = "비밀번호 요구사항을 충족하지 않습니다"
+                }
+            }
+        )
+    }
 }
 
 @Composable
 fun PasswordScreen(
+    password: String,
+    isError: Boolean,
+    errorText: String,
+    onPasswordChange: (String) -> Unit,
     onBackClick: () -> Unit,
-    onLoginClick: () -> Unit
+    passwordCallback: () -> Unit
 ) {
     val focusManager = LocalFocusManager.current
     val isKeyboardOpen by keyboardAsState()
     var isHidden by remember { mutableStateOf(false) }
     val animatedSpacerHeight by animateDpAsState(targetValue = if (isHidden) 100.dp else 16.dp)
-
-    var password by remember { mutableStateOf("") }
 
     LaunchedEffect(isKeyboardOpen) {
         if (isKeyboardOpen) {
@@ -94,12 +146,12 @@ fun PasswordScreen(
                 Spacer(modifier = Modifier.weight(1.1f))
                 GomsPasswordTextField(
                     modifier = Modifier.fillMaxWidth(),
+                    isError = isError,
+                    errorText = errorText,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                     placeHolder = "비밀번호",
                     setText = password,
-                    onValueChange = { passwordChange ->
-                        password = passwordChange
-                    },
+                    onValueChange = onPasswordChange,
                     singleLine = true
                 )
                 Spacer(modifier = Modifier.weight(1f))
@@ -108,7 +160,7 @@ fun PasswordScreen(
                     text = "회원가입",
                     state = if (password.isNotBlank()) ButtonState.Normal else ButtonState.Enable
                 ) {
-                    onLoginClick()
+                    passwordCallback()
                 }
                 Spacer(modifier = Modifier.height(animatedSpacerHeight))
             }
