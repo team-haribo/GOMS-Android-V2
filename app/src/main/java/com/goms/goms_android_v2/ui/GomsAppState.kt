@@ -6,12 +6,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.util.trace
 import androidx.navigation.NavDestination
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navOptions
 import com.goms.goms_android_v2.navigation.TopLevelDestination
 import com.goms.login.navigation.loginRoute
+import com.goms.login.navigation.navigateToLogin
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
@@ -53,4 +57,20 @@ class GomsAppState(
         get() = windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact
 
     val topLevelDestinations: List<TopLevelDestination> = TopLevelDestination.values().asList()
+
+    fun navigateToTopLevelDestination(topLevelDestination: TopLevelDestination) {
+        trace("Navigation: ${topLevelDestination.name}") {
+            val topLevelNavOptions = navOptions {
+                popUpTo(navController.graph.findStartDestination().id) {
+                    saveState = true
+                }
+                launchSingleTop = true
+                restoreState = true
+            }
+
+            when (topLevelDestination) {
+                TopLevelDestination.LOGIN -> navController.navigateToLogin(topLevelNavOptions)
+            }
+        }
+    }
 }
