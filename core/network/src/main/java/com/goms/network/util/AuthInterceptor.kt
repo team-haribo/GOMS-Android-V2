@@ -31,12 +31,8 @@ class AuthInterceptor @Inject constructor(
 
         ignorePath.forEachIndexed { index, s ->
             if (s == path && ignoreMethod[index] == method) {
-                return chain.proceed(request)
+                return response
             }
-        }
-
-        if (response.code == 204) {
-            return response.newBuilder().code(200).build()
         }
 
         runBlocking {
@@ -82,6 +78,10 @@ class AuthInterceptor @Inject constructor(
             val accessToken = dataSource.getAccessToken().first().replace("\"", "")
             builder.addHeader("Authorization", "Bearer $accessToken")
         }
-        return chain.proceed(builder.build())
+        return if (response.code == 204) {
+            response.newBuilder().code(200).build()
+        } else {
+            response
+        }
     }
 }
