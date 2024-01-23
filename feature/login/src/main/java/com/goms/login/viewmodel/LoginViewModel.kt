@@ -1,5 +1,6 @@
 package com.goms.login.viewmodel
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.goms.common.result.Result
@@ -16,7 +17,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AuthViewModel @Inject constructor(
+class LoginViewModel @Inject constructor(
+    private val savedStateHandle: SavedStateHandle,
     private val loginUseCase: LoginUseCase,
     private val saveTokenUseCase: SaveTokenUseCase
 ) : ViewModel() {
@@ -26,13 +28,16 @@ class AuthViewModel @Inject constructor(
     private val _saveTokenResponse = MutableStateFlow<Result<Unit>>(Result.Loading)
     val saveTokenResponse = _saveTokenResponse.asStateFlow()
 
+    var email = savedStateHandle.getStateFlow(key = EMAIL, initialValue = "")
+    var password = savedStateHandle.getStateFlow(key = PASSWORD, initialValue = "")
+
     fun login(body: LoginRequest) = viewModelScope.launch {
         loginUseCase(body = body)
             .asResult()
             .collectLatest{ result ->
                 when (result) {
                     is Result.Loading -> _loginResponse.value = LoginUiState.Loading
-                    is Result.Success -> _loginResponse.value = LoginUiState.Success(result.data)
+                    is Result.Success -> _loginResponse.value = LoginUiState.Success(result.data!!)
                     is Result.Error -> _loginResponse.value = LoginUiState.Error(result.exception)
                 }
             }
@@ -46,4 +51,15 @@ class AuthViewModel @Inject constructor(
                 _saveTokenResponse.value = Result.Error(it)
             }
     }
+
+    fun onEmailChange(value: String) {
+        savedStateHandle[EMAIL] = value
+    }
+
+    fun onPasswordChange(value: String) {
+        savedStateHandle[PASSWORD] = value
+    }
 }
+
+private const val EMAIL = "email"
+private const val PASSWORD = "password"
