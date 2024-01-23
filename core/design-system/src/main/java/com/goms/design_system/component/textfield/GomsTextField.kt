@@ -411,20 +411,21 @@ fun GomsPasswordTextField(
             )
             Column(
                 modifier = Modifier
-                    .height(32.dp)
+                    .height(50.dp)
                     .padding(start = 8.dp),
                 verticalArrangement = Arrangement.Center
             ) {
+                if (!isFocused.value) {
+                    Text(
+                        text = "대/소문자, 특수문자 12자 이상",
+                        color = colors.G4,
+                        style = typography.buttonLarge
+                    )
+                }
                 if (isError) {
                     Text(
                         text = errorText,
                         color = colors.N5,
-                        style = typography.buttonLarge
-                    )
-                } else if (!isFocused.value) {
-                    Text(
-                        text = "대/소문자, 특수문자 12자 이상",
-                        color = colors.G4,
                         style = typography.buttonLarge
                     )
                 }
