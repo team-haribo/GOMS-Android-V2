@@ -21,6 +21,7 @@ class AuthInterceptor @Inject constructor(
 ): Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
+        val response = chain.proceed(request)
         val builder = request.newBuilder()
         val currentTime = System.currentTimeMillis().toGomsTimeDate()
         val ignorePath = listOf("/auth")
@@ -30,7 +31,7 @@ class AuthInterceptor @Inject constructor(
 
         ignorePath.forEachIndexed { index, s ->
             if (s == path && ignoreMethod[index] == method) {
-                return chain.proceed(request)
+                return response
             }
         }
 
@@ -77,6 +78,10 @@ class AuthInterceptor @Inject constructor(
             val accessToken = dataSource.getAccessToken().first().replace("\"", "")
             builder.addHeader("Authorization", "Bearer $accessToken")
         }
-        return chain.proceed(builder.build())
+        return if (response.code == 204) {
+            response.newBuilder().code(200).build()
+        } else {
+            response
+        }
     }
 }

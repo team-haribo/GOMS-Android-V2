@@ -37,16 +37,18 @@ import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.util.keyboardAsState
 import com.goms.design_system.util.lockScreenOrientation
 import com.goms.login.component.InputLoginText
-import com.goms.login.viewmodel.AuthViewModel
+import com.goms.login.viewmodel.LoginViewModel
 import com.goms.login.viewmodel.LoginUiState
 import com.goms.model.request.auth.LoginRequest
 
 @Composable
 fun InputLoginRoute(
     onBackClick: () -> Unit,
-    viewModel: AuthViewModel = hiltViewModel(),
+    viewModel: LoginViewModel = hiltViewModel(),
 ) {
     val loginResponse = viewModel.loginResponse.collectAsStateWithLifecycle()
+    val email by viewModel.email.collectAsStateWithLifecycle()
+    val password by viewModel.password.collectAsStateWithLifecycle()
     var isError by remember { mutableStateOf(false) }
     var errorText by remember { mutableStateOf("") }
 
@@ -57,35 +59,38 @@ fun InputLoginRoute(
         }
         is LoginUiState.Error -> {
             isError = true
-            errorText = "로그인에 실패하였습니다."
+            errorText = "로그인에 실패하였습니다"
         }
     }
 
     InputLoginScreen(
-        onBackClick = onBackClick,
+        email = email,
+        password = password,
         isError = isError,
         errorText = errorText,
-        loginCallBack = { email, password ->
-            viewModel.login(body = LoginRequest(email, password))
-        }
+        onEmailChange = viewModel::onEmailChange,
+        onPasswordChange = viewModel::onPasswordChange,
+        onBackClick = onBackClick,
+        loginCallBack = { viewModel.login(body = LoginRequest("${viewModel.email.value}@gsm.hs.kr", viewModel.password.value)) }
     )
 }
 
 
 @Composable
 fun InputLoginScreen(
-    onBackClick: () -> Unit,
+    email: String,
+    password: String,
     isError: Boolean,
     errorText: String,
-    loginCallBack: (email: String, password: String) -> Unit
+    onEmailChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
+    onBackClick: () -> Unit,
+    loginCallBack: () -> Unit
 ) {
     val focusManager = LocalFocusManager.current
     val isKeyboardOpen by keyboardAsState()
     var isHidden by remember { mutableStateOf(false) }
     val animatedSpacerHeight by animateDpAsState(targetValue = if (isHidden) 100.dp else 16.dp)
-
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
 
     LaunchedEffect(isKeyboardOpen) {
         if (isKeyboardOpen) {
@@ -125,9 +130,7 @@ fun InputLoginScreen(
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                     placeHolder = "이메일",
                     setText = email,
-                    onValueChange = { emailChange ->
-                        email = emailChange
-                    },
+                    onValueChange = onEmailChange,
                     isError = isError,
                     singleLine = true
                 )
@@ -137,9 +140,7 @@ fun InputLoginScreen(
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                     placeHolder = "비밀번호",
                     setText = password,
-                    onValueChange = { passwordChange ->
-                        password = passwordChange
-                    },
+                    onValueChange = onPasswordChange,
                     isError = isError,
                     errorText = errorText,
                     singleLine = true,
@@ -152,7 +153,7 @@ fun InputLoginScreen(
                     state = if (email.isNotBlank() && password.isNotBlank()) ButtonState.Normal
                     else ButtonState.Enable
                 ) {
-                    loginCallBack("$email@gsm.hs.kr", password)
+                    loginCallBack()
                 }
                 Spacer(modifier = Modifier.height(animatedSpacerHeight))
             }

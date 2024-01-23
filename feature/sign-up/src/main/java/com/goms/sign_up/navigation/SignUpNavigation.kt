@@ -1,5 +1,6 @@
 package com.goms.sign_up.navigation
 
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -17,11 +18,13 @@ fun NavController.navigateToSignUp(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.signUpScreen(
+    viewModelStoreOwner: ViewModelStoreOwner,
     onBackClick: () -> Unit,
     onNumberClick: () -> Unit
 ) {
     composable(route = signUpRoute) {
         SignUpRoute(
+            viewModelStoreOwner = viewModelStoreOwner,
             onBackClick = onBackClick,
             onNumberClick = onNumberClick
         )
@@ -33,11 +36,13 @@ fun NavController.navigateToNumber(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.numberScreen(
+    viewModelStoreOwner: ViewModelStoreOwner,
     onBackClick: () -> Unit,
     onPasswordClick: () -> Unit
 ) {
     composable(route = numberRoute) {
         NumberRoute(
+            viewModelStoreOwner = viewModelStoreOwner,
             onBackClick = onBackClick,
             onPasswordClick = onPasswordClick
         )
@@ -49,11 +54,13 @@ fun NavController.navigateToPassword(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.passwordScreen(
+    viewModelStoreOwner: ViewModelStoreOwner,
     onBackClick: () -> Unit,
     onLoginClick: () -> Unit
 ) {
     composable(route = passwordRoute) {
         PasswordRoute(
+            viewModelStoreOwner = viewModelStoreOwner,
             onBackClick = onBackClick,
             onLoginClick = onLoginClick
         )

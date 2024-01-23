@@ -2,6 +2,7 @@ package com.goms.goms_android_v2.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.navigation.compose.NavHost
 import com.goms.goms_android_v2.ui.GomsAppState
 import com.goms.login.navigation.inputLoginScreen
@@ -23,6 +24,7 @@ fun GomsNavHost(
     startDestination: String = loginRoute
 ) {
     val navController = appState.navController
+    val viewModelStoreOwner = checkNotNull(LocalViewModelStoreOwner.current)
     NavHost(
         navController = navController,
         startDestination = startDestination,
@@ -36,16 +38,19 @@ fun GomsNavHost(
             onBackClick = navController::popBackStack
         )
         signUpScreen(
+            viewModelStoreOwner = viewModelStoreOwner,
             onBackClick = navController::popBackStack,
             onNumberClick = navController::navigateToNumber
         )
         numberScreen(
+            viewModelStoreOwner = viewModelStoreOwner,
             onBackClick = navController::popBackStack,
             onPasswordClick = navController::navigateToPassword
         )
         passwordScreen(
+            viewModelStoreOwner = viewModelStoreOwner,
             onBackClick = navController::popBackStack,
-            onLoginClick = navController::navigateToLogin
+            onLoginClick = { appState.navigateToTopLevelDestination(TopLevelDestination.LOGIN) }
         )
     }
 }
