@@ -21,6 +21,7 @@ class AuthInterceptor @Inject constructor(
 ): Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
+        val response = chain.proceed(request)
         val builder = request.newBuilder()
         val currentTime = System.currentTimeMillis().toGomsTimeDate()
         val ignorePath = listOf("/auth")
@@ -32,6 +33,10 @@ class AuthInterceptor @Inject constructor(
             if (s == path && ignoreMethod[index] == method) {
                 return chain.proceed(request)
             }
+        }
+
+        if (response.code == 204) {
+            return response.newBuilder().code(200).build()
         }
 
         runBlocking {
