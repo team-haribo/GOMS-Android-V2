@@ -88,14 +88,10 @@ fun NumberScreen(
 ) {
     val focusManager = LocalFocusManager.current
     val isKeyboardOpen by keyboardAsState()
-    var isHidden by remember { mutableStateOf(false) }
-    val animatedSpacerHeight by animateDpAsState(targetValue = if (isHidden) 100.dp else 16.dp)
+    val animatedSpacerHeight by animateDpAsState(targetValue = if (!isKeyboardOpen) 100.dp else 16.dp)
 
     LaunchedEffect(isKeyboardOpen) {
-        if (isKeyboardOpen) {
-            isHidden = false
-        } else {
-            isHidden = true
+        if (!isKeyboardOpen) {
             focusManager.clearFocus()
         }
     }
