@@ -44,6 +44,7 @@ import com.goms.model.request.auth.LoginRequest
 @Composable
 fun InputLoginRoute(
     onBackClick: () -> Unit,
+    onMainClick: () -> Unit,
     viewModel: LoginViewModel = hiltViewModel(),
 ) {
     val loginResponse = viewModel.loginResponse.collectAsStateWithLifecycle()
@@ -56,6 +57,7 @@ fun InputLoginRoute(
         is LoginUiState.Loading -> Unit
         is LoginUiState.Success -> {
             viewModel.saveToken(token = state.loginResponse)
+            onMainClick()
         }
         is LoginUiState.Error -> {
             isError = true

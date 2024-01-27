@@ -30,10 +30,14 @@ fun NavController.navigateToInputLogin(navOptions: NavOptions? = null) {
     this.navigate(InputLoginRoute, navOptions)
 }
 
-fun NavGraphBuilder.inputLoginScreen(onBackClick: () -> Unit) {
+fun NavGraphBuilder.inputLoginScreen(
+    onBackClick: () -> Unit,
+    onMainClick: () -> Unit
+) {
     composable(route = InputLoginRoute) {
         InputLoginRoute(
-            onBackClick = onBackClick
+            onBackClick = onBackClick,
+            onMainClick = onMainClick
         )
     }
 }
