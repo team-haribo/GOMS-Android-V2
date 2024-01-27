@@ -20,6 +20,19 @@ fun GomsIcon(
 }
 
 @Composable
+fun GomsTextIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+) {
+    Image(
+        painter = painterResource(id = R.drawable.ic_goms_text),
+        contentDescription = "Goms Text Icon",
+        modifier = modifier,
+        colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
+    )
+}
+
+@Composable
 fun GAuthIcon(
     modifier: Modifier = Modifier,
 ) {
@@ -49,6 +62,54 @@ fun CloseIcon(
     Image(
         painter = painterResource(id = R.drawable.ic_close),
         contentDescription = "Close Icon",
+        modifier = modifier,
+        colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
+    )
+}
+
+@Composable
+fun SettingIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+) {
+    Image(
+        painter = painterResource(id = R.drawable.ic_setting),
+        contentDescription = "Setting Icon",
+        modifier = modifier,
+        colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
+    )
+}
+
+@Composable
+fun QrScanIcon(
+    modifier: Modifier = Modifier
+) {
+    Image(
+        painter = painterResource(id = R.drawable.ic_qr_scan),
+        contentDescription = "Qr Scan Icon",
+        modifier = modifier
+    )
+}
+
+@Composable
+fun QrCreateIcon(
+    modifier: Modifier = Modifier
+) {
+    Image(
+        painter = painterResource(id = R.drawable.ic_qr_create),
+        contentDescription = "Qr Create Icon",
+        modifier = modifier
+    )
+}
+
+@Composable
+fun PersonIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+) {
+    Image(
+        painter = painterResource(id = R.drawable.ic_person),
+        contentDescription = "Person Icon",
         modifier = modifier,
         colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
     )
