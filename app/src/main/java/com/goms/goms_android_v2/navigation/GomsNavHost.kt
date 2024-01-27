@@ -10,6 +10,8 @@ import com.goms.login.navigation.loginRoute
 import com.goms.login.navigation.loginScreen
 import com.goms.login.navigation.navigateToInputLogin
 import com.goms.login.navigation.navigateToLogin
+import com.goms.main.navigation.mainScreen
+import com.goms.main.navigation.navigateToMain
 import com.goms.sign_up.navigation.navigateToNumber
 import com.goms.sign_up.navigation.navigateToPassword
 import com.goms.sign_up.navigation.navigateToSignUp
@@ -35,7 +37,8 @@ fun GomsNavHost(
             onInputLoginClick = navController::navigateToInputLogin
         )
         inputLoginScreen(
-            onBackClick = navController::popBackStack
+            onBackClick = navController::popBackStack,
+            onMainClick = { appState.navigateToTopLevelDestination(TopLevelDestination.MAIN) }
         )
         signUpScreen(
             viewModelStoreOwner = viewModelStoreOwner,
@@ -52,5 +55,6 @@ fun GomsNavHost(
             onBackClick = navController::popBackStack,
             onLoginClick = { appState.navigateToTopLevelDestination(TopLevelDestination.LOGIN) }
         )
+        mainScreen()
     }
 }

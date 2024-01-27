@@ -44,6 +44,7 @@ import com.goms.model.request.auth.LoginRequest
 @Composable
 fun InputLoginRoute(
     onBackClick: () -> Unit,
+    onMainClick: () -> Unit,
     viewModel: LoginViewModel = hiltViewModel(),
 ) {
     val loginResponse = viewModel.loginResponse.collectAsStateWithLifecycle()
@@ -56,6 +57,7 @@ fun InputLoginRoute(
         is LoginUiState.Loading -> Unit
         is LoginUiState.Success -> {
             viewModel.saveToken(token = state.loginResponse)
+            onMainClick()
         }
         is LoginUiState.Error -> {
             isError = true
@@ -89,14 +91,10 @@ fun InputLoginScreen(
 ) {
     val focusManager = LocalFocusManager.current
     val isKeyboardOpen by keyboardAsState()
-    var isHidden by remember { mutableStateOf(false) }
-    val animatedSpacerHeight by animateDpAsState(targetValue = if (isHidden) 100.dp else 16.dp)
+    val animatedSpacerHeight by animateDpAsState(targetValue = if (!isKeyboardOpen) 100.dp else 16.dp)
 
     LaunchedEffect(isKeyboardOpen) {
-        if (isKeyboardOpen) {
-            isHidden = false
-        } else {
-            isHidden = true
+        if (!isKeyboardOpen) {
             focusManager.clearFocus()
         }
     }

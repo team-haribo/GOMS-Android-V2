@@ -24,7 +24,7 @@ import com.goms.login.component.LoginText
 @Composable
 fun LoginRoute(
     onSignUpClick: () -> Unit,
-    onInputLoginClick: () -> Unit,
+    onInputLoginClick: () -> Unit
 ) {
     LoginScreen(
         onSignUpClick = onSignUpClick,

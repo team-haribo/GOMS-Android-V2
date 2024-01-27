@@ -33,3 +33,4 @@ include(":core:common")
 
 include(":feature:login")
 include(":feature:sign-up")
+include(":feature:main")

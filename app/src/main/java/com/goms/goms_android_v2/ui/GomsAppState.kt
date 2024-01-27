@@ -16,6 +16,7 @@ import androidx.navigation.navOptions
 import com.goms.goms_android_v2.navigation.TopLevelDestination
 import com.goms.login.navigation.loginRoute
 import com.goms.login.navigation.navigateToLogin
+import com.goms.main.navigation.navigateToMain
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
@@ -68,6 +69,7 @@ class GomsAppState(
 
             when (topLevelDestination) {
                 TopLevelDestination.LOGIN -> navController.navigateToLogin(topLevelNavOptions)
+                TopLevelDestination.MAIN -> navController.navigateToMain(topLevelNavOptions)
             }
         }
     }
