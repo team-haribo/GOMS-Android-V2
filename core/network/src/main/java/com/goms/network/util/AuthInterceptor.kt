@@ -8,7 +8,6 @@ import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.json.JsonObject
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -61,7 +60,7 @@ class AuthInterceptor @Inject constructor(
                 val refreshRequest = Request.Builder()
                     .url(BuildConfig.BASE_URL + "/api/v2/auth")
                     .patch(chain.request().body ?: RequestBody.create(null, byteArrayOf()))
-                    .addHeader("Refresh-Token", refreshTokenWithBearer)
+                    .addHeader("refreshToken", refreshTokenWithBearer)
                     .build()
 
                 val response = client.newCall(refreshRequest).execute()
