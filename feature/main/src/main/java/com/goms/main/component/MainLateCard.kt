@@ -25,88 +25,98 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.goms.design_system.component.modifier.gomsClickable
 import com.goms.design_system.theme.GomsTheme
+import com.goms.main.viewmodel.GetLateRankListUiState
 import com.goms.model.enum.Authority
+import com.goms.model.response.late.RankResponse
 
 @Composable
 fun MainLateCard(
     modifier: Modifier = Modifier,
-    list: List<String> = listOf("1", "2", "3", "4"),
     role: Authority,
+    getLateRankListUiState: GetLateRankListUiState,
     onClick: () -> Unit
 ) {
-    var componentWidth by remember { mutableStateOf(0.dp) }
-    val density = LocalDensity.current
+    when (getLateRankListUiState) {
+        GetLateRankListUiState.Loading -> Unit
+        is GetLateRankListUiState.Error -> Unit
+        is GetLateRankListUiState.Success -> {
+            val data = getLateRankListUiState.getLateRankListResponse
 
-    GomsTheme { colors, typography ->
-        Surface(
-            modifier = modifier
-                .onGloballyPositioned {
-                    componentWidth = with(density) {
-                        it.size.width.toDp()
-                    }
-                },
-            color = colors.G1,
-            shape = RoundedCornerShape(12.dp),
-            border = BorderStroke(width = 1.dp, color = colors.WHITE.copy(0.15f))
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+            var componentWidth by remember { mutableStateOf(0.dp) }
+            val density = LocalDensity.current
+
+            GomsTheme { colors, typography ->
+                Surface(
+                    modifier = modifier
+                        .onGloballyPositioned {
+                            componentWidth = with(density) {
+                                it.size.width.toDp()
+                            }
+                        },
+                    color = colors.G1,
+                    shape = RoundedCornerShape(12.dp),
+                    border = BorderStroke(width = 1.dp, color = colors.WHITE.copy(0.15f))
                 ) {
-                    Text(
-                        text = "지각자 TOP 3",
-                        style = typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = colors.WHITE
-                    )
-                    if (role == Authority.ROLE_STUDENT_COUNCIL) {
-                        Text(
-                            modifier = Modifier.gomsClickable { onClick() },
-                            text = "더보기",
-                            style = typography.buttonSmall,
-                            fontWeight = FontWeight.Normal,
-                            color = colors.G7
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.height(16.dp))
-                if (list.isEmpty()) {
                     Column(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
                     ) {
-                        Text(
-                            text = "\uD83D\uDC4D",
-                            fontSize = 80.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = colors.WHITE
-                        )
-                        Text(
-                            text = "지각자가 없어요! 놀랍게도...",
-                            style = typography.textMedium,
-                            fontWeight = FontWeight.SemiBold,
-                            color = colors.G4
-                        )
-                    }
-                } else {
-                    LazyRow(modifier = Modifier.fillMaxWidth()) {
-                        items(3) {
-                            MainLateItem(
-                                modifier = Modifier.widthIn((componentWidth - 32.dp) / 3),
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "지각자 TOP 3",
+                                style = typography.titleMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = colors.WHITE
                             )
+                            if (role == Authority.ROLE_STUDENT_COUNCIL) {
+                                Text(
+                                    modifier = Modifier.gomsClickable { onClick() },
+                                    text = "더보기",
+                                    style = typography.buttonSmall,
+                                    fontWeight = FontWeight.Normal,
+                                    color = colors.G7
+                                )
+                            }
+                        }
+                        Spacer(modifier = Modifier.height(16.dp))
+                        if (data.isEmpty()) {
+                            Column(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.spacedBy(12.dp)
+                            ) {
+                                Text(
+                                    text = "\uD83D\uDC4D",
+                                    fontSize = 80.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = colors.WHITE
+                                )
+                                Text(
+                                    text = "지각자가 없어요! 놀랍게도...",
+                                    style = typography.textMedium,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = colors.G4
+                                )
+                            }
+                        } else {
+                            LazyRow(modifier = Modifier.fillMaxWidth()) {
+                                items(3) {
+                                    MainLateItem(
+                                        modifier = Modifier.widthIn((componentWidth - 32.dp) / 3),
+                                        data = data[it]
+                                    )
+                                }
+                            }
                         }
                     }
                 }
@@ -117,7 +127,8 @@ fun MainLateCard(
 
 @Composable
 fun MainLateItem(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    data: RankResponse
 ) {
     GomsTheme { colors, typography ->
         Column(
@@ -126,33 +137,23 @@ fun MainLateItem(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             AsyncImage(
-                model = "",
+                model = data.profileUrl,
                 modifier = Modifier.size(56.dp),
                 contentScale = ContentScale.Crop,
                 contentDescription = "Profile Image",
             )
             Text(
-                text = "김경수",
+                text = data.name,
                 style = typography.textMedium,
                 fontWeight = FontWeight.SemiBold,
                 color = colors.G7
             )
             Text(
-                text = "7기 | IoT",
+                text = "${data.grade}기 | ${data.major}",
                 style = typography.caption,
                 fontWeight = FontWeight.Normal,
                 color = colors.G4
             )
         }
-    }
-}
-
-@Composable
-@Preview(showBackground = true)
-fun MainLateCardPreview() {
-    Column {
-        MainLateCard(role = Authority.ROLE_STUDENT) {}
-        MainLateCard(role = Authority.ROLE_STUDENT_COUNCIL) {}
-        MainLateCard(role = Authority.ROLE_STUDENT_COUNCIL, list = emptyList()) {}
     }
 }

@@ -54,7 +54,6 @@ fun MainRoute(
             viewModel.getProfile()
             viewModel.getLateRankList()
             viewModel.getOutingCount()
-            viewModel.getOutingList()
         }
     )
 }
@@ -100,7 +99,10 @@ fun MainScreen(
                         role = role,
                         getProfileUiState = getProfileUiState
                     )
-                    MainLateCard(role = role) {}
+                    MainLateCard(
+                        role = role,
+                        getLateRankListUiState = getLateRankListUiState
+                    ) {}
                     MainOutingCard(role = role) {}
                 }
             }
