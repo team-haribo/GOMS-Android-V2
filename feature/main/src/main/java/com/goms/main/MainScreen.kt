@@ -103,7 +103,11 @@ fun MainScreen(
                         role = role,
                         getLateRankListUiState = getLateRankListUiState
                     ) {}
-                    MainOutingCard(role = role) {}
+                    MainOutingCard(
+                        role = role,
+                        getOutingListUiState = getOutingListUiState,
+                        getOutingCountUiState = getOutingCountUiState
+                    ) {}
                 }
             }
             GomsFloatingButton(

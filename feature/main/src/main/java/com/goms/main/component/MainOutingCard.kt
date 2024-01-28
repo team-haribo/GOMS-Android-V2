@@ -24,84 +24,169 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.goms.design_system.component.modifier.gomsClickable
 import com.goms.design_system.theme.GomsTheme
+import com.goms.main.viewmodel.GetOutingCountUiState
+import com.goms.main.viewmodel.GetOutingListUiState
 import com.goms.model.enum.Authority
+import com.goms.model.response.outing.OutingResponse
 
 @Composable
 fun MainOutingCard(
     modifier: Modifier = Modifier,
-    list: List<String> = listOf("1", "2", "3", "4", "5", "6", "7"),
     role: Authority,
+    getOutingListUiState: GetOutingListUiState,
+    getOutingCountUiState: GetOutingCountUiState,
     onClick: () -> Unit
 ) {
-    GomsTheme { colors, typography ->
-        Surface(
-            modifier = modifier,
-            color = colors.G1,
-            shape = RoundedCornerShape(12.dp),
-            border = BorderStroke(width = 1.dp, color = colors.WHITE.copy(0.15f))
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(6.dp)
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+    when (getOutingCountUiState) {
+        GetOutingCountUiState.Loading -> Unit
+        is GetOutingCountUiState.Error -> Unit
+        GetOutingCountUiState.Empty -> {
+            GomsTheme { colors, typography ->
+                Surface(
+                    modifier = modifier,
+                    color = colors.G1,
+                    shape = RoundedCornerShape(12.dp),
+                    border = BorderStroke(width = 1.dp, color = colors.WHITE.copy(0.15f))
                 ) {
-                    Text(
-                        text = "외출 현황",
-                        style = typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = colors.WHITE
-                    )
-                    if (role == Authority.ROLE_STUDENT) {
-                        Text(
-                            modifier = Modifier.gomsClickable { onClick() },
-                            text = "더보기",
-                            style = typography.buttonSmall,
-                            fontWeight = FontWeight.Normal,
-                            color = colors.G7
-                        )
-                    } else {
-                        Text(
-                            modifier = Modifier.gomsClickable { onClick() },
-                            text = "인원 관리하기",
-                            style = typography.buttonSmall,
-                            fontWeight = FontWeight.Normal,
-                            color = colors.G7
-                        )
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "외출 현황",
+                                style = typography.titleMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = colors.WHITE
+                            )
+                            if (role == Authority.ROLE_STUDENT) {
+                                Text(
+                                    modifier = Modifier.gomsClickable { onClick() },
+                                    text = "더보기",
+                                    style = typography.buttonSmall,
+                                    fontWeight = FontWeight.Normal,
+                                    color = colors.G7
+                                )
+                            } else {
+                                Text(
+                                    modifier = Modifier.gomsClickable { onClick() },
+                                    text = "인원 관리하기",
+                                    style = typography.buttonSmall,
+                                    fontWeight = FontWeight.Normal,
+                                    color = colors.G7
+                                )
+                            }
+                        }
+                        Divider(modifier = Modifier.height(1.dp), color = colors.WHITE.copy(0.15f))
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = "0",
+                                style = typography.textMedium,
+                                fontWeight = FontWeight.SemiBold,
+                                color = colors.G7
+                            )
+                            Text(
+                                text = "명이 외출중",
+                                style = typography.textMedium,
+                                fontWeight = FontWeight.Normal,
+                                color = colors.G4
+                            )
+                        }
                     }
                 }
-                Divider(modifier = Modifier.height(1.dp), color = colors.WHITE.copy(0.15f))
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "66",
-                        style = typography.textMedium,
-                        fontWeight = FontWeight.SemiBold,
-                        color = colors.G7
-                    )
-                    Text(
-                        text = "명이 외출중",
-                        style = typography.textMedium,
-                        fontWeight = FontWeight.Normal,
-                        color = colors.G4
-                    )
-                }
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(max = 10000.dp)
-                ) {
-                    items(list.size) {
-                        MainOutingItem(
-                            modifier = Modifier.fillMaxWidth()
-                        )
+            }
+        }
+        is GetOutingCountUiState.Success -> {
+            when (getOutingListUiState) {
+                GetOutingListUiState.Loading -> Unit
+                is GetOutingListUiState.Error -> Unit
+                is GetOutingListUiState.Success -> {
+                    val count = getOutingCountUiState.getOutingCountResponse
+                    val list = getOutingListUiState.getOutingListResponse
+
+                    GomsTheme { colors, typography ->
+                        Surface(
+                            modifier = modifier,
+                            color = colors.G1,
+                            shape = RoundedCornerShape(12.dp),
+                            border = BorderStroke(width = 1.dp, color = colors.WHITE.copy(0.15f))
+                        ) {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(16.dp),
+                                verticalArrangement = Arrangement.spacedBy(6.dp)
+                            ) {
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Text(
+                                        text = "외출 현황",
+                                        style = typography.titleMedium,
+                                        fontWeight = FontWeight.Bold,
+                                        color = colors.WHITE
+                                    )
+                                    if (role == Authority.ROLE_STUDENT) {
+                                        Text(
+                                            modifier = Modifier.gomsClickable { onClick() },
+                                            text = "더보기",
+                                            style = typography.buttonSmall,
+                                            fontWeight = FontWeight.Normal,
+                                            color = colors.G7
+                                        )
+                                    } else {
+                                        Text(
+                                            modifier = Modifier.gomsClickable { onClick() },
+                                            text = "인원 관리하기",
+                                            style = typography.buttonSmall,
+                                            fontWeight = FontWeight.Normal,
+                                            color = colors.G7
+                                        )
+                                    }
+                                }
+                                Divider(modifier = Modifier.height(1.dp), color = colors.WHITE.copy(0.15f))
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Text(
+                                        text = "${count.outingCount}",
+                                        style = typography.textMedium,
+                                        fontWeight = FontWeight.SemiBold,
+                                        color = colors.G7
+                                    )
+                                    Text(
+                                        text = "명이 외출중",
+                                        style = typography.textMedium,
+                                        fontWeight = FontWeight.Normal,
+                                        color = colors.G4
+                                    )
+                                }
+                                LazyColumn(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .heightIn(max = 10000.dp)
+                                ) {
+                                    items(list.size) {
+                                        MainOutingItem(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            list = list[it]
+                                        )
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -111,7 +196,8 @@ fun MainOutingCard(
 
 @Composable
 fun MainOutingItem(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    list: OutingResponse
 ) {
     GomsTheme { colors, typography ->
         Row(
@@ -120,33 +206,23 @@ fun MainOutingItem(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             AsyncImage(
-                model = "",
+                model = list.profileUrl,
                 modifier = Modifier.size(28.dp),
                 contentScale = ContentScale.Crop,
                 contentDescription = "Profile Image",
             )
             Text(
-                text = "김경수",
+                text = list.name,
                 style = typography.textMedium,
                 fontWeight = FontWeight.SemiBold,
                 color = colors.G7
             )
             Text(
-                text = "7기 | IoT",
+                text = "${list.grade}기 | ${list.major}",
                 style = typography.caption,
                 fontWeight = FontWeight.Normal,
                 color = colors.G4
             )
         }
-    }
-}
-
-@Composable
-@Preview(showBackground = true)
-fun MainOutingCardPreview() {
-    Column {
-        MainOutingCard(role = Authority.ROLE_STUDENT, list = emptyList()) {}
-        MainOutingCard(role = Authority.ROLE_STUDENT) {}
-        MainOutingCard(role = Authority.ROLE_STUDENT_COUNCIL) {}
     }
 }
