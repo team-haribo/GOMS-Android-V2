@@ -37,7 +37,10 @@ class LoginViewModel @Inject constructor(
             .collectLatest { result ->
                 when (result) {
                     is Result.Loading -> _loginUiState.value = LoginUiState.Loading
-                    is Result.Success -> _loginUiState.value = LoginUiState.Success(result.data)
+                    is Result.Success -> {
+                        _loginUiState.value = LoginUiState.Success(result.data)
+                        saveToken(result.data)
+                    }
                     is Result.Error -> _loginUiState.value = LoginUiState.Error(result.exception)
                 }
             }
