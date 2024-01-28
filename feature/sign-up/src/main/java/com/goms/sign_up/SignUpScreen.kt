@@ -49,13 +49,13 @@ fun SignUpRoute(
     onNumberClick: () -> Unit,
 ) {
     SignUpViewModelProvider(viewModelStoreOwner = viewModelStoreOwner) { viewModel ->
-        val sendNumberResponse = viewModel.sendNumberResponse.collectAsStateWithLifecycle()
+        val sendNumberUiState by viewModel.sendNumberUiState.collectAsStateWithLifecycle()
         val name by viewModel.name.collectAsStateWithLifecycle()
         val email by viewModel.email.collectAsStateWithLifecycle()
         val gender by viewModel.gender.collectAsStateWithLifecycle()
         val major by viewModel.major.collectAsStateWithLifecycle()
 
-        when (sendNumberResponse.value) {
+        when (sendNumberUiState) {
             is Result.Loading -> Unit
             is Result.Success -> {
                 onNumberClick()

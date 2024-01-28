@@ -47,16 +47,15 @@ fun InputLoginRoute(
     onMainClick: () -> Unit,
     viewModel: LoginViewModel = hiltViewModel(),
 ) {
-    val loginResponse = viewModel.loginResponse.collectAsStateWithLifecycle()
+    val loginUiState by viewModel.loginUiState.collectAsStateWithLifecycle()
     val email by viewModel.email.collectAsStateWithLifecycle()
     val password by viewModel.password.collectAsStateWithLifecycle()
     var isError by remember { mutableStateOf(false) }
     var errorText by remember { mutableStateOf("") }
 
-    when (val state = loginResponse.value) {
+    when (loginUiState) {
         is LoginUiState.Loading -> Unit
         is LoginUiState.Success -> {
-            viewModel.saveToken(token = state.loginResponse)
             onMainClick()
         }
         is LoginUiState.Error -> {
