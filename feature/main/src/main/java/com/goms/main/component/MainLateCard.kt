@@ -1,4 +1,4 @@
-package com.goms.ui
+package com.goms.main.component
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
