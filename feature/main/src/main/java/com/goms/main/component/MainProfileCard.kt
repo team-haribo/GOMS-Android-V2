@@ -21,64 +21,94 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.goms.design_system.theme.GomsTheme
+import com.goms.main.viewmodel.GetProfileUiState
 import com.goms.model.enum.Authority
 
 @Composable
 fun MainProfileCard(
     modifier: Modifier = Modifier,
-    role: Authority
+    role: Authority,
+    getProfileUiState: GetProfileUiState,
 ) {
-    GomsTheme { colors, typography ->
-        val stateColor = when (role) {
-            Authority.ROLE_STUDENT -> colors.G4
-            Authority.ROLE_STUDENT_COUNCIL -> colors.A7
-        }
+    when (getProfileUiState) {
+        GetProfileUiState.Loading -> Unit
+        is GetProfileUiState.Error -> Unit
+        is GetProfileUiState.Success -> {
+            val data = getProfileUiState.getProfileResponse
 
-        val stateText = when (role) {
-            Authority.ROLE_STUDENT -> "외출 대기중"
-            Authority.ROLE_STUDENT_COUNCIL -> "학생회"
-        }
-
-        Surface(
-            modifier = modifier,
-            color = colors.G1,
-            shape = RoundedCornerShape(12.dp),
-            border = BorderStroke(width = 1.dp, color = colors.WHITE.copy(0.15f))
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                AsyncImage(
-                    model = "",
-                    modifier = Modifier.size(64.dp),
-                    contentScale = ContentScale.Crop,
-                    contentDescription = "Profile Image",
-                )
-                Spacer(modifier = Modifier.width(16.dp))
-                Column(verticalArrangement = Arrangement.SpaceBetween) {
-                    Text(
-                        text = "홍길동",
-                        style = typography.titleSmall,
-                        fontWeight = FontWeight.SemiBold,
-                        color = colors.WHITE
-                    )
-                    Text(
-                        text = "7기 | SW개발",
-                        style = typography.textMedium,
-                        fontWeight = FontWeight.Normal,
-                        color = colors.G4
-                    )
+            GomsTheme { colors, typography ->
+                val stateColor = when (role) {
+                    Authority.ROLE_STUDENT -> {
+                        if (data.isBlackList) {
+                            colors.N5
+                        } else {
+                            if (data.isOuting) {
+                                colors.P5
+                            } else {
+                                colors.G4
+                            }
+                        }
+                    }
+                    Authority.ROLE_STUDENT_COUNCIL -> colors.A7
                 }
-                Spacer(modifier = Modifier.weight(1f))
-                Text(
-                    text = stateText,
-                    style = typography.titleSmall,
-                    fontWeight = FontWeight.SemiBold,
-                    color = stateColor
-                )
+
+                val stateText = when (role) {
+                    Authority.ROLE_STUDENT -> {
+                        if (data.isBlackList) {
+                            "외출 금지"
+                        } else {
+                            if (data.isOuting) {
+                                "외출 중"
+                            } else {
+                                "외출 대기 중"
+                            }
+                        }
+                    }
+                    Authority.ROLE_STUDENT_COUNCIL -> "학생회"
+                }
+
+                Surface(
+                    modifier = modifier,
+                    color = colors.G1,
+                    shape = RoundedCornerShape(12.dp),
+                    border = BorderStroke(width = 1.dp, color = colors.WHITE.copy(0.15f))
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        AsyncImage(
+                            model = data.profileUrl,
+                            modifier = Modifier.size(64.dp),
+                            contentScale = ContentScale.Crop,
+                            contentDescription = "Profile Image",
+                        )
+                        Spacer(modifier = Modifier.width(16.dp))
+                        Column(verticalArrangement = Arrangement.SpaceBetween) {
+                            Text(
+                                text = data.name,
+                                style = typography.titleSmall,
+                                fontWeight = FontWeight.SemiBold,
+                                color = colors.WHITE
+                            )
+                            Text(
+                                text = "${data.grade}기 | ${data.major}",
+                                style = typography.textMedium,
+                                fontWeight = FontWeight.Normal,
+                                color = colors.G4
+                            )
+                        }
+                        Spacer(modifier = Modifier.weight(1f))
+                        Text(
+                            text = stateText,
+                            style = typography.titleSmall,
+                            fontWeight = FontWeight.SemiBold,
+                            color = stateColor
+                        )
+                    }
+                }
             }
         }
     }
@@ -88,7 +118,13 @@ fun MainProfileCard(
 @Preview(showBackground = true)
 fun MainProfileCardPreview() {
     Column {
-        MainProfileCard(role = Authority.ROLE_STUDENT)
-        MainProfileCard(role = Authority.ROLE_STUDENT_COUNCIL)
+        MainProfileCard(
+            role = Authority.ROLE_STUDENT,
+            getProfileUiState = GetProfileUiState.Loading
+        )
+        MainProfileCard(
+            role = Authority.ROLE_STUDENT_COUNCIL,
+            getProfileUiState = GetProfileUiState.Loading
+        )
     }
 }
