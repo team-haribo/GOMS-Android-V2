@@ -1,6 +1,7 @@
 package com.goms.main.component
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,10 +19,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.goms.design_system.R
 import com.goms.design_system.component.modifier.gomsClickable
 import com.goms.design_system.theme.GomsTheme
 import com.goms.main.viewmodel.GetOutingCountUiState
@@ -206,12 +208,20 @@ fun MainOutingItem(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            AsyncImage(
-                model = list.profileUrl,
-                modifier = Modifier.size(28.dp),
-                contentScale = ContentScale.Crop,
-                contentDescription = "Profile Image",
-            )
+            if (list.profileUrl.isNullOrEmpty()) {
+                Image(
+                    painter = painterResource(R.drawable.ic_profile),
+                    contentDescription = "Default Profile Image",
+                    modifier = Modifier.size(28.dp)
+                )
+            } else {
+                AsyncImage(
+                    model = list.profileUrl,
+                    modifier = Modifier.size(28.dp),
+                    contentScale = ContentScale.Crop,
+                    contentDescription = "Profile Image",
+                )
+            }
             Text(
                 text = list.name,
                 style = typography.textMedium,

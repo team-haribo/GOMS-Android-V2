@@ -1,6 +1,7 @@
 package com.goms.main.component
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,10 +25,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.goms.design_system.R
 import com.goms.design_system.component.modifier.gomsClickable
 import com.goms.design_system.theme.GomsTheme
 import com.goms.main.viewmodel.GetLateRankListUiState
@@ -46,7 +49,7 @@ fun MainLateCard(
         GetLateRankListUiState.Loading -> Unit
         is GetLateRankListUiState.Error -> Unit
         is GetLateRankListUiState.Success -> {
-            val data = getLateRankListUiState.getLateRankListResponse
+            val list = getLateRankListUiState.getLateRankListResponse
 
             var componentWidth by remember { mutableStateOf(0.dp) }
             val density = LocalDensity.current
@@ -90,7 +93,7 @@ fun MainLateCard(
                             }
                         }
                         Spacer(modifier = Modifier.height(16.dp))
-                        if (data.isEmpty()) {
+                        if (list.isEmpty()) {
                             Column(
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -114,7 +117,7 @@ fun MainLateCard(
                                 items(3) {
                                     MainLateItem(
                                         modifier = Modifier.widthIn((componentWidth - 32.dp) / 3),
-                                        data = data[it]
+                                        list = list[it]
                                     )
                                 }
                             }
@@ -129,7 +132,7 @@ fun MainLateCard(
 @Composable
 fun MainLateItem(
     modifier: Modifier = Modifier,
-    data: RankResponse
+    list: RankResponse
 ) {
     GomsTheme { colors, typography ->
         Column(
@@ -137,20 +140,28 @@ fun MainLateItem(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            AsyncImage(
-                model = data.profileUrl,
-                modifier = Modifier.size(56.dp),
-                contentScale = ContentScale.Crop,
-                contentDescription = "Profile Image",
-            )
+            if (list.profileUrl.isNullOrEmpty()) {
+                Image(
+                    painter = painterResource(R.drawable.ic_profile),
+                    contentDescription = "Default Profile Image",
+                    modifier = Modifier.size(56.dp)
+                )
+            } else {
+                AsyncImage(
+                    model = list.profileUrl,
+                    modifier = Modifier.size(56.dp),
+                    contentScale = ContentScale.Crop,
+                    contentDescription = "Profile Image",
+                )
+            }
             Text(
-                text = data.name,
+                text = list.name,
                 style = typography.textMedium,
                 fontWeight = FontWeight.SemiBold,
                 color = colors.G7
             )
             Text(
-                text = "${data.grade}기 | ${data.major.toText()}",
+                text = "${list.grade}기 | ${list.major.toText()}",
                 style = typography.caption,
                 fontWeight = FontWeight.Normal,
                 color = colors.G4
