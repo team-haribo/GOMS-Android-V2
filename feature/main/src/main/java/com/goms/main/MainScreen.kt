@@ -38,14 +38,14 @@ import com.goms.main.component.MainProfileCard
 fun MainRoute(
     viewModel: MainViewModel = hiltViewModel()
 ) {
-    val role by viewModel.role.collectAsState(initial = "")
+    val role by viewModel.role.collectAsStateWithLifecycle(initialValue = "")
     val getProfileUiState by viewModel.getProfileUiState.collectAsStateWithLifecycle()
     val getLateRankListUiState by viewModel.getLateRankListUiState.collectAsStateWithLifecycle()
     val getOutingListUiState by viewModel.getOutingListUiState.collectAsStateWithLifecycle()
     val getOutingCountUiState by viewModel.getOutingCountUiState.collectAsStateWithLifecycle()
 
     MainScreen(
-        role = Authority.ROLE_STUDENT,
+        role = if (role.isNotBlank()) Authority.valueOf(role) else Authority.ROLE_STUDENT,
         getProfileUiState = getProfileUiState,
         getLateRankListUiState = getLateRankListUiState,
         getOutingListUiState = getOutingListUiState,
