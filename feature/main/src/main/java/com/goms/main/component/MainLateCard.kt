@@ -32,6 +32,7 @@ import com.goms.design_system.component.modifier.gomsClickable
 import com.goms.design_system.theme.GomsTheme
 import com.goms.main.viewmodel.GetLateRankListUiState
 import com.goms.model.enum.Authority
+import com.goms.model.enum.toText
 import com.goms.model.response.late.RankResponse
 
 @Composable
@@ -149,7 +150,7 @@ fun MainLateItem(
                 color = colors.G7
             )
             Text(
-                text = "${data.grade}기 | ${data.major}",
+                text = "${data.grade}기 | ${data.major.toText()}",
                 style = typography.caption,
                 fontWeight = FontWeight.Normal,
                 color = colors.G4

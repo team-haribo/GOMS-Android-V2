@@ -22,6 +22,7 @@ import coil.compose.AsyncImage
 import com.goms.design_system.theme.GomsTheme
 import com.goms.main.viewmodel.GetProfileUiState
 import com.goms.model.enum.Authority
+import com.goms.model.enum.toText
 
 @Composable
 fun MainProfileCard(
@@ -93,7 +94,7 @@ fun MainProfileCard(
                                 color = colors.WHITE
                             )
                             Text(
-                                text = "${data.grade}기 | ${data.major}",
+                                text = "${data.grade}기 | ${data.major.toText()}",
                                 style = typography.textMedium,
                                 fontWeight = FontWeight.Normal,
                                 color = colors.G4

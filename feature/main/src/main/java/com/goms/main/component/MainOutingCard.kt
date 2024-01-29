@@ -27,6 +27,7 @@ import com.goms.design_system.theme.GomsTheme
 import com.goms.main.viewmodel.GetOutingCountUiState
 import com.goms.main.viewmodel.GetOutingListUiState
 import com.goms.model.enum.Authority
+import com.goms.model.enum.toText
 import com.goms.model.response.outing.OutingResponse
 
 @Composable
@@ -218,7 +219,7 @@ fun MainOutingItem(
                 color = colors.G7
             )
             Text(
-                text = "${list.grade}기 | ${list.major}",
+                text = "${list.grade}기 | ${list.major.toText()}",
                 style = typography.caption,
                 fontWeight = FontWeight.Normal,
                 color = colors.G4
