@@ -29,6 +29,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.goms.common.result.Result
 import com.goms.design_system.component.button.ButtonState
 import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.button.GomsButton
@@ -48,6 +49,7 @@ fun InputLoginRoute(
     viewModel: LoginViewModel = hiltViewModel(),
 ) {
     val loginUiState by viewModel.loginUiState.collectAsStateWithLifecycle()
+    val saveTokenUiState by viewModel.saveTokenUiState.collectAsStateWithLifecycle()
     val email by viewModel.email.collectAsStateWithLifecycle()
     val password by viewModel.password.collectAsStateWithLifecycle()
     var isError by remember { mutableStateOf(false) }
@@ -56,7 +58,13 @@ fun InputLoginRoute(
     when (loginUiState) {
         is LoginUiState.Loading -> Unit
         is LoginUiState.Success -> {
-            onMainClick()
+            when (saveTokenUiState) {
+                is Result.Loading -> Unit
+                is Result.Success -> {
+                    onMainClick()
+                }
+                is Result.Error -> {}
+            }
         }
         is LoginUiState.Error -> {
             isError = true
