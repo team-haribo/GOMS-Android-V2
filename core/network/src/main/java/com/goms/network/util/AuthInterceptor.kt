@@ -1,5 +1,6 @@
 package com.goms.network.util
 
+import android.util.Log
 import com.goms.common.exception.TokenExpirationException
 import com.goms.datastore.AuthTokenDataSource
 import com.goms.model.response.auth.LoginResponse
@@ -22,15 +23,14 @@ class AuthInterceptor @Inject constructor(
         val request = chain.request()
         val builder = request.newBuilder()
         val currentTime = System.currentTimeMillis().toGomsTimeDate()
-        val ignorePath = listOf("/auth")
-        val ignoreMethod = listOf("POST")
+        val ignorePath = "/auth"
+        val ignoreMethodPost = "POST"
+        val ignoreMethodGet = "GET"
         val path = request.url.encodedPath
         val method = request.method
 
-        ignorePath.forEachIndexed { index, s ->
-            if (s == path && ignoreMethod[index] == method) {
-                return chain.proceed(request)
-            }
+        if (path.contains(ignorePath) && (method == ignoreMethodPost || method == ignoreMethodGet)) {
+            return chain.proceed(request)
         }
 
         runBlocking {
