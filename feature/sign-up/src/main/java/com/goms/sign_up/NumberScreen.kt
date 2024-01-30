@@ -44,12 +44,12 @@ fun NumberRoute(
     onPasswordClick: () -> Unit,
 ) {
     SignUpViewModelProvider(viewModelStoreOwner = viewModelStoreOwner) { viewModel ->
-        val verifyNumberResponse = viewModel.verifyNumberResponse.collectAsStateWithLifecycle()
+        val verifyNumberUiState by viewModel.verifyNumberUiState.collectAsStateWithLifecycle()
         val number by viewModel.number.collectAsStateWithLifecycle()
         var isError by remember { mutableStateOf(false) }
         var errorText by remember { mutableStateOf("") }
 
-        when (verifyNumberResponse.value) {
+        when (verifyNumberUiState) {
             is Result.Loading -> Unit
             is Result.Success -> {
                 onPasswordClick()

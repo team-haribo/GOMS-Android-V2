@@ -1,5 +1,6 @@
 package com.goms.network.util
 
+import android.util.Log
 import com.goms.common.exception.TokenExpirationException
 import com.goms.datastore.AuthTokenDataSource
 import com.goms.model.response.auth.LoginResponse
@@ -8,7 +9,6 @@ import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.json.JsonObject
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -21,18 +21,16 @@ class AuthInterceptor @Inject constructor(
 ): Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
-        val response = chain.proceed(request)
         val builder = request.newBuilder()
         val currentTime = System.currentTimeMillis().toGomsTimeDate()
-        val ignorePath = listOf("/auth")
-        val ignoreMethod = listOf("POST")
+        val ignorePath = "/auth"
+        val ignoreMethodPost = "POST"
+        val ignoreMethodGet = "GET"
         val path = request.url.encodedPath
         val method = request.method
 
-        ignorePath.forEachIndexed { index, s ->
-            if (s == path && ignoreMethod[index] == method) {
-                return response
-            }
+        if (path.contains(ignorePath) && (method == ignoreMethodPost || method == ignoreMethodGet)) {
+            return chain.proceed(request)
         }
 
         runBlocking {
@@ -61,7 +59,7 @@ class AuthInterceptor @Inject constructor(
                 val refreshRequest = Request.Builder()
                     .url(BuildConfig.BASE_URL + "/api/v2/auth")
                     .patch(chain.request().body ?: RequestBody.create(null, byteArrayOf()))
-                    .addHeader("Refresh-Token", refreshTokenWithBearer)
+                    .addHeader("refreshToken", refreshTokenWithBearer)
                     .build()
 
                 val response = client.newCall(refreshRequest).execute()
@@ -78,6 +76,8 @@ class AuthInterceptor @Inject constructor(
             val accessToken = dataSource.getAccessToken().first().replace("\"", "")
             builder.addHeader("Authorization", "Bearer $accessToken")
         }
+        val response = chain.proceed(builder.build())
+
         return if (response.code == 204) {
             response.newBuilder().code(200).build()
         } else {

@@ -22,11 +22,11 @@ class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
     private val saveTokenUseCase: SaveTokenUseCase
 ) : ViewModel() {
-    private val _loginResponse = MutableStateFlow<LoginUiState>(LoginUiState.Loading)
-    val loginResponse = _loginResponse.asStateFlow()
+    private val _loginUiState = MutableStateFlow<LoginUiState>(LoginUiState.Loading)
+    val loginUiState = _loginUiState.asStateFlow()
 
-    private val _saveTokenResponse = MutableStateFlow<Result<Unit>>(Result.Loading)
-    val saveTokenResponse = _saveTokenResponse.asStateFlow()
+    private val _saveTokenUiState = MutableStateFlow<Result<Unit>>(Result.Loading)
+    val saveTokenUiState = _saveTokenUiState.asStateFlow()
 
     var email = savedStateHandle.getStateFlow(key = EMAIL, initialValue = "")
     var password = savedStateHandle.getStateFlow(key = PASSWORD, initialValue = "")
@@ -34,11 +34,14 @@ class LoginViewModel @Inject constructor(
     fun login(body: LoginRequest) = viewModelScope.launch {
         loginUseCase(body = body)
             .asResult()
-            .collectLatest{ result ->
+            .collectLatest { result ->
                 when (result) {
-                    is Result.Loading -> _loginResponse.value = LoginUiState.Loading
-                    is Result.Success -> _loginResponse.value = LoginUiState.Success(result.data!!)
-                    is Result.Error -> _loginResponse.value = LoginUiState.Error(result.exception)
+                    is Result.Loading -> _loginUiState.value = LoginUiState.Loading
+                    is Result.Success -> {
+                        _loginUiState.value = LoginUiState.Success(result.data)
+                        saveToken(result.data)
+                    }
+                    is Result.Error -> _loginUiState.value = LoginUiState.Error(result.exception)
                 }
             }
     }
@@ -46,9 +49,9 @@ class LoginViewModel @Inject constructor(
     fun saveToken(token: LoginResponse) = viewModelScope.launch {
         saveTokenUseCase(token = token)
             .onSuccess {
-                _saveTokenResponse.value = Result.Success(it)
+                _saveTokenUiState.value = Result.Success(it)
             }.onFailure {
-                _saveTokenResponse.value = Result.Error(it)
+                _saveTokenUiState.value = Result.Error(it)
             }
     }
 

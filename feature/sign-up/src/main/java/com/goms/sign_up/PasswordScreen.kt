@@ -50,12 +50,12 @@ fun PasswordRoute(
     onLoginClick: () -> Unit,
 ) {
     SignUpViewModelProvider(viewModelStoreOwner = viewModelStoreOwner) { viewModel ->
-        val signUpResponse = viewModel.signUpResponse.collectAsStateWithLifecycle()
+        val signUpUiState by viewModel.signUpUiState.collectAsStateWithLifecycle()
         val password by viewModel.password.collectAsStateWithLifecycle()
         var isError by remember { mutableStateOf(false) }
         var errorText by remember { mutableStateOf("") }
 
-        when (signUpResponse.value) {
+        when (signUpUiState) {
             is Result.Loading -> Unit
             is Result.Success -> {
                 onLoginClick()
