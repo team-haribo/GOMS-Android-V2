@@ -114,7 +114,7 @@ fun MainLateCard(
                             }
                         } else {
                             LazyRow(modifier = Modifier.fillMaxWidth()) {
-                                items(3) {
+                                items(list.take(3).size) {
                                     MainLateItem(
                                         modifier = Modifier.widthIn((componentWidth - 32.dp) / 3),
                                         list = list[it]
@@ -138,7 +138,7 @@ fun MainLateItem(
         Column(
             modifier = modifier.padding(vertical = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             if (list.profileUrl.isNullOrEmpty()) {
                 Image(
