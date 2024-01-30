@@ -13,5 +13,5 @@ data class OutingResponse(
     @Json(name = "grade") val grade: Int,
     @Json(name = "gender") val gender: Gender,
     @Json(name = "profileUrl") val profileUrl: String?,
-    @Json(name = "createdAt") val createdAt: String
+    @Json(name = "createdTime") val createdTime: String
 )
