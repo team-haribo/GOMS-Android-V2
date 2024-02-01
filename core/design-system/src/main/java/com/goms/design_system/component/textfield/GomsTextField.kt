@@ -40,6 +40,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.goms.design_system.component.modifier.gomsClickable
 import com.goms.design_system.component.timer.CountdownTimer
+import com.goms.design_system.icon.SearchIcon
 import com.goms.design_system.theme.GomsTheme
 
 @Composable
@@ -430,6 +431,81 @@ fun GomsPasswordTextField(
                     )
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun GomsSearchTextField(
+    modifier: Modifier = Modifier,
+    placeHolder: String = "",
+    readOnly: Boolean = false,
+    focusManager: FocusManager = LocalFocusManager.current,
+    focusRequester: FocusRequester = FocusRequester(),
+    setText: String,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    maxLines: Int = Int.MAX_VALUE,
+    singleLine: Boolean = false,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    onValueChange: (String) -> Unit = {},
+) {
+    val isFocused = remember { mutableStateOf(false) }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            focusManager.clearFocus()
+        }
+    }
+
+    GomsTheme { colors, typography ->
+        Column {
+            OutlinedTextField(
+                value = setText,
+                onValueChange = {
+                    onValueChange(it)
+                },
+                keyboardOptions = keyboardOptions,
+                keyboardActions = keyboardActions,
+                placeholder = {
+                    Text(
+                        text = placeHolder,
+                        style = typography.textMedium,
+                        fontWeight = FontWeight.Normal,
+                        color = colors.G4
+                    )
+                },
+                modifier = modifier
+                    .fillMaxWidth()
+                    .focusRequester(focusRequester)
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(colors.G1)
+                    .border(
+                        width = 1.dp,
+                        color = colors.WHITE.copy(0.15f),
+                        shape = RoundedCornerShape(12.dp)
+                    )
+                    .onFocusChanged {
+                        isFocused.value = it.isFocused
+                    },
+                maxLines = maxLines,
+                singleLine = singleLine,
+                textStyle = typography.textMedium,
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedTextColor = colors.WHITE,
+                    unfocusedTextColor = colors.WHITE,
+                    focusedPlaceholderColor = colors.G4,
+                    unfocusedPlaceholderColor = colors.G4,
+                    focusedBorderColor = Color.Transparent,
+                    unfocusedBorderColor = Color.Transparent,
+                    cursorColor = colors.I5
+                ),
+                trailingIcon = {
+                    SearchIcon(tint = colors.G4)
+                },
+                readOnly = readOnly,
+                visualTransformation = visualTransformation
+            )
         }
     }
 }
