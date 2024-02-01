@@ -94,24 +94,7 @@ fun MainLateCard(
                         }
                         Spacer(modifier = Modifier.height(16.dp))
                         if (list.isEmpty()) {
-                            Column(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.spacedBy(12.dp)
-                            ) {
-                                Text(
-                                    text = "\uD83D\uDC4D",
-                                    fontSize = 80.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = colors.WHITE
-                                )
-                                Text(
-                                    text = "지각자가 없어요! 놀랍게도...",
-                                    style = typography.textMedium,
-                                    fontWeight = FontWeight.SemiBold,
-                                    color = colors.G4
-                                )
-                            }
+                            LateListEmptyText()
                         } else {
                             LazyRow(modifier = Modifier.fillMaxWidth()) {
                                 items(list.take(3).size) {
