@@ -127,3 +127,14 @@ fun SearchIcon(
         colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
     )
 }
+
+@Composable
+fun DeleteIcon(
+    modifier: Modifier = Modifier
+) {
+    Image(
+        painter = painterResource(id = R.drawable.ic_delete),
+        contentDescription = "Delete Icon",
+        modifier = modifier
+    )
+}
