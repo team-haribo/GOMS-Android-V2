@@ -29,8 +29,8 @@ import com.goms.design_system.theme.GomsTheme
 import com.goms.main.viewmodel.GetOutingCountUiState
 import com.goms.main.viewmodel.GetOutingListUiState
 import com.goms.model.enum.Authority
-import com.goms.model.enum.toText
 import com.goms.model.response.outing.OutingResponse
+import com.goms.ui.toText
 
 @Composable
 fun MainOutingCard(
