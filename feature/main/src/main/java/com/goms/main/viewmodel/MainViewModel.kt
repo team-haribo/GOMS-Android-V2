@@ -1,5 +1,6 @@
 package com.goms.main.viewmodel
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.goms.common.result.Result
@@ -9,17 +10,16 @@ import com.goms.domain.account.GetProfileUseCase
 import com.goms.domain.late.GetLateRankListUseCase
 import com.goms.domain.outing.GetOutingCountUseCase
 import com.goms.domain.outing.GetOutingListUseCase
-import com.goms.model.enum.Authority
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
+    private val savedStateHandle: SavedStateHandle,
     private val getProfileUseCase: GetProfileUseCase,
     private val getLateRankListUseCase: GetLateRankListUseCase,
     private val getOutingListUseCase: GetOutingListUseCase,
@@ -39,6 +39,8 @@ class MainViewModel @Inject constructor(
 
     private val _getOutingCountUiState = MutableStateFlow<GetOutingCountUiState>(GetOutingCountUiState.Loading)
     val getOutingCountUiState = _getOutingCountUiState.asStateFlow()
+
+    var outingSearch = savedStateHandle.getStateFlow(key = OUTING_SEARCH, initialValue = "")
 
     fun getProfile() = viewModelScope.launch {
         getProfileUseCase()
@@ -94,4 +96,10 @@ class MainViewModel @Inject constructor(
                 }
             }
     }
+
+    fun onOutingSearchChange(value: String) {
+        savedStateHandle[OUTING_SEARCH] = value
+    }
 }
+
+private const val OUTING_SEARCH = "outing search"
