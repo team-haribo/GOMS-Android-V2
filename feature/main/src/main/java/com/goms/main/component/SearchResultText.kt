@@ -12,8 +12,8 @@ fun SearchResultText(modifier: Modifier) {
         Text(
             modifier = modifier,
             text = "검색 결과",
-            style = typography.titleLarge,
-            fontWeight = FontWeight.Bold,
+            style = typography.textLarge,
+            fontWeight = FontWeight.SemiBold,
             color = colors.WHITE
         )
     }
