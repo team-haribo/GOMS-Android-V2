@@ -16,6 +16,9 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
@@ -25,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goms.design_system.component.button.GomsBackButton
+import com.goms.design_system.component.dialog.GomsDialog
 import com.goms.design_system.component.textfield.GomsSearchTextField
 import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.util.keyboardAsState
@@ -73,14 +77,27 @@ fun OutingStatusScreen(
     outingSearchCallBack: (String) -> Unit
 ) {
     val scrollState = rememberScrollState()
-
     val focusManager = LocalFocusManager.current
     val isKeyboardOpen by keyboardAsState()
+    var openDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(isKeyboardOpen) {
         if (!isKeyboardOpen) {
             focusManager.clearFocus()
         }
+    }
+
+    if (openDialog) {
+        GomsDialog(
+            openDialog = openDialog,
+            onStateChange = { openDialog = it },
+            title = "외출 강제 복귀",
+            content = "외출자를 강제로 복귀시키시겠습니까?",
+            dismissText = "취소",
+            checkText = "복귀",
+            onDismissClick = { openDialog = false },
+            onCheckClick = { openDialog = false }
+        )
     }
 
     GomsTheme { colors, typography ->
@@ -122,7 +139,9 @@ fun OutingStatusScreen(
                     getOutingListUiState = getOutingListUiState,
                     getOutingCountUiState = getOutingCountUiState,
                     outingSearchUiState = outingSearchUiState
-                ) {}
+                ) {
+                    openDialog = true
+                }
             }
         }
     }
