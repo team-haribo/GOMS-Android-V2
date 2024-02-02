@@ -20,6 +20,7 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -42,6 +43,7 @@ import com.goms.design_system.component.modifier.gomsClickable
 import com.goms.design_system.component.timer.CountdownTimer
 import com.goms.design_system.icon.SearchIcon
 import com.goms.design_system.theme.GomsTheme
+import kotlinx.coroutines.delay
 
 @Composable
 fun GomsTextField(
@@ -438,6 +440,7 @@ fun GomsPasswordTextField(
 @Composable
 fun GomsSearchTextField(
     modifier: Modifier = Modifier,
+    debounceTime: Long = 300L,
     placeHolder: String = "",
     readOnly: Boolean = false,
     focusManager: FocusManager = LocalFocusManager.current,
@@ -449,6 +452,7 @@ fun GomsSearchTextField(
     singleLine: Boolean = false,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     onValueChange: (String) -> Unit = {},
+    onSearchTextChange: (String) -> Unit = {}
 ) {
     val isFocused = remember { mutableStateOf(false) }
 
@@ -456,6 +460,11 @@ fun GomsSearchTextField(
         onDispose {
             focusManager.clearFocus()
         }
+    }
+
+    LaunchedEffect(setText) {
+        delay(debounceTime)
+        onSearchTextChange(setText)
     }
 
     GomsTheme { colors, typography ->
