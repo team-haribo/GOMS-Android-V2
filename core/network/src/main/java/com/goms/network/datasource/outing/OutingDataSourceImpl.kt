@@ -28,4 +28,12 @@ class OutingDataSourceImpl @Inject constructor(
                 .sendRequest()
         )
     }.flowOn(Dispatchers.IO)
+
+    override suspend fun outingSearch(name: String): Flow<List<OutingResponse>> = flow {
+        emit(
+            GomsApiHandler<List<OutingResponse>>()
+                .httpRequest { outingAPI.outingSearch(name = name) }
+                .sendRequest()
+        )
+    }.flowOn(Dispatchers.IO)
 }
