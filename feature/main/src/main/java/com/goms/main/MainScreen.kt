@@ -1,6 +1,5 @@
 package com.goms.main
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,12 +12,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goms.design_system.icon.SettingIcon
 import com.goms.design_system.theme.GomsTheme
@@ -26,36 +24,40 @@ import com.goms.main.viewmodel.GetLateRankListUiState
 import com.goms.main.viewmodel.GetOutingCountUiState
 import com.goms.main.viewmodel.GetOutingListUiState
 import com.goms.main.viewmodel.GetProfileUiState
-import com.goms.main.viewmodel.MainViewModel
 import com.goms.model.enum.Authority
 import com.goms.ui.GomsTopBar
 import com.goms.ui.GomsFloatingButton
 import com.goms.main.component.MainLateCard
 import com.goms.main.component.MainOutingCard
 import com.goms.main.component.MainProfileCard
+import com.goms.main.viewmodel.MainViewModelProvider
 
 @Composable
 fun MainRoute(
-    viewModel: MainViewModel = hiltViewModel()
+    viewModelStoreOwner: ViewModelStoreOwner,
+    onOutingStatusClick: () -> Unit
 ) {
-    val role by viewModel.role.collectAsStateWithLifecycle(initialValue = "")
-    val getProfileUiState by viewModel.getProfileUiState.collectAsStateWithLifecycle()
-    val getLateRankListUiState by viewModel.getLateRankListUiState.collectAsStateWithLifecycle()
-    val getOutingListUiState by viewModel.getOutingListUiState.collectAsStateWithLifecycle()
-    val getOutingCountUiState by viewModel.getOutingCountUiState.collectAsStateWithLifecycle()
+    MainViewModelProvider(viewModelStoreOwner = viewModelStoreOwner) { viewModel ->
+        val role by viewModel.role.collectAsStateWithLifecycle(initialValue = "")
+        val getProfileUiState by viewModel.getProfileUiState.collectAsStateWithLifecycle()
+        val getLateRankListUiState by viewModel.getLateRankListUiState.collectAsStateWithLifecycle()
+        val getOutingListUiState by viewModel.getOutingListUiState.collectAsStateWithLifecycle()
+        val getOutingCountUiState by viewModel.getOutingCountUiState.collectAsStateWithLifecycle()
 
-    MainScreen(
-        role = if (role.isNotBlank()) Authority.valueOf(role) else Authority.ROLE_STUDENT,
-        getProfileUiState = getProfileUiState,
-        getLateRankListUiState = getLateRankListUiState,
-        getOutingListUiState = getOutingListUiState,
-        getOutingCountUiState = getOutingCountUiState,
-        getData = {
-            viewModel.getProfile()
-            viewModel.getLateRankList()
-            viewModel.getOutingCount()
-        }
-    )
+        MainScreen(
+            role = if (role.isNotBlank()) Authority.valueOf(role) else Authority.ROLE_STUDENT,
+            getProfileUiState = getProfileUiState,
+            getLateRankListUiState = getLateRankListUiState,
+            getOutingListUiState = getOutingListUiState,
+            getOutingCountUiState = getOutingCountUiState,
+            getData = {
+                viewModel.getProfile()
+                viewModel.getLateRankList()
+                viewModel.getOutingCount()
+            },
+            onOutingStatusClick = onOutingStatusClick
+        )
+    }
 }
 
 @Composable
@@ -65,7 +67,8 @@ fun MainScreen(
     getLateRankListUiState: GetLateRankListUiState,
     getOutingListUiState: GetOutingListUiState,
     getOutingCountUiState: GetOutingCountUiState,
-    getData: () -> Unit
+    getData: () -> Unit,
+    onOutingStatusClick: () -> Unit,
 ) {
     LaunchedEffect(true) {
         getData()
@@ -107,7 +110,9 @@ fun MainScreen(
                         role = role,
                         getOutingListUiState = getOutingListUiState,
                         getOutingCountUiState = getOutingCountUiState
-                    ) {}
+                    ) {
+                        onOutingStatusClick()
+                    }
                 }
             }
             GomsFloatingButton(

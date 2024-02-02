@@ -12,6 +12,8 @@ import com.goms.login.navigation.navigateToInputLogin
 import com.goms.login.navigation.navigateToLogin
 import com.goms.main.navigation.mainScreen
 import com.goms.main.navigation.navigateToMain
+import com.goms.main.navigation.navigateToOutingStatus
+import com.goms.main.navigation.outingStatusScreen
 import com.goms.sign_up.navigation.navigateToNumber
 import com.goms.sign_up.navigation.navigateToPassword
 import com.goms.sign_up.navigation.navigateToSignUp
@@ -55,6 +57,13 @@ fun GomsNavHost(
             onBackClick = navController::popBackStack,
             onLoginClick = { appState.navigateToTopLevelDestination(TopLevelDestination.LOGIN) }
         )
-        mainScreen()
+        mainScreen(
+            viewModelStoreOwner = viewModelStoreOwner,
+            onOutingStatusClick = navController::navigateToOutingStatus
+        )
+        outingStatusScreen(
+            viewModelStoreOwner = viewModelStoreOwner,
+            onBackClick = navController::popBackStack
+        )
     }
 }

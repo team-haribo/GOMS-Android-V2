@@ -26,7 +26,7 @@ import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.R
 import com.goms.main.viewmodel.GetProfileUiState
 import com.goms.model.enum.Authority
-import com.goms.model.enum.toText
+import com.goms.ui.toText
 
 @Composable
 fun MainProfileCard(

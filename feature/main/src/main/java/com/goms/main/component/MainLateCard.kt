@@ -35,8 +35,8 @@ import com.goms.design_system.component.modifier.gomsClickable
 import com.goms.design_system.theme.GomsTheme
 import com.goms.main.viewmodel.GetLateRankListUiState
 import com.goms.model.enum.Authority
-import com.goms.model.enum.toText
 import com.goms.model.response.late.RankResponse
+import com.goms.ui.toText
 
 @Composable
 fun MainLateCard(
@@ -94,24 +94,7 @@ fun MainLateCard(
                         }
                         Spacer(modifier = Modifier.height(16.dp))
                         if (list.isEmpty()) {
-                            Column(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.spacedBy(12.dp)
-                            ) {
-                                Text(
-                                    text = "\uD83D\uDC4D",
-                                    fontSize = 80.sp,
-                                    fontWeight = FontWeight.Bold,
-                                    color = colors.WHITE
-                                )
-                                Text(
-                                    text = "지각자가 없어요! 놀랍게도...",
-                                    style = typography.textMedium,
-                                    fontWeight = FontWeight.SemiBold,
-                                    color = colors.G4
-                                )
-                            }
+                            LateListEmptyText()
                         } else {
                             LazyRow(modifier = Modifier.fillMaxWidth()) {
                                 items(list.take(3).size) {
