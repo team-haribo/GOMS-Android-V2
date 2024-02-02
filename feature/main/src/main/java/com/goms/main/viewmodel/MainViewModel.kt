@@ -10,6 +10,7 @@ import com.goms.domain.account.GetProfileUseCase
 import com.goms.domain.late.GetLateRankListUseCase
 import com.goms.domain.outing.GetOutingCountUseCase
 import com.goms.domain.outing.GetOutingListUseCase
+import com.goms.domain.outing.OutingSearchUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -24,6 +25,7 @@ class MainViewModel @Inject constructor(
     private val getLateRankListUseCase: GetLateRankListUseCase,
     private val getOutingListUseCase: GetOutingListUseCase,
     private val getOutingCountUseCase: GetOutingCountUseCase,
+    private val outingSearchUseCase: OutingSearchUseCase,
     private val authTokenDataSource: AuthTokenDataSource
 ) : ViewModel() {
     val role = authTokenDataSource.getAuthority()
@@ -39,6 +41,9 @@ class MainViewModel @Inject constructor(
 
     private val _getOutingCountUiState = MutableStateFlow<GetOutingCountUiState>(GetOutingCountUiState.Loading)
     val getOutingCountUiState = _getOutingCountUiState.asStateFlow()
+
+    private val _outingSearchUiState = MutableStateFlow<OutingSearchUiState>(OutingSearchUiState.Loading)
+    val outingSearchUiState = _outingSearchUiState.asStateFlow()
 
     var outingSearch = savedStateHandle.getStateFlow(key = OUTING_SEARCH, initialValue = "")
 
@@ -94,6 +99,28 @@ class MainViewModel @Inject constructor(
                     }
                     is Result.Error -> _getOutingCountUiState.value = GetOutingCountUiState.Error(result.exception)
                 }
+            }
+    }
+
+    fun outingSearch(name: String) = viewModelScope.launch {
+            if (name.isEmpty()) {
+                _outingSearchUiState.value = OutingSearchUiState.QueryEmpty
+            } else {
+                outingSearchUseCase(name = name)
+                    .asResult()
+                    .collectLatest { result ->
+                        when (result) {
+                            is Result.Loading -> _outingSearchUiState.value = OutingSearchUiState.Loading
+                            is Result.Success -> {
+                                if (result.data.isEmpty()) {
+                                    _outingSearchUiState.value = OutingSearchUiState.Empty
+                                } else {
+                                    _outingSearchUiState.value = OutingSearchUiState.Success(result.data)
+                                }
+                            }
+                            is Result.Error -> _outingSearchUiState.value = OutingSearchUiState.Error(result.exception)
+                        }
+                    }
             }
     }
 
