@@ -33,6 +33,7 @@ import com.goms.main.component.OutingStatusText
 import com.goms.main.viewmodel.GetOutingCountUiState
 import com.goms.main.viewmodel.GetOutingListUiState
 import com.goms.main.viewmodel.MainViewModelProvider
+import com.goms.main.viewmodel.OutingSearchUiState
 import com.goms.model.enum.Authority
 
 @Composable
@@ -45,6 +46,7 @@ fun OutingStatusRoute(
         val outingSearch by viewModel.outingSearch.collectAsStateWithLifecycle()
         val getOutingListUiState by viewModel.getOutingListUiState.collectAsStateWithLifecycle()
         val getOutingCountUiState by viewModel.getOutingCountUiState.collectAsStateWithLifecycle()
+        val outingSearchUiState by viewModel.outingSearchUiState.collectAsStateWithLifecycle()
 
         OutingStatusScreen(
             role = if (role.isNotBlank()) Authority.valueOf(role) else Authority.ROLE_STUDENT,
@@ -52,7 +54,9 @@ fun OutingStatusRoute(
             onOutingSearchChange = viewModel::onOutingSearchChange,
             getOutingListUiState = getOutingListUiState,
             getOutingCountUiState = getOutingCountUiState,
-            onBackClick = onBackClick
+            outingSearchUiState = outingSearchUiState,
+            onBackClick = onBackClick,
+            outingSearchCallBack = { viewModel.outingSearch(it) }
         )
     }
 }
@@ -64,7 +68,9 @@ fun OutingStatusScreen(
     onOutingSearchChange: (String) -> Unit,
     getOutingListUiState: GetOutingListUiState,
     getOutingCountUiState: GetOutingCountUiState,
-    onBackClick: () -> Unit
+    outingSearchUiState: OutingSearchUiState,
+    onBackClick: () -> Unit,
+    outingSearchCallBack: (String) -> Unit
 ) {
     val scrollState = rememberScrollState()
 
@@ -107,13 +113,15 @@ fun OutingStatusScreen(
                     placeHolder = "학생 검색...",
                     setText = outingSearch,
                     onValueChange = onOutingSearchChange,
+                    onSearchTextChange = outingSearchCallBack,
                     singleLine = true
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 OutingStatusList(
                     role = role,
                     getOutingListUiState = getOutingListUiState,
-                    getOutingCountUiState = getOutingCountUiState
+                    getOutingCountUiState = getOutingCountUiState,
+                    outingSearchUiState = outingSearchUiState
                 ) {}
             }
         }
