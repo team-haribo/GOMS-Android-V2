@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.goms.design_system.theme.GomsTheme
@@ -30,8 +31,9 @@ fun SearchEmptyText() {
                 text = "검색 결과가 없습니다\n" +
                         "검색 내용이 잘못되진 않았나요?",
                 style = typography.textMedium,
-                fontWeight = FontWeight.SemiBold,
-                color = colors.G4
+                fontWeight = FontWeight.Normal,
+                color = colors.G4,
+                textAlign = TextAlign.Center
             )
         }
     }

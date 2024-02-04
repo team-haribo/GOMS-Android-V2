@@ -27,9 +27,11 @@ import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.util.formatTime
 import com.goms.main.viewmodel.GetOutingCountUiState
 import com.goms.main.viewmodel.GetOutingListUiState
+import com.goms.main.viewmodel.OutingSearchUiState
 import com.goms.model.enum.Authority
 import com.goms.model.response.outing.OutingResponse
 import com.goms.ui.toText
+import java.util.UUID
 
 @Composable
 fun OutingStatusList(
@@ -37,20 +39,72 @@ fun OutingStatusList(
     role: Authority,
     getOutingListUiState: GetOutingListUiState,
     getOutingCountUiState: GetOutingCountUiState,
-    onClick: () -> Unit
+    outingSearchUiState: OutingSearchUiState,
+    onClick: (UUID) -> Unit
 ) {
     when (getOutingCountUiState) {
         GetOutingCountUiState.Loading -> Unit
         is GetOutingCountUiState.Error -> Unit
         GetOutingCountUiState.Empty -> {
-            OutingListEmptyText()
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 100.dp)
+            ) {
+                OutingListEmptyText()
+            }
         }
         is GetOutingCountUiState.Success -> {
-            when (getOutingListUiState) {
-                GetOutingListUiState.Loading -> Unit
-                is GetOutingListUiState.Error -> Unit
-                is GetOutingListUiState.Success -> {
-                    val list = getOutingListUiState.getOutingListResponse
+            when (outingSearchUiState) {
+                OutingSearchUiState.Loading -> Unit
+                is OutingSearchUiState.Error -> Unit
+                OutingSearchUiState.QueryEmpty -> {
+                    when (getOutingListUiState) {
+                        GetOutingListUiState.Loading -> Unit
+                        is GetOutingListUiState.Error -> Unit
+                        is GetOutingListUiState.Success -> {
+                            val list = getOutingListUiState.getOutingListResponse
+
+                            GomsTheme { colors, typography ->
+                                Column(
+                                    modifier = modifier.fillMaxWidth(),
+                                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                                ) {
+                                    SearchResultText(modifier = Modifier.align(Alignment.Start))
+                                    LazyColumn(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .heightIn(max = 10000.dp)
+                                    ) {
+                                        items(list.size) {
+                                            OutingStatusListItem(
+                                                modifier = Modifier.fillMaxWidth(),
+                                                role = role,
+                                                list = list[it],
+                                                onClick = onClick
+                                            )
+                                            Divider(
+                                                modifier = Modifier.fillMaxWidth(),
+                                                color = colors.WHITE.copy(0.15f)
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                OutingSearchUiState.Empty -> {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 100.dp)
+                    ) {
+                        SearchEmptyText()
+                    }
+                }
+                is OutingSearchUiState.Success -> {
+                    val list = outingSearchUiState.outingSearchResponse
 
                     GomsTheme { colors, typography ->
                         Column(
@@ -68,7 +122,7 @@ fun OutingStatusList(
                                         modifier = Modifier.fillMaxWidth(),
                                         role = role,
                                         list = list[it],
-                                        onClick = { onClick() }
+                                        onClick = onClick
                                     )
                                     Divider(
                                         modifier = Modifier.fillMaxWidth(),
@@ -89,7 +143,7 @@ fun OutingStatusListItem(
     modifier: Modifier = Modifier,
     role: Authority,
     list: OutingResponse,
-    onClick: () -> Unit
+    onClick: (UUID) -> Unit
 ) {
     GomsTheme { colors, typography ->
         Row(
@@ -142,7 +196,7 @@ fun OutingStatusListItem(
             }
             Spacer(modifier = Modifier.weight(1f))
             if (role == Authority.ROLE_STUDENT_COUNCIL) {
-                IconButton(onClick = { onClick() }) {
+                IconButton(onClick = { onClick(UUID.fromString(list.accountIdx)) }) {
                     DeleteIcon()
                 }
             }

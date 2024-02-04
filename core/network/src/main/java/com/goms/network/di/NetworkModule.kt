@@ -4,6 +4,7 @@ import android.util.Log
 import com.goms.network.BuildConfig
 import com.goms.network.api.AccountAPI
 import com.goms.network.api.AuthAPI
+import com.goms.network.api.CouncilAPI
 import com.goms.network.api.LateAPI
 import com.goms.network.api.OutingAPI
 import com.goms.network.util.AuthInterceptor
@@ -91,5 +92,11 @@ object NetworkModule {
     @Singleton
     fun provideOutingAPI(retrofit: Retrofit): OutingAPI {
         return retrofit.create(OutingAPI::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCouncilAPI(retrofit: Retrofit): CouncilAPI {
+        return retrofit.create(CouncilAPI::class.java)
     }
 }

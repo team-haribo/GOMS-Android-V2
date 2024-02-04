@@ -29,7 +29,7 @@ fun LateListEmptyText() {
             Text(
                 text = "지각자가 없어요! 놀랍게도...",
                 style = typography.textMedium,
-                fontWeight = FontWeight.SemiBold,
+                fontWeight = FontWeight.Normal,
                 color = colors.G4
             )
         }
