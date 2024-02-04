@@ -7,6 +7,7 @@ import com.goms.common.result.Result
 import com.goms.common.result.asResult
 import com.goms.datastore.AuthTokenDataSource
 import com.goms.domain.account.GetProfileUseCase
+import com.goms.domain.council.DeleteOutingUseCase
 import com.goms.domain.late.GetLateRankListUseCase
 import com.goms.domain.outing.GetOutingCountUseCase
 import com.goms.domain.outing.GetOutingListUseCase
@@ -14,8 +15,10 @@ import com.goms.domain.outing.OutingSearchUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,6 +29,7 @@ class MainViewModel @Inject constructor(
     private val getOutingListUseCase: GetOutingListUseCase,
     private val getOutingCountUseCase: GetOutingCountUseCase,
     private val outingSearchUseCase: OutingSearchUseCase,
+    private val deleteOutingUseCase: DeleteOutingUseCase,
     private val authTokenDataSource: AuthTokenDataSource
 ) : ViewModel() {
     val role = authTokenDataSource.getAuthority()
@@ -44,6 +48,9 @@ class MainViewModel @Inject constructor(
 
     private val _outingSearchUiState = MutableStateFlow<OutingSearchUiState>(OutingSearchUiState.Loading)
     val outingSearchUiState = _outingSearchUiState.asStateFlow()
+
+    private val _deleteOutingUiState = MutableStateFlow<Result<Unit>>(Result.Loading)
+    val deleteOutingUiState = _deleteOutingUiState.asStateFlow()
 
     var outingSearch = savedStateHandle.getStateFlow(key = OUTING_SEARCH, initialValue = "")
 
@@ -121,6 +128,19 @@ class MainViewModel @Inject constructor(
                             is Result.Error -> _outingSearchUiState.value = OutingSearchUiState.Error(result.exception)
                         }
                     }
+            }
+    }
+
+    fun deleteOuting(accountIdx: UUID) = viewModelScope.launch {
+        deleteOutingUseCase(accountIdx = accountIdx)
+            .onSuccess {
+                it.catch {  remoteError ->
+                    _deleteOutingUiState.value = Result.Error(remoteError)
+                }.collect { result ->
+                    _deleteOutingUiState.value = Result.Success(result)
+                }
+            }.onFailure {
+                _deleteOutingUiState.value = Result.Error(it)
             }
     }
 
