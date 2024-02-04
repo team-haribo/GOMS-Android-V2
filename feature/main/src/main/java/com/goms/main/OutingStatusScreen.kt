@@ -27,6 +27,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.goms.common.result.Result
 import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.dialog.GomsDialog
 import com.goms.design_system.component.textfield.GomsSearchTextField
@@ -39,6 +40,7 @@ import com.goms.main.viewmodel.GetOutingListUiState
 import com.goms.main.viewmodel.MainViewModelProvider
 import com.goms.main.viewmodel.OutingSearchUiState
 import com.goms.model.enum.Authority
+import java.util.UUID
 
 @Composable
 fun OutingStatusRoute(
@@ -51,6 +53,12 @@ fun OutingStatusRoute(
         val getOutingListUiState by viewModel.getOutingListUiState.collectAsStateWithLifecycle()
         val getOutingCountUiState by viewModel.getOutingCountUiState.collectAsStateWithLifecycle()
         val outingSearchUiState by viewModel.outingSearchUiState.collectAsStateWithLifecycle()
+        val deleteOutingUiState by viewModel.deleteOutingUiState.collectAsStateWithLifecycle()
+
+        when (deleteOutingUiState) {
+            is Result.Success -> viewModel.getOutingCount()
+            else -> Unit
+        }
 
         OutingStatusScreen(
             role = if (role.isNotBlank()) Authority.valueOf(role) else Authority.ROLE_STUDENT,
@@ -60,7 +68,8 @@ fun OutingStatusRoute(
             getOutingCountUiState = getOutingCountUiState,
             outingSearchUiState = outingSearchUiState,
             onBackClick = onBackClick,
-            outingSearchCallBack = { viewModel.outingSearch(it) }
+            outingSearchCallBack = { viewModel.outingSearch(it) },
+            deleteOutingCallBack = { viewModel.deleteOuting(it) }
         )
     }
 }
@@ -74,12 +83,14 @@ fun OutingStatusScreen(
     getOutingCountUiState: GetOutingCountUiState,
     outingSearchUiState: OutingSearchUiState,
     onBackClick: () -> Unit,
-    outingSearchCallBack: (String) -> Unit
+    outingSearchCallBack: (String) -> Unit,
+    deleteOutingCallBack: (UUID) -> Unit
 ) {
     val scrollState = rememberScrollState()
     val focusManager = LocalFocusManager.current
     val isKeyboardOpen by keyboardAsState()
     var openDialog by remember { mutableStateOf(false) }
+    var uuid by remember { mutableStateOf(UUID.randomUUID()) }
 
     LaunchedEffect(isKeyboardOpen) {
         if (!isKeyboardOpen) {
@@ -96,7 +107,10 @@ fun OutingStatusScreen(
             dismissText = "취소",
             checkText = "복귀",
             onDismissClick = { openDialog = false },
-            onCheckClick = { openDialog = false }
+            onCheckClick = {
+                deleteOutingCallBack(uuid)
+                openDialog = false
+            }
         )
     }
 
@@ -139,7 +153,8 @@ fun OutingStatusScreen(
                     getOutingListUiState = getOutingListUiState,
                     getOutingCountUiState = getOutingCountUiState,
                     outingSearchUiState = outingSearchUiState
-                ) {
+                ) { selectedUuid ->
+                    uuid = selectedUuid
                     openDialog = true
                 }
             }

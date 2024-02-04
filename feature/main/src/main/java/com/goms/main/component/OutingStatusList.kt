@@ -31,6 +31,7 @@ import com.goms.main.viewmodel.OutingSearchUiState
 import com.goms.model.enum.Authority
 import com.goms.model.response.outing.OutingResponse
 import com.goms.ui.toText
+import java.util.UUID
 
 @Composable
 fun OutingStatusList(
@@ -39,7 +40,7 @@ fun OutingStatusList(
     getOutingListUiState: GetOutingListUiState,
     getOutingCountUiState: GetOutingCountUiState,
     outingSearchUiState: OutingSearchUiState,
-    onClick: () -> Unit
+    onClick: (UUID) -> Unit
 ) {
     when (getOutingCountUiState) {
         GetOutingCountUiState.Loading -> Unit
@@ -80,7 +81,7 @@ fun OutingStatusList(
                                                 modifier = Modifier.fillMaxWidth(),
                                                 role = role,
                                                 list = list[it],
-                                                onClick = { onClick() }
+                                                onClick = onClick
                                             )
                                             Divider(
                                                 modifier = Modifier.fillMaxWidth(),
@@ -121,7 +122,7 @@ fun OutingStatusList(
                                         modifier = Modifier.fillMaxWidth(),
                                         role = role,
                                         list = list[it],
-                                        onClick = { onClick() }
+                                        onClick = onClick
                                     )
                                     Divider(
                                         modifier = Modifier.fillMaxWidth(),
@@ -142,7 +143,7 @@ fun OutingStatusListItem(
     modifier: Modifier = Modifier,
     role: Authority,
     list: OutingResponse,
-    onClick: () -> Unit
+    onClick: (UUID) -> Unit
 ) {
     GomsTheme { colors, typography ->
         Row(
@@ -195,7 +196,7 @@ fun OutingStatusListItem(
             }
             Spacer(modifier = Modifier.weight(1f))
             if (role == Authority.ROLE_STUDENT_COUNCIL) {
-                IconButton(onClick = { onClick() }) {
+                IconButton(onClick = { onClick(UUID.fromString(list.accountIdx)) }) {
                     DeleteIcon()
                 }
             }
