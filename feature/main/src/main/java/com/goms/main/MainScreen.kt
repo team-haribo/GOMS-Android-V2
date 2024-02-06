@@ -35,7 +35,8 @@ import com.goms.main.viewmodel.MainViewModelProvider
 @Composable
 fun MainRoute(
     viewModelStoreOwner: ViewModelStoreOwner,
-    onOutingStatusClick: () -> Unit
+    onOutingStatusClick: () -> Unit,
+    onLateListClick: () -> Unit
 ) {
     MainViewModelProvider(viewModelStoreOwner = viewModelStoreOwner) { viewModel ->
         val role by viewModel.role.collectAsStateWithLifecycle(initialValue = "")
@@ -55,7 +56,8 @@ fun MainRoute(
                 viewModel.getLateRankList()
                 viewModel.getOutingCount()
             },
-            onOutingStatusClick = onOutingStatusClick
+            onOutingStatusClick = onOutingStatusClick,
+            onLateListClick = onLateListClick
         )
     }
 }
@@ -69,6 +71,7 @@ fun MainScreen(
     getOutingCountUiState: GetOutingCountUiState,
     getData: () -> Unit,
     onOutingStatusClick: () -> Unit,
+    onLateListClick: () -> Unit
 ) {
     LaunchedEffect(true) {
         getData()
@@ -105,7 +108,9 @@ fun MainScreen(
                     MainLateCard(
                         role = role,
                         getLateRankListUiState = getLateRankListUiState
-                    ) {}
+                    ) {
+                        onLateListClick()
+                    }
                     MainOutingCard(
                         role = role,
                         getOutingListUiState = getOutingListUiState,
