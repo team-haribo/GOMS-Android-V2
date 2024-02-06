@@ -22,6 +22,8 @@ androidxTestRules = "1.5.0"
 androidxTestRunner = "1.5.2"
 androidx-test-ext-junit = "1.1.5"
 androidxWindowManager = "1.2.0"
+camera = "1.3.0-beta01"
+cameraRc = "1.3.0-beta01-rc01@aar"
 coil = "2.4.0"
 converter-moshi = "2.9.0"
 firebaseBom = "31.2.0"
@@ -83,6 +85,11 @@ androidx-test-ext = { group = "androidx.test.ext", name = "junit-ktx", version.r
 androidx-test-rules = { group = "androidx.test", name = "rules", version.ref = "androidxTestRules" }
 androidx-test-runner = { group = "androidx.test", name = "runner", version.ref = "androidxTestRunner" }
 androidx-window-manager = { module = "androidx.window:window", version.ref = "androidxWindowManager" }
+camera-core =  { group = "androidx.camera", name = "camera-core", version.ref = "camera" }
+camera-view = { group = "androidx.camera", name = "camera-view", version.ref = "camera" }
+camera-camera2 = { group = "androidx.camera", name = "camera-camera2", version.ref = "cameraRc" }
+camera-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "camera" }
+camera-extensions = { group = "androidx.camera", name = "camera-extensions", version.ref = "camera" }
 coil-kt = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
 coil-kt-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 coil-kt-svg = { group = "io.coil-kt", name = "coil-svg", version.ref = "coil" }
