@@ -23,6 +23,7 @@ android {
 
 dependencies {
     implementation(libs.coil.kt.compose)
+    implementation(libs.gauth)
 }
 
 fun getApiKey(propertyKey: String): String {
