@@ -39,11 +39,6 @@
             <option value="$PROJECT_DIR$/core/ui" />
             <option value="$PROJECT_DIR$/feature" />
             <option value="$PROJECT_DIR$/feature/login" />
-            <option value="$PROJECT_DIR$/feature/main" />
-            <option value="$PROJECT_DIR$/feature/sign-up" />
-            <option value="$PROJECT_DIR$/feature/main" />
-            <option value="$PROJECT_DIR$/feature/qrcode-scan" />
-            <option value="$PROJECT_DIR$/feature/sign-up" />
           </set>
         </option>
       </GradleProjectSettings>
