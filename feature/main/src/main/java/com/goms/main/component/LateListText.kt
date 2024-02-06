@@ -11,7 +11,7 @@ fun LateListText(modifier: Modifier) {
     GomsTheme { colors, typography ->
         Text(
             modifier = modifier,
-            text = "외출 현황",
+            text = "지각자 명단",
             style = typography.titleLarge,
             fontWeight = FontWeight.Bold,
             color = colors.WHITE
