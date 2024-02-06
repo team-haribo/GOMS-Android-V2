@@ -1,6 +1,7 @@
 package com.goms.qrcode_scan.component
 
 import android.content.Context
+<<<<<<< HEAD
 import android.util.Log
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -10,6 +11,10 @@ import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
+=======
+import android.view.ViewGroup
+import android.widget.LinearLayout
+>>>>>>> 44b7094 (:memo: :: Add QrcodeScanPreview.kt)
 import androidx.camera.view.LifecycleCameraController
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.layout.PaddingValues
@@ -23,6 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
+<<<<<<< HEAD
 import androidx.core.app.ComponentActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
@@ -83,6 +89,42 @@ fun QrcodeScanPreview(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(innerPadding))
+=======
+import androidx.lifecycle.LifecycleOwner
+import com.goms.design_system.theme.GomsTheme
+
+@Composable
+fun QrcodeScanPreview(
+    context: Context,
+) {
+
+    val lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
+    val cameraController: LifecycleCameraController = remember { LifecycleCameraController(context) }
+
+    GomsTheme { colors, typography ->
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
+        ) { innerPadding: PaddingValues ->
+            AndroidView(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
+                factory = { context ->
+                    PreviewView(context).apply {
+                        setBackgroundColor(Color.LightGray.toArgb())
+                        layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+                        scaleType = PreviewView.ScaleType.FILL_CENTER
+                        implementationMode = PreviewView.ImplementationMode.PERFORMANCE
+                    }.also { previewView ->
+                        previewView.controller = cameraController
+                        cameraController.bindToLifecycle(lifecycleOwner)
+                    }
+                },
+                onRelease = {
+                    cameraController.unbind()
+                }
+            )
+>>>>>>> 44b7094 (:memo: :: Add QrcodeScanPreview.kt)
         }
     }
 }
