@@ -101,7 +101,7 @@ fun QrcodeScanPreview(
     val lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current
     val cameraController: LifecycleCameraController = remember { LifecycleCameraController(context) }
 
-    GomsTheme { colors, typography ->
+    GomsTheme { _, _ ->
         Scaffold(
             modifier = Modifier.fillMaxSize(),
         ) { innerPadding: PaddingValues ->
