@@ -92,6 +92,17 @@ fun QrScanIcon(
 }
 
 @Composable
+fun QrScanGuideIcon(
+    modifier: Modifier = Modifier
+) {
+    Image(
+        painter = painterResource(id = R.drawable.ic_qr_scan_guide),
+        contentDescription = "Qr Scan Guide Icon",
+        modifier = modifier
+    )
+}
+
+@Composable
 fun QrCreateIcon(
     modifier: Modifier = Modifier
 ) {
