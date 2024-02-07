@@ -10,7 +10,9 @@ import com.goms.login.navigation.loginRoute
 import com.goms.login.navigation.loginScreen
 import com.goms.login.navigation.navigateToInputLogin
 import com.goms.login.navigation.navigateToLogin
+import com.goms.main.navigation.lateListScreen
 import com.goms.main.navigation.mainScreen
+import com.goms.main.navigation.navigateToLateList
 import com.goms.main.navigation.navigateToMain
 import com.goms.main.navigation.navigateToOutingStatus
 import com.goms.main.navigation.outingStatusScreen
@@ -59,10 +61,14 @@ fun GomsNavHost(
         )
         mainScreen(
             viewModelStoreOwner = viewModelStoreOwner,
-            onOutingStatusClick = navController::navigateToOutingStatus
+            onOutingStatusClick = navController::navigateToOutingStatus,
+            onLateListClick = navController::navigateToLateList
         )
         outingStatusScreen(
             viewModelStoreOwner = viewModelStoreOwner,
+            onBackClick = navController::popBackStack
+        )
+        lateListScreen(
             onBackClick = navController::popBackStack
         )
     }

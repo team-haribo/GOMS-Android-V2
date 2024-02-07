@@ -65,25 +65,11 @@ fun SelectorBottomSheet(
                         }
                     }
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(32.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = title,
-                        style = typography.titleSmall,
-                        fontWeight = FontWeight.Bold,
-                        color = colors.WHITE
-                    )
-                    CloseIcon(
-                        modifier = Modifier.gomsClickable { closeSheet() },
-                        tint = colors.WHITE
-                    )
-                }
-                Spacer(modifier = Modifier.height(16.dp))
+                BottomSheetHeader(
+                    modifier = Modifier,
+                    title = title,
+                    closeSheet = closeSheet
+                )
                 LazyRow(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
