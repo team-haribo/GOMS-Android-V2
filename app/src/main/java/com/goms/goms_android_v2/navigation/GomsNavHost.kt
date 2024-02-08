@@ -30,7 +30,8 @@ fun GomsNavHost(
     startDestination: String = loginRoute
 ) {
     val navController = appState.navController
-    val viewModelStoreOwner = checkNotNull(LocalViewModelStoreOwner.current)
+    val signUpViewModelStoreOwner = checkNotNull(LocalViewModelStoreOwner.current)
+    val mainViewModelStoreOwner = checkNotNull(LocalViewModelStoreOwner.current)
     NavHost(
         navController = navController,
         startDestination = startDestination,
@@ -45,30 +46,31 @@ fun GomsNavHost(
             onMainClick = { appState.navigateToTopLevelDestination(TopLevelDestination.MAIN) }
         )
         signUpScreen(
-            viewModelStoreOwner = viewModelStoreOwner,
+            viewModelStoreOwner = signUpViewModelStoreOwner,
             onBackClick = navController::popBackStack,
             onNumberClick = navController::navigateToNumber
         )
         numberScreen(
-            viewModelStoreOwner = viewModelStoreOwner,
+            viewModelStoreOwner = signUpViewModelStoreOwner,
             onBackClick = navController::popBackStack,
             onPasswordClick = navController::navigateToPassword
         )
         passwordScreen(
-            viewModelStoreOwner = viewModelStoreOwner,
+            viewModelStoreOwner = signUpViewModelStoreOwner,
             onBackClick = navController::popBackStack,
             onLoginClick = { appState.navigateToTopLevelDestination(TopLevelDestination.LOGIN) }
         )
         mainScreen(
-            viewModelStoreOwner = viewModelStoreOwner,
+            viewModelStoreOwner = mainViewModelStoreOwner,
             onOutingStatusClick = navController::navigateToOutingStatus,
             onLateListClick = navController::navigateToLateList
         )
         outingStatusScreen(
-            viewModelStoreOwner = viewModelStoreOwner,
+            viewModelStoreOwner = mainViewModelStoreOwner,
             onBackClick = navController::popBackStack
         )
         lateListScreen(
+            viewModelStoreOwner = mainViewModelStoreOwner,
             onBackClick = navController::popBackStack
         )
     }

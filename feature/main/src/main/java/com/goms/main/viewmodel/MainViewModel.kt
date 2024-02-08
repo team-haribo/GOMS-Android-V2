@@ -8,6 +8,7 @@ import com.goms.common.result.asResult
 import com.goms.datastore.AuthTokenDataSource
 import com.goms.domain.account.GetProfileUseCase
 import com.goms.domain.council.DeleteOutingUseCase
+import com.goms.domain.council.GetLateListUseCase
 import com.goms.domain.late.GetLateRankListUseCase
 import com.goms.domain.outing.GetOutingCountUseCase
 import com.goms.domain.outing.GetOutingListUseCase
@@ -18,6 +19,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDate
 import java.util.UUID
 import javax.inject.Inject
 
@@ -30,6 +32,7 @@ class MainViewModel @Inject constructor(
     private val getOutingCountUseCase: GetOutingCountUseCase,
     private val outingSearchUseCase: OutingSearchUseCase,
     private val deleteOutingUseCase: DeleteOutingUseCase,
+    private val getLateListUseCase: GetLateListUseCase,
     private val authTokenDataSource: AuthTokenDataSource
 ) : ViewModel() {
     val role = authTokenDataSource.getAuthority()
@@ -51,6 +54,9 @@ class MainViewModel @Inject constructor(
 
     private val _deleteOutingUiState = MutableStateFlow<Result<Unit>>(Result.Loading)
     val deleteOutingUiState = _deleteOutingUiState.asStateFlow()
+
+    private val _getLateListUiState = MutableStateFlow<GetLateListUiState>(GetLateListUiState.Loading)
+    val getLateListUiState = _getLateListUiState.asStateFlow()
 
     var outingSearch = savedStateHandle.getStateFlow(key = OUTING_SEARCH, initialValue = "")
 
@@ -141,6 +147,24 @@ class MainViewModel @Inject constructor(
                 }
             }.onFailure {
                 _deleteOutingUiState.value = Result.Error(it)
+            }
+    }
+
+    fun getLateList(date: LocalDate) = viewModelScope.launch {
+        getLateListUseCase(date = date)
+            .asResult()
+            .collectLatest { result ->
+                when (result) {
+                    is Result.Loading -> _getLateListUiState.value = GetLateListUiState.Loading
+                    is Result.Success -> {
+                        if (result.data.isEmpty()) {
+                            _getLateListUiState.value = GetLateListUiState.Empty
+                        } else {
+                            _getLateListUiState.value = GetLateListUiState.Success(result.data)
+                        }
+                    }
+                    is Result.Error -> _getLateListUiState.value = GetLateListUiState.Error(result.exception)
+                }
             }
     }
 

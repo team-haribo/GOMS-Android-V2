@@ -1,18 +1,14 @@
 package com.goms.design_system.util
 
+import kotlinx.datetime.*
 import java.time.DayOfWeek
-import java.time.Instant
-import java.time.LocalDate
-import java.time.ZoneId
-import java.time.temporal.TemporalAdjusters
 
 fun getDefaultWednesday(): Instant {
-    val currentDate = LocalDate.now()
-
-    return if (currentDate.dayOfWeek != DayOfWeek.WEDNESDAY) {
-        val lastWednesday = currentDate.with(TemporalAdjusters.previous(DayOfWeek.WEDNESDAY))
-        lastWednesday.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()
+    val currentDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
+    return if (currentDate.dayOfWeek == DayOfWeek.WEDNESDAY) {
+        currentDate.atStartOfDayIn(TimeZone.currentSystemDefault())
     } else {
-        currentDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()
+        val lastWednesday = currentDate.minus((currentDate.dayOfWeek.ordinal - DayOfWeek.WEDNESDAY.ordinal).toLong(), DateTimeUnit.DAY)
+        lastWednesday.atStartOfDayIn(TimeZone.currentSystemDefault())
     }
 }

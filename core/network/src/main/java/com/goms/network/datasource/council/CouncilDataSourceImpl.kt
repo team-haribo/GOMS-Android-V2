@@ -1,11 +1,13 @@
 package com.goms.network.datasource.council
 
+import com.goms.model.response.council.LateResponse
 import com.goms.network.api.CouncilAPI
 import com.goms.network.util.GomsApiHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.datetime.LocalDate
 import java.util.UUID
 import javax.inject.Inject
 
@@ -19,4 +21,12 @@ class CouncilDataSourceImpl @Inject constructor(
                 .sendRequest()
         )
     }.flowOn(Dispatchers.IO)
+
+    override suspend fun getLateList(date: LocalDate): Flow<List<LateResponse>> = flow {
+        emit(
+            GomsApiHandler<List<LateResponse>>()
+                .httpRequest { councilAPI.getLateList(date = date) }
+                .sendRequest()
+        )
+    }
 }
