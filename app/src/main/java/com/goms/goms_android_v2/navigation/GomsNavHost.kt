@@ -69,6 +69,7 @@ fun GomsNavHost(
             onBackClick = navController::popBackStack
         )
         lateListScreen(
+            viewModelStoreOwner = viewModelStoreOwner,
             onBackClick = navController::popBackStack
         )
     }

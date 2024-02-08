@@ -52,10 +52,12 @@ fun NavController.navigateToLateList(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.lateListScreen(
+    viewModelStoreOwner: ViewModelStoreOwner,
     onBackClick: () -> Unit
 ) {
     composable(route = lateListRoute) {
         LateListRoute(
+            viewModelStoreOwner = viewModelStoreOwner,
             onBackClick = onBackClick
         )
     }
