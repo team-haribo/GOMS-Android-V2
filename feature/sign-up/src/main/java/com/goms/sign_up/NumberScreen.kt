@@ -34,6 +34,7 @@ import com.goms.design_system.component.textfield.NumberTextField
 import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.util.keyboardAsState
 import com.goms.design_system.util.lockScreenOrientation
+import com.goms.model.request.auth.SendNumberRequest
 import com.goms.sign_up.component.NumberText
 import com.goms.sign_up.viewmodel.SignUpViewModelProvider
 
@@ -72,7 +73,8 @@ fun NumberRoute(
                     email = "${viewModel.email.value}@gsm.hs.kr",
                     authCode = viewModel.number.value
                 )
-            }
+            },
+            resentCallBack = { viewModel.sendNumber(body = SendNumberRequest("${viewModel.email.value}@gsm.hs.kr")) }
         )
     }
 }
@@ -84,7 +86,8 @@ fun NumberScreen(
     errorText: String,
     onNumberChange: (String) -> Unit,
     onBackClick: () -> Unit,
-    numberCallback: () -> Unit
+    numberCallback: () -> Unit,
+    resentCallBack: () -> Unit
 ) {
     val focusManager = LocalFocusManager.current
     val isKeyboardOpen by keyboardAsState()
@@ -125,7 +128,9 @@ fun NumberScreen(
                     isError = isError,
                     errorText = errorText,
                     onValueChange = onNumberChange,
-                    onResendClick = {}
+                    onResendClick = {
+                        resentCallBack()
+                    }
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 GomsButton(
