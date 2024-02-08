@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -49,7 +50,7 @@ fun SignUpRoute(
     onNumberClick: () -> Unit,
 ) {
     SignUpViewModelProvider(viewModelStoreOwner = viewModelStoreOwner) { viewModel ->
-        val sendNumberUiState by viewModel.sendNumberUiState.collectAsStateWithLifecycle()
+        val sendNumberUiState by viewModel.sendNumberUiState.collectAsState()
         val name by viewModel.name.collectAsStateWithLifecycle()
         val email by viewModel.email.collectAsStateWithLifecycle()
         val gender by viewModel.gender.collectAsStateWithLifecycle()

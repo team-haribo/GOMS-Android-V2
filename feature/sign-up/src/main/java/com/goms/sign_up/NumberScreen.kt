@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,7 +46,7 @@ fun NumberRoute(
     onPasswordClick: () -> Unit,
 ) {
     SignUpViewModelProvider(viewModelStoreOwner = viewModelStoreOwner) { viewModel ->
-        val verifyNumberUiState by viewModel.verifyNumberUiState.collectAsStateWithLifecycle()
+        val verifyNumberUiState by viewModel.verifyNumberUiState.collectAsState()
         val number by viewModel.number.collectAsStateWithLifecycle()
         var isError by remember { mutableStateOf(false) }
         var errorText by remember { mutableStateOf("") }
