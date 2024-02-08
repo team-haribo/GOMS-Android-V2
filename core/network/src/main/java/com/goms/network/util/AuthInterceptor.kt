@@ -30,7 +30,12 @@ class AuthInterceptor @Inject constructor(
         val method = request.method
 
         if (path.contains(ignorePath) && (method == ignoreMethodPost || method == ignoreMethodGet)) {
-            return chain.proceed(request)
+            val response = chain.proceed(request)
+            return if (response.code == 204) {
+                response.newBuilder().code(200).build()
+            } else {
+                response
+            }
         }
 
         runBlocking {
