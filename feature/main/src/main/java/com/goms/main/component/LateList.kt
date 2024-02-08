@@ -21,13 +21,14 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.goms.design_system.R
 import com.goms.design_system.theme.GomsTheme
-import com.goms.design_system.util.formatTime
-import com.goms.model.response.outing.OutingResponse
+import com.goms.main.viewmodel.GetLateListUiState
+import com.goms.model.response.council.LateResponse
 import com.goms.ui.toText
 
 @Composable
 fun LateList(
     modifier: Modifier = Modifier,
+    getLateListUiState: GetLateListUiState,
     onBottomSheetOpenClick: () -> Unit
 ) {
     GomsTheme { colors, typography ->
@@ -43,21 +44,38 @@ fun LateList(
                 SearchResultText(modifier = Modifier)
                 FilterText(onFilterTextClick = onBottomSheetOpenClick)
             }
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(max = 10000.dp)
-            ) {
-//                items(list.size) {
-//                    LateListItem(
-//                        modifier = Modifier.fillMaxWidth(),
-//                        list = list[it]
-//                    )
-//                    Divider(
-//                        modifier = Modifier.fillMaxWidth(),
-//                        color = colors.WHITE.copy(0.15f)
-//                    )
-//                }
+            when (getLateListUiState) {
+                GetLateListUiState.Loading -> Unit
+                is GetLateListUiState.Error -> Unit
+                GetLateListUiState.Empty -> {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 60.dp)
+                    ) {
+                        LateListEmptyText()
+                    }
+                }
+                is GetLateListUiState.Success -> {
+                    val list = getLateListUiState.getLateRankListResponse
+
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(max = 10000.dp)
+                    ) {
+                        items(list.size) {
+                            LateListItem(
+                                modifier = Modifier.fillMaxWidth(),
+                                list = list[it]
+                            )
+                            Divider(
+                                modifier = Modifier.fillMaxWidth(),
+                                color = colors.WHITE.copy(0.15f)
+                            )
+                        }
+                    }
+                }
             }
         }
     }
@@ -66,7 +84,7 @@ fun LateList(
 @Composable
 fun LateListItem(
     modifier: Modifier = Modifier,
-    list: OutingResponse
+    list: LateResponse
 ) {
     GomsTheme { colors, typography ->
         Row(
@@ -95,27 +113,12 @@ fun LateListItem(
                     fontWeight = FontWeight.SemiBold,
                     color = colors.G7
                 )
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(4.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "${list.grade}기 | ${list.major.toText()}",
-                        style = typography.caption,
-                        fontWeight = FontWeight.Normal,
-                        color = colors.G4
-                    )
-                    Divider(
-                        modifier = Modifier.size(1.dp, 8.dp),
-                        color = colors.WHITE.copy(0.15f)
-                    )
-                    Text(
-                        text = "${list.createdTime.formatTime()}에 외출",
-                        style = typography.caption,
-                        fontWeight = FontWeight.Normal,
-                        color = colors.G4
-                    )
-                }
+                Text(
+                    text = "${list.grade}기 | ${list.major.toText()}",
+                    style = typography.caption,
+                    fontWeight = FontWeight.Normal,
+                    color = colors.G4
+                )
             }
         }
     }
