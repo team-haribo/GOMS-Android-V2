@@ -32,10 +32,7 @@ fun LateList(
     onBottomSheetOpenClick: () -> Unit
 ) {
     GomsTheme { colors, typography ->
-        Column(
-            modifier = modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
+        Column(modifier = modifier.fillMaxWidth()) {
             Row(
                 modifier = modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
