@@ -15,7 +15,9 @@ import com.goms.main.navigation.mainScreen
 import com.goms.main.navigation.navigateToLateList
 import com.goms.main.navigation.navigateToMain
 import com.goms.main.navigation.navigateToOutingStatus
+import com.goms.main.navigation.navigateToStudentManagement
 import com.goms.main.navigation.outingStatusScreen
+import com.goms.main.navigation.studentManagementScreen
 import com.goms.sign_up.navigation.navigateToNumber
 import com.goms.sign_up.navigation.navigateToPassword
 import com.goms.sign_up.navigation.navigateToSignUp
@@ -63,13 +65,18 @@ fun GomsNavHost(
         mainScreen(
             viewModelStoreOwner = mainViewModelStoreOwner,
             onOutingStatusClick = navController::navigateToOutingStatus,
-            onLateListClick = navController::navigateToLateList
+            onLateListClick = navController::navigateToLateList,
+            onStudentManagementClick = navController::navigateToStudentManagement
         )
         outingStatusScreen(
             viewModelStoreOwner = mainViewModelStoreOwner,
             onBackClick = navController::popBackStack
         )
         lateListScreen(
+            viewModelStoreOwner = mainViewModelStoreOwner,
+            onBackClick = navController::popBackStack
+        )
+        studentManagementScreen(
             viewModelStoreOwner = mainViewModelStoreOwner,
             onBackClick = navController::popBackStack
         )
