@@ -138,3 +138,14 @@ fun DeleteIcon(
         modifier = modifier
     )
 }
+
+@Composable
+fun WriteIcon(
+    modifier: Modifier = Modifier
+) {
+    Image(
+        painter = painterResource(id = R.drawable.ic_write),
+        contentDescription = "Write Icon",
+        modifier = modifier
+    )
+}
