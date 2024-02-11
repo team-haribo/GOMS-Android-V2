@@ -27,6 +27,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.goms.common.result.Result
 import com.goms.design_system.component.bottomsheet.AdminSelectorBottomSheet
 import com.goms.design_system.component.bottomsheet.MultipleSelectorBottomSheet
 import com.goms.design_system.component.button.GomsBackButton
@@ -40,6 +41,8 @@ import com.goms.main.viewmodel.MainViewModelProvider
 import com.goms.model.enum.Class
 import com.goms.model.enum.Grade
 import com.goms.model.enum.Status
+import com.goms.model.request.council.AuthorityRequest
+import java.util.UUID
 
 @Composable
 fun StudentManagementRoute(
@@ -53,6 +56,15 @@ fun StudentManagementRoute(
         val filterGrade by viewModel.filterGrade.collectAsStateWithLifecycle()
         val filterClass by viewModel.filterClass.collectAsStateWithLifecycle()
         val getStudentListUiState by viewModel.getStudentListUiState.collectAsStateWithLifecycle()
+        val changeAuthorityUiState by viewModel.changeAuthorityUiState.collectAsStateWithLifecycle()
+
+        when (changeAuthorityUiState) {
+            is Result.Success -> {
+                viewModel.getStudentList()
+                viewModel.initChangeAuthority()
+            }
+            else -> Unit
+        }
 
         StudentManagementScreen(
             studentSearch = studentSearch,
@@ -68,7 +80,15 @@ fun StudentManagementRoute(
             getStudentListUiState = getStudentListUiState,
             onBackClick = onBackClick,
             studentListCallBack = { viewModel.getStudentList() },
-            studentSearchCallBack = {}
+            studentSearchCallBack = {},
+            changeAuthorityCallBack = { accountIdx, authority ->
+                viewModel.changeAuthority(
+                    body = AuthorityRequest(
+                        accountIdx = accountIdx.toString(),
+                        authority = Status.values().find { it.value == authority }!!.name
+                    )
+                )
+            }
         )
     }
 }
@@ -88,7 +108,8 @@ fun StudentManagementScreen(
     getStudentListUiState: GetStudentListUiState,
     onBackClick: () -> Unit,
     studentListCallBack: () -> Unit,
-    studentSearchCallBack: (String) -> Unit
+    studentSearchCallBack: (String) -> Unit,
+    changeAuthorityCallBack: (UUID, String) -> Unit
 ) {
     LaunchedEffect(true) {
         studentListCallBack()
@@ -97,6 +118,7 @@ fun StudentManagementScreen(
     val scrollState = rememberScrollState()
     val focusManager = LocalFocusManager.current
     val isKeyboardOpen by keyboardAsState()
+    var uuid by remember { mutableStateOf(UUID.randomUUID()) }
     var onStatusBottomSheetOpenClick by remember { mutableStateOf(false) }
     var onFilterBottomSheetOpenClick by remember { mutableStateOf(false) }
 
@@ -143,9 +165,10 @@ fun StudentManagementScreen(
                 StudentManagementList(
                     getStudentListUiState = getStudentListUiState,
                     onBottomSheetOpenClick = { onFilterBottomSheetOpenClick = true },
-                    onClick = {
+                    onClick = { accountIdx, authority ->
                         onStatusBottomSheetOpenClick = true
-                        onStatusChange(it)
+                        uuid = accountIdx
+                        onStatusChange(authority)
                     }
                 )
             }
@@ -164,6 +187,9 @@ fun StudentManagementScreen(
                 itemChange = onStatusChange,
                 closeSheet = {
                     onStatusBottomSheetOpenClick = false
+                    if (status != Status.BLACK_LIST.value) {
+                        changeAuthorityCallBack(uuid, status)
+                    }
                 }
             )
         }

@@ -33,13 +33,14 @@ import com.goms.model.enum.Status
 import com.goms.model.response.council.StudentResponse
 import com.goms.model.response.outing.OutingResponse
 import com.goms.ui.toText
+import java.util.UUID
 
 @Composable
 fun StudentManagementList(
     modifier: Modifier = Modifier,
     getStudentListUiState: GetStudentListUiState,
     onBottomSheetOpenClick: () -> Unit,
-    onClick: (String) -> Unit
+    onClick: (UUID, String) -> Unit
 ) {
     when (getStudentListUiState) {
         GetStudentListUiState.Loading -> Unit
@@ -84,7 +85,7 @@ fun StudentManagementList(
 fun StudentManagementListItem(
     modifier: Modifier = Modifier,
     list: StudentResponse,
-    onClick: (String) -> Unit
+    onClick: (UUID, String) -> Unit
 ) {
     GomsTheme { colors, typography ->
         Row(
@@ -141,6 +142,7 @@ fun StudentManagementListItem(
             Spacer(modifier = Modifier.weight(1f))
             IconButton(onClick = {
                 onClick(
+                    UUID.fromString(list.accountIdx),
                     if (list.authority == Authority.ROLE_STUDENT_COUNCIL) Status.ROLE_STUDENT_COUNCIL.value
                     else if (list.isBlackList) Status.BLACK_LIST.value
                     else Status.ROLE_STUDENT.value
