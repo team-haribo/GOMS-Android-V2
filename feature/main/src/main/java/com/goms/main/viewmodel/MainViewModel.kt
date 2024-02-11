@@ -7,6 +7,7 @@ import com.goms.common.result.Result
 import com.goms.common.result.asResult
 import com.goms.datastore.AuthTokenDataSource
 import com.goms.domain.account.GetProfileUseCase
+import com.goms.domain.council.ChangeAuthorityUseCase
 import com.goms.domain.council.DeleteOutingUseCase
 import com.goms.domain.council.GetLateListUseCase
 import com.goms.domain.council.GetStudentListUseCase
@@ -14,6 +15,7 @@ import com.goms.domain.late.GetLateRankListUseCase
 import com.goms.domain.outing.GetOutingCountUseCase
 import com.goms.domain.outing.GetOutingListUseCase
 import com.goms.domain.outing.OutingSearchUseCase
+import com.goms.model.request.council.AuthorityRequest
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -35,6 +37,7 @@ class MainViewModel @Inject constructor(
     private val deleteOutingUseCase: DeleteOutingUseCase,
     private val getLateListUseCase: GetLateListUseCase,
     private val getStudentListUseCase: GetStudentListUseCase,
+    private val changeAuthorityUseCase: ChangeAuthorityUseCase,
     private val authTokenDataSource: AuthTokenDataSource
 ) : ViewModel() {
     val role = authTokenDataSource.getAuthority()
@@ -62,6 +65,9 @@ class MainViewModel @Inject constructor(
 
     private val _getStudentListUiState = MutableStateFlow<GetStudentListUiState>(GetStudentListUiState.Loading)
     val getStudentListUiState = _getStudentListUiState.asStateFlow()
+
+    private val _changeAuthorityUiState = MutableStateFlow<Result<Unit>>(Result.Loading)
+    val changeAuthorityUiState = _changeAuthorityUiState.asStateFlow()
 
     var outingSearch = savedStateHandle.getStateFlow(key = OUTING_SEARCH, initialValue = "")
     var studentSearch = savedStateHandle.getStateFlow(key = STUDENT_SEARCH, initialValue = "")
@@ -189,6 +195,23 @@ class MainViewModel @Inject constructor(
                     is Result.Error -> _getStudentListUiState.value = GetStudentListUiState.Error(result.exception)
                 }
             }
+    }
+
+    fun changeAuthority(body: AuthorityRequest) = viewModelScope.launch {
+        changeAuthorityUseCase(body = body)
+            .onSuccess {
+                it.catch {  remoteError ->
+                    _changeAuthorityUiState.value = Result.Error(remoteError)
+                }.collect { result ->
+                    _changeAuthorityUiState.value = Result.Success(result)
+                }
+            }.onFailure {
+                _changeAuthorityUiState.value = Result.Error(it)
+            }
+    }
+
+    fun initChangeAuthority() {
+        _changeAuthorityUiState.value = Result.Loading
     }
 
     fun onOutingSearchChange(value: String) {
