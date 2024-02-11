@@ -1,5 +1,6 @@
 package com.goms.network.datasource.council
 
+import com.goms.model.request.council.AuthorityRequest
 import com.goms.model.response.council.LateResponse
 import com.goms.model.response.council.StudentResponse
 import com.goms.network.api.CouncilAPI
@@ -19,6 +20,14 @@ class CouncilDataSourceImpl @Inject constructor(
         emit(
             GomsApiHandler<List<StudentResponse>>()
                 .httpRequest { councilAPI.getStudentList() }
+                .sendRequest()
+        )
+    }.flowOn(Dispatchers.IO)
+
+    override suspend fun changeAuthority(body: AuthorityRequest): Flow<Unit> = flow {
+        emit(
+            GomsApiHandler<Unit>()
+                .httpRequest { councilAPI.changeAuthority(body = body) }
                 .sendRequest()
         )
     }.flowOn(Dispatchers.IO)
