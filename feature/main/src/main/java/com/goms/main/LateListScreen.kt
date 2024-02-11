@@ -73,7 +73,7 @@ fun LateListScreen(
     val selectedLocalDateTime = selectedInstant.toLocalDateTime(TimeZone.currentSystemDefault())
     val selectedLocalDate = selectedLocalDateTime.date
 
-    LaunchedEffect(selectedLocalDate) {
+    LaunchedEffect(true) {
         lateListCallBack(selectedLocalDate)
     }
 
@@ -116,7 +116,10 @@ fun LateListScreen(
         if (onDatePickerBottomSheetOpenClick) {
             DatePickerBottomSheet(
                 state = datePickerState,
-                closeSheet = { onDatePickerBottomSheetOpenClick = false }
+                closeSheet = {
+                    onDatePickerBottomSheetOpenClick = false
+                    lateListCallBack(selectedLocalDate)
+                }
             )
         }
     }
