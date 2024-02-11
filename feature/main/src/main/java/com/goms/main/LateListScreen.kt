@@ -50,8 +50,8 @@ fun LateListRoute(
 
         LateListScreen(
             getLateListUiState = getLateListUiState,
-            lateListCallBack = { viewModel.getLateList(it) },
-            onBackClick = onBackClick
+            onBackClick = onBackClick,
+            lateListCallBack = { viewModel.getLateList(it) }
         )
     }
 }
@@ -60,8 +60,8 @@ fun LateListRoute(
 @Composable
 fun LateListScreen(
     getLateListUiState: GetLateListUiState,
-    lateListCallBack: (LocalDate) -> Unit,
     onBackClick: () -> Unit,
+    lateListCallBack: (LocalDate) -> Unit
 ) {
     val scrollState = rememberScrollState()
     val focusManager = LocalFocusManager.current
