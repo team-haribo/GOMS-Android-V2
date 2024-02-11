@@ -1,5 +1,6 @@
 package com.goms.data.repository.council
 
+import com.goms.model.request.council.AuthorityRequest
 import com.goms.model.response.council.LateResponse
 import com.goms.model.response.council.StudentResponse
 import com.goms.network.datasource.council.CouncilDataSource
@@ -13,6 +14,10 @@ class CouncilRepositoryImpl @Inject constructor(
 ) : CouncilRepository {
     override suspend fun getStudentList(): Flow<List<StudentResponse>> {
         return remoteCouncilDataSource.getStudentList()
+    }
+
+    override suspend fun changeAuthority(body: AuthorityRequest): Flow<Unit> {
+        return remoteCouncilDataSource.changeAuthority(body = body)
     }
 
     override suspend fun deleteOuting(accountIdx: UUID): Flow<Unit> {
