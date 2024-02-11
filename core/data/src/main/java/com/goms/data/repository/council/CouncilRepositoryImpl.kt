@@ -20,6 +20,14 @@ class CouncilRepositoryImpl @Inject constructor(
         return remoteCouncilDataSource.changeAuthority(body = body)
     }
 
+    override suspend fun setBlackList(accountIdx: UUID): Flow<Unit> {
+        return remoteCouncilDataSource.setBlackList(accountIdx = accountIdx)
+    }
+
+    override suspend fun deleteBlackList(accountIdx: UUID): Flow<Unit> {
+        return remoteCouncilDataSource.deleteBlackList(accountIdx = accountIdx)
+    }
+
     override suspend fun deleteOuting(accountIdx: UUID): Flow<Unit> {
         return remoteCouncilDataSource.deleteOuting(accountIdx = accountIdx)
     }
