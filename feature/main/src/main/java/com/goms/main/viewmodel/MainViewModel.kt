@@ -9,6 +9,7 @@ import com.goms.datastore.AuthTokenDataSource
 import com.goms.domain.account.GetProfileUseCase
 import com.goms.domain.council.DeleteOutingUseCase
 import com.goms.domain.council.GetLateListUseCase
+import com.goms.domain.council.GetStudentListUseCase
 import com.goms.domain.late.GetLateRankListUseCase
 import com.goms.domain.outing.GetOutingCountUseCase
 import com.goms.domain.outing.GetOutingListUseCase
@@ -33,6 +34,7 @@ class MainViewModel @Inject constructor(
     private val outingSearchUseCase: OutingSearchUseCase,
     private val deleteOutingUseCase: DeleteOutingUseCase,
     private val getLateListUseCase: GetLateListUseCase,
+    private val getStudentListUseCase: GetStudentListUseCase,
     private val authTokenDataSource: AuthTokenDataSource
 ) : ViewModel() {
     val role = authTokenDataSource.getAuthority()
@@ -57,6 +59,9 @@ class MainViewModel @Inject constructor(
 
     private val _getLateListUiState = MutableStateFlow<GetLateListUiState>(GetLateListUiState.Loading)
     val getLateListUiState = _getLateListUiState.asStateFlow()
+
+    private val _getStudentListUiState = MutableStateFlow<GetStudentListUiState>(GetStudentListUiState.Loading)
+    val getStudentListUiState = _getStudentListUiState.asStateFlow()
 
     var outingSearch = savedStateHandle.getStateFlow(key = OUTING_SEARCH, initialValue = "")
     var studentSearch = savedStateHandle.getStateFlow(key = STUDENT_SEARCH, initialValue = "")
@@ -170,6 +175,18 @@ class MainViewModel @Inject constructor(
                         }
                     }
                     is Result.Error -> _getLateListUiState.value = GetLateListUiState.Error(result.exception)
+                }
+            }
+    }
+
+    fun getStudentList() = viewModelScope.launch {
+        getStudentListUseCase()
+            .asResult()
+            .collectLatest { result ->
+                when (result) {
+                    is Result.Loading -> _getStudentListUiState.value = GetStudentListUiState.Loading
+                    is Result.Success -> _getStudentListUiState.value = GetStudentListUiState.Success(result.data)
+                    is Result.Error -> _getStudentListUiState.value = GetStudentListUiState.Error(result.exception)
                 }
             }
     }
