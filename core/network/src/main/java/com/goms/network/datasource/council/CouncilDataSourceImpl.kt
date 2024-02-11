@@ -1,6 +1,7 @@
 package com.goms.network.datasource.council
 
 import com.goms.model.response.council.LateResponse
+import com.goms.model.response.council.StudentResponse
 import com.goms.network.api.CouncilAPI
 import com.goms.network.util.GomsApiHandler
 import kotlinx.coroutines.Dispatchers
@@ -14,6 +15,14 @@ import javax.inject.Inject
 class CouncilDataSourceImpl @Inject constructor(
     private val councilAPI: CouncilAPI
 ) : CouncilDataSource {
+    override suspend fun getStudentList(): Flow<List<StudentResponse>> = flow {
+        emit(
+            GomsApiHandler<List<StudentResponse>>()
+                .httpRequest { councilAPI.getStudentList() }
+                .sendRequest()
+        )
+    }.flowOn(Dispatchers.IO)
+
     override suspend fun deleteOuting(accountIdx: UUID): Flow<Unit> = flow {
         emit(
             GomsApiHandler<Unit>()
@@ -28,5 +37,5 @@ class CouncilDataSourceImpl @Inject constructor(
                 .httpRequest { councilAPI.getLateList(date = date) }
                 .sendRequest()
         )
-    }
+    }.flowOn(Dispatchers.IO)
 }
