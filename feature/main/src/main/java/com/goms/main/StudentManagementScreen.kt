@@ -57,11 +57,21 @@ fun StudentManagementRoute(
         val filterClass by viewModel.filterClass.collectAsStateWithLifecycle()
         val getStudentListUiState by viewModel.getStudentListUiState.collectAsStateWithLifecycle()
         val changeAuthorityUiState by viewModel.changeAuthorityUiState.collectAsStateWithLifecycle()
+        val setBlackListUiState by viewModel.setBlackListUiState.collectAsStateWithLifecycle()
+        val deleteBlackListUiState by viewModel.deleteBlackListUiState.collectAsStateWithLifecycle()
 
         when (changeAuthorityUiState) {
             is Result.Success -> {
                 viewModel.getStudentList()
                 viewModel.initChangeAuthority()
+            }
+            else -> Unit
+        }
+
+        when (setBlackListUiState) {
+            is Result.Success -> {
+                viewModel.getStudentList()
+                viewModel.initSetBlackList()
             }
             else -> Unit
         }
@@ -88,6 +98,10 @@ fun StudentManagementRoute(
                         authority = Status.values().find { it.value == authority }!!.name
                     )
                 )
+                viewModel.deleteBlackList(accountIdx = accountIdx)
+            },
+            setBlackListCallBack = { accountIdx ->
+                viewModel.setBlackList(accountIdx = accountIdx)
             }
         )
     }
@@ -109,7 +123,8 @@ fun StudentManagementScreen(
     onBackClick: () -> Unit,
     studentListCallBack: () -> Unit,
     studentSearchCallBack: (String) -> Unit,
-    changeAuthorityCallBack: (UUID, String) -> Unit
+    changeAuthorityCallBack: (UUID, String) -> Unit,
+    setBlackListCallBack: (UUID) -> Unit
 ) {
     LaunchedEffect(true) {
         studentListCallBack()
@@ -189,6 +204,8 @@ fun StudentManagementScreen(
                     onStatusBottomSheetOpenClick = false
                     if (status != Status.BLACK_LIST.value) {
                         changeAuthorityCallBack(uuid, status)
+                    } else {
+                        setBlackListCallBack(uuid)
                     }
                 }
             )

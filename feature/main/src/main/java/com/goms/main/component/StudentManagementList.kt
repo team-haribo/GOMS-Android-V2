@@ -101,8 +101,8 @@ fun StudentManagementListItem(
                         .size(48.dp)
                         .border(
                             width = 4.dp,
-                            color = if (list.authority == Authority.ROLE_STUDENT_COUNCIL) colors.A7
-                            else if (list.isBlackList) colors.N5
+                            color = if (list.isBlackList) colors.N5
+                            else if (list.authority == Authority.ROLE_STUDENT_COUNCIL) colors.A7
                             else Color.Transparent,
                             shape = CircleShape
                         )
@@ -114,8 +114,8 @@ fun StudentManagementListItem(
                         .size(48.dp)
                         .border(
                             width = 4.dp,
-                            color = if (list.authority == Authority.ROLE_STUDENT_COUNCIL) colors.A7
-                            else if (list.isBlackList) colors.N5
+                            color = if (list.isBlackList) colors.N5
+                            else if (list.authority == Authority.ROLE_STUDENT_COUNCIL) colors.A7
                             else Color.Transparent,
                             shape = CircleShape
                         ),
@@ -128,8 +128,8 @@ fun StudentManagementListItem(
                     text = list.name,
                     style = typography.textMedium,
                     fontWeight = FontWeight.SemiBold,
-                    color = if (list.authority == Authority.ROLE_STUDENT_COUNCIL) colors.A7
-                    else if (list.isBlackList) colors.N5
+                    color = if (list.isBlackList) colors.N5
+                    else if (list.authority == Authority.ROLE_STUDENT_COUNCIL) colors.A7
                     else colors.G7
                 )
                 Text(
@@ -143,8 +143,8 @@ fun StudentManagementListItem(
             IconButton(onClick = {
                 onClick(
                     UUID.fromString(list.accountIdx),
-                    if (list.authority == Authority.ROLE_STUDENT_COUNCIL) Status.ROLE_STUDENT_COUNCIL.value
-                    else if (list.isBlackList) Status.BLACK_LIST.value
+                    if (list.isBlackList) Status.BLACK_LIST.value
+                    else if (list.authority == Authority.ROLE_STUDENT_COUNCIL) Status.ROLE_STUDENT_COUNCIL.value
                     else Status.ROLE_STUDENT.value
                 )
             }) {
