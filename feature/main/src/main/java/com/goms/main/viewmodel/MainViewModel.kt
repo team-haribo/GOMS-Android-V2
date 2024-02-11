@@ -8,9 +8,11 @@ import com.goms.common.result.asResult
 import com.goms.datastore.AuthTokenDataSource
 import com.goms.domain.account.GetProfileUseCase
 import com.goms.domain.council.ChangeAuthorityUseCase
+import com.goms.domain.council.DeleteBlackListUseCase
 import com.goms.domain.council.DeleteOutingUseCase
 import com.goms.domain.council.GetLateListUseCase
 import com.goms.domain.council.GetStudentListUseCase
+import com.goms.domain.council.SetBlackListUseCase
 import com.goms.domain.late.GetLateRankListUseCase
 import com.goms.domain.outing.GetOutingCountUseCase
 import com.goms.domain.outing.GetOutingListUseCase
@@ -38,6 +40,8 @@ class MainViewModel @Inject constructor(
     private val getLateListUseCase: GetLateListUseCase,
     private val getStudentListUseCase: GetStudentListUseCase,
     private val changeAuthorityUseCase: ChangeAuthorityUseCase,
+    private val setBlackListUseCase: SetBlackListUseCase,
+    private val deleteBlackListUseCase: DeleteBlackListUseCase,
     private val authTokenDataSource: AuthTokenDataSource
 ) : ViewModel() {
     val role = authTokenDataSource.getAuthority()
@@ -68,6 +72,12 @@ class MainViewModel @Inject constructor(
 
     private val _changeAuthorityUiState = MutableStateFlow<Result<Unit>>(Result.Loading)
     val changeAuthorityUiState = _changeAuthorityUiState.asStateFlow()
+
+    private val _setBlackListUiState = MutableStateFlow<Result<Unit>>(Result.Loading)
+    val setBlackListUiState = _setBlackListUiState.asStateFlow()
+
+    private val _deleteBlackListUiState = MutableStateFlow<Result<Unit>>(Result.Loading)
+    val deleteBlackListUiState = _deleteBlackListUiState.asStateFlow()
 
     var outingSearch = savedStateHandle.getStateFlow(key = OUTING_SEARCH, initialValue = "")
     var studentSearch = savedStateHandle.getStateFlow(key = STUDENT_SEARCH, initialValue = "")
@@ -212,6 +222,36 @@ class MainViewModel @Inject constructor(
 
     fun initChangeAuthority() {
         _changeAuthorityUiState.value = Result.Loading
+    }
+
+    fun setBlackList(accountIdx: UUID) = viewModelScope.launch {
+        setBlackListUseCase(accountIdx = accountIdx)
+            .onSuccess {
+                it.catch {  remoteError ->
+                    _setBlackListUiState.value = Result.Error(remoteError)
+                }.collect { result ->
+                    _setBlackListUiState.value = Result.Success(result)
+                }
+            }.onFailure {
+                _setBlackListUiState.value = Result.Error(it)
+            }
+    }
+
+    fun initSetBlackList() {
+        _setBlackListUiState.value = Result.Loading
+    }
+
+    fun deleteBlackList(accountIdx: UUID) = viewModelScope.launch {
+        deleteBlackListUseCase(accountIdx = accountIdx)
+            .onSuccess {
+                it.catch {  remoteError ->
+                    _setBlackListUiState.value = Result.Error(remoteError)
+                }.collect { result ->
+                    _setBlackListUiState.value = Result.Success(result)
+                }
+            }.onFailure {
+                _setBlackListUiState.value = Result.Error(it)
+            }
     }
 
     fun onOutingSearchChange(value: String) {
