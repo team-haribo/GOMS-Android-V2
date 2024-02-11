@@ -12,6 +12,10 @@ interface CouncilDataSource {
 
     suspend fun changeAuthority(body: AuthorityRequest): Flow<Unit>
 
+    suspend fun setBlackList(accountIdx: UUID): Flow<Unit>
+
+    suspend fun deleteBlackList(accountIdx: UUID): Flow<Unit>
+
     suspend fun deleteOuting(accountIdx: UUID): Flow<Unit>
 
     suspend fun getLateList(date: LocalDate): Flow<List<LateResponse>>

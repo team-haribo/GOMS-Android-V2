@@ -32,6 +32,22 @@ class CouncilDataSourceImpl @Inject constructor(
         )
     }.flowOn(Dispatchers.IO)
 
+    override suspend fun setBlackList(accountIdx: UUID): Flow<Unit> = flow {
+        emit(
+            GomsApiHandler<Unit>()
+                .httpRequest { councilAPI.setBlackList(accountIdx = accountIdx) }
+                .sendRequest()
+        )
+    }.flowOn(Dispatchers.IO)
+
+    override suspend fun deleteBlackList(accountIdx: UUID): Flow<Unit> = flow {
+        emit(
+            GomsApiHandler<Unit>()
+                .httpRequest { councilAPI.deleteBlackList(accountIdx = accountIdx) }
+                .sendRequest()
+        )
+    }.flowOn(Dispatchers.IO)
+
     override suspend fun deleteOuting(accountIdx: UUID): Flow<Unit> = flow {
         emit(
             GomsApiHandler<Unit>()
