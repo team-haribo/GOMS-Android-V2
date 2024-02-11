@@ -104,10 +104,7 @@ fun MainScreen(
                         .padding(horizontal = 16.dp),
                     verticalArrangement = Arrangement.spacedBy(32.dp)
                 ) {
-                    MainProfileCard(
-                        role = role,
-                        getProfileUiState = getProfileUiState
-                    )
+                    MainProfileCard(getProfileUiState = getProfileUiState)
                     MainLateCard(
                         role = role,
                         getLateRankListUiState = getLateRankListUiState
