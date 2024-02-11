@@ -8,6 +8,7 @@ import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.PATCH
+import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 import java.util.UUID
@@ -19,6 +20,16 @@ interface CouncilAPI {
     @PATCH("/api/v2/student-council/authority")
     suspend fun changeAuthority(
         @Body body: AuthorityRequest
+    )
+
+    @POST("/api/v2/student-council/black-list/{accountIdx}")
+    suspend fun setBlackList(
+        @Path("accountIdx") accountIdx: UUID
+    )
+
+    @DELETE("/api/v2/student-council/black-list/{accountIdx}")
+    suspend fun deleteBlackList(
+        @Path("accountIdx") accountIdx: UUID
     )
 
     @DELETE("/api/v2/student-council/outing/{accountIdx}")
