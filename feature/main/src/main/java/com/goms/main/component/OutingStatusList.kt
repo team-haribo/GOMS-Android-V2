@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -54,6 +55,7 @@ fun OutingStatusList(
                 OutingListEmptyText()
             }
         }
+
         is GetOutingCountUiState.Success -> {
             when (outingSearchUiState) {
                 OutingSearchUiState.Loading -> Unit
@@ -66,11 +68,12 @@ fun OutingStatusList(
                             val list = getOutingListUiState.getOutingListResponse
 
                             GomsTheme { colors, typography ->
-                                Column(
-                                    modifier = modifier.fillMaxWidth(),
-                                    verticalArrangement = Arrangement.spacedBy(16.dp)
-                                ) {
-                                    SearchResultText(modifier = Modifier.align(Alignment.Start))
+                                Column(modifier = modifier.fillMaxWidth()) {
+                                    SearchResultText(
+                                        modifier = Modifier
+                                            .align(Alignment.Start)
+                                            .height(40.dp)
+                                    )
                                     LazyColumn(
                                         modifier = Modifier
                                             .fillMaxWidth()
@@ -94,24 +97,31 @@ fun OutingStatusList(
                         }
                     }
                 }
+
                 OutingSearchUiState.Empty -> {
                     Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 100.dp)
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalArrangement = Arrangement.spacedBy(60.dp)
                     ) {
+                        SearchResultText(
+                            modifier = Modifier
+                                .align(Alignment.Start)
+                                .height(40.dp)
+                        )
                         SearchEmptyText()
                     }
                 }
+
                 is OutingSearchUiState.Success -> {
                     val list = outingSearchUiState.outingSearchResponse
 
                     GomsTheme { colors, typography ->
-                        Column(
-                            modifier = modifier.fillMaxWidth(),
-                            verticalArrangement = Arrangement.spacedBy(16.dp)
-                        ) {
-                            SearchResultText(modifier = Modifier.align(Alignment.Start))
+                        Column(modifier = modifier.fillMaxWidth()) {
+                            SearchResultText(
+                                modifier = Modifier
+                                    .align(Alignment.Start)
+                                    .height(40.dp)
+                            )
                             LazyColumn(
                                 modifier = Modifier
                                     .fillMaxWidth()

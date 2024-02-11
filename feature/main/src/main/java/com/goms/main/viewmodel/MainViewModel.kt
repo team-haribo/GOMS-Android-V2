@@ -59,6 +59,12 @@ class MainViewModel @Inject constructor(
     val getLateListUiState = _getLateListUiState.asStateFlow()
 
     var outingSearch = savedStateHandle.getStateFlow(key = OUTING_SEARCH, initialValue = "")
+    var studentSearch = savedStateHandle.getStateFlow(key = STUDENT_SEARCH, initialValue = "")
+    var status = savedStateHandle.getStateFlow(key = STATUS, initialValue = "")
+    var filterStatus = savedStateHandle.getStateFlow(key = FILTER_STATUS, initialValue = "")
+    var filterGrade = savedStateHandle.getStateFlow(key = FILTER_GRADE, initialValue = "")
+    var filterClass = savedStateHandle.getStateFlow(key = FILTER_CLASS, initialValue = "")
+
 
     fun getProfile() = viewModelScope.launch {
         getProfileUseCase()
@@ -171,6 +177,30 @@ class MainViewModel @Inject constructor(
     fun onOutingSearchChange(value: String) {
         savedStateHandle[OUTING_SEARCH] = value
     }
+
+    fun onStudentSearchChange(value: String) {
+        savedStateHandle[STUDENT_SEARCH] = value
+    }
+
+    fun onStatusChange(value: String) {
+        savedStateHandle[STATUS] = value
+    }
+
+    fun onFilterStatusChange(value: String) {
+        savedStateHandle[FILTER_STATUS] = value
+    }
+
+    fun onFilterGradeChange(value: String) {
+        savedStateHandle[FILTER_GRADE] = value
+    }
+    fun onFilterClassChange(value: String) {
+        savedStateHandle[FILTER_CLASS] = value
+    }
 }
 
 private const val OUTING_SEARCH = "outing search"
+private const val STUDENT_SEARCH = "student Search"
+private const val STATUS = "status"
+private const val FILTER_STATUS = "filter status"
+private const val FILTER_GRADE = "filter grade"
+private const val FILTER_CLASS = "filter class"

@@ -36,7 +36,8 @@ import com.goms.main.viewmodel.MainViewModelProvider
 fun MainRoute(
     viewModelStoreOwner: ViewModelStoreOwner,
     onOutingStatusClick: () -> Unit,
-    onLateListClick: () -> Unit
+    onLateListClick: () -> Unit,
+    onStudentManagementClick: () -> Unit
 ) {
     MainViewModelProvider(viewModelStoreOwner = viewModelStoreOwner) { viewModel ->
         val role by viewModel.role.collectAsStateWithLifecycle(initialValue = "")
@@ -57,7 +58,8 @@ fun MainRoute(
                 viewModel.getOutingCount()
             },
             onOutingStatusClick = onOutingStatusClick,
-            onLateListClick = onLateListClick
+            onLateListClick = onLateListClick,
+            onStudentManagementClick = onStudentManagementClick
         )
     }
 }
@@ -71,7 +73,8 @@ fun MainScreen(
     getOutingCountUiState: GetOutingCountUiState,
     getData: () -> Unit,
     onOutingStatusClick: () -> Unit,
-    onLateListClick: () -> Unit
+    onLateListClick: () -> Unit,
+    onStudentManagementClick: () -> Unit
 ) {
     LaunchedEffect(true) {
         getData()
@@ -92,7 +95,7 @@ fun MainScreen(
                     role = role,
                     icon = { SettingIcon(tint = colors.G7) },
                     onSettingClick = {},
-                    onAdminClick = {}
+                    onAdminClick = { onStudentManagementClick() }
                 )
                 Column(
                     modifier = Modifier

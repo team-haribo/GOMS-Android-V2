@@ -1,35 +1,41 @@
 package com.goms.main.component
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Divider
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.goms.design_system.R
+import com.goms.design_system.icon.WriteIcon
 import com.goms.design_system.theme.GomsTheme
-import com.goms.main.viewmodel.GetLateListUiState
-import com.goms.model.response.council.LateResponse
+import com.goms.model.enum.Authority
+import com.goms.model.response.outing.OutingResponse
 import com.goms.ui.toText
 
 @Composable
-fun LateList(
+fun StudentManagementList(
     modifier: Modifier = Modifier,
-    getLateListUiState: GetLateListUiState,
-    onBottomSheetOpenClick: () -> Unit
+    onBottomSheetOpenClick: () -> Unit,
+    onClick: () -> Unit
 ) {
     GomsTheme { colors, typography ->
         Column(modifier = modifier.fillMaxWidth()) {
@@ -41,47 +47,33 @@ fun LateList(
                 SearchResultText(modifier = Modifier)
                 FilterText(onFilterTextClick = onBottomSheetOpenClick)
             }
-            when (getLateListUiState) {
-                GetLateListUiState.Loading -> Unit
-                is GetLateListUiState.Error -> Unit
-                GetLateListUiState.Empty -> {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 60.dp)
-                    ) {
-                        LateListEmptyText()
-                    }
-                }
-                is GetLateListUiState.Success -> {
-                    val list = getLateListUiState.getLateRankListResponse
-
-                    LazyColumn(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .heightIn(max = 10000.dp)
-                    ) {
-                        items(list.size) {
-                            LateListItem(
-                                modifier = Modifier.fillMaxWidth(),
-                                list = list[it]
-                            )
-                            Divider(
-                                modifier = Modifier.fillMaxWidth(),
-                                color = colors.WHITE.copy(0.15f)
-                            )
-                        }
-                    }
-                }
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(max = 10000.dp)
+            ) {
+//                items(list.size) {
+//                    StudentManagementListItem(
+//                        modifier = Modifier.fillMaxWidth(),
+//                        list = list[it],
+//                        onClick = onClick
+//                    )
+//                    Divider(
+//                        modifier = Modifier.fillMaxWidth(),
+//                        color = colors.WHITE.copy(0.15f)
+//                    )
+//                }
             }
         }
     }
 }
 
 @Composable
-fun LateListItem(
+fun StudentManagementListItem(
     modifier: Modifier = Modifier,
-    list: LateResponse
+    role: Authority,
+    list: OutingResponse,
+    onClick: () -> Unit
 ) {
     GomsTheme { colors, typography ->
         Row(
@@ -93,12 +85,24 @@ fun LateListItem(
                 Image(
                     painter = painterResource(R.drawable.ic_profile),
                     contentDescription = "Default Profile Image",
-                    modifier = Modifier.size(48.dp)
+                    modifier = Modifier
+                        .size(48.dp)
+                        .border(
+                            width = 4.dp,
+                            color = if (role == Authority.ROLE_STUDENT_COUNCIL) colors.A7 else Color.Transparent,
+                            shape = CircleShape
+                        )
                 )
             } else {
                 AsyncImage(
                     model = list.profileUrl,
-                    modifier = Modifier.size(48.dp),
+                    modifier = Modifier
+                        .size(48.dp)
+                        .border(
+                            width = 4.dp,
+                            color = if (role == Authority.ROLE_STUDENT_COUNCIL) colors.A7 else Color.Transparent,
+                            shape = CircleShape
+                        ),
                     contentScale = ContentScale.Crop,
                     contentDescription = "Profile Image",
                 )
@@ -108,7 +112,7 @@ fun LateListItem(
                     text = list.name,
                     style = typography.textMedium,
                     fontWeight = FontWeight.SemiBold,
-                    color = colors.G7
+                    color = if (role == Authority.ROLE_STUDENT_COUNCIL) colors.A7 else colors.G7
                 )
                 Text(
                     text = "${list.grade}기 | ${list.major.toText()}",
@@ -116,6 +120,10 @@ fun LateListItem(
                     fontWeight = FontWeight.Normal,
                     color = colors.G4
                 )
+            }
+            Spacer(modifier = Modifier.weight(1f))
+            IconButton(onClick = { onClick() }) {
+                WriteIcon()
             }
         }
     }
