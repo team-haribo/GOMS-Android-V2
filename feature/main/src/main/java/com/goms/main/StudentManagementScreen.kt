@@ -35,6 +35,7 @@ import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.util.keyboardAsState
 import com.goms.main.component.StudentManagementList
 import com.goms.main.component.StudentManagementText
+import com.goms.main.viewmodel.GetStudentListUiState
 import com.goms.main.viewmodel.MainViewModelProvider
 import com.goms.model.enum.Class
 import com.goms.model.enum.Grade
@@ -51,6 +52,7 @@ fun StudentManagementRoute(
         val filterStatus by viewModel.filterStatus.collectAsStateWithLifecycle()
         val filterGrade by viewModel.filterGrade.collectAsStateWithLifecycle()
         val filterClass by viewModel.filterClass.collectAsStateWithLifecycle()
+        val getStudentListUiState by viewModel.getStudentListUiState.collectAsStateWithLifecycle()
 
         StudentManagementScreen(
             studentSearch = studentSearch,
@@ -63,8 +65,10 @@ fun StudentManagementRoute(
             onFilterStatusChange = viewModel::onFilterStatusChange,
             onFilterGradeChange = viewModel::onFilterGradeChange,
             onFilterClassChange = viewModel::onFilterClassChange,
-            studentSearchCallBack = {},
+            getStudentListUiState = getStudentListUiState,
             onBackClick = onBackClick,
+            studentListCallBack = { viewModel.getStudentList() },
+            studentSearchCallBack = {}
         )
     }
 }
@@ -81,9 +85,15 @@ fun StudentManagementScreen(
     onFilterStatusChange: (String) -> Unit,
     onFilterGradeChange: (String) -> Unit,
     onFilterClassChange: (String) -> Unit,
-    studentSearchCallBack: (String) -> Unit,
+    getStudentListUiState: GetStudentListUiState,
     onBackClick: () -> Unit,
+    studentListCallBack: () -> Unit,
+    studentSearchCallBack: (String) -> Unit
 ) {
+    LaunchedEffect(true) {
+        studentListCallBack()
+    }
+
     val scrollState = rememberScrollState()
     val focusManager = LocalFocusManager.current
     val isKeyboardOpen by keyboardAsState()
@@ -131,8 +141,12 @@ fun StudentManagementScreen(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 StudentManagementList(
+                    getStudentListUiState = getStudentListUiState,
                     onBottomSheetOpenClick = { onFilterBottomSheetOpenClick = true },
-                    onClick = { onStatusBottomSheetOpenClick = true }
+                    onClick = {
+                        onStatusBottomSheetOpenClick = true
+                        onStatusChange(it)
+                    }
                 )
             }
         }
@@ -141,7 +155,11 @@ fun StudentManagementScreen(
                 modifier = Modifier.fillMaxWidth(),
                 title = "유저 권한 변경",
                 subTitle = "역할",
-                list = listOf(Status.ROLE_STUDENT.value, Status.ROLE_STUDENT_COUNCIL.value, Status.BLACK_LIST.value),
+                list = listOf(
+                    Status.ROLE_STUDENT.value,
+                    Status.ROLE_STUDENT_COUNCIL.value,
+                    Status.BLACK_LIST.value
+                ),
                 selected = status,
                 itemChange = onStatusChange,
                 closeSheet = {
@@ -154,15 +172,28 @@ fun StudentManagementScreen(
                 modifier = Modifier.fillMaxWidth(),
                 title = "필터",
                 subTitle1 = "역할",
-                list1 = listOf(Status.ROLE_STUDENT.value, Status.ROLE_STUDENT_COUNCIL.value, Status.BLACK_LIST.value),
+                list1 = listOf(
+                    Status.ROLE_STUDENT.value,
+                    Status.ROLE_STUDENT_COUNCIL.value,
+                    Status.BLACK_LIST.value
+                ),
                 selected1 = filterStatus,
                 itemChange1 = onFilterStatusChange,
                 subTitle2 = "학년",
-                list2 = listOf(Grade.FIRST_GRADE.value, Grade.SECOND_GRADE.value, Grade.THIRD_GRADE.value),
+                list2 = listOf(
+                    Grade.FIRST_GRADE.value,
+                    Grade.SECOND_GRADE.value,
+                    Grade.THIRD_GRADE.value
+                ),
                 selected2 = filterGrade,
                 itemChange2 = onFilterGradeChange,
                 subTitle3 = "반",
-                list3 = listOf(Class.FIRST.value, Class.SECOND.value, Class.THIRD.value, Class.FOURTH.value),
+                list3 = listOf(
+                    Class.FIRST.value,
+                    Class.SECOND.value,
+                    Class.THIRD.value,
+                    Class.FOURTH.value
+                ),
                 selected3 = filterClass,
                 itemChange3 = onFilterClassChange,
                 closeSheet = {

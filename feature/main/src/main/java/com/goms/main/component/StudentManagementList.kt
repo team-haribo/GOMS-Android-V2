@@ -27,42 +27,54 @@ import coil.compose.AsyncImage
 import com.goms.design_system.R
 import com.goms.design_system.icon.WriteIcon
 import com.goms.design_system.theme.GomsTheme
+import com.goms.main.viewmodel.GetStudentListUiState
 import com.goms.model.enum.Authority
+import com.goms.model.enum.Status
+import com.goms.model.response.council.StudentResponse
 import com.goms.model.response.outing.OutingResponse
 import com.goms.ui.toText
 
 @Composable
 fun StudentManagementList(
     modifier: Modifier = Modifier,
+    getStudentListUiState: GetStudentListUiState,
     onBottomSheetOpenClick: () -> Unit,
-    onClick: () -> Unit
+    onClick: (String) -> Unit
 ) {
-    GomsTheme { colors, typography ->
-        Column(modifier = modifier.fillMaxWidth()) {
-            Row(
-                modifier = modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                SearchResultText(modifier = Modifier)
-                FilterText(onFilterTextClick = onBottomSheetOpenClick)
-            }
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(max = 10000.dp)
-            ) {
-//                items(list.size) {
-//                    StudentManagementListItem(
-//                        modifier = Modifier.fillMaxWidth(),
-//                        list = list[it],
-//                        onClick = onClick
-//                    )
-//                    Divider(
-//                        modifier = Modifier.fillMaxWidth(),
-//                        color = colors.WHITE.copy(0.15f)
-//                    )
-//                }
+    when (getStudentListUiState) {
+        GetStudentListUiState.Loading -> Unit
+        is GetStudentListUiState.Error -> Unit
+        is GetStudentListUiState.Success -> {
+            val list = getStudentListUiState.getStudentResponse
+
+            GomsTheme { colors, typography ->
+                Column(modifier = modifier.fillMaxWidth()) {
+                    Row(
+                        modifier = modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        SearchResultText(modifier = Modifier)
+                        FilterText(onFilterTextClick = onBottomSheetOpenClick)
+                    }
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(max = 10000.dp)
+                    ) {
+                        items(list.size) {
+                            StudentManagementListItem(
+                                modifier = Modifier.fillMaxWidth(),
+                                list = list[it],
+                                onClick = onClick
+                            )
+                            Divider(
+                                modifier = Modifier.fillMaxWidth(),
+                                color = colors.WHITE.copy(0.15f)
+                            )
+                        }
+                    }
+                }
             }
         }
     }
@@ -71,9 +83,8 @@ fun StudentManagementList(
 @Composable
 fun StudentManagementListItem(
     modifier: Modifier = Modifier,
-    role: Authority,
-    list: OutingResponse,
-    onClick: () -> Unit
+    list: StudentResponse,
+    onClick: (String) -> Unit
 ) {
     GomsTheme { colors, typography ->
         Row(
@@ -89,7 +100,9 @@ fun StudentManagementListItem(
                         .size(48.dp)
                         .border(
                             width = 4.dp,
-                            color = if (role == Authority.ROLE_STUDENT_COUNCIL) colors.A7 else Color.Transparent,
+                            color = if (list.authority == Authority.ROLE_STUDENT_COUNCIL) colors.A7
+                            else if (list.isBlackList) colors.N5
+                            else Color.Transparent,
                             shape = CircleShape
                         )
                 )
@@ -100,7 +113,9 @@ fun StudentManagementListItem(
                         .size(48.dp)
                         .border(
                             width = 4.dp,
-                            color = if (role == Authority.ROLE_STUDENT_COUNCIL) colors.A7 else Color.Transparent,
+                            color = if (list.authority == Authority.ROLE_STUDENT_COUNCIL) colors.A7
+                            else if (list.isBlackList) colors.N5
+                            else Color.Transparent,
                             shape = CircleShape
                         ),
                     contentScale = ContentScale.Crop,
@@ -112,7 +127,9 @@ fun StudentManagementListItem(
                     text = list.name,
                     style = typography.textMedium,
                     fontWeight = FontWeight.SemiBold,
-                    color = if (role == Authority.ROLE_STUDENT_COUNCIL) colors.A7 else colors.G7
+                    color = if (list.authority == Authority.ROLE_STUDENT_COUNCIL) colors.A7
+                    else if (list.isBlackList) colors.N5
+                    else colors.G7
                 )
                 Text(
                     text = "${list.grade}기 | ${list.major.toText()}",
@@ -122,7 +139,13 @@ fun StudentManagementListItem(
                 )
             }
             Spacer(modifier = Modifier.weight(1f))
-            IconButton(onClick = { onClick() }) {
+            IconButton(onClick = {
+                onClick(
+                    if (list.authority == Authority.ROLE_STUDENT_COUNCIL) Status.ROLE_STUDENT_COUNCIL.value
+                    else if (list.isBlackList) Status.BLACK_LIST.value
+                    else Status.ROLE_STUDENT.value
+                )
+            }) {
                 WriteIcon()
             }
         }
