@@ -13,6 +13,7 @@ import com.goms.domain.council.DeleteOutingUseCase
 import com.goms.domain.council.GetLateListUseCase
 import com.goms.domain.council.GetStudentListUseCase
 import com.goms.domain.council.SetBlackListUseCase
+import com.goms.domain.council.StudentSearchUseCase
 import com.goms.domain.late.GetLateRankListUseCase
 import com.goms.domain.outing.GetOutingCountUseCase
 import com.goms.domain.outing.GetOutingListUseCase
@@ -42,6 +43,7 @@ class MainViewModel @Inject constructor(
     private val changeAuthorityUseCase: ChangeAuthorityUseCase,
     private val setBlackListUseCase: SetBlackListUseCase,
     private val deleteBlackListUseCase: DeleteBlackListUseCase,
+    private val studentSearchUseCase: StudentSearchUseCase,
     private val authTokenDataSource: AuthTokenDataSource
 ) : ViewModel() {
     val role = authTokenDataSource.getAuthority()
@@ -79,13 +81,16 @@ class MainViewModel @Inject constructor(
     private val _deleteBlackListUiState = MutableStateFlow<Result<Unit>>(Result.Loading)
     val deleteBlackListUiState = _deleteBlackListUiState.asStateFlow()
 
+    private val _studentSearchUiState = MutableStateFlow<StudentSearchUiState>(StudentSearchUiState.Loading)
+    val studentSearchUiState = _studentSearchUiState.asStateFlow()
+
     var outingSearch = savedStateHandle.getStateFlow(key = OUTING_SEARCH, initialValue = "")
     var studentSearch = savedStateHandle.getStateFlow(key = STUDENT_SEARCH, initialValue = "")
     var status = savedStateHandle.getStateFlow(key = STATUS, initialValue = "")
     var filterStatus = savedStateHandle.getStateFlow(key = FILTER_STATUS, initialValue = "")
     var filterGrade = savedStateHandle.getStateFlow(key = FILTER_GRADE, initialValue = "")
-    var filterClass = savedStateHandle.getStateFlow(key = FILTER_CLASS, initialValue = "")
-
+    var filterGender = savedStateHandle.getStateFlow(key = FILTER_GENDER, initialValue = "")
+    var filterMajor = savedStateHandle.getStateFlow(key = FILTER_MAJOR, initialValue = "")
 
     fun getProfile() = viewModelScope.launch {
         getProfileUseCase()
@@ -254,6 +259,42 @@ class MainViewModel @Inject constructor(
             }
     }
 
+    fun studentSearch(
+        grade: Int?,
+        gender: String?,
+        major: String?,
+        name: String?,
+        isBlackList: Boolean?,
+        authority: String?
+    ) = viewModelScope.launch {
+        if (name.isNullOrEmpty() && gender.isNullOrEmpty() && major.isNullOrEmpty() && authority.isNullOrEmpty() && grade == null && isBlackList == null) {
+            _studentSearchUiState.value = StudentSearchUiState.QueryEmpty
+        } else {
+            studentSearchUseCase(
+                grade = grade,
+                gender = gender,
+                major = major,
+                name = name,
+                isBlackList = isBlackList,
+                authority = authority
+            )
+                .asResult()
+                .collectLatest { result ->
+                    when (result) {
+                        is Result.Loading -> _studentSearchUiState.value = StudentSearchUiState.Loading
+                        is Result.Success -> {
+                            if (result.data.isEmpty()) {
+                                _studentSearchUiState.value = StudentSearchUiState.Empty
+                            } else {
+                                _studentSearchUiState.value = StudentSearchUiState.Success(result.data)
+                            }
+                        }
+                        is Result.Error -> _studentSearchUiState.value = StudentSearchUiState.Error(result.exception)
+                    }
+                }
+        }
+    }
+
     fun onOutingSearchChange(value: String) {
         savedStateHandle[OUTING_SEARCH] = value
     }
@@ -273,8 +314,13 @@ class MainViewModel @Inject constructor(
     fun onFilterGradeChange(value: String) {
         savedStateHandle[FILTER_GRADE] = value
     }
-    fun onFilterClassChange(value: String) {
-        savedStateHandle[FILTER_CLASS] = value
+
+    fun onFilterGenderChange(value: String) {
+        savedStateHandle[FILTER_GENDER] = value
+    }
+
+    fun onFilterMajorChange(value: String) {
+        savedStateHandle[FILTER_MAJOR] = value
     }
 }
 
@@ -283,4 +329,5 @@ private const val STUDENT_SEARCH = "student Search"
 private const val STATUS = "status"
 private const val FILTER_STATUS = "filter status"
 private const val FILTER_GRADE = "filter grade"
-private const val FILTER_CLASS = "filter class"
+private const val FILTER_GENDER = "filter gender"
+private const val FILTER_MAJOR = "filter major"
