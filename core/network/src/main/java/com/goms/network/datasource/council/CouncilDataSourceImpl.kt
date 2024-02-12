@@ -48,6 +48,30 @@ class CouncilDataSourceImpl @Inject constructor(
         )
     }.flowOn(Dispatchers.IO)
 
+    override suspend fun studentSearch(
+        grade: Int?,
+        gender: String?,
+        major: String?,
+        name: String?,
+        isBlackList: Boolean?,
+        authority: String?
+    ): Flow<List<StudentResponse>> = flow {
+        emit(
+            GomsApiHandler<List<StudentResponse>>()
+                .httpRequest {
+                    councilAPI.studentSearch(
+                        grade = grade,
+                        gender = gender,
+                        major = major,
+                        name = name,
+                        isBlackList = isBlackList,
+                        authority = authority
+                    )
+                }
+                .sendRequest()
+        )
+    }.flowOn(Dispatchers.IO)
+
     override suspend fun deleteOuting(accountIdx: UUID): Flow<Unit> = flow {
         emit(
             GomsApiHandler<Unit>()
