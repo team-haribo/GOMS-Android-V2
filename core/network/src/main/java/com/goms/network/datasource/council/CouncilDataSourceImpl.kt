@@ -1,6 +1,8 @@
 package com.goms.network.datasource.council
 
+import com.goms.model.request.council.AuthorityRequest
 import com.goms.model.response.council.LateResponse
+import com.goms.model.response.council.StudentResponse
 import com.goms.network.api.CouncilAPI
 import com.goms.network.util.GomsApiHandler
 import kotlinx.coroutines.Dispatchers
@@ -14,6 +16,62 @@ import javax.inject.Inject
 class CouncilDataSourceImpl @Inject constructor(
     private val councilAPI: CouncilAPI
 ) : CouncilDataSource {
+    override suspend fun getStudentList(): Flow<List<StudentResponse>> = flow {
+        emit(
+            GomsApiHandler<List<StudentResponse>>()
+                .httpRequest { councilAPI.getStudentList() }
+                .sendRequest()
+        )
+    }.flowOn(Dispatchers.IO)
+
+    override suspend fun changeAuthority(body: AuthorityRequest): Flow<Unit> = flow {
+        emit(
+            GomsApiHandler<Unit>()
+                .httpRequest { councilAPI.changeAuthority(body = body) }
+                .sendRequest()
+        )
+    }.flowOn(Dispatchers.IO)
+
+    override suspend fun setBlackList(accountIdx: UUID): Flow<Unit> = flow {
+        emit(
+            GomsApiHandler<Unit>()
+                .httpRequest { councilAPI.setBlackList(accountIdx = accountIdx) }
+                .sendRequest()
+        )
+    }.flowOn(Dispatchers.IO)
+
+    override suspend fun deleteBlackList(accountIdx: UUID): Flow<Unit> = flow {
+        emit(
+            GomsApiHandler<Unit>()
+                .httpRequest { councilAPI.deleteBlackList(accountIdx = accountIdx) }
+                .sendRequest()
+        )
+    }.flowOn(Dispatchers.IO)
+
+    override suspend fun studentSearch(
+        grade: Int?,
+        gender: String?,
+        major: String?,
+        name: String?,
+        isBlackList: Boolean?,
+        authority: String?
+    ): Flow<List<StudentResponse>> = flow {
+        emit(
+            GomsApiHandler<List<StudentResponse>>()
+                .httpRequest {
+                    councilAPI.studentSearch(
+                        grade = grade,
+                        gender = gender,
+                        major = major,
+                        name = name,
+                        isBlackList = isBlackList,
+                        authority = authority
+                    )
+                }
+                .sendRequest()
+        )
+    }.flowOn(Dispatchers.IO)
+
     override suspend fun deleteOuting(accountIdx: UUID): Flow<Unit> = flow {
         emit(
             GomsApiHandler<Unit>()
@@ -28,5 +86,5 @@ class CouncilDataSourceImpl @Inject constructor(
                 .httpRequest { councilAPI.getLateList(date = date) }
                 .sendRequest()
         )
-    }
+    }.flowOn(Dispatchers.IO)
 }

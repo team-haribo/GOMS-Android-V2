@@ -83,10 +83,9 @@ class AuthInterceptor @Inject constructor(
         }
         val response = chain.proceed(builder.build())
 
-        return if (response.code == 204) {
-            response.newBuilder().code(200).build()
-        } else {
-            response
+        return when (response.code) {
+            204, 205 -> response.newBuilder().code(200).build()
+            else -> response
         }
     }
 }

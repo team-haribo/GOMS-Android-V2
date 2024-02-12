@@ -52,14 +52,14 @@ fun MainRoute(
             getLateRankListUiState = getLateRankListUiState,
             getOutingListUiState = getOutingListUiState,
             getOutingCountUiState = getOutingCountUiState,
-            getData = {
+            onOutingStatusClick = onOutingStatusClick,
+            onLateListClick = onLateListClick,
+            onStudentManagementClick = onStudentManagementClick,
+            mainCallBack = {
                 viewModel.getProfile()
                 viewModel.getLateRankList()
                 viewModel.getOutingCount()
-            },
-            onOutingStatusClick = onOutingStatusClick,
-            onLateListClick = onLateListClick,
-            onStudentManagementClick = onStudentManagementClick
+            }
         )
     }
 }
@@ -71,13 +71,13 @@ fun MainScreen(
     getLateRankListUiState: GetLateRankListUiState,
     getOutingListUiState: GetOutingListUiState,
     getOutingCountUiState: GetOutingCountUiState,
-    getData: () -> Unit,
     onOutingStatusClick: () -> Unit,
     onLateListClick: () -> Unit,
-    onStudentManagementClick: () -> Unit
+    onStudentManagementClick: () -> Unit,
+    mainCallBack: () -> Unit
 ) {
     LaunchedEffect(true) {
-        getData()
+        mainCallBack()
     }
 
     val scrollState = rememberScrollState()
@@ -104,10 +104,7 @@ fun MainScreen(
                         .padding(horizontal = 16.dp),
                     verticalArrangement = Arrangement.spacedBy(32.dp)
                 ) {
-                    MainProfileCard(
-                        role = role,
-                        getProfileUiState = getProfileUiState
-                    )
+                    MainProfileCard(getProfileUiState = getProfileUiState)
                     MainLateCard(
                         role = role,
                         getLateRankListUiState = getLateRankListUiState
