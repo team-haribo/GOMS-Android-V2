@@ -32,6 +32,16 @@ interface CouncilAPI {
         @Path("accountIdx") accountIdx: UUID
     )
 
+    @GET("/api/v2/student-council/search")
+    suspend fun studentSearch(
+        @Query("grade") grade: Int?,
+        @Query("gender") gender: String?,
+        @Query("major") major: String?,
+        @Query("name") name: String?,
+        @Query("isBlackList") isBlackList: Boolean?,
+        @Query("authority") authority: String?
+    ): List<StudentResponse>
+
     @DELETE("/api/v2/student-council/outing/{accountIdx}")
     suspend fun deleteOuting(
         @Path("accountIdx") accountIdx: UUID
