@@ -1,5 +1,6 @@
 package com.goms.main
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
@@ -38,8 +39,10 @@ import com.goms.main.component.StudentManagementList
 import com.goms.main.component.StudentManagementText
 import com.goms.main.viewmodel.GetStudentListUiState
 import com.goms.main.viewmodel.MainViewModelProvider
-import com.goms.model.enum.Class
+import com.goms.main.viewmodel.StudentSearchUiState
+import com.goms.model.enum.Gender
 import com.goms.model.enum.Grade
+import com.goms.model.enum.Major
 import com.goms.model.enum.Status
 import com.goms.model.request.council.AuthorityRequest
 import java.util.UUID
@@ -54,11 +57,15 @@ fun StudentManagementRoute(
         val status by viewModel.status.collectAsStateWithLifecycle()
         val filterStatus by viewModel.filterStatus.collectAsStateWithLifecycle()
         val filterGrade by viewModel.filterGrade.collectAsStateWithLifecycle()
-        val filterClass by viewModel.filterClass.collectAsStateWithLifecycle()
+        val filterGender by viewModel.filterGender.collectAsStateWithLifecycle()
+        val filterMajor by viewModel.filterMajor.collectAsStateWithLifecycle()
         val getStudentListUiState by viewModel.getStudentListUiState.collectAsStateWithLifecycle()
         val changeAuthorityUiState by viewModel.changeAuthorityUiState.collectAsStateWithLifecycle()
         val setBlackListUiState by viewModel.setBlackListUiState.collectAsStateWithLifecycle()
         val deleteBlackListUiState by viewModel.deleteBlackListUiState.collectAsStateWithLifecycle()
+        val studentSearchUiState by viewModel.studentSearchUiState.collectAsStateWithLifecycle()
+
+        Log.d("testt", studentSearchUiState.toString())
 
         when (changeAuthorityUiState) {
             is Result.Success -> {
@@ -81,16 +88,30 @@ fun StudentManagementRoute(
             status = status,
             filterStatus = filterStatus,
             filterGrade = filterGrade,
-            filterClass = filterClass,
+            filterGender = filterGender,
+            filterMajor = filterMajor,
             onStudentSearchChange = viewModel::onStudentSearchChange,
             onStatusChange = viewModel::onStatusChange,
             onFilterStatusChange = viewModel::onFilterStatusChange,
             onFilterGradeChange = viewModel::onFilterGradeChange,
-            onFilterClassChange = viewModel::onFilterClassChange,
+            onFilterGenderChange = viewModel::onFilterGenderChange,
+            onFilterMajorChange = viewModel::onFilterMajorChange,
             getStudentListUiState = getStudentListUiState,
+            studentSearchUiState = studentSearchUiState,
             onBackClick = onBackClick,
             studentListCallBack = { viewModel.getStudentList() },
-            studentSearchCallBack = {},
+            studentSearchCallBack = { name ->
+                viewModel.studentSearch(
+                    grade = if (filterGrade.isNotBlank()) Grade.values().find { it.value == filterGrade }!!.enum else null,
+                    gender = if (filterGender.isNotBlank()) Gender.values().find { it.value == filterGender }!!.name else null,
+                    major = if (filterMajor.isNotBlank()) Major.values().find { it.value == filterMajor }!!.name else null,
+                    name = name.ifBlank { null },
+                    isBlackList = if (filterStatus.isBlank()) null
+                    else filterStatus == Status.BLACK_LIST.value,
+                    authority = if (filterStatus.isBlank() || filterStatus == Status.BLACK_LIST.value) null
+                    else Status.values().find { it.value ==  filterStatus }!!.name
+                )
+            },
             changeAuthorityCallBack = { accountIdx, authority ->
                 viewModel.changeAuthority(
                     body = AuthorityRequest(
@@ -113,13 +134,16 @@ fun StudentManagementScreen(
     status: String,
     filterStatus: String,
     filterGrade: String,
-    filterClass: String,
+    filterGender: String,
+    filterMajor: String,
     onStudentSearchChange: (String) -> Unit,
     onStatusChange: (String) -> Unit,
     onFilterStatusChange: (String) -> Unit,
     onFilterGradeChange: (String) -> Unit,
-    onFilterClassChange: (String) -> Unit,
+    onFilterGenderChange: (String) -> Unit,
+    onFilterMajorChange: (String) -> Unit,
     getStudentListUiState: GetStudentListUiState,
+    studentSearchUiState: StudentSearchUiState,
     onBackClick: () -> Unit,
     studentListCallBack: () -> Unit,
     studentSearchCallBack: (String) -> Unit,
@@ -179,6 +203,7 @@ fun StudentManagementScreen(
                 Spacer(modifier = Modifier.height(8.dp))
                 StudentManagementList(
                     getStudentListUiState = getStudentListUiState,
+                    studentSearchUiState = studentSearchUiState,
                     onBottomSheetOpenClick = { onFilterBottomSheetOpenClick = true },
                     onClick = { accountIdx, authority ->
                         onStatusBottomSheetOpenClick = true
@@ -230,17 +255,24 @@ fun StudentManagementScreen(
                 ),
                 selected2 = filterGrade,
                 itemChange2 = onFilterGradeChange,
-                subTitle3 = "반",
+                subTitle3 = "성별",
                 list3 = listOf(
-                    Class.FIRST.value,
-                    Class.SECOND.value,
-                    Class.THIRD.value,
-                    Class.FOURTH.value
+                    Gender.MAN.value,
+                    Gender.WOMAN.value
                 ),
-                selected3 = filterClass,
-                itemChange3 = onFilterClassChange,
+                selected3 = filterGender,
+                itemChange3 = onFilterGenderChange,
+                subTitle4 = "학과",
+                list4 = listOf(
+                    Major.SW_DEVELOP.value,
+                    Major.SMART_IOT.value,
+                    Major.AI.value
+                ),
+                selected4 = filterMajor,
+                itemChange4 = onFilterMajorChange,
                 closeSheet = {
                     onFilterBottomSheetOpenClick = false
+                    studentSearchCallBack(studentSearch)
                 }
             )
         }

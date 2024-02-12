@@ -28,10 +28,10 @@ import com.goms.design_system.R
 import com.goms.design_system.icon.WriteIcon
 import com.goms.design_system.theme.GomsTheme
 import com.goms.main.viewmodel.GetStudentListUiState
+import com.goms.main.viewmodel.StudentSearchUiState
 import com.goms.model.enum.Authority
 import com.goms.model.enum.Status
 import com.goms.model.response.council.StudentResponse
-import com.goms.model.response.outing.OutingResponse
 import com.goms.ui.toText
 import java.util.UUID
 
@@ -39,14 +39,70 @@ import java.util.UUID
 fun StudentManagementList(
     modifier: Modifier = Modifier,
     getStudentListUiState: GetStudentListUiState,
+    studentSearchUiState: StudentSearchUiState,
     onBottomSheetOpenClick: () -> Unit,
     onClick: (UUID, String) -> Unit
 ) {
-    when (getStudentListUiState) {
-        GetStudentListUiState.Loading -> Unit
-        is GetStudentListUiState.Error -> Unit
-        is GetStudentListUiState.Success -> {
-            val list = getStudentListUiState.getStudentResponse
+    when (studentSearchUiState) {
+        StudentSearchUiState.Loading -> Unit
+        is StudentSearchUiState.Error -> Unit
+        StudentSearchUiState.QueryEmpty -> {
+            when (getStudentListUiState) {
+                GetStudentListUiState.Loading -> Unit
+                is GetStudentListUiState.Error -> Unit
+                is GetStudentListUiState.Success -> {
+                    val list = getStudentListUiState.getStudentResponse
+
+                    GomsTheme { colors, typography ->
+                        Column(modifier = modifier.fillMaxWidth()) {
+                            Row(
+                                modifier = modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                SearchResultText(modifier = Modifier)
+                                FilterText(onFilterTextClick = onBottomSheetOpenClick)
+                            }
+                            LazyColumn(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .heightIn(max = 10000.dp)
+                            ) {
+                                items(list.size) {
+                                    StudentManagementListItem(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        list = list[it],
+                                        onClick = onClick
+                                    )
+                                    Divider(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        color = colors.WHITE.copy(0.15f)
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        StudentSearchUiState.Empty -> {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(60.dp)
+            ) {
+                Row(
+                    modifier = modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    SearchResultText(modifier = Modifier)
+                    FilterText(onFilterTextClick = onBottomSheetOpenClick)
+                }
+                SearchEmptyText()
+            }
+        }
+        is StudentSearchUiState.Success -> {
+            val list = studentSearchUiState.studentSearchResponse
 
             GomsTheme { colors, typography ->
                 Column(modifier = modifier.fillMaxWidth()) {
