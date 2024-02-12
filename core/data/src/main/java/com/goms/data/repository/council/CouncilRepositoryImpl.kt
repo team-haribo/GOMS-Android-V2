@@ -28,6 +28,24 @@ class CouncilRepositoryImpl @Inject constructor(
         return remoteCouncilDataSource.deleteBlackList(accountIdx = accountIdx)
     }
 
+    override suspend fun studentSearch(
+        grade: Int?,
+        gender: String?,
+        major: String?,
+        name: String?,
+        isBlackList: Boolean?,
+        authority: String?
+    ): Flow<List<StudentResponse>> {
+        return remoteCouncilDataSource.studentSearch(
+            grade = grade,
+            gender = gender,
+            major = major,
+            name = name,
+            isBlackList = isBlackList,
+            authority = authority
+        )
+    }
+
     override suspend fun deleteOuting(accountIdx: UUID): Flow<Unit> {
         return remoteCouncilDataSource.deleteOuting(accountIdx = accountIdx)
     }

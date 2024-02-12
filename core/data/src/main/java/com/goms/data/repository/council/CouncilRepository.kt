@@ -16,6 +16,15 @@ interface CouncilRepository {
 
     suspend fun deleteBlackList(accountIdx: UUID): Flow<Unit>
 
+    suspend fun studentSearch(
+        grade: Int?,
+        gender: String?,
+        major: String?,
+        name: String?,
+        isBlackList: Boolean?,
+        authority: String?
+    ): Flow<List<StudentResponse>>
+
     suspend fun deleteOuting(accountIdx: UUID): Flow<Unit>
 
     suspend fun getLateList(date: LocalDate): Flow<List<LateResponse>>
