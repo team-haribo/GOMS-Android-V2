@@ -43,6 +43,10 @@ fun MultipleSelectorBottomSheet(
     list3: List<String>,
     selected3: String,
     itemChange3: (String) -> Unit,
+    subTitle4: String,
+    list4: List<String>,
+    selected4: String,
+    itemChange4: (String) -> Unit,
     closeSheet: () -> Unit
 ) {
     var componentWidth by remember { mutableStateOf( 0.dp ) }
@@ -132,6 +136,27 @@ fun MultipleSelectorBottomSheet(
                             selected = selected3 == list3[it]
                         ) {
                             itemChange3(list3[it])
+                        }
+                    }
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = subTitle4,
+                    style = typography.titleSmall,
+                    fontWeight = FontWeight.SemiBold,
+                    color = colors.WHITE
+                )
+                LazyRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    items(list4.size) {
+                        AdminBottomSheetButton(
+                            modifier = Modifier.widthIn((componentWidth - 16.dp * list4.lastIndex) / list4.size),
+                            text = list4[it],
+                            selected = selected4 == list4[it]
+                        ) {
+                            itemChange4(list4[it])
                         }
                     }
                 }
