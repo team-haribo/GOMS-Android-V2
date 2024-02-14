@@ -3,6 +3,7 @@ package com.goms.main.component
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.goms.design_system.R
 import com.goms.design_system.component.clickable.gomsClickable
+import com.goms.design_system.component.shimmer.shimmerEffect
 import com.goms.design_system.theme.GomsTheme
 import com.goms.main.viewmodel.GetOutingCountUiState
 import com.goms.main.viewmodel.GetOutingListUiState
@@ -40,53 +42,59 @@ fun MainOutingCard(
     getOutingCountUiState: GetOutingCountUiState,
     onClick: () -> Unit
 ) {
-    when (getOutingCountUiState) {
-        GetOutingCountUiState.Loading -> Unit
-        is GetOutingCountUiState.Error -> Unit
-        GetOutingCountUiState.Empty -> {
-            GomsTheme { colors, typography ->
-                Surface(
-                    modifier = modifier,
-                    color = colors.G1,
-                    shape = RoundedCornerShape(12.dp),
-                    border = BorderStroke(width = 1.dp, color = colors.WHITE.copy(0.15f))
+    GomsTheme { colors, typography ->
+        Surface(
+            modifier = modifier,
+            color = colors.G1,
+            shape = RoundedCornerShape(12.dp),
+            border = BorderStroke(width = 1.dp, color = colors.WHITE.copy(0.15f))
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(6.dp)
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(6.dp)
-                    ) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                text = "외출 현황",
-                                style = typography.titleMedium,
-                                fontWeight = FontWeight.Bold,
-                                color = colors.WHITE
+                    Text(
+                        text = "외출 현황",
+                        style = typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = colors.WHITE
+                    )
+                    if (role == Authority.ROLE_STUDENT) {
+                        Text(
+                            modifier = Modifier.gomsClickable { onClick() },
+                            text = "더보기",
+                            style = typography.buttonSmall,
+                            fontWeight = FontWeight.Normal,
+                            color = colors.G7
+                        )
+                    } else {
+                        Text(
+                            modifier = Modifier.gomsClickable { onClick() },
+                            text = "인원 관리하기",
+                            style = typography.buttonSmall,
+                            fontWeight = FontWeight.Normal,
+                            color = colors.G7
+                        )
+                    }
+                }
+                Divider(modifier = Modifier.height(1.dp), color = colors.WHITE.copy(0.15f))
+                when (getOutingCountUiState) {
+                    GetOutingCountUiState.Loading -> {
+                            Box(
+                                modifier = Modifier
+                                    .size(56.dp, 23.dp)
+                                    .shimmerEffect(color = colors.WHITE)
                             )
-                            if (role == Authority.ROLE_STUDENT) {
-                                Text(
-                                    modifier = Modifier.gomsClickable { onClick() },
-                                    text = "더보기",
-                                    style = typography.buttonSmall,
-                                    fontWeight = FontWeight.Normal,
-                                    color = colors.G7
-                                )
-                            } else {
-                                Text(
-                                    modifier = Modifier.gomsClickable { onClick() },
-                                    text = "인원 관리하기",
-                                    style = typography.buttonSmall,
-                                    fontWeight = FontWeight.Normal,
-                                    color = colors.G7
-                                )
-                            }
-                        }
-                        Divider(modifier = Modifier.height(1.dp), color = colors.WHITE.copy(0.15f))
+                    }
+                    is GetOutingCountUiState.Error -> Unit
+                    GetOutingCountUiState.Empty -> {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             verticalAlignment = Alignment.CenterVertically
@@ -105,60 +113,29 @@ fun MainOutingCard(
                             )
                         }
                     }
-                }
-            }
-        }
-        is GetOutingCountUiState.Success -> {
-            when (getOutingListUiState) {
-                GetOutingListUiState.Loading -> Unit
-                is GetOutingListUiState.Error -> Unit
-                is GetOutingListUiState.Success -> {
-                    val count = getOutingCountUiState.getOutingCountResponse
-                    val list = getOutingListUiState.getOutingListResponse
-
-                    GomsTheme { colors, typography ->
-                        Surface(
-                            modifier = modifier,
-                            color = colors.G1,
-                            shape = RoundedCornerShape(12.dp),
-                            border = BorderStroke(width = 1.dp, color = colors.WHITE.copy(0.15f))
-                        ) {
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(16.dp),
-                                verticalArrangement = Arrangement.spacedBy(6.dp)
-                            ) {
-                                Row(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.SpaceBetween,
-                                    verticalAlignment = Alignment.CenterVertically
+                    is GetOutingCountUiState.Success -> {
+                        when (getOutingListUiState) {
+                            GetOutingListUiState.Loading -> {
+                                Box(
+                                    modifier = Modifier
+                                        .size(56.dp, 23.dp)
+                                        .shimmerEffect(color = colors.WHITE)
+                                )
+                                LazyColumn(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .heightIn(max = 10000.dp)
                                 ) {
-                                    Text(
-                                        text = "외출 현황",
-                                        style = typography.titleMedium,
-                                        fontWeight = FontWeight.Bold,
-                                        color = colors.WHITE
-                                    )
-                                    if (role == Authority.ROLE_STUDENT) {
-                                        Text(
-                                            modifier = Modifier.gomsClickable { onClick() },
-                                            text = "더보기",
-                                            style = typography.buttonSmall,
-                                            fontWeight = FontWeight.Normal,
-                                            color = colors.G7
-                                        )
-                                    } else {
-                                        Text(
-                                            modifier = Modifier.gomsClickable { onClick() },
-                                            text = "인원 관리하기",
-                                            style = typography.buttonSmall,
-                                            fontWeight = FontWeight.Normal,
-                                            color = colors.G7
-                                        )
+                                    items(5) {
+                                        ShimmerMainOutingItem(modifier = modifier)
                                     }
                                 }
-                                Divider(modifier = Modifier.height(1.dp), color = colors.WHITE.copy(0.15f))
+                            }
+                            is GetOutingListUiState.Error -> Unit
+                            is GetOutingListUiState.Success -> {
+                                val count = getOutingCountUiState.getOutingCountResponse
+                                val list = getOutingListUiState.getOutingListResponse
+
                                 Row(
                                     modifier = Modifier.fillMaxWidth(),
                                     verticalAlignment = Alignment.CenterVertically
@@ -233,6 +210,35 @@ fun MainOutingItem(
                 style = typography.caption,
                 fontWeight = FontWeight.Normal,
                 color = colors.G4
+            )
+        }
+    }
+}
+
+@Composable
+fun ShimmerMainOutingItem(
+    modifier: Modifier = Modifier,
+) {
+    GomsTheme { colors, typography ->
+        Row(
+            modifier = modifier.padding(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(28.dp)
+                    .shimmerEffect(color = colors.WHITE)
+            )
+            Box(
+                modifier = Modifier
+                    .size(56.dp, 23.dp)
+                    .shimmerEffect(color = colors.WHITE)
+            )
+            Box(
+                modifier = Modifier
+                    .size(60.dp, 16.dp)
+                    .shimmerEffect(color = colors.WHITE)
             )
         }
     }
