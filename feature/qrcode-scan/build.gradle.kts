@@ -15,4 +15,8 @@ dependencies {
     add("implementation", libs.findLibrary("camera.camera2").get())
     add("implementation", libs.findLibrary("camera.lifecycle").get())
     add("implementation", libs.findLibrary("camera.extensions").get())
+
+    add("implementation", libs.findLibrary("mlkit").get())
+
+    add("implementation", libs.findLibrary("accompanist.permission").get())
 }
