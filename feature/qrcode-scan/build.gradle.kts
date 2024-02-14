@@ -15,11 +15,4 @@ dependencies {
     add("implementation", libs.findLibrary("camera.camera2").get())
     add("implementation", libs.findLibrary("camera.lifecycle").get())
     add("implementation", libs.findLibrary("camera.extensions").get())
-<<<<<<< HEAD
-
-    add("implementation", libs.findLibrary("mlkit").get())
-
-    add("implementation", libs.findLibrary("accompanist.permission").get())
-=======
->>>>>>> 9276a7d (:memo: :: Add qrcode module and set dependency)
 }
