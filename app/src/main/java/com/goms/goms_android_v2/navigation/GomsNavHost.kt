@@ -18,6 +18,8 @@ import com.goms.main.navigation.navigateToOutingStatus
 import com.goms.main.navigation.navigateToStudentManagement
 import com.goms.main.navigation.outingStatusScreen
 import com.goms.main.navigation.studentManagementScreen
+import com.goms.qrcode_scan.navigation.navigateToQrScan
+import com.goms.qrcode_scan.navigation.qrcodeScanScreen
 import com.goms.sign_up.navigation.navigateToNumber
 import com.goms.sign_up.navigation.navigateToPassword
 import com.goms.sign_up.navigation.navigateToSignUp
@@ -66,7 +68,11 @@ fun GomsNavHost(
             viewModelStoreOwner = mainViewModelStoreOwner,
             onOutingStatusClick = navController::navigateToOutingStatus,
             onLateListClick = navController::navigateToLateList,
-            onStudentManagementClick = navController::navigateToStudentManagement
+            onStudentManagementClick = navController::navigateToStudentManagement,
+            onQrcodeClick = navController::navigateToQrScan
+        )
+        qrcodeScanScreen(
+            onPermissionBlock = navController::popBackStack
         )
         outingStatusScreen(
             viewModelStoreOwner = mainViewModelStoreOwner,
