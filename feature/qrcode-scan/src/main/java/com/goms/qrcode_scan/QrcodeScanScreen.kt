@@ -45,10 +45,14 @@ fun QrcodeScanRoute(
         onPermissionBlock()
     }
 }
+@androidx.annotation.OptIn(androidx.camera.core.ExperimentalGetImage::class)
 @Composable
 fun QrcodeScanScreen() {
     GomsTheme { _, _ ->
-        QrcodeScanPreview(context = LocalContext.current)
+        QrcodeScanPreview(
+            context = LocalContext.current,
+            onQrcodeScan = {}
+        )
         Column(
             modifier = Modifier
                 .fillMaxSize()
