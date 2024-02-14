@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,6 +35,7 @@ import com.goms.design_system.component.textfield.NumberTextField
 import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.util.keyboardAsState
 import com.goms.design_system.util.lockScreenOrientation
+import com.goms.model.request.auth.SendNumberRequest
 import com.goms.sign_up.component.NumberText
 import com.goms.sign_up.viewmodel.SignUpViewModelProvider
 
@@ -44,7 +46,7 @@ fun NumberRoute(
     onPasswordClick: () -> Unit,
 ) {
     SignUpViewModelProvider(viewModelStoreOwner = viewModelStoreOwner) { viewModel ->
-        val verifyNumberUiState by viewModel.verifyNumberUiState.collectAsStateWithLifecycle()
+        val verifyNumberUiState by viewModel.verifyNumberUiState.collectAsState()
         val number by viewModel.number.collectAsStateWithLifecycle()
         var isError by remember { mutableStateOf(false) }
         var errorText by remember { mutableStateOf("") }
@@ -72,7 +74,8 @@ fun NumberRoute(
                     email = "${viewModel.email.value}@gsm.hs.kr",
                     authCode = viewModel.number.value
                 )
-            }
+            },
+            resentCallBack = { viewModel.sendNumber(body = SendNumberRequest("${viewModel.email.value}@gsm.hs.kr")) }
         )
     }
 }
@@ -84,7 +87,8 @@ fun NumberScreen(
     errorText: String,
     onNumberChange: (String) -> Unit,
     onBackClick: () -> Unit,
-    numberCallback: () -> Unit
+    numberCallback: () -> Unit,
+    resentCallBack: () -> Unit
 ) {
     val focusManager = LocalFocusManager.current
     val isKeyboardOpen by keyboardAsState()
@@ -125,7 +129,9 @@ fun NumberScreen(
                     isError = isError,
                     errorText = errorText,
                     onValueChange = onNumberChange,
-                    onResendClick = {}
+                    onResendClick = {
+                        resentCallBack()
+                    }
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 GomsButton(

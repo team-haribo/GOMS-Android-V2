@@ -125,6 +125,37 @@ fun BottomSheetButton(
 }
 
 @Composable
+fun AdminBottomSheetButton(
+    modifier: Modifier = Modifier,
+    text: String,
+    selected: Boolean,
+    onClick: () -> Unit
+) {
+    GomsTheme { colors, typography ->
+        Box(
+            modifier = modifier
+                .height(56.dp)
+                .clip(RoundedCornerShape(12.dp))
+                .background(if (selected) colors.A7.copy(0.25f) else colors.G1)
+                .border(
+                    width = 1.dp,
+                    color = if (selected) Color.Transparent else colors.WHITE.copy(0.15f),
+                    shape = RoundedCornerShape(12.dp)
+                )
+                .gomsClickable { onClick() }
+        ) {
+            Text(
+                modifier = Modifier.align(Alignment.Center),
+                text = text,
+                style = typography.buttonMedium,
+                fontWeight = FontWeight.SemiBold,
+                color = if (selected) colors.A7 else colors.G7
+            )
+        }
+    }
+}
+
+@Composable
 @Preview(showBackground = true)
 fun GomsButtonPreview() {
     Column {
@@ -156,6 +187,11 @@ fun GomsButtonPreview() {
             modifier = Modifier.fillMaxWidth(),
             text = "버튼",
             selected = false,
+        ) {}
+        AdminBottomSheetButton(
+            modifier = Modifier.fillMaxWidth(),
+            text = "버튼",
+            selected = true,
         ) {}
     }
 }

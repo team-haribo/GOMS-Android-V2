@@ -79,13 +79,8 @@ fun PasswordRoute(
                             email = "${viewModel.email.value}@gsm.hs.kr",
                             password = viewModel.password.value,
                             name = viewModel.name.value,
-                            gender = if (viewModel.gender.value == Gender.MAN.value) Gender.MAN.name else Gender.WOMAN.name,
-                            major = when (viewModel.major.value) {
-                                Major.SW_DEVELOP.value -> Major.SW_DEVELOP.name
-                                Major.SMART_IOT.value -> Major.SMART_IOT.name
-                                Major.AI.value -> Major.AI.name
-                                else -> ""
-                            },
+                            gender = Gender.values().find { it.value == viewModel.gender.value }!!.name,
+                            major = Major.values().find { it.value == viewModel.major.value }!!.name
                         )
                     )
                 } else {

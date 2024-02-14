@@ -20,6 +20,7 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -40,7 +41,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.goms.design_system.component.modifier.gomsClickable
 import com.goms.design_system.component.timer.CountdownTimer
+import com.goms.design_system.icon.SearchIcon
 import com.goms.design_system.theme.GomsTheme
+import kotlinx.coroutines.delay
 
 @Composable
 fun GomsTextField(
@@ -430,6 +433,88 @@ fun GomsPasswordTextField(
                     )
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun GomsSearchTextField(
+    modifier: Modifier = Modifier,
+    debounceTime: Long = 300L,
+    placeHolder: String = "",
+    readOnly: Boolean = false,
+    focusManager: FocusManager = LocalFocusManager.current,
+    focusRequester: FocusRequester = FocusRequester(),
+    setText: String,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    maxLines: Int = Int.MAX_VALUE,
+    singleLine: Boolean = false,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    onValueChange: (String) -> Unit = {},
+    onSearchTextChange: (String) -> Unit = {}
+) {
+    val isFocused = remember { mutableStateOf(false) }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            focusManager.clearFocus()
+        }
+    }
+
+    LaunchedEffect(setText) {
+        delay(debounceTime)
+        onSearchTextChange(setText)
+    }
+
+    GomsTheme { colors, typography ->
+        Column {
+            OutlinedTextField(
+                value = setText,
+                onValueChange = {
+                    onValueChange(it)
+                },
+                keyboardOptions = keyboardOptions,
+                keyboardActions = keyboardActions,
+                placeholder = {
+                    Text(
+                        text = placeHolder,
+                        style = typography.textMedium,
+                        fontWeight = FontWeight.Normal,
+                        color = colors.G4
+                    )
+                },
+                modifier = modifier
+                    .fillMaxWidth()
+                    .focusRequester(focusRequester)
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(colors.G1)
+                    .border(
+                        width = 1.dp,
+                        color = colors.WHITE.copy(0.15f),
+                        shape = RoundedCornerShape(12.dp)
+                    )
+                    .onFocusChanged {
+                        isFocused.value = it.isFocused
+                    },
+                maxLines = maxLines,
+                singleLine = singleLine,
+                textStyle = typography.textMedium,
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedTextColor = colors.WHITE,
+                    unfocusedTextColor = colors.WHITE,
+                    focusedPlaceholderColor = colors.G4,
+                    unfocusedPlaceholderColor = colors.G4,
+                    focusedBorderColor = Color.Transparent,
+                    unfocusedBorderColor = Color.Transparent,
+                    cursorColor = colors.I5
+                ),
+                trailingIcon = {
+                    SearchIcon(tint = colors.G4)
+                },
+                readOnly = readOnly,
+                visualTransformation = visualTransformation
+            )
         }
     }
 }

@@ -16,4 +16,8 @@ class OutingRepositoryImpl @Inject constructor(
     override suspend fun getOutingCount(): Flow<CountResponse> {
         return remoteOutingDataSource.getOutingCount()
     }
+
+    override suspend fun outingSearch(name: String): Flow<List<OutingResponse>> {
+        return remoteOutingDataSource.outingSearch(name = name)
+    }
 }

@@ -10,8 +10,14 @@ import com.goms.login.navigation.loginRoute
 import com.goms.login.navigation.loginScreen
 import com.goms.login.navigation.navigateToInputLogin
 import com.goms.login.navigation.navigateToLogin
+import com.goms.main.navigation.lateListScreen
 import com.goms.main.navigation.mainScreen
+import com.goms.main.navigation.navigateToLateList
 import com.goms.main.navigation.navigateToMain
+import com.goms.main.navigation.navigateToOutingStatus
+import com.goms.main.navigation.navigateToStudentManagement
+import com.goms.main.navigation.outingStatusScreen
+import com.goms.main.navigation.studentManagementScreen
 import com.goms.sign_up.navigation.navigateToNumber
 import com.goms.sign_up.navigation.navigateToPassword
 import com.goms.sign_up.navigation.navigateToSignUp
@@ -26,7 +32,8 @@ fun GomsNavHost(
     startDestination: String = loginRoute
 ) {
     val navController = appState.navController
-    val viewModelStoreOwner = checkNotNull(LocalViewModelStoreOwner.current)
+    val signUpViewModelStoreOwner = checkNotNull(LocalViewModelStoreOwner.current)
+    val mainViewModelStoreOwner = checkNotNull(LocalViewModelStoreOwner.current)
     NavHost(
         navController = navController,
         startDestination = startDestination,
@@ -41,20 +48,37 @@ fun GomsNavHost(
             onMainClick = { appState.navigateToTopLevelDestination(TopLevelDestination.MAIN) }
         )
         signUpScreen(
-            viewModelStoreOwner = viewModelStoreOwner,
+            viewModelStoreOwner = signUpViewModelStoreOwner,
             onBackClick = navController::popBackStack,
             onNumberClick = navController::navigateToNumber
         )
         numberScreen(
-            viewModelStoreOwner = viewModelStoreOwner,
+            viewModelStoreOwner = signUpViewModelStoreOwner,
             onBackClick = navController::popBackStack,
             onPasswordClick = navController::navigateToPassword
         )
         passwordScreen(
-            viewModelStoreOwner = viewModelStoreOwner,
+            viewModelStoreOwner = signUpViewModelStoreOwner,
             onBackClick = navController::popBackStack,
             onLoginClick = { appState.navigateToTopLevelDestination(TopLevelDestination.LOGIN) }
         )
-        mainScreen()
+        mainScreen(
+            viewModelStoreOwner = mainViewModelStoreOwner,
+            onOutingStatusClick = navController::navigateToOutingStatus,
+            onLateListClick = navController::navigateToLateList,
+            onStudentManagementClick = navController::navigateToStudentManagement
+        )
+        outingStatusScreen(
+            viewModelStoreOwner = mainViewModelStoreOwner,
+            onBackClick = navController::popBackStack
+        )
+        lateListScreen(
+            viewModelStoreOwner = mainViewModelStoreOwner,
+            onBackClick = navController::popBackStack
+        )
+        studentManagementScreen(
+            viewModelStoreOwner = mainViewModelStoreOwner,
+            onBackClick = navController::popBackStack
+        )
     }
 }

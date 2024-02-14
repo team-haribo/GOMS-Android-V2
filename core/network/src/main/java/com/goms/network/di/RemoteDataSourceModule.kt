@@ -4,6 +4,8 @@ import com.goms.network.datasource.account.AccountDataSource
 import com.goms.network.datasource.account.AccountDataSourceImpl
 import com.goms.network.datasource.auth.AuthDataSource
 import com.goms.network.datasource.auth.AuthDataSourceImpl
+import com.goms.network.datasource.council.CouncilDataSource
+import com.goms.network.datasource.council.CouncilDataSourceImpl
 import com.goms.network.datasource.late.LateDataSource
 import com.goms.network.datasource.late.LateDataSourceImpl
 import com.goms.network.datasource.outing.OutingDataSource
@@ -35,4 +37,9 @@ abstract class RemoteDataSourceModule {
     abstract fun bindOutingDataSource(
         outingDataSourceImpl: OutingDataSourceImpl
     ): OutingDataSource
+
+    @Binds
+    abstract fun bindCouncilDataSource(
+        councilDataSourceImpl: CouncilDataSourceImpl
+    ): CouncilDataSource
 }

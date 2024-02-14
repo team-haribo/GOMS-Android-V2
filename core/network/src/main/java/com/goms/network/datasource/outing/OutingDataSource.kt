@@ -8,4 +8,6 @@ interface OutingDataSource {
     suspend fun getOutingList(): Flow<List<OutingResponse>>
 
     suspend fun getOutingCount(): Flow<CountResponse>
+
+    suspend fun outingSearch(name: String): Flow<List<OutingResponse>>
 }
