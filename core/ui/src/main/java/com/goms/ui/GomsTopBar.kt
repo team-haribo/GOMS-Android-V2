@@ -24,7 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.goms.design_system.component.modifier.gomsClickable
+import com.goms.design_system.component.clickable.gomsClickable
 import com.goms.design_system.icon.GomsTextIcon
 import com.goms.design_system.icon.PersonIcon
 import com.goms.design_system.icon.SettingIcon

@@ -28,10 +28,9 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.goms.design_system.R
-import com.goms.design_system.component.modifier.gomsClickable
+import com.goms.design_system.component.clickable.gomsClickable
 import com.goms.design_system.theme.GomsTheme
 import com.goms.main.viewmodel.GetLateRankListUiState
 import com.goms.model.enum.Authority
