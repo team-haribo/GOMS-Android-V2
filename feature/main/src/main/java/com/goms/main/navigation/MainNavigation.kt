@@ -23,14 +23,16 @@ fun NavGraphBuilder.mainScreen(
     viewModelStoreOwner: ViewModelStoreOwner,
     onOutingStatusClick: () -> Unit,
     onLateListClick: () -> Unit,
-    onStudentManagementClick: () -> Unit
+    onStudentManagementClick: () -> Unit,
+    onQrcodeClick: () -> Unit
 ) {
     composable(route = mainRoute) {
         MainRoute(
             viewModelStoreOwner = viewModelStoreOwner,
             onOutingStatusClick = onOutingStatusClick,
             onLateListClick = onLateListClick,
-            onStudentManagementClick = onStudentManagementClick
+            onStudentManagementClick = onStudentManagementClick,
+            onQrcodeClick = onQrcodeClick
         )
     }
 }

@@ -1,5 +1,6 @@
 package com.goms.main
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -37,7 +38,8 @@ fun MainRoute(
     viewModelStoreOwner: ViewModelStoreOwner,
     onOutingStatusClick: () -> Unit,
     onLateListClick: () -> Unit,
-    onStudentManagementClick: () -> Unit
+    onStudentManagementClick: () -> Unit,
+    onQrcodeClick: () -> Unit
 ) {
     MainViewModelProvider(viewModelStoreOwner = viewModelStoreOwner) { viewModel ->
         val role by viewModel.role.collectAsStateWithLifecycle(initialValue = "")
@@ -55,6 +57,7 @@ fun MainRoute(
             onOutingStatusClick = onOutingStatusClick,
             onLateListClick = onLateListClick,
             onStudentManagementClick = onStudentManagementClick,
+            onQrcodeClick = onQrcodeClick,
             mainCallBack = {
                 viewModel.getProfile()
                 viewModel.getLateRankList()
@@ -74,6 +77,7 @@ fun MainScreen(
     onOutingStatusClick: () -> Unit,
     onLateListClick: () -> Unit,
     onStudentManagementClick: () -> Unit,
+    onQrcodeClick: () -> Unit,
     mainCallBack: () -> Unit
 ) {
     LaunchedEffect(true) {
@@ -125,7 +129,9 @@ fun MainScreen(
                     .align(Alignment.BottomEnd)
                     .padding(end = 16.dp, bottom = 16.dp),
                 role = role
-            ) {}
+            ) {
+                onQrcodeClick()
+            }
         }
     }
 }

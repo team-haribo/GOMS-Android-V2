@@ -8,11 +8,20 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import java.util.UUID
 import javax.inject.Inject
 
 class OutingDataSourceImpl @Inject constructor(
     private val outingAPI: OutingAPI
 ) : OutingDataSource {
+    override suspend fun outing(outingUUID: UUID): Flow<Unit> = flow {
+        emit(
+            GomsApiHandler<Unit>()
+                .httpRequest { outingAPI.outing(outingUUID) }
+                .sendRequest()
+        )
+    }.flowOn(Dispatchers.IO)
+
     override suspend fun getOutingList(): Flow<List<OutingResponse>> = flow {
         emit(
             GomsApiHandler<List<OutingResponse>>()

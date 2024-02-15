@@ -30,6 +30,7 @@
             <option value="$PROJECT_DIR$/core/common" />
             <option value="$PROJECT_DIR$/core/data" />
             <option value="$PROJECT_DIR$/core/datastore" />
+            <option value="$PROJECT_DIR$/core/datastore-proto" />
             <option value="$PROJECT_DIR$/core/design-system" />
             <option value="$PROJECT_DIR$/core/domain" />
             <option value="$PROJECT_DIR$/core/model" />
@@ -39,6 +40,9 @@
             <option value="$PROJECT_DIR$/feature" />
             <option value="$PROJECT_DIR$/feature/login" />
             <option value="$PROJECT_DIR$/feature/main" />
+            <option value="$PROJECT_DIR$/feature/sign-up" />
+            <option value="$PROJECT_DIR$/feature/main" />
+            <option value="$PROJECT_DIR$/feature/qrcode-scan" />
             <option value="$PROJECT_DIR$/feature/sign-up" />
           </set>
         </option>
