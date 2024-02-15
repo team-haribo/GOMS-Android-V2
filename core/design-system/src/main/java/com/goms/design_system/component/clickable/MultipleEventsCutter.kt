@@ -1,4 +1,4 @@
-package com.goms.design_system.component.modifier
+package com.goms.design_system.component.clickable
 
 internal interface MultipleEventsCutter {
     fun processEvent(event: () -> Unit)

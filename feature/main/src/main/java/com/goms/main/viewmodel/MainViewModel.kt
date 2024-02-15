@@ -110,7 +110,13 @@ class MainViewModel @Inject constructor(
             .collectLatest { result ->
                 when (result) {
                     is Result.Loading -> _getLateRankListUiState.value = GetLateRankListUiState.Loading
-                    is Result.Success -> _getLateRankListUiState.value = GetLateRankListUiState.Success(result.data)
+                    is Result.Success -> {
+                        if (result.data.isEmpty()) {
+                            _getLateRankListUiState.value = GetLateRankListUiState.Empty
+                        } else {
+                            _getLateRankListUiState.value = GetLateRankListUiState.Success(result.data)
+                        }
+                    }
                     is Result.Error -> _getLateRankListUiState.value = GetLateRankListUiState.Error(result.exception)
                 }
             }

@@ -3,13 +3,16 @@ package com.goms.main.component
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Divider
@@ -25,6 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.goms.design_system.R
+import com.goms.design_system.component.shimmer.shimmerEffect
 import com.goms.design_system.icon.WriteIcon
 import com.goms.design_system.theme.GomsTheme
 import com.goms.main.viewmodel.GetStudentListUiState
@@ -44,44 +48,25 @@ fun StudentManagementList(
     onClick: (UUID, String) -> Unit
 ) {
     when (studentSearchUiState) {
-        StudentSearchUiState.Loading -> Unit
+        StudentSearchUiState.Loading -> {
+            ShimmerStudentManagementListComponent(modifier = modifier)
+        }
         is StudentSearchUiState.Error -> Unit
         StudentSearchUiState.QueryEmpty -> {
             when (getStudentListUiState) {
-                GetStudentListUiState.Loading -> Unit
+                GetStudentListUiState.Loading -> {
+                    ShimmerStudentManagementListComponent(modifier = modifier)
+                }
                 is GetStudentListUiState.Error -> Unit
                 is GetStudentListUiState.Success -> {
                     val list = getStudentListUiState.getStudentResponse
 
-                    GomsTheme { colors, typography ->
-                        Column(modifier = modifier.fillMaxWidth()) {
-                            Row(
-                                modifier = modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                SearchResultText(modifier = Modifier)
-                                FilterText(onFilterTextClick = onBottomSheetOpenClick)
-                            }
-                            LazyColumn(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .heightIn(max = 10000.dp)
-                            ) {
-                                items(list.size) {
-                                    StudentManagementListItem(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        list = list[it],
-                                        onClick = onClick
-                                    )
-                                    Divider(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        color = colors.WHITE.copy(0.15f)
-                                    )
-                                }
-                            }
-                        }
-                    }
+                    StudentManagementListComponent(
+                        modifier = modifier,
+                        list = list,
+                        onBottomSheetOpenClick = onBottomSheetOpenClick,
+                        onClick = onClick
+                    )
                 }
             }
         }
@@ -104,33 +89,48 @@ fun StudentManagementList(
         is StudentSearchUiState.Success -> {
             val list = studentSearchUiState.studentSearchResponse
 
-            GomsTheme { colors, typography ->
-                Column(modifier = modifier.fillMaxWidth()) {
-                    Row(
-                        modifier = modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        SearchResultText(modifier = Modifier)
-                        FilterText(onFilterTextClick = onBottomSheetOpenClick)
-                    }
-                    LazyColumn(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .heightIn(max = 10000.dp)
-                    ) {
-                        items(list.size) {
-                            StudentManagementListItem(
-                                modifier = Modifier.fillMaxWidth(),
-                                list = list[it],
-                                onClick = onClick
-                            )
-                            Divider(
-                                modifier = Modifier.fillMaxWidth(),
-                                color = colors.WHITE.copy(0.15f)
-                            )
-                        }
-                    }
+            StudentManagementListComponent(
+                modifier = modifier,
+                list = list,
+                onBottomSheetOpenClick = onBottomSheetOpenClick,
+                onClick = onClick
+            )
+        }
+    }
+}
+
+@Composable
+fun StudentManagementListComponent(
+    modifier: Modifier,
+    list: List<StudentResponse>,
+    onBottomSheetOpenClick: () -> Unit,
+    onClick: (UUID, String) -> Unit
+) {
+    GomsTheme { colors, typography ->
+        Column(modifier = modifier.fillMaxWidth()) {
+            Row(
+                modifier = modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                SearchResultText(modifier = Modifier)
+                FilterText(onFilterTextClick = onBottomSheetOpenClick)
+            }
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(max = 10000.dp)
+            ) {
+                items(list.size) {
+                    StudentManagementListItem(
+                        modifier = Modifier.fillMaxWidth(),
+                        list = list[it],
+                        onClick = onClick
+                    )
+                    Divider(
+                        modifier = Modifier.fillMaxWidth(),
+                        color = colors.WHITE.copy(0.15f)
+                    )
                 }
             }
         }
@@ -205,6 +205,66 @@ fun StudentManagementListItem(
                 )
             }) {
                 WriteIcon()
+            }
+        }
+    }
+}
+
+@Composable
+fun ShimmerStudentManagementListComponent(modifier: Modifier) {
+    GomsTheme { colors, typography ->
+        Column(modifier = modifier.fillMaxWidth()) {
+            Row(
+                modifier = modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                SearchResultText(modifier = Modifier)
+                FilterText(onFilterTextClick = {})
+            }
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(max = 10000.dp)
+            ) {
+                items(10) {
+                    ShimmerStudentManagementListItem(modifier = modifier)
+                    Divider(
+                        modifier = Modifier.fillMaxWidth(),
+                        color = colors.WHITE.copy(0.15f)
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun ShimmerStudentManagementListItem(modifier: Modifier) {
+    GomsTheme { colors, typography ->
+        Row(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(48.dp)
+                    .shimmerEffect(color = colors.WHITE)
+            )
+            Spacer(modifier = Modifier.width(16.dp))
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Box(
+                    modifier = Modifier
+                        .size(42.dp, 18.dp)
+                        .shimmerEffect(color = colors.WHITE)
+                )
+                Box(
+                    modifier = Modifier
+                        .size(50.dp, 14.dp)
+                        .shimmerEffect(color = colors.WHITE)
+                )
             }
         }
     }
