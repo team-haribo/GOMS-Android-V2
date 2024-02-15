@@ -11,7 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.goms.design_system.component.modifier.gomsClickable
+import com.goms.design_system.component.clickable.gomsClickable
 import com.goms.design_system.icon.CloseIcon
 import com.goms.design_system.theme.GomsTheme
 
