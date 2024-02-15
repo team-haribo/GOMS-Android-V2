@@ -31,15 +31,12 @@ class QrcodeViewModel @Inject constructor(
                 when (result) {
                     is Result.Loading -> {
                         _outingState.value = Result.Loading
-                        Log.d("testt","loading")
                     }
                     is Result.Success -> {
                         _outingState.value = Result.Success(result.data)
-                        Log.d("testt","success")
                     }
                     is Result.Error -> {
                         _outingState.value = Result.Error(result.exception)
-                        Log.d("testt","fail")
                     }
                 }
             }
