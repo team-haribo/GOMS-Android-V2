@@ -16,20 +16,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.goms.design_system.theme.GomsTheme
 import com.goms.qrcode_scan.component.QrcodeScanGuide
 import com.goms.qrcode_scan.component.QrcodeScanPreview
 import com.goms.qrcode_scan.component.QrcodeScanTopBar
+import com.goms.qrcode_scan.viewmodel.QrcodeViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
+import java.util.UUID
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun QrcodeScanRoute(
-    onPermissionBlock: () -> Unit
+    onPermissionBlock: () -> Unit,
+    viewModel: QrcodeViewModel = hiltViewModel(),
 ) {
     val cameraPermissionState: PermissionState = rememberPermissionState(Manifest.permission.CAMERA)
 
@@ -40,15 +44,27 @@ fun QrcodeScanRoute(
     }
 
     if (cameraPermissionState.status.isGranted) {
-        QrcodeScanScreen()
+        QrcodeScanScreen(
+            onQrcodeScan = { qrcodeData ->
+                viewModel.outing(UUID.fromString(qrcodeData))
+            }
+        )
     } else {
         onPermissionBlock()
     }
 }
+@androidx.annotation.OptIn(androidx.camera.core.ExperimentalGetImage::class)
 @Composable
-fun QrcodeScanScreen() {
+fun QrcodeScanScreen(
+    onQrcodeScan: (String?) -> Unit
+) {
     GomsTheme { _, _ ->
-        QrcodeScanPreview(context = LocalContext.current)
+        QrcodeScanPreview(
+            context = LocalContext.current,
+            onQrcodeScan = { qrcodeData ->
+                onQrcodeScan(qrcodeData)
+            }
+        )
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -60,10 +76,4 @@ fun QrcodeScanScreen() {
             QrcodeScanGuide()
         }
     }
-}
-
-@Composable
-@Preview(showBackground = true)
-fun QrcodeScanScreenPreview() {
-    QrcodeScanScreen()
 }
