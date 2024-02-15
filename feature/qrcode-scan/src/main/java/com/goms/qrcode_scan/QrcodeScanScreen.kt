@@ -53,6 +53,7 @@ fun QrcodeScanRoute(
         onPermissionBlock()
     }
 }
+
 @androidx.annotation.OptIn(androidx.camera.core.ExperimentalGetImage::class)
 @Composable
 fun QrcodeScanScreen(
