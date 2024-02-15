@@ -16,6 +16,8 @@ fun NavGraphBuilder.qrcodeScanScreen(
     onPermissionBlock: () -> Unit
 ) {
     composable(route = qrcodeScanRoute) {
-        QrcodeScanRoute(onPermissionBlock = onPermissionBlock)
+        QrcodeScanRoute(
+            onPermissionBlock = onPermissionBlock
+        )
     }
 }

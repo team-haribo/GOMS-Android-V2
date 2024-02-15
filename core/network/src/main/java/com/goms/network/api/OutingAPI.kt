@@ -10,10 +10,11 @@ import retrofit2.http.Query
 import java.util.UUID
 
 interface OutingAPI {
-    @POST
+    @POST("/api/v2/outing/{outingUUID}")
     suspend fun outing(
         @Path("outingUUID") outingUUID: UUID
     ): Response<Unit>
+
     @GET("/api/v2/outing/")
     suspend fun getOutingList(): List<OutingResponse>
 

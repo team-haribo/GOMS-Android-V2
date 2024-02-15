@@ -34,7 +34,7 @@ import java.util.concurrent.Executors
 @Composable
 fun QrcodeScanPreview(
     context: Context,
-    onQrcodeScan: () -> Unit
+    onQrcodeScan: (String?) -> Unit
 ) {
     GomsTheme { _, _ ->
         Scaffold(
@@ -62,6 +62,7 @@ fun QrcodeScanPreview(
                         .also {
                             it.setAnalyzer(cameraExecutor, QrcodeScanner { qrcodeData ->
                                 Toast.makeText(context, qrcodeData, Toast.LENGTH_SHORT).show()
+                                onQrcodeScan(qrcodeData)
                             })
                         }
 
