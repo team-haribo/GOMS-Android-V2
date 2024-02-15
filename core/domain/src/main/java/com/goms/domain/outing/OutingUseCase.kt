@@ -8,6 +8,7 @@ import javax.inject.Inject
 class OutingUseCase @Inject constructor(
     private val outingRepository: OutingRepository
 ) {
-    suspend operator fun invoke(outingUUID: UUID): Flow<Unit> =
+    suspend operator fun invoke(outingUUID: UUID) = kotlin.runCatching {
         outingRepository.outing(outingUUID)
+    }
 }
