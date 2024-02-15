@@ -27,15 +27,21 @@ class QrcodeViewModel @Inject constructor(
     val outingState = _outingState.asStateFlow()
 
     fun outing(outingUUID: UUID) = viewModelScope.launch {
-        outingUseCase(outingUUID = outingUUID)
-            .onSuccess {
-                it.catch {  remoteError ->
-                    _outingState.value = Result.Error(remoteError)
-                }.collect { result ->
-                    _outingState.value = Result.Success(result)
+        outingUseCase(outingUUID = outingUUID).asResult().collectLatest { result ->
+                when (result) {
+                    is Result.Loading -> {
+                        _outingState.value = Result.Loading
+                        Log.d("testt","loading")
+                    }
+                    is Result.Success -> {
+                        _outingState.value = Result.Success(result.data)
+                        Log.d("testt","success")
+                    }
+                    is Result.Error -> {
+                        _outingState.value = Result.Error(result.exception)
+                        Log.d("testt","fail")
+                    }
                 }
-            }.onFailure {
-                _outingState.value = Result.Error(it)
             }
     }
 }
