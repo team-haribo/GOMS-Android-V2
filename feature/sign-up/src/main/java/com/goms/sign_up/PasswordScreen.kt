@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,6 +33,7 @@ import com.goms.common.result.Result
 import com.goms.design_system.component.button.ButtonState
 import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.button.GomsButton
+import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
 import com.goms.design_system.component.textfield.GomsPasswordTextField
 import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.util.isStrongPassword
@@ -52,41 +54,23 @@ fun PasswordRoute(
     SignUpViewModelProvider(viewModelStoreOwner = viewModelStoreOwner) { viewModel ->
         val signUpUiState by viewModel.signUpUiState.collectAsStateWithLifecycle()
         val password by viewModel.password.collectAsStateWithLifecycle()
-        var isError by remember { mutableStateOf(false) }
-        var errorText by remember { mutableStateOf("") }
-
-        when (signUpUiState) {
-            is Result.Loading -> Unit
-            is Result.Success -> {
-                onLoginClick()
-            }
-            is Result.Error -> {
-                isError = true
-                errorText = "오류가 발생하였습니다"
-            }
-        }
 
         PasswordScreen(
             password = password,
-            isError = isError,
-            errorText = errorText,
             onPasswordChange = viewModel::onPasswordChange,
+            signUpUiState = signUpUiState,
             onBackClick = onBackClick,
+            onLoginClick = onLoginClick,
             passwordCallback = {
-                if (isStrongPassword(viewModel.password.value)) {
-                    viewModel.signUp(
-                        body = SignUpRequest(
-                            email = "${viewModel.email.value}@gsm.hs.kr",
-                            password = viewModel.password.value,
-                            name = viewModel.name.value,
-                            gender = Gender.values().find { it.value == viewModel.gender.value }!!.name,
-                            major = Major.values().find { it.value == viewModel.major.value }!!.name
-                        )
+                viewModel.signUp(
+                    body = SignUpRequest(
+                        email = "${viewModel.email.value}@gsm.hs.kr",
+                        password = viewModel.password.value,
+                        name = viewModel.name.value,
+                        gender = Gender.values().find { it.value == viewModel.gender.value }!!.name,
+                        major = Major.values().find { it.value == viewModel.major.value }!!.name
                     )
-                } else {
-                    isError = true
-                    errorText = "비밀번호 요구사항을 충족하지 않습니다"
-                }
+                )
             }
         )
     }
@@ -95,15 +79,18 @@ fun PasswordRoute(
 @Composable
 fun PasswordScreen(
     password: String,
-    isError: Boolean,
-    errorText: String,
     onPasswordChange: (String) -> Unit,
+    signUpUiState: Result<Unit>,
     onBackClick: () -> Unit,
+    onLoginClick: () -> Unit,
     passwordCallback: () -> Unit
 ) {
     val focusManager = LocalFocusManager.current
     val isKeyboardOpen by keyboardAsState()
     val animatedSpacerHeight by animateDpAsState(targetValue = if (!isKeyboardOpen) 100.dp else 16.dp)
+    var isLoading by remember { mutableStateOf(false) }
+    var isError by remember { mutableStateOf(false) }
+    var errorText by remember { mutableStateOf("") }
 
     LaunchedEffect(isKeyboardOpen) {
         if (!isKeyboardOpen) {
@@ -111,49 +98,72 @@ fun PasswordScreen(
         }
     }
 
+    DisposableEffect(signUpUiState) {
+        when (signUpUiState) {
+            is Result.Loading -> Unit
+            is Result.Success -> onLoginClick()
+            is Result.Error -> {
+                isLoading = false
+                isError = true
+                errorText = "오류가 발생하였습니다"
+            }
+        }
+        onDispose {}
+    }
+
     lockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
     GomsTheme { colors, typography ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(colors.BLACK)
-                .statusBarsPadding()
-                .navigationBarsPadding()
-                .imePadding()
-                .pointerInput(Unit) {
-                    detectTapGestures {
-                        focusManager.clearFocus()
-                    }
-                }
-        ) {
-            GomsBackButton {
-                onBackClick()
-            }
+        if (isLoading) {
+            GomsCircularProgressIndicator()
+        } else {
             Column(
-                modifier = Modifier.padding(horizontal = 20.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(colors.BLACK)
+                    .statusBarsPadding()
+                    .navigationBarsPadding()
+                    .imePadding()
+                    .pointerInput(Unit) {
+                        detectTapGestures {
+                            focusManager.clearFocus()
+                        }
+                    }
             ) {
-                PasswordText(modifier = Modifier.align(Alignment.Start))
-                Spacer(modifier = Modifier.weight(1.1f))
-                GomsPasswordTextField(
-                    modifier = Modifier.fillMaxWidth(),
-                    isError = isError,
-                    errorText = errorText,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                    placeHolder = "비밀번호",
-                    setText = password,
-                    onValueChange = onPasswordChange,
-                    singleLine = true
-                )
-                Spacer(modifier = Modifier.weight(1f))
-                GomsButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = "회원가입",
-                    state = if (password.isNotBlank()) ButtonState.Normal else ButtonState.Enable
-                ) {
-                    passwordCallback()
+                GomsBackButton {
+                    onBackClick()
                 }
-                Spacer(modifier = Modifier.height(animatedSpacerHeight))
+                Column(
+                    modifier = Modifier.padding(horizontal = 20.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    PasswordText(modifier = Modifier.align(Alignment.Start))
+                    Spacer(modifier = Modifier.weight(1.1f))
+                    GomsPasswordTextField(
+                        modifier = Modifier.fillMaxWidth(),
+                        isError = isError,
+                        errorText = errorText,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                        placeHolder = "비밀번호",
+                        setText = password,
+                        onValueChange = onPasswordChange,
+                        singleLine = true
+                    )
+                    Spacer(modifier = Modifier.weight(1f))
+                    GomsButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "회원가입",
+                        state = if (password.isNotBlank()) ButtonState.Normal else ButtonState.Enable
+                    ) {
+                        if (isStrongPassword(password)) {
+                            passwordCallback()
+                            isLoading = true
+                        } else {
+                            isError = true
+                            errorText = "비밀번호 요구사항을 충족하지 않습니다"
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(animatedSpacerHeight))
+                }
             }
         }
     }
