@@ -67,7 +67,7 @@ fun SignUpRoute(
             onNameChange = viewModel::onNameChange,
             onEmailChange = viewModel::onEmailChange,
             onGenderChange = viewModel::onGenderChange,
-            onMajorChange =  viewModel::onMajorChange,
+            onMajorChange = viewModel::onMajorChange,
             sendNumberUiState = sendNumberUiState,
             onBackClick = onBackClick,
             onNumberClick = onNumberClick,
@@ -118,108 +118,107 @@ fun SignUpScreen(
 
     lockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
     GomsTheme { colors, typography ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(colors.BLACK)
+                .statusBarsPadding()
+                .navigationBarsPadding()
+                .pointerInput(Unit) {
+                    detectTapGestures {
+                        focusManager.clearFocus()
+                    }
+                }
+        ) {
+            GomsBackButton {
+                onBackClick()
+            }
+            Column(
+                modifier = Modifier.padding(horizontal = 20.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                SignUpText(modifier = Modifier.align(Alignment.Start))
+                Spacer(modifier = Modifier.weight(1.1f))
+                GomsTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                    placeHolder = "이름",
+                    setText = name,
+                    onValueChange = onNameChange,
+                    isEmail = false,
+                    singleLine = true
+                )
+                GomsTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                    placeHolder = "이메일",
+                    setText = email,
+                    onValueChange = onEmailChange,
+                    singleLine = true
+                )
+                GomsBottomSheetTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                    placeHolder = "성별",
+                    setText = gender,
+                    onValueChange = onGenderChange,
+                    readOnly = true,
+                    singleLine = true
+                ) {
+                    onGenderBottomSheetOpenClick = true
+                    focusManager.clearFocus()
+                }
+                GomsBottomSheetTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                    placeHolder = "과",
+                    setText = major,
+                    onValueChange = onMajorChange,
+                    readOnly = true,
+                    singleLine = true
+                ) {
+                    onMajorBottomSheetOpenClick = true
+                    focusManager.clearFocus()
+                }
+                Spacer(modifier = Modifier.weight(1f))
+                GomsButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "인증번호 받기",
+                    state = if (name.isNotBlank() && email.isNotBlank() && gender.isNotBlank() && major.isNotBlank()) ButtonState.Normal
+                    else ButtonState.Enable
+                ) {
+                    signUpCallBack()
+                    isLoading = true
+                }
+                Spacer(modifier = Modifier.height(100.dp))
+            }
+        }
+        if (onGenderBottomSheetOpenClick) {
+            SelectorBottomSheet(
+                modifier = Modifier.fillMaxWidth(),
+                title = "성별",
+                list = listOf(Gender.MAN.value, Gender.WOMAN.value),
+                selected = gender,
+                itemChange = onGenderChange,
+                closeSheet = {
+                    onGenderBottomSheetOpenClick = false
+                }
+            )
+        }
+        if (onMajorBottomSheetOpenClick) {
+            SelectorBottomSheet(
+                modifier = Modifier.fillMaxWidth(),
+                title = "과",
+                list = listOf(Major.SW_DEVELOP.value, Major.SMART_IOT.value, Major.AI.value),
+                selected = major,
+                itemChange = onMajorChange,
+                closeSheet = {
+                    onMajorBottomSheetOpenClick = false
+                }
+            )
+        }
         if (isLoading) {
             GomsCircularProgressIndicator()
-        } else {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(colors.BLACK)
-                    .statusBarsPadding()
-                    .navigationBarsPadding()
-                    .pointerInput(Unit) {
-                        detectTapGestures {
-                            focusManager.clearFocus()
-                        }
-                    }
-            ) {
-                GomsBackButton {
-                    onBackClick()
-                }
-                Column(
-                    modifier = Modifier.padding(horizontal = 20.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    SignUpText(modifier = Modifier.align(Alignment.Start))
-                    Spacer(modifier = Modifier.weight(1.1f))
-                    GomsTextField(
-                        modifier = Modifier.fillMaxWidth(),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                        placeHolder = "이름",
-                        setText = name,
-                        onValueChange = onNameChange,
-                        isEmail = false,
-                        singleLine = true
-                    )
-                    GomsTextField(
-                        modifier = Modifier.fillMaxWidth(),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                        placeHolder = "이메일",
-                        setText = email,
-                        onValueChange = onEmailChange,
-                        singleLine = true
-                    )
-                    GomsBottomSheetTextField(
-                        modifier = Modifier.fillMaxWidth(),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                        placeHolder = "성별",
-                        setText = gender,
-                        onValueChange = onGenderChange,
-                        readOnly = true,
-                        singleLine = true
-                    ) {
-                        onGenderBottomSheetOpenClick = true
-                        focusManager.clearFocus()
-                    }
-                    GomsBottomSheetTextField(
-                        modifier = Modifier.fillMaxWidth(),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                        placeHolder = "과",
-                        setText = major,
-                        onValueChange = onMajorChange,
-                        readOnly = true,
-                        singleLine = true
-                    ) {
-                        onMajorBottomSheetOpenClick = true
-                        focusManager.clearFocus()
-                    }
-                    Spacer(modifier = Modifier.weight(1f))
-                    GomsButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = "인증번호 받기",
-                        state = if (name.isNotBlank() && email.isNotBlank() && gender.isNotBlank() && major.isNotBlank()) ButtonState.Normal
-                        else ButtonState.Enable
-                    ) {
-                        signUpCallBack()
-                        isLoading = true
-                    }
-                    Spacer(modifier = Modifier.height(100.dp))
-                }
-            }
-            if (onGenderBottomSheetOpenClick) {
-                SelectorBottomSheet(
-                    modifier = Modifier.fillMaxWidth(),
-                    title = "성별",
-                    list = listOf(Gender.MAN.value, Gender.WOMAN.value),
-                    selected = gender,
-                    itemChange = onGenderChange,
-                    closeSheet = {
-                        onGenderBottomSheetOpenClick = false
-                    }
-                )
-            }
-            if (onMajorBottomSheetOpenClick) {
-                SelectorBottomSheet(
-                    modifier = Modifier.fillMaxWidth(),
-                    title = "과",
-                    list = listOf(Major.SW_DEVELOP.value, Major.SMART_IOT.value, Major.AI.value),
-                    selected = major,
-                    itemChange = onMajorChange,
-                    closeSheet = {
-                        onMajorBottomSheetOpenClick = false
-                    }
-                )
-            }
         }
     }
 }

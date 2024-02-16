@@ -64,7 +64,14 @@ fun InputLoginRoute(
         saveTokenUiState = saveTokenUiState,
         onBackClick = onBackClick,
         onMainClick = onMainClick,
-        loginCallBack = { viewModel.login(body = LoginRequest("${viewModel.email.value}@gsm.hs.kr", viewModel.password.value)) }
+        loginCallBack = {
+            viewModel.login(
+                body = LoginRequest(
+                    "${viewModel.email.value}@gsm.hs.kr",
+                    viewModel.password.value
+                )
+            )
+        }
     )
 }
 
@@ -101,9 +108,12 @@ fun InputLoginScreen(
                 when (saveTokenUiState) {
                     is Result.Loading -> Unit
                     is Result.Success -> onMainClick()
-                    is Result.Error -> { isLoading = false }
+                    is Result.Error -> {
+                        isLoading = false
+                    }
                 }
             }
+
             is LoginUiState.Error -> {
                 isLoading = false
                 isError = true
@@ -115,65 +125,64 @@ fun InputLoginScreen(
 
     lockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
     GomsTheme { colors, typography ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(colors.BLACK)
+                .statusBarsPadding()
+                .navigationBarsPadding()
+                .imePadding()
+                .pointerInput(Unit) {
+                    detectTapGestures {
+                        focusManager.clearFocus()
+                    }
+                }
+        ) {
+            GomsBackButton {
+                onBackClick()
+            }
+            Column(
+                modifier = Modifier.padding(horizontal = 20.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                InputLoginText(modifier = Modifier.align(Alignment.Start))
+                Spacer(modifier = Modifier.weight(1.1f))
+                GomsTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                    placeHolder = "이메일",
+                    setText = email,
+                    onValueChange = onEmailChange,
+                    isError = isError,
+                    singleLine = true
+                )
+                GomsTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    isEmail = false,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                    placeHolder = "비밀번호",
+                    setText = password,
+                    onValueChange = onPasswordChange,
+                    isError = isError,
+                    errorText = errorText,
+                    singleLine = true,
+                    visualTransformation = PasswordVisualTransformation()
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                GomsButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "로그인",
+                    state = if (email.isNotBlank() && password.isNotBlank()) ButtonState.Normal
+                    else ButtonState.Enable
+                ) {
+                    loginCallBack()
+                    isLoading = true
+                }
+                Spacer(modifier = Modifier.height(animatedSpacerHeight))
+            }
+        }
         if (isLoading) {
             GomsCircularProgressIndicator()
-        } else {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(colors.BLACK)
-                    .statusBarsPadding()
-                    .navigationBarsPadding()
-                    .imePadding()
-                    .pointerInput(Unit) {
-                        detectTapGestures {
-                            focusManager.clearFocus()
-                        }
-                    }
-            ) {
-                GomsBackButton {
-                    onBackClick()
-                }
-                Column(
-                    modifier = Modifier.padding(horizontal = 20.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    InputLoginText(modifier = Modifier.align(Alignment.Start))
-                    Spacer(modifier = Modifier.weight(1.1f))
-                    GomsTextField(
-                        modifier = Modifier.fillMaxWidth(),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                        placeHolder = "이메일",
-                        setText = email,
-                        onValueChange = onEmailChange,
-                        isError = isError,
-                        singleLine = true
-                    )
-                    GomsTextField(
-                        modifier = Modifier.fillMaxWidth(),
-                        isEmail = false,
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                        placeHolder = "비밀번호",
-                        setText = password,
-                        onValueChange = onPasswordChange,
-                        isError = isError,
-                        errorText = errorText,
-                        singleLine = true,
-                        visualTransformation = PasswordVisualTransformation()
-                    )
-                    Spacer(modifier = Modifier.weight(1f))
-                    GomsButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = "로그인",
-                        state = if (email.isNotBlank() && password.isNotBlank()) ButtonState.Normal
-                        else ButtonState.Enable
-                    ) {
-                        loginCallBack()
-                        isLoading = true
-                    }
-                    Spacer(modifier = Modifier.height(animatedSpacerHeight))
-                }
-            }
         }
     }
 }

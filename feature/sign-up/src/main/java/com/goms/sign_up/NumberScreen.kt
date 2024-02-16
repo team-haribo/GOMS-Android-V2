@@ -108,52 +108,51 @@ fun NumberScreen(
 
     lockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_LOCKED)
     GomsTheme { colors, typography ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(colors.BLACK)
+                .statusBarsPadding()
+                .navigationBarsPadding()
+                .imePadding()
+                .pointerInput(Unit) {
+                    detectTapGestures {
+                        focusManager.clearFocus()
+                    }
+                }
+        ) {
+            GomsBackButton {
+                onBackClick()
+            }
+            Column(
+                modifier = Modifier.padding(horizontal = 20.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                NumberText(modifier = Modifier.align(Alignment.Start))
+                Spacer(modifier = Modifier.weight(2.1f))
+                NumberTextField(
+                    text = number,
+                    isError = isError,
+                    errorText = errorText,
+                    onValueChange = onNumberChange,
+                    onResendClick = {
+                        resentCallBack()
+                    }
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                GomsButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "인증",
+                    state = if (number.isNotBlank()) ButtonState.Normal else ButtonState.Enable
+                ) {
+                    numberCallback()
+                    isLoading = true
+                }
+                Spacer(modifier = Modifier.height(animatedSpacerHeight))
+            }
+        }
         if (isLoading) {
             GomsCircularProgressIndicator()
-        } else {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(colors.BLACK)
-                    .statusBarsPadding()
-                    .navigationBarsPadding()
-                    .imePadding()
-                    .pointerInput(Unit) {
-                        detectTapGestures {
-                            focusManager.clearFocus()
-                        }
-                    }
-            ) {
-                GomsBackButton {
-                    onBackClick()
-                }
-                Column(
-                    modifier = Modifier.padding(horizontal = 20.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    NumberText(modifier = Modifier.align(Alignment.Start))
-                    Spacer(modifier = Modifier.weight(2.1f))
-                    NumberTextField(
-                        text = number,
-                        isError = isError,
-                        errorText = errorText,
-                        onValueChange = onNumberChange,
-                        onResendClick = {
-                            resentCallBack()
-                        }
-                    )
-                    Spacer(modifier = Modifier.weight(1f))
-                    GomsButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = "인증",
-                        state = if (number.isNotBlank()) ButtonState.Normal else ButtonState.Enable
-                    ) {
-                        numberCallback()
-                        isLoading = true
-                    }
-                    Spacer(modifier = Modifier.height(animatedSpacerHeight))
-                }
-            }
         }
     }
 }

@@ -113,58 +113,57 @@ fun PasswordScreen(
 
     lockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
     GomsTheme { colors, typography ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(colors.BLACK)
+                .statusBarsPadding()
+                .navigationBarsPadding()
+                .imePadding()
+                .pointerInput(Unit) {
+                    detectTapGestures {
+                        focusManager.clearFocus()
+                    }
+                }
+        ) {
+            GomsBackButton {
+                onBackClick()
+            }
+            Column(
+                modifier = Modifier.padding(horizontal = 20.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                PasswordText(modifier = Modifier.align(Alignment.Start))
+                Spacer(modifier = Modifier.weight(1.1f))
+                GomsPasswordTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    isError = isError,
+                    errorText = errorText,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                    placeHolder = "비밀번호",
+                    setText = password,
+                    onValueChange = onPasswordChange,
+                    singleLine = true
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                GomsButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "회원가입",
+                    state = if (password.isNotBlank()) ButtonState.Normal else ButtonState.Enable
+                ) {
+                    if (isStrongPassword(password)) {
+                        passwordCallback()
+                        isLoading = true
+                    } else {
+                        isError = true
+                        errorText = "비밀번호 요구사항을 충족하지 않습니다"
+                    }
+                }
+                Spacer(modifier = Modifier.height(animatedSpacerHeight))
+            }
+        }
         if (isLoading) {
             GomsCircularProgressIndicator()
-        } else {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(colors.BLACK)
-                    .statusBarsPadding()
-                    .navigationBarsPadding()
-                    .imePadding()
-                    .pointerInput(Unit) {
-                        detectTapGestures {
-                            focusManager.clearFocus()
-                        }
-                    }
-            ) {
-                GomsBackButton {
-                    onBackClick()
-                }
-                Column(
-                    modifier = Modifier.padding(horizontal = 20.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    PasswordText(modifier = Modifier.align(Alignment.Start))
-                    Spacer(modifier = Modifier.weight(1.1f))
-                    GomsPasswordTextField(
-                        modifier = Modifier.fillMaxWidth(),
-                        isError = isError,
-                        errorText = errorText,
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                        placeHolder = "비밀번호",
-                        setText = password,
-                        onValueChange = onPasswordChange,
-                        singleLine = true
-                    )
-                    Spacer(modifier = Modifier.weight(1f))
-                    GomsButton(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = "회원가입",
-                        state = if (password.isNotBlank()) ButtonState.Normal else ButtonState.Enable
-                    ) {
-                        if (isStrongPassword(password)) {
-                            passwordCallback()
-                            isLoading = true
-                        } else {
-                            isError = true
-                            errorText = "비밀번호 요구사항을 충족하지 않습니다"
-                        }
-                    }
-                    Spacer(modifier = Modifier.height(animatedSpacerHeight))
-                }
-            }
         }
     }
 }

@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.unit.dp
+import com.goms.design_system.component.clickable.gomsClickable
 import com.goms.design_system.theme.GomsTheme
 
 @Composable
@@ -30,7 +31,8 @@ fun GomsCircularProgressIndicator() {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(colors.BLACK),
+                .background(Color.Black.copy(alpha = 0.45f))
+                .gomsClickable {},
             contentAlignment = Alignment.Center
         ) {
             val transition = rememberInfiniteTransition()
