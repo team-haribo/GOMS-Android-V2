@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -33,6 +34,7 @@ import com.goms.common.result.Result
 import com.goms.design_system.component.button.ButtonState
 import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.button.GomsButton
+import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
 import com.goms.design_system.component.textfield.GomsTextField
 import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.util.keyboardAsState
@@ -52,34 +54,16 @@ fun InputLoginRoute(
     val saveTokenUiState by viewModel.saveTokenUiState.collectAsStateWithLifecycle()
     val email by viewModel.email.collectAsStateWithLifecycle()
     val password by viewModel.password.collectAsStateWithLifecycle()
-    var isError by remember { mutableStateOf(false) }
-    var errorText by remember { mutableStateOf("") }
-
-    when (loginUiState) {
-        is LoginUiState.Loading -> Unit
-        is LoginUiState.Success -> {
-            when (saveTokenUiState) {
-                is Result.Loading -> Unit
-                is Result.Success -> {
-                    onMainClick()
-                }
-                is Result.Error -> {}
-            }
-        }
-        is LoginUiState.Error -> {
-            isError = true
-            errorText = "로그인에 실패하였습니다"
-        }
-    }
 
     InputLoginScreen(
         email = email,
         password = password,
-        isError = isError,
-        errorText = errorText,
         onEmailChange = viewModel::onEmailChange,
         onPasswordChange = viewModel::onPasswordChange,
+        loginUiState = loginUiState,
+        saveTokenUiState = saveTokenUiState,
         onBackClick = onBackClick,
+        onMainClick = onMainClick,
         loginCallBack = { viewModel.login(body = LoginRequest("${viewModel.email.value}@gsm.hs.kr", viewModel.password.value)) }
     )
 }
@@ -89,16 +73,20 @@ fun InputLoginRoute(
 fun InputLoginScreen(
     email: String,
     password: String,
-    isError: Boolean,
-    errorText: String,
     onEmailChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
+    loginUiState: LoginUiState,
+    saveTokenUiState: Result<Unit>,
     onBackClick: () -> Unit,
+    onMainClick: () -> Unit,
     loginCallBack: () -> Unit
 ) {
     val focusManager = LocalFocusManager.current
     val isKeyboardOpen by keyboardAsState()
     val animatedSpacerHeight by animateDpAsState(targetValue = if (!isKeyboardOpen) 100.dp else 16.dp)
+    var isLoading by remember { mutableStateOf(false) }
+    var isError by remember { mutableStateOf(false) }
+    var errorText by remember { mutableStateOf("") }
 
     LaunchedEffect(isKeyboardOpen) {
         if (!isKeyboardOpen) {
@@ -106,61 +94,85 @@ fun InputLoginScreen(
         }
     }
 
+    DisposableEffect(loginUiState, saveTokenUiState) {
+        when (loginUiState) {
+            is LoginUiState.Loading -> Unit
+            is LoginUiState.Success -> {
+                when (saveTokenUiState) {
+                    is Result.Loading -> Unit
+                    is Result.Success -> onMainClick()
+                    is Result.Error -> { isLoading = false }
+                }
+            }
+            is LoginUiState.Error -> {
+                isLoading = false
+                isError = true
+                errorText = "로그인에 실패하였습니다"
+            }
+        }
+        onDispose {}
+    }
+
     lockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
     GomsTheme { colors, typography ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(colors.BLACK)
-                .statusBarsPadding()
-                .navigationBarsPadding()
-                .imePadding()
-                .pointerInput(Unit) {
-                    detectTapGestures {
-                        focusManager.clearFocus()
-                    }
-                }
-        ) {
-            GomsBackButton {
-                onBackClick()
-            }
+        if (isLoading) {
+            GomsCircularProgressIndicator()
+        } else {
             Column(
-                modifier = Modifier.padding(horizontal = 20.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(colors.BLACK)
+                    .statusBarsPadding()
+                    .navigationBarsPadding()
+                    .imePadding()
+                    .pointerInput(Unit) {
+                        detectTapGestures {
+                            focusManager.clearFocus()
+                        }
+                    }
             ) {
-                InputLoginText(modifier = Modifier.align(Alignment.Start))
-                Spacer(modifier = Modifier.weight(1.1f))
-                GomsTextField(
-                    modifier = Modifier.fillMaxWidth(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                    placeHolder = "이메일",
-                    setText = email,
-                    onValueChange = onEmailChange,
-                    isError = isError,
-                    singleLine = true
-                )
-                GomsTextField(
-                    modifier = Modifier.fillMaxWidth(),
-                    isEmail = false,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                    placeHolder = "비밀번호",
-                    setText = password,
-                    onValueChange = onPasswordChange,
-                    isError = isError,
-                    errorText = errorText,
-                    singleLine = true,
-                    visualTransformation = PasswordVisualTransformation()
-                )
-                Spacer(modifier = Modifier.weight(1f))
-                GomsButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = "로그인",
-                    state = if (email.isNotBlank() && password.isNotBlank()) ButtonState.Normal
-                    else ButtonState.Enable
-                ) {
-                    loginCallBack()
+                GomsBackButton {
+                    onBackClick()
                 }
-                Spacer(modifier = Modifier.height(animatedSpacerHeight))
+                Column(
+                    modifier = Modifier.padding(horizontal = 20.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    InputLoginText(modifier = Modifier.align(Alignment.Start))
+                    Spacer(modifier = Modifier.weight(1.1f))
+                    GomsTextField(
+                        modifier = Modifier.fillMaxWidth(),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                        placeHolder = "이메일",
+                        setText = email,
+                        onValueChange = onEmailChange,
+                        isError = isError,
+                        singleLine = true
+                    )
+                    GomsTextField(
+                        modifier = Modifier.fillMaxWidth(),
+                        isEmail = false,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                        placeHolder = "비밀번호",
+                        setText = password,
+                        onValueChange = onPasswordChange,
+                        isError = isError,
+                        errorText = errorText,
+                        singleLine = true,
+                        visualTransformation = PasswordVisualTransformation()
+                    )
+                    Spacer(modifier = Modifier.weight(1f))
+                    GomsButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "로그인",
+                        state = if (email.isNotBlank() && password.isNotBlank()) ButtonState.Normal
+                        else ButtonState.Enable
+                    ) {
+                        loginCallBack()
+                        isLoading = true
+                    }
+                    Spacer(modifier = Modifier.height(animatedSpacerHeight))
+                }
             }
         }
     }
