@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -31,6 +32,7 @@ import com.goms.common.result.Result
 import com.goms.design_system.component.button.ButtonState
 import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.button.GomsButton
+import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
 import com.goms.design_system.component.textfield.NumberTextField
 import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.util.keyboardAsState
@@ -48,34 +50,21 @@ fun NumberRoute(
     SignUpViewModelProvider(viewModelStoreOwner = viewModelStoreOwner) { viewModel ->
         val verifyNumberUiState by viewModel.verifyNumberUiState.collectAsState()
         val number by viewModel.number.collectAsStateWithLifecycle()
-        var isError by remember { mutableStateOf(false) }
-        var errorText by remember { mutableStateOf("") }
-
-        when (verifyNumberUiState) {
-            is Result.Loading -> Unit
-            is Result.Success -> {
-                onPasswordClick()
-                viewModel.initVerifyNumber()
-            }
-            is Result.Error -> {
-                isError = true
-                errorText = "잘못된 인증번호입니다"
-            }
-        }
 
         NumberScreen(
             number = number,
-            isError = isError,
-            errorText = errorText,
             onNumberChange = viewModel::onNumberChange,
+            verifyNumberUiState = verifyNumberUiState,
             onBackClick = onBackClick,
+            onPasswordClick = onPasswordClick,
             numberCallback = {
                 viewModel.verifyNumber(
                     email = "${viewModel.email.value}@gsm.hs.kr",
                     authCode = viewModel.number.value
                 )
             },
-            resentCallBack = { viewModel.sendNumber(body = SendNumberRequest("${viewModel.email.value}@gsm.hs.kr")) }
+            resentCallBack = { viewModel.sendNumber(body = SendNumberRequest("${viewModel.email.value}@gsm.hs.kr")) },
+            initCallBack = { viewModel.initVerifyNumber() }
         )
     }
 }
@@ -83,16 +72,20 @@ fun NumberRoute(
 @Composable
 fun NumberScreen(
     number: String,
-    isError: Boolean,
-    errorText: String,
     onNumberChange: (String) -> Unit,
+    verifyNumberUiState: Result<Unit>,
     onBackClick: () -> Unit,
+    onPasswordClick: () -> Unit,
     numberCallback: () -> Unit,
-    resentCallBack: () -> Unit
+    resentCallBack: () -> Unit,
+    initCallBack: () -> Unit
 ) {
     val focusManager = LocalFocusManager.current
     val isKeyboardOpen by keyboardAsState()
     val animatedSpacerHeight by animateDpAsState(targetValue = if (!isKeyboardOpen) 100.dp else 16.dp)
+    var isLoading by remember { mutableStateOf(false) }
+    var isError by remember { mutableStateOf(false) }
+    var errorText by remember { mutableStateOf("") }
 
     LaunchedEffect(isKeyboardOpen) {
         if (!isKeyboardOpen) {
@@ -100,48 +93,66 @@ fun NumberScreen(
         }
     }
 
+    DisposableEffect(verifyNumberUiState) {
+        when (verifyNumberUiState) {
+            is Result.Loading -> Unit
+            is Result.Success -> onPasswordClick()
+            is Result.Error -> {
+                isLoading = false
+                isError = true
+                errorText = "잘못된 인증번호입니다"
+            }
+        }
+        onDispose { initCallBack() }
+    }
+
     lockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_LOCKED)
     GomsTheme { colors, typography ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(colors.BLACK)
-                .statusBarsPadding()
-                .navigationBarsPadding()
-                .imePadding()
-                .pointerInput(Unit) {
-                    detectTapGestures {
-                        focusManager.clearFocus()
-                    }
-                }
-        ) {
-            GomsBackButton {
-                onBackClick()
-            }
+        if (isLoading) {
+            GomsCircularProgressIndicator()
+        } else {
             Column(
-                modifier = Modifier.padding(horizontal = 20.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                NumberText(modifier = Modifier.align(Alignment.Start))
-                Spacer(modifier = Modifier.weight(2.1f))
-                NumberTextField(
-                    text = number,
-                    isError = isError,
-                    errorText = errorText,
-                    onValueChange = onNumberChange,
-                    onResendClick = {
-                        resentCallBack()
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(colors.BLACK)
+                    .statusBarsPadding()
+                    .navigationBarsPadding()
+                    .imePadding()
+                    .pointerInput(Unit) {
+                        detectTapGestures {
+                            focusManager.clearFocus()
+                        }
                     }
-                )
-                Spacer(modifier = Modifier.weight(1f))
-                GomsButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = "인증",
-                    state = if (number.isNotBlank()) ButtonState.Normal else ButtonState.Enable
-                ) {
-                    numberCallback()
+            ) {
+                GomsBackButton {
+                    onBackClick()
                 }
-                Spacer(modifier = Modifier.height(animatedSpacerHeight))
+                Column(
+                    modifier = Modifier.padding(horizontal = 20.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    NumberText(modifier = Modifier.align(Alignment.Start))
+                    Spacer(modifier = Modifier.weight(2.1f))
+                    NumberTextField(
+                        text = number,
+                        isError = isError,
+                        errorText = errorText,
+                        onValueChange = onNumberChange,
+                        onResendClick = {
+                            resentCallBack()
+                        }
+                    )
+                    Spacer(modifier = Modifier.weight(1f))
+                    GomsButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "인증",
+                        state = if (number.isNotBlank()) ButtonState.Normal else ButtonState.Enable
+                    ) {
+                        numberCallback()
+                        isLoading = true
+                    }
+                    Spacer(modifier = Modifier.height(animatedSpacerHeight))
+                }
             }
         }
     }
