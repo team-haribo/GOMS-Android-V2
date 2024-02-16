@@ -69,4 +69,8 @@ fun GomsCircularProgressIndicator() {
             }
         }
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 2df85b0 (:lipstick: :: Add GomsCircularProgressIndicator)
