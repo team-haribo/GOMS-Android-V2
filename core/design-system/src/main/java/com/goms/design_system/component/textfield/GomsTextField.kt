@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -344,6 +345,7 @@ fun GomsBottomSheetTextField(
 @Composable
 fun GomsPasswordTextField(
     modifier: Modifier = Modifier,
+    isDescription: Boolean = false,
     isError: Boolean = false,
     placeHolder: String = "",
     readOnly: Boolean = false,
@@ -413,11 +415,11 @@ fun GomsPasswordTextField(
             )
             Column(
                 modifier = Modifier
-                    .height(50.dp)
+                    .heightIn(min = 25.dp)
                     .padding(start = 8.dp),
                 verticalArrangement = Arrangement.Center
             ) {
-                if (!isFocused.value) {
+                if (isDescription) {
                     Text(
                         text = "대/소문자, 특수문자 12자 이상",
                         color = colors.G4,
