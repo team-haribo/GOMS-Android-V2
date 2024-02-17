@@ -54,10 +54,13 @@ fun PasswordRoute(
     SignUpViewModelProvider(viewModelStoreOwner = viewModelStoreOwner) { viewModel ->
         val signUpUiState by viewModel.signUpUiState.collectAsStateWithLifecycle()
         val password by viewModel.password.collectAsStateWithLifecycle()
+        val checkPassword by viewModel.checkPassword.collectAsStateWithLifecycle()
 
         PasswordScreen(
             password = password,
+            checkPassword = checkPassword,
             onPasswordChange = viewModel::onPasswordChange,
+            onCheckPasswordChange = viewModel::onCheckPasswordChange,
             signUpUiState = signUpUiState,
             onBackClick = onBackClick,
             onLoginClick = onLoginClick,
@@ -79,7 +82,9 @@ fun PasswordRoute(
 @Composable
 fun PasswordScreen(
     password: String,
+    checkPassword: String,
     onPasswordChange: (String) -> Unit,
+    onCheckPasswordChange: (String) -> Unit,
     signUpUiState: Result<Unit>,
     onBackClick: () -> Unit,
     onLoginClick: () -> Unit,
@@ -138,25 +143,39 @@ fun PasswordScreen(
                 GomsPasswordTextField(
                     modifier = Modifier.fillMaxWidth(),
                     isError = isError,
-                    errorText = errorText,
+                    isDescription = false,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                     placeHolder = "비밀번호",
                     setText = password,
                     onValueChange = onPasswordChange,
                     singleLine = true
                 )
+                GomsPasswordTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    isDescription = true,
+                    isError = isError,
+                    errorText = errorText,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                    placeHolder = "비밀번호 확인",
+                    setText = checkPassword,
+                    onValueChange = onCheckPasswordChange,
+                    singleLine = true
+                )
                 Spacer(modifier = Modifier.weight(1f))
                 GomsButton(
                     modifier = Modifier.fillMaxWidth(),
                     text = "회원가입",
-                    state = if (password.isNotBlank()) ButtonState.Normal else ButtonState.Enable
+                    state = if (password.isNotBlank() && checkPassword.isNotBlank()) ButtonState.Normal else ButtonState.Enable
                 ) {
-                    if (isStrongPassword(password)) {
-                        passwordCallback()
-                        isLoading = true
-                    } else {
+                    if (password != checkPassword) {
+                        isError = true
+                        errorText = "비밀번호가 일치하지 않습니다"
+                    } else if (!isStrongPassword(password)) {
                         isError = true
                         errorText = "비밀번호 요구사항을 충족하지 않습니다"
+                    } else {
+                        passwordCallback()
+                        isLoading = true
                     }
                 }
                 Spacer(modifier = Modifier.height(animatedSpacerHeight))

@@ -50,14 +50,14 @@ fun GomsCircularProgressIndicator() {
 
             Canvas(modifier = Modifier.size(size = 60.dp)) {
                 val startAngle = 5f
-                val sweepAngle = 345f
+                val sweepAngle = 350f
 
                 rotate(translateAnimation) {
                     drawArc(
                         brush = Brush.sweepGradient(
                             colors = listOf(
                                 colors.P5,
-                                Color.Black
+                                colors.P5.copy(0f)
                             ),
                             center = Offset(size.width / 2f, size.height / 2f)
                         ),

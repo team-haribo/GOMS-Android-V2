@@ -38,6 +38,7 @@ class SignUpViewModel @Inject constructor(
     var major = savedStateHandle.getStateFlow(key = MAJOR, initialValue = "")
     var number = savedStateHandle.getStateFlow(key = NUMBER, initialValue = "")
     var password = savedStateHandle.getStateFlow(key = PASSWORD, initialValue = "")
+    var checkPassword = savedStateHandle.getStateFlow(key = CHECK_PASSWORD, initialValue = "")
 
     fun signUp(body: SignUpRequest) = viewModelScope.launch {
         signUpUseCase(body = body)
@@ -110,6 +111,10 @@ class SignUpViewModel @Inject constructor(
     fun onPasswordChange(value: String) {
         savedStateHandle[PASSWORD] = value
     }
+
+    fun onCheckPasswordChange(value: String) {
+        savedStateHandle[CHECK_PASSWORD] = value
+    }
 }
 
 private const val NAME = "name"
@@ -118,3 +123,4 @@ private const val GENDER = "gender"
 private const val MAJOR = "major"
 private const val NUMBER = "number"
 private const val PASSWORD = "password"
+private const val CHECK_PASSWORD = "check password"
