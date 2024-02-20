@@ -8,6 +8,8 @@ import com.goms.data.repository.council.CouncilRepository
 import com.goms.data.repository.council.CouncilRepositoryImpl
 import com.goms.data.repository.late.LateRepository
 import com.goms.data.repository.late.LateRepositoryImpl
+import com.goms.data.repository.notification.NotificationRepository
+import com.goms.data.repository.notification.NotificationRepositoryImpl
 import com.goms.data.repository.outing.OutingRepository
 import com.goms.data.repository.outing.OutingRepositoryImpl
 import dagger.Binds
@@ -42,4 +44,9 @@ abstract class RepositoryModule {
     abstract fun bindCouncilRepository(
         councilRepositoryImpl: CouncilRepositoryImpl
     ): CouncilRepository
+
+    @Binds
+    abstract fun bindNotificationRepository(
+        notificationRepositoryImpl: NotificationRepositoryImpl
+    ): NotificationRepository
 }

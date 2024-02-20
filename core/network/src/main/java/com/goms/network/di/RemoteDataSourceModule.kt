@@ -8,6 +8,8 @@ import com.goms.network.datasource.council.CouncilDataSource
 import com.goms.network.datasource.council.CouncilDataSourceImpl
 import com.goms.network.datasource.late.LateDataSource
 import com.goms.network.datasource.late.LateDataSourceImpl
+import com.goms.network.datasource.notification.NotificationDataSource
+import com.goms.network.datasource.notification.NotificationDataSourceImpl
 import com.goms.network.datasource.outing.OutingDataSource
 import com.goms.network.datasource.outing.OutingDataSourceImpl
 import dagger.Binds
@@ -42,4 +44,9 @@ abstract class RemoteDataSourceModule {
     abstract fun bindCouncilDataSource(
         councilDataSourceImpl: CouncilDataSourceImpl
     ): CouncilDataSource
+
+    @Binds
+    abstract fun bindNotificationDataSource(
+        notificationDataSourceImpl: NotificationDataSourceImpl
+    ): NotificationDataSource
 }
