@@ -5,18 +5,24 @@ import androidx.lifecycle.viewModelScope
 import com.goms.common.result.Result
 import com.goms.common.result.asResult
 import com.goms.data.repository.account.AccountRepository
+import com.goms.domain.notification.SaveDeviceTokenUseCase
 import com.goms.model.response.account.ProfileResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
-    private val accountRepository: AccountRepository
+    private val accountRepository: AccountRepository,
+    private val saveDeviceTokenUseCase: SaveDeviceTokenUseCase
 ) : ViewModel() {
     val uiState: StateFlow<MainActivityUiState> = flow {
         accountRepository.getProfile().collect { profileResponse ->
@@ -36,6 +42,22 @@ class MainActivityViewModel @Inject constructor(
             initialValue = MainActivityUiState.Loading,
             started = SharingStarted.WhileSubscribed(5_000),
         )
+
+    private val _saveDeviceTokenUiState = MutableStateFlow<Result<Unit>>(Result.Loading)
+    val saveDeviceTokenUiState = _saveDeviceTokenUiState.asStateFlow()
+
+    fun saveDeviceToken(deviceToken: String) = viewModelScope.launch {
+        saveDeviceTokenUseCase(deviceToken = deviceToken)
+            .onSuccess {
+                it.catch {  remoteError ->
+                    _saveDeviceTokenUiState.value = Result.Error(remoteError)
+                }.collect { result ->
+                    _saveDeviceTokenUiState.value = Result.Success(result)
+                }
+            }.onFailure {
+                _saveDeviceTokenUiState.value = Result.Error(it)
+            }
+    }
 }
 
 sealed interface MainActivityUiState {
