@@ -18,6 +18,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.goms.design_system.theme.GomsTheme
 import com.goms.goms_android_v2.ui.GomsApp
+import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -55,6 +56,7 @@ class MainActivity : ComponentActivity() {
                     uiState is MainActivityUiState.Loading
                 }
             }
+            getNotification()
             if (uiState !is MainActivityUiState.Loading) {
                 CompositionLocalProvider {
                     GomsTheme { _, _ ->
@@ -76,6 +78,18 @@ class MainActivity : ComponentActivity() {
             doubleBackToExitPressedOnce = true
             backPressedTimestamp = currentTime
             Toast.makeText(this, "'뒤로'버튼 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun getNotification() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val deviceTokenSF = getSharedPreferences("deviceToken", MODE_PRIVATE)
+                val deviceToken = task.result
+                if (deviceTokenSF.getString("device", "") == deviceToken) {
+                    deviceTokenSF.edit().putString("device", deviceToken).apply()
+                }
+            }
         }
     }
 }
