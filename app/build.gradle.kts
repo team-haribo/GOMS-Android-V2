@@ -20,6 +20,7 @@ dependencies {
     implementation(project(":core:design-system"))
     implementation(project(":core:data"))
     implementation(project(":core:model"))
+    implementation(project(":core:domain"))
     implementation(project(":feature:login"))
     implementation(project(":feature:sign-up"))
     implementation(project(":feature:main"))
