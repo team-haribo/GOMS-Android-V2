@@ -6,6 +6,7 @@ import com.goms.network.api.AccountAPI
 import com.goms.network.api.AuthAPI
 import com.goms.network.api.CouncilAPI
 import com.goms.network.api.LateAPI
+import com.goms.network.api.NotificationAPI
 import com.goms.network.api.OutingAPI
 import com.goms.network.util.AuthInterceptor
 import com.squareup.moshi.Moshi
@@ -98,5 +99,11 @@ object NetworkModule {
     @Singleton
     fun provideCouncilAPI(retrofit: Retrofit): CouncilAPI {
         return retrofit.create(CouncilAPI::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideNotificationAPI(retrofit: Retrofit): NotificationAPI {
+        return retrofit.create(NotificationAPI::class.java)
     }
 }

@@ -16,9 +16,12 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.goms.common.result.Result
 import com.goms.design_system.theme.GomsTheme
 import com.goms.goms_android_v2.ui.GomsApp
+import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
@@ -45,7 +48,11 @@ class MainActivity : ComponentActivity() {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState
                     .onEach { uiState = it }
-                    .collect {}
+                    .collectLatest {
+                        if (it is MainActivityUiState.Success) {
+                            getNotification()
+                        }
+                    }
             }
         }
 
@@ -76,6 +83,33 @@ class MainActivity : ComponentActivity() {
             doubleBackToExitPressedOnce = true
             backPressedTimestamp = currentTime
             Toast.makeText(this, "'뒤로'버튼 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun getNotification() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val deviceTokenSF = getSharedPreferences("deviceToken", MODE_PRIVATE)
+                val deviceToken = task.result
+                if (deviceTokenSF.getString("device", "") == deviceToken) {
+                    viewModel.saveDeviceToken(deviceToken = deviceToken)
+                    setNotification(deviceToken = deviceToken)
+                }
+            }
+        }
+    }
+
+    private fun setNotification(deviceToken: String) {
+        lifecycleScope.launch {
+            viewModel.saveDeviceTokenUiState.collect {
+                when (it) {
+                    is Result.Success -> {
+                        val deviceTokenSF = getSharedPreferences("deviceToken", MODE_PRIVATE)
+                        deviceTokenSF.edit().putString("device", deviceToken).apply()
+                    }
+                    is Result.Error, Result.Loading -> Unit
+                }
+            }
         }
     }
 }
