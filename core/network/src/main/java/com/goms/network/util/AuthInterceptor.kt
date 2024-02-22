@@ -1,6 +1,5 @@
 package com.goms.network.util
 
-import android.util.Log
 import com.goms.common.exception.TokenExpirationException
 import com.goms.datastore.AuthTokenDataSource
 import com.goms.model.response.auth.LoginResponse
@@ -62,7 +61,7 @@ class AuthInterceptor @Inject constructor(
                     moshi.adapter(LoginResponse::class.java)
 
                 val refreshRequest = Request.Builder()
-                    .url(BuildConfig.BASE_URL + "/api/v2/auth")
+                    .url(BuildConfig.BASE_URL + "api/v2/auth")
                     .patch(chain.request().body ?: RequestBody.create(null, byteArrayOf()))
                     .addHeader("refreshToken", refreshTokenWithBearer)
                     .build()
