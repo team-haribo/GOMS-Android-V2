@@ -1,14 +1,18 @@
 package com.goms.goms_android_v2
 
+import android.Manifest
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -62,15 +66,40 @@ class MainActivity : ComponentActivity() {
                     uiState is MainActivityUiState.Loading
                 }
             }
-            if (uiState !is MainActivityUiState.Loading) {
-                CompositionLocalProvider {
-                    GomsTheme { _, _ ->
-                        GomsApp(
-                            windowSizeClass = calculateWindowSizeClass(this),
-                            uiState = uiState
+            when (uiState) {
+                is MainActivityUiState.Success -> {
+                    val permissionLauncher = rememberLauncherForActivityResult(
+                        contract = ActivityResultContracts.RequestMultiplePermissions()
+                    ) { isGrantedMap: Map<String, Boolean> -> }
+
+                    LaunchedEffect(true) {
+                        permissionLauncher.launch(
+                            arrayOf(
+                                Manifest.permission.CAMERA,
+                                Manifest.permission.POST_NOTIFICATIONS
+                            )
                         )
                     }
+                    CompositionLocalProvider {
+                        GomsTheme { _, _ ->
+                            GomsApp(
+                                windowSizeClass = calculateWindowSizeClass(this),
+                                uiState = uiState
+                            )
+                        }
+                    }
                 }
+                is MainActivityUiState.Error -> {
+                    CompositionLocalProvider {
+                        GomsTheme { _, _ ->
+                            GomsApp(
+                                windowSizeClass = calculateWindowSizeClass(this),
+                                uiState = uiState
+                            )
+                        }
+                    }
+                }
+                else -> Unit
             }
         }
     }
