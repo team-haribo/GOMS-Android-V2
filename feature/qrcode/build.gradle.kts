@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.goms.qrcode_scan"
+    namespace = "com.goms.qrcode"
 }
 
 dependencies {

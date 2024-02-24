@@ -1,4 +1,4 @@
-package com.goms.qrcode_scan.component
+package com.goms.qrcode.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

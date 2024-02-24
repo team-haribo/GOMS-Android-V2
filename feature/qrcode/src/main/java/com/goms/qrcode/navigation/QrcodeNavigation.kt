@@ -1,10 +1,10 @@
-package com.goms.qrcode_scan.navigation
+package com.goms.qrcode.navigation
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import com.goms.qrcode_scan.QrcodeScanRoute
+import com.goms.qrcode.QrcodeScanRoute
 
 const val qrcodeScanRoute = "qrcode_scan_route"
 

@@ -1,4 +1,4 @@
-package com.goms.qrcode_scan.component
+package com.goms.qrcode.component
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable

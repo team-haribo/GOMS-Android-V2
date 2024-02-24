@@ -1,4 +1,4 @@
-package com.goms.qrcode_scan.viewmodel
+package com.goms.qrcode.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
