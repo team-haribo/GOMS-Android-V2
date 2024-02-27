@@ -9,6 +9,7 @@ import com.goms.main.LateListRoute
 import com.goms.main.MainRoute
 import com.goms.main.OutingStatusRoute
 import com.goms.main.StudentManagementRoute
+import com.goms.model.enum.Authority
 
 const val mainRoute = "main_route"
 const val outingStatusRoute = "outing_status_route"
@@ -24,7 +25,7 @@ fun NavGraphBuilder.mainScreen(
     onOutingStatusClick: () -> Unit,
     onLateListClick: () -> Unit,
     onStudentManagementClick: () -> Unit,
-    onQrcodeClick: () -> Unit
+    onQrcodeClick: (role: Authority) -> Unit
 ) {
     composable(route = mainRoute) {
         MainRoute(
