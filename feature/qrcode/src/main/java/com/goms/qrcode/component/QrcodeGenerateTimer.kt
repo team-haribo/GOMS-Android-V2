@@ -27,15 +27,17 @@ import java.util.concurrent.TimeUnit
 fun QrcodeGenerateTimer(
     onTimerFinish: () -> Unit,
 ) {
-    var remainingTime by remember { mutableIntStateOf(5 * 60) }
+    var remainingTime by remember { mutableIntStateOf(1 * 30) }
 
     LaunchedEffect(remainingTime) {
         while (remainingTime > 0) {
             delay(1000)
             remainingTime--
         }
-
-        onTimerFinish()
+        if(remainingTime == 0) {
+            onTimerFinish()
+            remainingTime--
+        }
     }
 
     GomsTheme { colors, typography ->
