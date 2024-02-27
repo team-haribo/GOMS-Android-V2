@@ -73,7 +73,7 @@ fun QrcodeGenerateScreen(
                 is GetOutingUUIDUiState.Success -> {
                     val data = getOutingUUIDUiState.getOutingUUIDResponse
 
-                    Image(painter = QrcodeGenerator(content = data.toString()), contentDescription = "outing qrcode image" )
+                    Image(painter = QrcodeGenerator(content = data.outingUUID), contentDescription = "outing qrcode image" )
                 }
                 is GetOutingUUIDUiState.Error -> onRemoteError
             }
