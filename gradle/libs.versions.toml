@@ -56,6 +56,7 @@ retrofit = "2.9.0"
 retrofitKotlinxSerializableJson = "1.0.0"
 room = "2.6.1"
 turbine = "1.0.0"
+zxing = "3.5.1"
 
 
 [libraries]
@@ -127,6 +128,7 @@ room-compiler = { group = "androidx.room", name = "room-compiler", version.ref =
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
+zxing-core = { group = "com.google.zxing", name = "core", version.ref = "zxing" }
 
 #Define Dependeicies used in build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
