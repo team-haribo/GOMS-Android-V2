@@ -79,7 +79,7 @@ fun QrcodeGenerateScreen(
             }
             Spacer(modifier = Modifier.height(32.dp))
             QrcodeGenerateTimer(
-                onTimerFinish = { onTimerFinish() }
+                onTimerFinish = onTimerFinish
             )
         }
     }
