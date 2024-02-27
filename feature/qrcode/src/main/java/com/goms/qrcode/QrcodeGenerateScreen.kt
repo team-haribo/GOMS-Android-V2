@@ -36,7 +36,6 @@ fun QrcodeGenerateRoute(
     QrcodeGenerateScreen(
         getOutingUUIDUiState = getOutingUUIDUiState,
         onQrCreate = {
-            Log.d("testt","Launched")
             viewModel.getOutingUUID()
         },
         onBackClick = onBackClick,
