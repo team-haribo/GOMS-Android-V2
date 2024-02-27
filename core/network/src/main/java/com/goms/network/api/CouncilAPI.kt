@@ -2,6 +2,7 @@ package com.goms.network.api
 
 import com.goms.model.request.council.AuthorityRequest
 import com.goms.model.response.council.LateResponse
+import com.goms.model.response.council.OutingUUIDResponse
 import com.goms.model.response.council.StudentResponse
 import kotlinx.datetime.LocalDate
 import retrofit2.http.Body
@@ -41,6 +42,9 @@ interface CouncilAPI {
         @Query("isBlackList") isBlackList: Boolean?,
         @Query("authority") authority: String?
     ): List<StudentResponse>
+
+    @POST("/api/v2/student-council/outing")
+    suspend fun getOutingUUID(): OutingUUIDResponse
 
     @DELETE("/api/v2/student-council/outing/{accountIdx}")
     suspend fun deleteOuting(
