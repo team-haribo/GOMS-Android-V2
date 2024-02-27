@@ -54,7 +54,8 @@ fun QrcodeGenerateTimer(
             Text(
                 text = formatTime(remainingTime.toLong()),
                 color = colors.A7,
-                style = typography.titleSmall
+                style = typography.titleSmall,
+                fontWeight = FontWeight.SemiBold
             )
         }
     }
