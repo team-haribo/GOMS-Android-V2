@@ -2,6 +2,7 @@ package com.goms.data.repository.council
 
 import com.goms.model.request.council.AuthorityRequest
 import com.goms.model.response.council.LateResponse
+import com.goms.model.response.council.OutingUUIDResponse
 import com.goms.model.response.council.StudentResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.LocalDate
@@ -24,6 +25,8 @@ interface CouncilRepository {
         isBlackList: Boolean?,
         authority: String?
     ): Flow<List<StudentResponse>>
+
+    suspend fun getOutingUUID(): Flow<OutingUUIDResponse>
 
     suspend fun deleteOuting(accountIdx: UUID): Flow<Unit>
 

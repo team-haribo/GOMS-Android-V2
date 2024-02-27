@@ -1,4 +1,4 @@
-package com.goms.qrcode_scan.util
+package com.goms.qrcode.util
 
 import android.util.Log
 import androidx.camera.core.ImageAnalysis

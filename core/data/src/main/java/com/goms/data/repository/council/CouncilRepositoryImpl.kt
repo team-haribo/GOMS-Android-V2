@@ -2,6 +2,7 @@ package com.goms.data.repository.council
 
 import com.goms.model.request.council.AuthorityRequest
 import com.goms.model.response.council.LateResponse
+import com.goms.model.response.council.OutingUUIDResponse
 import com.goms.model.response.council.StudentResponse
 import com.goms.network.datasource.council.CouncilDataSource
 import kotlinx.coroutines.flow.Flow
@@ -44,6 +45,10 @@ class CouncilRepositoryImpl @Inject constructor(
             isBlackList = isBlackList,
             authority = authority
         )
+    }
+
+    override suspend fun getOutingUUID(): Flow<OutingUUIDResponse> {
+        return remoteCouncilDataSource.getOutingUUID()
     }
 
     override suspend fun deleteOuting(accountIdx: UUID): Flow<Unit> {

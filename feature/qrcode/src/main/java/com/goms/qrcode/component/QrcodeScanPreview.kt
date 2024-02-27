@@ -1,4 +1,4 @@
-package com.goms.qrcode_scan.component
+package com.goms.qrcode.component
 
 import android.content.Context
 import android.util.Log
@@ -27,7 +27,7 @@ import androidx.core.app.ComponentActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import com.goms.design_system.theme.GomsTheme
-import com.goms.qrcode_scan.util.QrcodeScanner
+import com.goms.qrcode.util.QrcodeScanner
 import java.util.concurrent.Executors
 
 @androidx.camera.core.ExperimentalGetImage

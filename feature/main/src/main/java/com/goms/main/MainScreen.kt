@@ -44,7 +44,7 @@ fun MainRoute(
     onOutingStatusClick: () -> Unit,
     onLateListClick: () -> Unit,
     onStudentManagementClick: () -> Unit,
-    onQrcodeClick: () -> Unit
+    onQrcodeClick: (role: Authority) -> Unit
 ) {
     MainViewModelProvider(viewModelStoreOwner = viewModelStoreOwner) { viewModel ->
         val role by viewModel.role.collectAsStateWithLifecycle(initialValue = "")
@@ -82,7 +82,7 @@ fun MainScreen(
     onOutingStatusClick: () -> Unit,
     onLateListClick: () -> Unit,
     onStudentManagementClick: () -> Unit,
-    onQrcodeClick: () -> Unit,
+    onQrcodeClick: (role: Authority) -> Unit,
     mainCallBack: () -> Unit
 ) {
     var isPermissionRequest by rememberSaveable { mutableStateOf(false) }
@@ -153,7 +153,7 @@ fun MainScreen(
                     .padding(end = 16.dp, bottom = 16.dp),
                 role = role
             ) {
-                onQrcodeClick()
+                onQrcodeClick(role)
             }
         }
     }

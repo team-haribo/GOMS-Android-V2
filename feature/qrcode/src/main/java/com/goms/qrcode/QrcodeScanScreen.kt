@@ -1,4 +1,4 @@
-package com.goms.qrcode_scan
+package com.goms.qrcode
 
 import android.Manifest
 import androidx.compose.foundation.layout.Arrangement
@@ -18,10 +18,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.goms.design_system.theme.GomsTheme
-import com.goms.qrcode_scan.component.QrcodeScanGuide
-import com.goms.qrcode_scan.component.QrcodeScanPreview
-import com.goms.qrcode_scan.component.QrcodeScanTopBar
-import com.goms.qrcode_scan.viewmodel.QrcodeViewModel
+import com.goms.qrcode.component.QrcodeScanGuide
+import com.goms.qrcode.component.QrcodeScanPreview
+import com.goms.qrcode.component.QrcodeScanTopBar
+import com.goms.qrcode.viewmodel.QrcodeViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.isGranted
