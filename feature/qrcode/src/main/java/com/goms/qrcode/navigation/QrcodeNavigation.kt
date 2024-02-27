@@ -31,11 +31,13 @@ fun NavController.navigateToQrGenerate(navOptions: NavOptions? = null) {
 
 fun NavGraphBuilder.qrcodeGenerateScreen(
     onRemoteError: () -> Unit,
+    onBackClick: () -> Unit,
     onTimerFinish: () -> Unit
 ) {
     composable(route = qrcodeGenerateRoute) {
         QrcodeGenerateRoute(
             onRemoteError = onRemoteError,
+            onBackClick = onBackClick,
             onTimerFinish = onTimerFinish
         )
     }

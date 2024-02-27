@@ -88,6 +88,7 @@ fun GomsNavHost(
         )
         qrcodeGenerateScreen(
             onTimerFinish = navController::popBackStack,
+            onBackClick = navController::popBackStack,
             onRemoteError = navController::popBackStack
         )
         outingStatusScreen(

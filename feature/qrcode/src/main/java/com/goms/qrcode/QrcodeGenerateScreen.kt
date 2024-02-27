@@ -28,6 +28,7 @@ import java.util.UUID
 fun QrcodeGenerateRoute(
     onRemoteError: () -> Unit,
     viewModel: QrcodeViewModel = hiltViewModel(),
+    onBackClick: () -> Unit,
     onTimerFinish: () -> Unit,
 ) {
     val getOutingUUIDUiState by viewModel.getOutingUUIDState.collectAsStateWithLifecycle()
@@ -38,6 +39,8 @@ fun QrcodeGenerateRoute(
             Log.d("testt","Launched")
             viewModel.getOutingUUID()
         },
+        onBackClick = onBackClick,
+        onRemoteError = onRemoteError,
         onTimerFinish = onTimerFinish
     )
 }
@@ -45,7 +48,9 @@ fun QrcodeGenerateRoute(
 @Composable
 fun QrcodeGenerateScreen(
     getOutingUUIDUiState: GetOutingUUIDUiState,
+    onBackClick: () -> Unit,
     onQrCreate: () -> Unit,
+    onRemoteError: () -> Unit,
     onTimerFinish: () -> Unit
 ) {
     LaunchedEffect("qr create") {
@@ -57,7 +62,7 @@ fun QrcodeGenerateScreen(
             .fillMaxWidth()
             .statusBarsPadding()
     ) {
-        GomsBackButton {}
+        GomsBackButton { onBackClick() }
         QrcodeGenerateText(Modifier)
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -71,7 +76,7 @@ fun QrcodeGenerateScreen(
 
                     Image(painter = QrcodeGenerator(content = data.toString()), contentDescription = "outing qrcode image" )
                 }
-                is GetOutingUUIDUiState.Error -> Unit
+                is GetOutingUUIDUiState.Error -> onRemoteError
             }
             Spacer(modifier = Modifier.height(32.dp))
             QrcodeGenerateTimer(
