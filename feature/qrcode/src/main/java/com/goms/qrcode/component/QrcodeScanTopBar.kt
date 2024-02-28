@@ -1,5 +1,6 @@
 package com.goms.qrcode.component
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -22,6 +23,7 @@ import com.goms.design_system.theme.GomsTheme
 
 @Composable
 fun QrcodeScanTopBar(
+    onClick: () -> Unit
 ) {
     GomsTheme { color, _ ->
         Row(
@@ -30,7 +32,11 @@ fun QrcodeScanTopBar(
         ) {
             GomsTextIcon(tint = color.BLACK)
             Box(
-                modifier = Modifier.size(64.dp, 56.dp),
+                modifier = Modifier
+                    .size(64.dp, 56.dp)
+                    .clickable {
+                        onClick
+                    },
                 contentAlignment = Alignment.Center
                 ) {
                 CloseIcon(tint = color.BLACK)
@@ -42,5 +48,5 @@ fun QrcodeScanTopBar(
 @Composable
 @Preview(showBackground = true)
 fun QrcodeScanTopBarPreview() {
-    QrcodeScanTopBar()
+    QrcodeScanTopBar(onClick = {})
 }
