@@ -28,7 +28,7 @@ import androidx.compose.ui.window.Dialog
 import com.goms.design_system.theme.GomsTheme
 
 @Composable
-fun GomsDialog(
+fun GomsTwoButtonDialog(
     openDialog: Boolean,
     onStateChange: (Boolean) -> Unit,
     title: String,
@@ -125,7 +125,7 @@ fun GomsDialog(
 @Preview(showBackground = true)
 @Composable
 fun GomsDialogPreview() {
-    GomsDialog(
+    GomsTwoButtonDialog(
         openDialog = true,
         onStateChange = {},
         title = "외출 강제 복귀",
