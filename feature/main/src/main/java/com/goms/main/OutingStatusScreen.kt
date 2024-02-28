@@ -29,7 +29,7 @@ import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goms.common.result.Result
 import com.goms.design_system.component.button.GomsBackButton
-import com.goms.design_system.component.dialog.GomsDialog
+import com.goms.design_system.component.dialog.GomsTwoButtonDialog
 import com.goms.design_system.component.textfield.GomsSearchTextField
 import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.util.keyboardAsState
@@ -99,7 +99,7 @@ fun OutingStatusScreen(
     }
 
     if (openDialog) {
-        GomsDialog(
+        GomsTwoButtonDialog(
             openDialog = openDialog,
             onStateChange = { openDialog = it },
             title = "외출 강제 복귀",
