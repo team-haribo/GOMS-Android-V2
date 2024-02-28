@@ -13,6 +13,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -69,7 +70,9 @@ fun QrcodeGenerateScreen(
         ) {
             Spacer(modifier = Modifier.height(120.dp))
             when (getOutingUUIDUiState) {
-                GetOutingUUIDUiState.Loading -> {}
+                GetOutingUUIDUiState.Loading -> {
+                    Image(painter = painterResource(com.goms.design_system.R.drawable.ic_qrcode_load), contentDescription = "outing qrcode loading image")
+                }
                 is GetOutingUUIDUiState.Success -> {
                     val data = getOutingUUIDUiState.getOutingUUIDResponse
 
