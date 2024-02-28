@@ -64,7 +64,6 @@ fun QrcodeScanPreview(
                         .also {
                             it.setAnalyzer(cameraExecutor, QrcodeScanner { qrcodeData ->
                                 if (isScanningEnabled) {
-                                    Toast.makeText(context, qrcodeData, Toast.LENGTH_SHORT).show()
                                     onQrcodeScan(qrcodeData)
                                     isScanningEnabled = false
                                 }
