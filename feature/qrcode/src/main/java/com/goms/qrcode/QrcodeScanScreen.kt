@@ -37,6 +37,7 @@ import java.util.UUID
 @Composable
 fun QrcodeScanRoute(
     onPermissionBlock: () -> Unit,
+    onBackClick: () -> Unit,
     onError: () -> Unit,
     onSuccess: () -> Unit,
     viewModel: QrcodeViewModel = hiltViewModel(),
@@ -57,7 +58,8 @@ fun QrcodeScanRoute(
                 viewModel.outing(UUID.fromString(qrcodeData))
             },
             onError = onError,
-            onSuccess = onSuccess
+            onSuccess = onSuccess,
+            onBackClick = onBackClick
         )
     } else {
         onPermissionBlock()
@@ -69,6 +71,7 @@ fun QrcodeScanRoute(
 fun QrcodeScanScreen(
     outingUiState: Result<Unit>,
     onQrcodeScan: (String?) -> Unit,
+    onBackClick: () -> Unit,
     onError: () -> Unit,
     onSuccess: () -> Unit
 ) {
@@ -87,7 +90,7 @@ fun QrcodeScanScreen(
                 .statusBarsPadding(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            QrcodeScanTopBar()
+            QrcodeScanTopBar(onClick = onBackClick)
             Spacer(modifier = Modifier.height(224.dp))
             QrcodeScanGuide()
         }

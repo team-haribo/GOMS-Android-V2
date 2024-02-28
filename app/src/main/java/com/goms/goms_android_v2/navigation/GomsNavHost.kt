@@ -86,7 +86,8 @@ fun GomsNavHost(
         qrcodeScanScreen(
             onPermissionBlock = navController::popBackStack,
             onError = navController::popBackStack,
-            onSuccess = navController::popBackStack
+            onSuccess = navController::popBackStack,
+            onBackClick = navController::popBackStack
         )
         qrcodeGenerateScreen(
             onTimerFinish = navController::popBackStack,
