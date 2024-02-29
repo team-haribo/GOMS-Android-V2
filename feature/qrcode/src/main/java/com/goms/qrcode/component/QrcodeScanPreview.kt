@@ -41,6 +41,8 @@ fun QrcodeScanPreview(
             modifier = Modifier.fillMaxSize(),
         ) { innerPadding: PaddingValues ->
             AndroidView({ context ->
+                var isScanningEnabled = true
+
                 val cameraExecutor = Executors.newSingleThreadExecutor()
                 val previewView = PreviewView(context).also {
                     it.scaleType = PreviewView.ScaleType.FILL_CENTER
@@ -61,8 +63,10 @@ fun QrcodeScanPreview(
                         .build()
                         .also {
                             it.setAnalyzer(cameraExecutor, QrcodeScanner { qrcodeData ->
-                                Toast.makeText(context, qrcodeData, Toast.LENGTH_SHORT).show()
-                                onQrcodeScan(qrcodeData)
+                                if (isScanningEnabled) {
+                                    onQrcodeScan(qrcodeData)
+                                    isScanningEnabled = false
+                                }
                             })
                         }
 
