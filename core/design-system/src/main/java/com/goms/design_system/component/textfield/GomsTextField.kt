@@ -421,7 +421,7 @@ fun GomsPasswordTextField(
             ) {
                 if (isDescription) {
                     Text(
-                        text = "대/소문자, 특수문자 12자 이상",
+                        text = "대/소문자, 특수문자 6~15자",
                         color = colors.G4,
                         style = typography.buttonLarge
                     )
