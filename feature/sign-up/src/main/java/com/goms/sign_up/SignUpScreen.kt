@@ -24,6 +24,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -45,6 +46,8 @@ import com.goms.model.enum.Major
 import com.goms.model.request.auth.SendNumberRequest
 import com.goms.sign_up.component.SignUpText
 import com.goms.sign_up.viewmodel.SignUpViewModelProvider
+import com.goms.ui.createToast
+import com.goms.ui.isStrongEmail
 
 @Composable
 fun SignUpRoute(
@@ -94,9 +97,9 @@ fun SignUpScreen(
     signUpCallBack: () -> Unit,
     initCallBack: () -> Unit
 ) {
+    val context = LocalContext.current
     val focusManager = LocalFocusManager.current
     val isKeyboardOpen by keyboardAsState()
-
     var onGenderBottomSheetOpenClick by rememberSaveable { mutableStateOf(false) }
     var onMajorBottomSheetOpenClick by rememberSaveable { mutableStateOf(false) }
     var isLoading by remember { mutableStateOf(false) }
@@ -111,7 +114,13 @@ fun SignUpScreen(
         when (sendNumberUiState) {
             is Result.Loading -> Unit
             is Result.Success -> onNumberClick()
-            is Result.Error -> isLoading = false
+            is Result.Error -> {
+                isLoading = false
+                createToast(
+                    context = context,
+                    message = "오류가 발생하였습니다"
+                )
+            }
         }
         onDispose { initCallBack() }
     }
@@ -187,8 +196,16 @@ fun SignUpScreen(
                     state = if (name.isNotBlank() && email.isNotBlank() && gender.isNotBlank() && major.isNotBlank()) ButtonState.Normal
                     else ButtonState.Enable
                 ) {
-                    signUpCallBack()
-                    isLoading = true
+                    if (!isStrongEmail(email)) {
+                        isLoading = false
+                        createToast(
+                            context = context,
+                            message = "이메일 형식이 올바르지 않습니다"
+                        )
+                    } else {
+                        signUpCallBack()
+                        isLoading = true
+                    }
                 }
                 Spacer(modifier = Modifier.height(100.dp))
             }
