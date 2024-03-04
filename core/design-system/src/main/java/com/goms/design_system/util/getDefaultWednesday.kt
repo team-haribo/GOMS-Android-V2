@@ -5,10 +5,6 @@ import java.time.DayOfWeek
 
 fun getDefaultWednesday(): Instant {
     val currentDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
-    return if (currentDate.dayOfWeek == DayOfWeek.WEDNESDAY) {
-        currentDate.atStartOfDayIn(TimeZone.currentSystemDefault())
-    } else {
-        val lastWednesday = currentDate.minus((currentDate.dayOfWeek.ordinal - DayOfWeek.WEDNESDAY.ordinal).toLong(), DateTimeUnit.DAY)
-        lastWednesday.atStartOfDayIn(TimeZone.currentSystemDefault())
-    }
+    val daysUntilWednesday = (currentDate.dayOfWeek.ordinal - DayOfWeek.WEDNESDAY.ordinal + 7) % 7
+    return currentDate.minus(daysUntilWednesday.toLong(), DateTimeUnit.DAY).atStartOfDayIn(TimeZone.currentSystemDefault())
 }
