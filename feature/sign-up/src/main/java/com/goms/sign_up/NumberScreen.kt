@@ -24,6 +24,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelStoreOwner
@@ -40,6 +41,7 @@ import com.goms.design_system.util.lockScreenOrientation
 import com.goms.model.request.auth.SendNumberRequest
 import com.goms.sign_up.component.NumberText
 import com.goms.sign_up.viewmodel.SignUpViewModelProvider
+import com.goms.ui.createToast
 
 @Composable
 fun NumberRoute(
@@ -80,6 +82,7 @@ fun NumberScreen(
     resentCallBack: () -> Unit,
     initCallBack: () -> Unit
 ) {
+    val context = LocalContext.current
     val focusManager = LocalFocusManager.current
     val isKeyboardOpen by keyboardAsState()
     val animatedSpacerHeight by animateDpAsState(targetValue = if (!isKeyboardOpen) 100.dp else 16.dp)

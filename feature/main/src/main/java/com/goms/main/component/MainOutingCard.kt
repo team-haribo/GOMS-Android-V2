@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -32,6 +33,7 @@ import com.goms.main.viewmodel.GetOutingCountUiState
 import com.goms.main.viewmodel.GetOutingListUiState
 import com.goms.model.enum.Authority
 import com.goms.model.response.outing.OutingResponse
+import com.goms.ui.createToast
 import com.goms.ui.toText
 
 @Composable
@@ -93,7 +95,12 @@ fun MainOutingCard(
                                     .shimmerEffect(color = colors.WHITE)
                             )
                     }
-                    is GetOutingCountUiState.Error -> Unit
+                    is GetOutingCountUiState.Error -> {
+                        createToast(
+                            context = LocalContext.current,
+                            message = "외출학생 숫자를 가져오지 못했습니다"
+                        )
+                    }
                     GetOutingCountUiState.Empty -> {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
@@ -131,7 +138,12 @@ fun MainOutingCard(
                                     }
                                 }
                             }
-                            is GetOutingListUiState.Error -> Unit
+                            is GetOutingListUiState.Error -> {
+                                createToast(
+                                    context = LocalContext.current,
+                                    message = "외출자 정보를 가져오지 못했습니다"
+                                )
+                            }
                             is GetOutingListUiState.Success -> {
                                 val count = getOutingCountUiState.getOutingCountResponse
                                 val list = getOutingListUiState.getOutingListResponse
