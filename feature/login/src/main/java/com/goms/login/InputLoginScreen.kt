@@ -24,6 +24,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -43,6 +44,8 @@ import com.goms.login.component.InputLoginText
 import com.goms.login.viewmodel.LoginViewModel
 import com.goms.login.viewmodel.LoginUiState
 import com.goms.model.request.auth.LoginRequest
+import com.goms.ui.createToast
+import com.goms.ui.isStrongEmail
 
 @Composable
 fun InputLoginRoute(
@@ -88,6 +91,7 @@ fun InputLoginScreen(
     onMainClick: () -> Unit,
     loginCallBack: () -> Unit
 ) {
+    val context = LocalContext.current
     val focusManager = LocalFocusManager.current
     val isKeyboardOpen by keyboardAsState()
     val animatedSpacerHeight by animateDpAsState(targetValue = if (!isKeyboardOpen) 100.dp else 16.dp)
@@ -113,11 +117,23 @@ fun InputLoginScreen(
                     }
                 }
             }
-
-            is LoginUiState.Error -> {
+            is LoginUiState.BadRequest -> {
                 isLoading = false
                 isError = true
-                errorText = "로그인에 실패하였습니다"
+                errorText = "비밀번호가 일치하지 않습니다"
+                createToast(
+                    context = context,
+                    message = "비밀번호가 일치하지 않습니다"
+                )
+            }
+            is LoginUiState.NotFound -> {
+                isLoading = false
+                isError = true
+                errorText = "해당 유저가 존재하지 않습니다"
+                createToast(
+                    context = context,
+                    message = "해당 유저가 존재하지 않습니다"
+                )
             }
         }
         onDispose {}
@@ -175,8 +191,16 @@ fun InputLoginScreen(
                     state = if (email.isNotBlank() && password.isNotBlank()) ButtonState.Normal
                     else ButtonState.Enable
                 ) {
-                    loginCallBack()
-                    isLoading = true
+                    if (!isStrongEmail(email)) {
+                        isLoading = false
+                        createToast(
+                            context = context,
+                            message = "이메일 형식이 올바르지 않습니다"
+                        )
+                    } else {
+                        loginCallBack()
+                        isLoading = true
+                    }
                 }
                 Spacer(modifier = Modifier.height(animatedSpacerHeight))
             }
