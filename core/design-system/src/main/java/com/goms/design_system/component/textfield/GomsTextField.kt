@@ -154,8 +154,13 @@ fun NumberTextField(
     onValueChange: (String) -> Unit,
     onResendClick: () -> Unit,
 ) {
-    val isError = remember { mutableStateOf(isError) }
-    val errorText = remember { mutableStateOf(errorText) }
+    val isErrorTextField = remember { mutableStateOf(isError) }
+    val errorTextTextField = remember { mutableStateOf(errorText) }
+
+    LaunchedEffect(isError, errorText) {
+        isErrorTextField.value = isError
+        errorTextTextField.value = errorText
+    }
 
     GomsTheme { colors, typography ->
         Column {
@@ -176,14 +181,14 @@ fun NumberTextField(
                             NumberTextFieldCharContainer(
                                 modifier = Modifier,
                                 text = char,
-                                isError = isError.value
+                                isError = isErrorTextField.value
                             )
                         }
                         repeat(4 - text.length) {
                             NumberTextFieldCharContainer(
                                 modifier = Modifier,
                                 text = ' ',
-                                isError = isError.value
+                                isError = isErrorTextField.value
                             )
                         }
                     }
@@ -191,15 +196,15 @@ fun NumberTextField(
                 singleLine = true
             )
             CountdownTimer(
-                isError = isError.value,
-                errorText = errorText.value,
+                isError = isErrorTextField.value,
+                errorText = errorTextTextField.value,
                 onTimerFinish = {
-                    isError.value = true
-                    errorText.value = "시간이 만료되었습니다"
+                    isErrorTextField.value = true
+                    errorTextTextField.value = "시간이 만료되었습니다"
                 },
                 onTimerReset = {
-                    isError.value = false
-                    errorText.value = ""
+                    isErrorTextField.value = false
+                    errorTextTextField.value = ""
                     onResendClick()
                 }
             )
