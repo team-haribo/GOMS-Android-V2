@@ -115,7 +115,7 @@ fun MainScreen(
                 .fillMaxSize()
                 .statusBarsPadding()
                 .navigationBarsPadding()
-                .background(colors.BLACK)
+                .background(colors.BACKGROUND)
         ) {
             Column {
                 GomsTopBar(

@@ -42,7 +42,7 @@ fun LoginScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(colors.BLACK)
+                .background(colors.BACKGROUND)
                 .padding(horizontal = 20.dp)
                 .navigationBarsPadding(),
             horizontalAlignment = Alignment.CenterHorizontally
