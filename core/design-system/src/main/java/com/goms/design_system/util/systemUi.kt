@@ -11,13 +11,11 @@ import androidx.core.view.WindowCompat
 fun ApplySystemUi(isDarkTheme: Boolean) {
     val view = LocalView.current
     val context = view.context as? Activity ?: return
-
-    val statusBarColor = if (isDarkTheme) Color.Black else Color.White
-    val navigationBarColor = if (isDarkTheme) Color.Black else Color.White
+    val color = if (isDarkTheme) Color(0xFF0D0D0D) else Color(0xFFFAFAFA)
 
     WindowCompat.setDecorFitsSystemWindows(context.window, false)
     val insetsController = WindowCompat.getInsetsController(context.window, view)
     insetsController.isAppearanceLightStatusBars = !isDarkTheme
-    context.window.statusBarColor = statusBarColor.toArgb()
-    context.window.navigationBarColor = navigationBarColor.toArgb()
+    context.window.statusBarColor = color.toArgb()
+    context.window.navigationBarColor = color.toArgb()
 }
