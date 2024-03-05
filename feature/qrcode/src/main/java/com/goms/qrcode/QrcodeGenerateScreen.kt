@@ -1,7 +1,6 @@
 package com.goms.qrcode
 
-import android.util.Log
-import android.widget.Toast
+import android.content.pm.ActivityInfo
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -20,13 +19,13 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goms.design_system.component.button.GomsBackButton
+import com.goms.design_system.util.lockScreenOrientation
 import com.goms.qrcode.component.QrcodeGenerateText
 import com.goms.qrcode.component.QrcodeGenerateTimer
 import com.goms.qrcode.util.QrcodeGenerator
 import com.goms.qrcode.viewmodel.GetOutingUUIDUiState
 import com.goms.qrcode.viewmodel.QrcodeViewModel
 import com.goms.ui.createToast
-import java.util.UUID
 
 @Composable
 fun QrcodeGenerateRoute(
@@ -62,6 +61,7 @@ fun QrcodeGenerateScreen(
         onQrCreate()
     }
 
+    lockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
     Column(
         modifier = Modifier
             .fillMaxWidth()
