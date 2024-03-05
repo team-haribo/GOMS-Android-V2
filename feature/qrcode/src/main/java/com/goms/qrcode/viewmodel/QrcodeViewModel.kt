@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.goms.common.network.errorHandling
 import com.goms.common.result.Result
 import com.goms.common.result.asResult
 import com.goms.domain.auth.LoginUseCase
@@ -26,7 +27,7 @@ class QrcodeViewModel @Inject constructor(
     private val outingUseCase: OutingUseCase,
     private val getOutingUUIDUseCase: GetOutingUUIDUseCase
 ) : ViewModel() {
-    private val _outingState = MutableStateFlow<Result<Unit>>(Result.Loading)
+    private val _outingState = MutableStateFlow<OutingUiState>(OutingUiState.Loading)
     val outingState = _outingState.asStateFlow()
 
     private val _getOutingUUIDState = MutableStateFlow<GetOutingUUIDUiState>(GetOutingUUIDUiState.Loading)
@@ -36,12 +37,14 @@ class QrcodeViewModel @Inject constructor(
         outingUseCase(outingUUID = outingUUID)
             .onSuccess {
                 it.catch {  remoteError ->
-                    _outingState.value = Result.Error(remoteError)
+                    _outingState.value = OutingUiState.Error
                 }.collect { result ->
-                    _outingState.value = Result.Success(result)
+                    _outingState.value = OutingUiState.Success
                 }
             }.onFailure {
-                _outingState.value = Result.Error(it)
+                it.errorHandling(
+                    badRequestAction = { _outingState.value = OutingUiState.BadRequest }
+                )
             }
     }
 

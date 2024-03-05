@@ -25,7 +25,9 @@ import com.goms.design_system.theme.GomsTheme
 import com.goms.qrcode.component.QrcodeScanGuide
 import com.goms.qrcode.component.QrcodeScanPreview
 import com.goms.qrcode.component.QrcodeScanTopBar
+import com.goms.qrcode.viewmodel.OutingUiState
 import com.goms.qrcode.viewmodel.QrcodeViewModel
+import com.goms.ui.createToast
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.isGranted
@@ -69,12 +71,13 @@ fun QrcodeScanRoute(
 @androidx.annotation.OptIn(androidx.camera.core.ExperimentalGetImage::class)
 @Composable
 fun QrcodeScanScreen(
-    outingUiState: Result<Unit>,
+    outingUiState: OutingUiState,
     onQrcodeScan: (String?) -> Unit,
     onBackClick: () -> Unit,
     onError: () -> Unit,
     onSuccess: () -> Unit
 ) {
+    val context = LocalContext.current
     var openDialog by remember { mutableStateOf(false) }
 
     GomsTheme { _, _ ->
@@ -97,11 +100,21 @@ fun QrcodeScanScreen(
     }
 
     when (outingUiState) {
-        is Result.Loading -> Unit
-        is Result.Success -> openDialog = true
-        is Result.Error -> {
+        is OutingUiState.Loading -> Unit
+        is OutingUiState.Success -> openDialog = true
+        is OutingUiState.BadRequest -> {
             onError()
-            Toast.makeText(LocalContext.current,"네트워크 에러",Toast.LENGTH_LONG).show()
+            createToast(
+                context = context,
+                message = "외출 금지 상태이거나, 유효하지 않은 QR코드입니다"
+            )
+        }
+        is OutingUiState.Error -> {
+            onError()
+            createToast(
+                context = context,
+                message = "오류가 발생하였습니다"
+            )
         }
     }
 

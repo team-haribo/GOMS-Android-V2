@@ -25,6 +25,7 @@ import com.goms.qrcode.component.QrcodeGenerateTimer
 import com.goms.qrcode.util.QrcodeGenerator
 import com.goms.qrcode.viewmodel.GetOutingUUIDUiState
 import com.goms.qrcode.viewmodel.QrcodeViewModel
+import com.goms.ui.createToast
 import java.util.UUID
 
 @Composable
@@ -55,6 +56,8 @@ fun QrcodeGenerateScreen(
     onRemoteError: () -> Unit,
     onTimerFinish: () -> Unit
 ) {
+    val context = LocalContext.current
+
     LaunchedEffect("qr create") {
         onQrCreate()
     }
@@ -81,8 +84,11 @@ fun QrcodeGenerateScreen(
                     Image(painter = QrcodeGenerator(content = data.outingUUID), contentDescription = "outing qrcode image" )
                 }
                 is GetOutingUUIDUiState.Error -> {
-                    Toast.makeText(LocalContext.current,"네트워크 에러", Toast.LENGTH_LONG).show()
-                    onRemoteError
+                    onRemoteError()
+                    createToast(
+                        context = context,
+                        message = "오류가 발생하였습니다"
+                    )
                 }
             }
             Spacer(modifier = Modifier.height(32.dp))
