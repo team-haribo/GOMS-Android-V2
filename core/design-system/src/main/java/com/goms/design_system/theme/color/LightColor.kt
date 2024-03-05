@@ -56,4 +56,6 @@ object LightColor : ColorTheme() {
 
     override val BLACK = Color(0xFFFFFFFF)
     override val WHITE = Color(0xFF000000)
+
+    override val BACKGROUND = Color(0xFFFAFAFA)
 }

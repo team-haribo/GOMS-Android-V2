@@ -56,4 +56,6 @@ object DarkColor : ColorTheme() {
 
     override val BLACK = Color(0xFF000000)
     override val WHITE = Color(0xFFFFFFFF)
+
+    override val BACKGROUND = Color(0xFF0D0D0D)
 }
