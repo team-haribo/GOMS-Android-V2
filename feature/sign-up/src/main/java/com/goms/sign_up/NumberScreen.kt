@@ -104,6 +104,10 @@ fun NumberScreen(
                 isLoading = false
                 isError = true
                 errorText = "잘못된 인증번호입니다"
+                createToast(
+                    context = context,
+                    message = "잘못된 인증번호입니다"
+                )
             }
         }
         onDispose { initCallBack() }
