@@ -24,7 +24,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -44,7 +43,6 @@ import com.goms.model.enum.Major
 import com.goms.model.request.auth.SignUpRequest
 import com.goms.sign_up.component.PasswordText
 import com.goms.sign_up.viewmodel.SignUpViewModelProvider
-import com.goms.ui.createToast
 import com.goms.ui.isStrongPassword
 
 @Composable
@@ -52,6 +50,7 @@ fun PasswordRoute(
     viewModelStoreOwner: ViewModelStoreOwner,
     onBackClick: () -> Unit,
     onLoginClick: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
     SignUpViewModelProvider(viewModelStoreOwner = viewModelStoreOwner) { viewModel ->
         val signUpUiState by viewModel.signUpUiState.collectAsStateWithLifecycle()
@@ -66,6 +65,7 @@ fun PasswordRoute(
             signUpUiState = signUpUiState,
             onBackClick = onBackClick,
             onLoginClick = onLoginClick,
+            onErrorToast = onErrorToast,
             passwordCallback = {
                 viewModel.signUp(
                     body = SignUpRequest(
@@ -90,9 +90,9 @@ fun PasswordScreen(
     signUpUiState: Result<Unit>,
     onBackClick: () -> Unit,
     onLoginClick: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     passwordCallback: () -> Unit
 ) {
-    val context = LocalContext.current
     val focusManager = LocalFocusManager.current
     val isKeyboardOpen by keyboardAsState()
     val animatedSpacerHeight by animateDpAsState(targetValue = if (!isKeyboardOpen) 100.dp else 16.dp)
@@ -113,11 +113,7 @@ fun PasswordScreen(
             is Result.Error -> {
                 isLoading = false
                 isError = true
-                errorText = "오류가 발생하였습니다"
-                createToast(
-                    context = context,
-                    message = "오류가 발생하였습니다"
-                )
+                onErrorToast(signUpUiState.exception, null)
             }
         }
         onDispose {}
@@ -177,17 +173,11 @@ fun PasswordScreen(
                     if (password != checkPassword) {
                         isError = true
                         errorText = "비밀번호가 일치하지 않습니다"
-                        createToast(
-                            context = context,
-                            message = "비밀번호가 일치하지 않습니다"
-                        )
+                        onErrorToast(null, "비밀번호가 일치하지 않습니다")
                     } else if (!isStrongPassword(password)) {
                         isError = true
                         errorText = "비밀번호 요구사항을 충족하지 않습니다"
-                        createToast(
-                            context = context,
-                            message = "비밀번호 요구사항을 충족하지 않습니다"
-                        )
+                        onErrorToast(null, "비밀번호 요구사항을 충족하지 않습니다")
                     } else {
                         passwordCallback()
                         isLoading = true

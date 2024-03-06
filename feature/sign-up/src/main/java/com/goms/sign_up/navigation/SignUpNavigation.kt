@@ -20,13 +20,15 @@ fun NavController.navigateToSignUp(navOptions: NavOptions? = null) {
 fun NavGraphBuilder.signUpScreen(
     viewModelStoreOwner: ViewModelStoreOwner,
     onBackClick: () -> Unit,
-    onNumberClick: () -> Unit
+    onNumberClick: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
     composable(route = signUpRoute) {
         SignUpRoute(
             viewModelStoreOwner = viewModelStoreOwner,
             onBackClick = onBackClick,
-            onNumberClick = onNumberClick
+            onNumberClick = onNumberClick,
+            onErrorToast = onErrorToast
         )
     }
 }
@@ -38,13 +40,15 @@ fun NavController.navigateToNumber(navOptions: NavOptions? = null) {
 fun NavGraphBuilder.numberScreen(
     viewModelStoreOwner: ViewModelStoreOwner,
     onBackClick: () -> Unit,
-    onPasswordClick: () -> Unit
+    onPasswordClick: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
     composable(route = numberRoute) {
         NumberRoute(
             viewModelStoreOwner = viewModelStoreOwner,
             onBackClick = onBackClick,
-            onPasswordClick = onPasswordClick
+            onPasswordClick = onPasswordClick,
+            onErrorToast = onErrorToast
         )
     }
 }
@@ -56,13 +60,15 @@ fun NavController.navigateToPassword(navOptions: NavOptions? = null) {
 fun NavGraphBuilder.passwordScreen(
     viewModelStoreOwner: ViewModelStoreOwner,
     onBackClick: () -> Unit,
-    onLoginClick: () -> Unit
+    onLoginClick: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
     composable(route = passwordRoute) {
         PasswordRoute(
             viewModelStoreOwner = viewModelStoreOwner,
             onBackClick = onBackClick,
-            onLoginClick = onLoginClick
+            onLoginClick = onLoginClick,
+            onErrorToast = onErrorToast
         )
     }
 }
