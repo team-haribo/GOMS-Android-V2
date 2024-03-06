@@ -37,11 +37,15 @@ class QrcodeViewModel @Inject constructor(
         outingUseCase(outingUUID = outingUUID)
             .onSuccess {
                 it.catch {  remoteError ->
-                    _outingState.value = OutingUiState.Error
+                    _outingState.value = OutingUiState.Error(remoteError)
+                    remoteError.errorHandling(
+                        badRequestAction = { _outingState.value = OutingUiState.BadRequest }
+                    )
                 }.collect { result ->
                     _outingState.value = OutingUiState.Success
                 }
             }.onFailure {
+                _outingState.value = OutingUiState.Error(it)
                 it.errorHandling(
                     badRequestAction = { _outingState.value = OutingUiState.BadRequest }
                 )

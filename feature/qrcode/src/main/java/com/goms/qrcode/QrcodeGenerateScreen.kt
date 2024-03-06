@@ -13,7 +13,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -25,7 +24,6 @@ import com.goms.qrcode.component.QrcodeGenerateTimer
 import com.goms.qrcode.util.QrcodeGenerator
 import com.goms.qrcode.viewmodel.GetOutingUUIDUiState
 import com.goms.qrcode.viewmodel.QrcodeViewModel
-import com.goms.ui.createToast
 
 @Composable
 fun QrcodeGenerateRoute(
@@ -33,6 +31,7 @@ fun QrcodeGenerateRoute(
     viewModel: QrcodeViewModel = hiltViewModel(),
     onBackClick: () -> Unit,
     onTimerFinish: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
     val getOutingUUIDUiState by viewModel.getOutingUUIDState.collectAsStateWithLifecycle()
 
@@ -43,7 +42,8 @@ fun QrcodeGenerateRoute(
         },
         onBackClick = onBackClick,
         onRemoteError = onRemoteError,
-        onTimerFinish = onTimerFinish
+        onTimerFinish = onTimerFinish,
+        onErrorToast = onErrorToast
     )
 }
 
@@ -53,10 +53,9 @@ fun QrcodeGenerateScreen(
     onBackClick: () -> Unit,
     onQrCreate: () -> Unit,
     onRemoteError: () -> Unit,
-    onTimerFinish: () -> Unit
+    onTimerFinish: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
-    val context = LocalContext.current
-
     LaunchedEffect("qr create") {
         onQrCreate()
     }
@@ -85,10 +84,7 @@ fun QrcodeGenerateScreen(
                 }
                 is GetOutingUUIDUiState.Error -> {
                     onRemoteError()
-                    createToast(
-                        context = context,
-                        message = "오류가 발생하였습니다"
-                    )
+                    onErrorToast(getOutingUUIDUiState.exception, null)
                 }
             }
             Spacer(modifier = Modifier.height(32.dp))

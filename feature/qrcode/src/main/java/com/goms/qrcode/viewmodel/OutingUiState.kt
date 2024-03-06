@@ -7,5 +7,5 @@ sealed interface OutingUiState {
     object Loading : OutingUiState
     object Success : OutingUiState
     object BadRequest : OutingUiState
-    object Error : OutingUiState
+    data class Error(val exception: Throwable) : OutingUiState
 }
