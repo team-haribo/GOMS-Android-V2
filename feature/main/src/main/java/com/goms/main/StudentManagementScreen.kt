@@ -49,7 +49,8 @@ import java.util.UUID
 @Composable
 fun StudentManagementRoute(
     viewModelStoreOwner: ViewModelStoreOwner,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
     MainViewModelProvider(viewModelStoreOwner = viewModelStoreOwner) { viewModel ->
         val studentSearch by viewModel.studentSearch.collectAsStateWithLifecycle()
@@ -65,19 +66,25 @@ fun StudentManagementRoute(
         val studentSearchUiState by viewModel.studentSearchUiState.collectAsStateWithLifecycle()
 
         when (changeAuthorityUiState) {
+            is Result.Loading -> Unit
             is Result.Success -> {
                 viewModel.getStudentList()
                 viewModel.initChangeAuthority()
             }
-            else -> Unit
+            is Result.Error -> {
+                onErrorToast((changeAuthorityUiState as Result.Error).exception, "권한 변경이 실패했습니다")
+            }
         }
 
         when (setBlackListUiState) {
+            is Result.Loading -> Unit
             is Result.Success -> {
                 viewModel.getStudentList()
                 viewModel.initSetBlackList()
             }
-            else -> Unit
+            is Result.Error -> {
+                onErrorToast((setBlackListUiState as Result.Error).exception, "권한 변경이 실패했습니다")
+            }
         }
 
         StudentManagementScreen(
@@ -96,6 +103,7 @@ fun StudentManagementRoute(
             getStudentListUiState = getStudentListUiState,
             studentSearchUiState = studentSearchUiState,
             onBackClick = onBackClick,
+            onErrorToast = onErrorToast,
             studentListCallBack = { viewModel.getStudentList() },
             studentSearchCallBack = { name ->
                 viewModel.studentSearch(
@@ -142,6 +150,7 @@ fun StudentManagementScreen(
     getStudentListUiState: GetStudentListUiState,
     studentSearchUiState: StudentSearchUiState,
     onBackClick: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     studentListCallBack: () -> Unit,
     studentSearchCallBack: (String) -> Unit,
     changeAuthorityCallBack: (UUID, String) -> Unit,
@@ -202,6 +211,7 @@ fun StudentManagementScreen(
                     getStudentListUiState = getStudentListUiState,
                     studentSearchUiState = studentSearchUiState,
                     onBottomSheetOpenClick = { onFilterBottomSheetOpenClick = true },
+                    onErrorToast = onErrorToast,
                     onClick = { accountIdx, authority ->
                         onStatusBottomSheetOpenClick = true
                         uuid = accountIdx

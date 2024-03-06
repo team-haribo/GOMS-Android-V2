@@ -44,6 +44,7 @@ fun StudentManagementList(
     modifier: Modifier = Modifier,
     getStudentListUiState: GetStudentListUiState,
     studentSearchUiState: StudentSearchUiState,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     onBottomSheetOpenClick: () -> Unit,
     onClick: (UUID, String) -> Unit
 ) {
@@ -51,13 +52,17 @@ fun StudentManagementList(
         StudentSearchUiState.Loading -> {
             ShimmerStudentManagementListComponent(modifier = modifier)
         }
-        is StudentSearchUiState.Error -> Unit
+        is StudentSearchUiState.Error -> {
+            onErrorToast(studentSearchUiState.exception, "학생 검색이 실패했습니다")
+        }
         StudentSearchUiState.QueryEmpty -> {
             when (getStudentListUiState) {
                 GetStudentListUiState.Loading -> {
                     ShimmerStudentManagementListComponent(modifier = modifier)
                 }
-                is GetStudentListUiState.Error -> Unit
+                is GetStudentListUiState.Error -> {
+                    onErrorToast(getStudentListUiState.exception, "학생 리스트를 가져오지 못했습니다")
+                }
                 is GetStudentListUiState.Success -> {
                     val list = getStudentListUiState.getStudentResponse
 
