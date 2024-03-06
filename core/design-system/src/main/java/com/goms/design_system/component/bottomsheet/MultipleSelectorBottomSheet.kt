@@ -3,6 +3,7 @@ package com.goms.design_system.component.bottomsheet
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -14,6 +15,7 @@ import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,6 +26,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.goms.design_system.component.button.AdminBottomSheetButton
+import com.goms.design_system.component.button.InitBottomSheetButton
 import com.goms.design_system.theme.GomsTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -47,12 +50,25 @@ fun MultipleSelectorBottomSheet(
     list4: List<String>,
     selected4: String,
     itemChange4: (String) -> Unit,
+    initClick: () -> Unit,
     closeSheet: () -> Unit
 ) {
     var componentWidth by remember { mutableStateOf( 0.dp ) }
     val density = LocalDensity.current
 
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
+    var bottomSheetSelected1 by remember { mutableStateOf(selected1) }
+    var bottomSheetSelected2 by remember { mutableStateOf(selected2) }
+    var bottomSheetSelected3 by remember { mutableStateOf(selected3) }
+    var bottomSheetSelected4 by remember { mutableStateOf(selected4) }
+
+    LaunchedEffect(selected1, selected2, selected3, selected4) {
+        bottomSheetSelected1 = selected1
+        bottomSheetSelected2 = selected2
+        bottomSheetSelected3 = selected3
+        bottomSheetSelected4 = selected4
+    }
 
     GomsTheme { colors, typography ->
         ModalBottomSheet(
@@ -91,7 +107,7 @@ fun MultipleSelectorBottomSheet(
                         AdminBottomSheetButton(
                             modifier = Modifier.widthIn((componentWidth - 16.dp * list1.lastIndex) / list1.size),
                             text = list1[it],
-                            selected = selected1 == list1[it]
+                            selected = bottomSheetSelected1 == list1[it]
                         ) {
                             itemChange1(list1[it])
                         }
@@ -112,7 +128,7 @@ fun MultipleSelectorBottomSheet(
                         AdminBottomSheetButton(
                             modifier = Modifier.widthIn((componentWidth - 16.dp * list2.lastIndex) / list2.size),
                             text = list2[it],
-                            selected = selected2 == list2[it]
+                            selected = bottomSheetSelected2 == list2[it]
                         ) {
                             itemChange2(list2[it])
                         }
@@ -133,7 +149,7 @@ fun MultipleSelectorBottomSheet(
                         AdminBottomSheetButton(
                             modifier = Modifier.widthIn((componentWidth - 16.dp * list3.lastIndex) / list3.size),
                             text = list3[it],
-                            selected = selected3 == list3[it]
+                            selected = bottomSheetSelected3 == list3[it]
                         ) {
                             itemChange3(list3[it])
                         }
@@ -154,11 +170,22 @@ fun MultipleSelectorBottomSheet(
                         AdminBottomSheetButton(
                             modifier = Modifier.widthIn((componentWidth - 16.dp * list4.lastIndex) / list4.size),
                             text = list4[it],
-                            selected = selected4 == list4[it]
+                            selected = bottomSheetSelected4 == list4[it]
                         ) {
                             itemChange4(list4[it])
                         }
                     }
+                }
+                Spacer(modifier = Modifier.height(32.dp))
+                InitBottomSheetButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "필터 초기화"
+                ) {
+                    bottomSheetSelected1 = ""
+                    bottomSheetSelected2 = ""
+                    bottomSheetSelected3 = ""
+                    bottomSheetSelected4 = ""
+                    initClick()
                 }
             }
         }
