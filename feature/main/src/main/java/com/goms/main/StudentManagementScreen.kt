@@ -277,10 +277,16 @@ fun StudentManagementScreen(
                 ),
                 selected4 = filterMajor,
                 itemChange4 = onFilterMajorChange,
+                initClick = {
+                    onFilterStatusChange("")
+                    onFilterGradeChange("")
+                    onFilterGenderChange("")
+                    onFilterMajorChange("")
+                },
                 closeSheet = {
                     onFilterBottomSheetOpenClick = false
                     studentSearchCallBack(studentSearch)
-                }
+                },
             )
         }
     }
