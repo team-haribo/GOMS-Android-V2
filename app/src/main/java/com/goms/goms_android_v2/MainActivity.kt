@@ -19,6 +19,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.goms.common.result.Result
 import com.goms.design_system.theme.GomsTheme
 import com.goms.goms_android_v2.ui.GomsApp
+import com.goms.ui.createToast
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -83,7 +84,7 @@ class MainActivity : ComponentActivity() {
         } else {
             doubleBackToExitPressedOnce = true
             backPressedTimestamp = currentTime
-            Toast.makeText(this, "'뒤로'버튼 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show()
+            createToast(this, "'뒤로'버튼 한번 더 누르시면 종료됩니다.")
         }
     }
 

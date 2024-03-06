@@ -20,7 +20,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -33,7 +32,6 @@ import com.goms.main.viewmodel.GetOutingCountUiState
 import com.goms.main.viewmodel.GetOutingListUiState
 import com.goms.model.enum.Authority
 import com.goms.model.response.outing.OutingResponse
-import com.goms.ui.createToast
 import com.goms.ui.toText
 
 @Composable
@@ -42,6 +40,7 @@ fun MainOutingCard(
     role: Authority,
     getOutingListUiState: GetOutingListUiState,
     getOutingCountUiState: GetOutingCountUiState,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     onClick: () -> Unit
 ) {
     GomsTheme { colors, typography ->
@@ -96,10 +95,7 @@ fun MainOutingCard(
                             )
                     }
                     is GetOutingCountUiState.Error -> {
-                        createToast(
-                            context = LocalContext.current,
-                            message = "외출학생 숫자를 가져오지 못했습니다"
-                        )
+                        onErrorToast(getOutingCountUiState.exception, "외출학생 숫자를 가져오지 못했습니다")
                     }
                     GetOutingCountUiState.Empty -> {
                         Row(
@@ -139,10 +135,7 @@ fun MainOutingCard(
                                 }
                             }
                             is GetOutingListUiState.Error -> {
-                                createToast(
-                                    context = LocalContext.current,
-                                    message = "외출자 정보를 가져오지 못했습니다"
-                                )
+                                onErrorToast(getOutingListUiState.exception, "외출자 정보를 가져오지 못했습니다")
                             }
                             is GetOutingListUiState.Success -> {
                                 val count = getOutingCountUiState.getOutingCountResponse

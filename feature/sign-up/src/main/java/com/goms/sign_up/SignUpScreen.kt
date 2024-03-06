@@ -24,7 +24,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -46,7 +45,6 @@ import com.goms.model.enum.Major
 import com.goms.model.request.auth.SendNumberRequest
 import com.goms.sign_up.component.SignUpText
 import com.goms.sign_up.viewmodel.SignUpViewModelProvider
-import com.goms.ui.createToast
 import com.goms.ui.isStrongEmail
 
 @Composable
@@ -54,6 +52,7 @@ fun SignUpRoute(
     viewModelStoreOwner: ViewModelStoreOwner,
     onBackClick: () -> Unit,
     onNumberClick: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
     SignUpViewModelProvider(viewModelStoreOwner = viewModelStoreOwner) { viewModel ->
         val sendNumberUiState by viewModel.sendNumberUiState.collectAsState()
@@ -74,6 +73,7 @@ fun SignUpRoute(
             sendNumberUiState = sendNumberUiState,
             onBackClick = onBackClick,
             onNumberClick = onNumberClick,
+            onErrorToast = onErrorToast,
             signUpCallBack = { viewModel.sendNumber(body = SendNumberRequest("${viewModel.email.value}@gsm.hs.kr")) },
             initCallBack = { viewModel.initSendNumber() }
         )
@@ -94,10 +94,10 @@ fun SignUpScreen(
     sendNumberUiState: Result<Unit>,
     onBackClick: () -> Unit,
     onNumberClick: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     signUpCallBack: () -> Unit,
     initCallBack: () -> Unit
 ) {
-    val context = LocalContext.current
     val focusManager = LocalFocusManager.current
     val isKeyboardOpen by keyboardAsState()
     var onGenderBottomSheetOpenClick by rememberSaveable { mutableStateOf(false) }
@@ -116,10 +116,7 @@ fun SignUpScreen(
             is Result.Success -> onNumberClick()
             is Result.Error -> {
                 isLoading = false
-                createToast(
-                    context = context,
-                    message = "오류가 발생하였습니다"
-                )
+                onErrorToast(sendNumberUiState.exception, null)
             }
         }
         onDispose { initCallBack() }
@@ -198,10 +195,7 @@ fun SignUpScreen(
                 ) {
                     if (!isStrongEmail(email)) {
                         isLoading = false
-                        createToast(
-                            context = context,
-                            message = "이메일 형식이 올바르지 않습니다"
-                        )
+                        onErrorToast(null, "이메일 형식이 올바르지 않습니다")
                     } else {
                         signUpCallBack()
                         isLoading = true

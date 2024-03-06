@@ -3,6 +3,7 @@ package com.goms.sign_up.viewmodel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.goms.common.network.errorHandling
 import com.goms.common.result.Result
 import com.goms.domain.auth.SendNumberUseCase
 import com.goms.domain.auth.SighUpUseCase
@@ -29,7 +30,7 @@ class SignUpViewModel @Inject constructor(
     private val _sendNumberUiState = MutableStateFlow<Result<Unit>>(Result.Loading)
     val sendNumberUiState = _sendNumberUiState.asStateFlow()
 
-    private val _verifyNumberUiState = MutableStateFlow<Result<Unit>>(Result.Loading)
+    private val _verifyNumberUiState = MutableStateFlow<VerifyNumberUiState>(VerifyNumberUiState.Loading)
     val verifyNumberUiState = _verifyNumberUiState.asStateFlow()
 
     var name = savedStateHandle.getStateFlow(key = NAME, initialValue = "")
@@ -75,17 +76,23 @@ class SignUpViewModel @Inject constructor(
         verifyNumberUseCase(email = email, authCode = authCode)
             .onSuccess {
                 it.catch {  remoteError ->
-                    _verifyNumberUiState.value = Result.Error(remoteError)
+                    _verifyNumberUiState.value = VerifyNumberUiState.Error(remoteError)
+                    remoteError.errorHandling(
+                        notFoundAction = { _verifyNumberUiState.value = VerifyNumberUiState.NotFound }
+                    )
                 }.collect { result ->
-                    _verifyNumberUiState.value = Result.Success(result)
+                    _verifyNumberUiState.value = VerifyNumberUiState.Success
                 }
             }.onFailure {
-                _verifyNumberUiState.value = Result.Error(it)
+                _verifyNumberUiState.value = VerifyNumberUiState.Error(it)
+                it.errorHandling(
+                    notFoundAction = { _verifyNumberUiState.value = VerifyNumberUiState.NotFound }
+                )
             }
     }
 
     fun initVerifyNumber() {
-        _verifyNumberUiState.value = Result.Loading
+        _verifyNumberUiState.value = VerifyNumberUiState.Loading
     }
 
     fun onNameChange(value: String) {

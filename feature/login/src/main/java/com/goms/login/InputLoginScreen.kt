@@ -46,11 +46,13 @@ import com.goms.login.viewmodel.LoginUiState
 import com.goms.model.request.auth.LoginRequest
 import com.goms.ui.createToast
 import com.goms.ui.isStrongEmail
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun InputLoginRoute(
     onBackClick: () -> Unit,
     onMainClick: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     viewModel: LoginViewModel = hiltViewModel(),
 ) {
     val loginUiState by viewModel.loginUiState.collectAsStateWithLifecycle()
@@ -67,6 +69,7 @@ fun InputLoginRoute(
         saveTokenUiState = saveTokenUiState,
         onBackClick = onBackClick,
         onMainClick = onMainClick,
+        onErrorToast = onErrorToast,
         loginCallBack = {
             viewModel.login(
                 body = LoginRequest(
@@ -78,7 +81,6 @@ fun InputLoginRoute(
     )
 }
 
-
 @Composable
 fun InputLoginScreen(
     email: String,
@@ -89,6 +91,7 @@ fun InputLoginScreen(
     saveTokenUiState: Result<Unit>,
     onBackClick: () -> Unit,
     onMainClick: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     loginCallBack: () -> Unit
 ) {
     val context = LocalContext.current
@@ -121,19 +124,18 @@ fun InputLoginScreen(
                 isLoading = false
                 isError = true
                 errorText = "비밀번호가 일치하지 않습니다"
-                createToast(
-                    context = context,
-                    message = "비밀번호가 일치하지 않습니다"
-                )
+                onErrorToast(null, "비밀번호가 일치하지 않습니다")
             }
             is LoginUiState.NotFound -> {
                 isLoading = false
                 isError = true
                 errorText = "해당 유저가 존재하지 않습니다"
-                createToast(
-                    context = context,
-                    message = "해당 유저가 존재하지 않습니다"
-                )
+                onErrorToast(null, "해당 유저가 존재하지 않습니다")
+            }
+            is LoginUiState.Error -> {
+                isLoading = false
+                isError = true
+                onErrorToast(loginUiState.exception, null)
             }
         }
         onDispose {}
@@ -193,10 +195,7 @@ fun InputLoginScreen(
                 ) {
                     if (!isStrongEmail(email)) {
                         isLoading = false
-                        createToast(
-                            context = context,
-                            message = "이메일 형식이 올바르지 않습니다"
-                        )
+                        onErrorToast(null, "이메일 형식이 올바르지 않습니다")
                     } else {
                         loginCallBack()
                         isLoading = true

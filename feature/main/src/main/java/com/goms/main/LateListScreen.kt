@@ -43,7 +43,8 @@ import kotlinx.datetime.toLocalDateTime
 @Composable
 fun LateListRoute(
     viewModelStoreOwner: ViewModelStoreOwner,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
     MainViewModelProvider(viewModelStoreOwner = viewModelStoreOwner) { viewModel ->
         val getLateListUiState by viewModel.getLateListUiState.collectAsStateWithLifecycle()
@@ -51,7 +52,8 @@ fun LateListRoute(
         LateListScreen(
             getLateListUiState = getLateListUiState,
             onBackClick = onBackClick,
-            lateListCallBack = { viewModel.getLateList(it) }
+            lateListCallBack = { viewModel.getLateList(it) },
+            onErrorToast = onErrorToast
         )
     }
 }
@@ -61,6 +63,7 @@ fun LateListRoute(
 fun LateListScreen(
     getLateListUiState: GetLateListUiState,
     onBackClick: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     lateListCallBack: (LocalDate) -> Unit
 ) {
     val scrollState = rememberScrollState()
@@ -109,7 +112,8 @@ fun LateListScreen(
                 Spacer(modifier = Modifier.height(8.dp))
                 LateList(
                     getLateListUiState = getLateListUiState,
-                    onBottomSheetOpenClick = { onDatePickerBottomSheetOpenClick = true }
+                    onBottomSheetOpenClick = { onDatePickerBottomSheetOpenClick = true },
+                    onErrorToast = onErrorToast
                 )
             }
         }

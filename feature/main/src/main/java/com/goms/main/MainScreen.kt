@@ -44,7 +44,8 @@ fun MainRoute(
     onOutingStatusClick: () -> Unit,
     onLateListClick: () -> Unit,
     onStudentManagementClick: () -> Unit,
-    onQrcodeClick: (role: Authority) -> Unit
+    onQrcodeClick: (role: Authority) -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
     MainViewModelProvider(viewModelStoreOwner = viewModelStoreOwner) { viewModel ->
         val role by viewModel.role.collectAsStateWithLifecycle(initialValue = "")
@@ -63,6 +64,7 @@ fun MainRoute(
             onLateListClick = onLateListClick,
             onStudentManagementClick = onStudentManagementClick,
             onQrcodeClick = onQrcodeClick,
+            onErrorToast = onErrorToast,
             mainCallBack = {
                 viewModel.getProfile()
                 viewModel.getLateRankList()
@@ -83,6 +85,7 @@ fun MainScreen(
     onLateListClick: () -> Unit,
     onStudentManagementClick: () -> Unit,
     onQrcodeClick: (role: Authority) -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     mainCallBack: () -> Unit
 ) {
     var isPermissionRequest by rememberSaveable { mutableStateOf(false) }
@@ -131,17 +134,22 @@ fun MainScreen(
                         .padding(horizontal = 16.dp),
                     verticalArrangement = Arrangement.spacedBy(32.dp)
                 ) {
-                    MainProfileCard(getProfileUiState = getProfileUiState)
+                    MainProfileCard(
+                        getProfileUiState = getProfileUiState,
+                        onErrorToast = onErrorToast
+                    )
                     MainLateCard(
                         role = role,
-                        getLateRankListUiState = getLateRankListUiState
+                        getLateRankListUiState = getLateRankListUiState,
+                        onErrorToast = onErrorToast
                     ) {
                         onLateListClick()
                     }
                     MainOutingCard(
                         role = role,
                         getOutingListUiState = getOutingListUiState,
-                        getOutingCountUiState = getOutingCountUiState
+                        getOutingCountUiState = getOutingCountUiState,
+                        onErrorToast = onErrorToast
                     ) {
                         onOutingStatusClick()
                     }

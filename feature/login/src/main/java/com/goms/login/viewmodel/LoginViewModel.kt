@@ -42,10 +42,13 @@ class LoginViewModel @Inject constructor(
                         _loginUiState.value = LoginUiState.Success(result.data)
                         saveToken(result.data)
                     }
-                    is Result.Error -> result.exception.errorHandling(
-                        badRequestAction = { _loginUiState.value = LoginUiState.BadRequest },
-                        notFoundAction = { _loginUiState.value = LoginUiState.NotFound }
-                    )
+                    is Result.Error -> {
+                        _loginUiState.value = LoginUiState.Error(result.exception)
+                        result.exception.errorHandling(
+                            badRequestAction = { _loginUiState.value = LoginUiState.BadRequest },
+                            notFoundAction = { _loginUiState.value = LoginUiState.NotFound }
+                        )
+                    }
                 }
             }
     }
