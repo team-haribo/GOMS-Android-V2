@@ -15,8 +15,11 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 @HiltViewModel
 class SettingViewModel @Inject constructor (
+    private val authTokenDataSource: AuthTokenDataSource,
     private val getProfileUseCase: GetProfileUseCase,
 ) : ViewModel() {
+    val role = authTokenDataSource.getAuthority()
+
     private val _getProfileUiState = MutableStateFlow<GetProfileUiState>(GetProfileUiState.Loading)
     val getProfileUiState = _getProfileUiState.asStateFlow()
     fun getProfile() = viewModelScope.launch {
