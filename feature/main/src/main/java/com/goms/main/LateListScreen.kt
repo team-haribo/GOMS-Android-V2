@@ -67,8 +67,6 @@ fun LateListScreen(
     lateListCallBack: (LocalDate) -> Unit
 ) {
     val scrollState = rememberScrollState()
-    val focusManager = LocalFocusManager.current
-    val isKeyboardOpen by keyboardAsState()
     val datePickerState = rememberDatePickerState()
     var onDatePickerBottomSheetOpenClick by remember { mutableStateOf(false) }
     val selectedDateMillis = datePickerState.selectedDateMillis ?: getDefaultWednesday().toEpochMilliseconds()
@@ -80,12 +78,6 @@ fun LateListScreen(
         lateListCallBack(selectedLocalDate)
     }
 
-    LaunchedEffect(isKeyboardOpen) {
-        if (!isKeyboardOpen) {
-            focusManager.clearFocus()
-        }
-    }
-
     GomsTheme { colors, typography ->
         Column(
             modifier = Modifier
@@ -93,11 +85,6 @@ fun LateListScreen(
                 .background(colors.BACKGROUND)
                 .statusBarsPadding()
                 .navigationBarsPadding()
-                .pointerInput(Unit) {
-                    detectTapGestures {
-                        focusManager.clearFocus()
-                    }
-                }
         ) {
             GomsBackButton {
                 onBackClick()
