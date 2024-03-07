@@ -24,6 +24,7 @@ dependencies {
     implementation(project(":feature:login"))
     implementation(project(":feature:sign-up"))
     implementation(project(":feature:main"))
+    implementation(project(":feature:setting"))
     implementation(project(":feature:qrcode"))
 
     implementation(libs.junit)
