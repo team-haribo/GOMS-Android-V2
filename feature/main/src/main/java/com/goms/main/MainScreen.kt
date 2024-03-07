@@ -37,6 +37,9 @@ import com.goms.main.component.MainLateCard
 import com.goms.main.component.MainOutingCard
 import com.goms.main.component.MainProfileCard
 import com.goms.main.viewmodel.MainViewModelProvider
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
 @Composable
 fun MainRoute(
@@ -49,6 +52,7 @@ fun MainRoute(
 ) {
     MainViewModelProvider(viewModelStoreOwner = viewModelStoreOwner) { viewModel ->
         val role by viewModel.role.collectAsStateWithLifecycle(initialValue = "")
+        val isRefreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
         val getProfileUiState by viewModel.getProfileUiState.collectAsStateWithLifecycle()
         val getLateRankListUiState by viewModel.getLateRankListUiState.collectAsStateWithLifecycle()
         val getOutingListUiState by viewModel.getOutingListUiState.collectAsStateWithLifecycle()
@@ -56,6 +60,7 @@ fun MainRoute(
 
         MainScreen(
             role = if (role.isNotBlank()) Authority.valueOf(role) else Authority.ROLE_STUDENT,
+            isRefreshing = isRefreshing,
             getProfileUiState = getProfileUiState,
             getLateRankListUiState = getLateRankListUiState,
             getOutingListUiState = getOutingListUiState,
@@ -77,6 +82,7 @@ fun MainRoute(
 @Composable
 fun MainScreen(
     role: Authority,
+    isRefreshing: Boolean,
     getProfileUiState: GetProfileUiState,
     getLateRankListUiState: GetLateRankListUiState,
     getOutingListUiState: GetOutingListUiState,
@@ -111,57 +117,71 @@ fun MainScreen(
     }
 
     val scrollState = rememberScrollState()
+    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = isRefreshing)
 
     GomsTheme { colors, typography ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .statusBarsPadding()
-                .navigationBarsPadding()
-                .background(colors.BACKGROUND)
-        ) {
-            Column {
-                GomsTopBar(
-                    role = role,
-                    icon = { SettingIcon(tint = colors.G7) },
-                    onSettingClick = {},
-                    onAdminClick = { onStudentManagementClick() }
+        SwipeRefresh(
+            state = swipeRefreshState,
+            onRefresh = { mainCallBack() },
+            indicator = { state, refreshTrigger ->
+                SwipeRefreshIndicator(
+                    state = state,
+                    refreshTriggerDistance = refreshTrigger,
+                    backgroundColor = colors.G2,
+                    contentColor = colors.WHITE
                 )
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .verticalScroll(scrollState)
-                        .padding(horizontal = 16.dp),
-                    verticalArrangement = Arrangement.spacedBy(32.dp)
-                ) {
-                    MainProfileCard(
-                        getProfileUiState = getProfileUiState,
-                        onErrorToast = onErrorToast
+            }
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .statusBarsPadding()
+                    .navigationBarsPadding()
+                    .background(colors.BACKGROUND)
+            ) {
+                Column {
+                    GomsTopBar(
+                        role = role,
+                        icon = { SettingIcon(tint = colors.G7) },
+                        onSettingClick = {},
+                        onAdminClick = { onStudentManagementClick() }
                     )
-                    MainLateCard(
-                        role = role,
-                        getLateRankListUiState = getLateRankListUiState,
-                        onErrorToast = onErrorToast
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .verticalScroll(scrollState)
+                            .padding(horizontal = 16.dp),
+                        verticalArrangement = Arrangement.spacedBy(32.dp)
                     ) {
-                        onLateListClick()
-                    }
-                    MainOutingCard(
-                        role = role,
-                        getOutingListUiState = getOutingListUiState,
-                        getOutingCountUiState = getOutingCountUiState,
-                        onErrorToast = onErrorToast
-                    ) {
-                        onOutingStatusClick()
+                        MainProfileCard(
+                            getProfileUiState = getProfileUiState,
+                            onErrorToast = onErrorToast
+                        )
+                        MainLateCard(
+                            role = role,
+                            getLateRankListUiState = getLateRankListUiState,
+                            onErrorToast = onErrorToast
+                        ) {
+                            onLateListClick()
+                        }
+                        MainOutingCard(
+                            role = role,
+                            getOutingListUiState = getOutingListUiState,
+                            getOutingCountUiState = getOutingCountUiState,
+                            onErrorToast = onErrorToast
+                        ) {
+                            onOutingStatusClick()
+                        }
                     }
                 }
-            }
-            GomsFloatingButton(
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(end = 16.dp, bottom = 16.dp),
-                role = role
-            ) {
-                onQrcodeClick(role)
+                GomsFloatingButton(
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(end = 16.dp, bottom = 16.dp),
+                    role = role
+                ) {
+                    onQrcodeClick(role)
+                }
             }
         }
     }

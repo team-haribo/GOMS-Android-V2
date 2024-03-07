@@ -55,6 +55,7 @@ protobufPlugin = "0.9.4"
 retrofit = "2.9.0"
 retrofitKotlinxSerializableJson = "1.0.0"
 room = "2.6.1"
+swiperefresh = "0.27.0"
 turbine = "1.0.0"
 zxing = "3.5.1"
 
@@ -127,6 +128,7 @@ retrofit-kotlin-serialization = { group = "com.jakewharton.retrofit", name = "re
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+swiperefresh = { group = "com.google.accompanist", name = "accompanist-swiperefresh", version.ref = "swiperefresh" }
 turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
 zxing-core = { group = "com.google.zxing", name = "core", version.ref = "zxing" }
 
