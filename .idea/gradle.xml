@@ -39,6 +39,7 @@
             <option value="$PROJECT_DIR$/feature/login" />
             <option value="$PROJECT_DIR$/feature/main" />
             <option value="$PROJECT_DIR$/feature/qrcode" />
+            <option value="$PROJECT_DIR$/feature/setting" />
             <option value="$PROJECT_DIR$/feature/sign-up" />
           </set>
         </option>
