@@ -100,6 +100,12 @@ fun NumberScreen(
         when (verifyNumberUiState) {
             is VerifyNumberUiState.Loading -> Unit
             is VerifyNumberUiState.Success -> onPasswordClick()
+            is VerifyNumberUiState.BadRequest -> {
+                isLoading = false
+                isError = true
+                errorText = "인증번호가 일치하지 않습니다"
+                onErrorToast(null, "인증번호가 일치하지 않습니다")
+            }
             is VerifyNumberUiState.NotFound -> {
                 isLoading = false
                 isError = true
