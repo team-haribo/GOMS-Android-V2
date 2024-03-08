@@ -32,7 +32,7 @@ fun PasswordChangeButton(
                 modifier = Modifier.fillMaxWidth(),
                 color = colors.WHITE.copy(0.15f)
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(22.dp))
             Row(
                 modifier = modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
@@ -47,7 +47,7 @@ fun PasswordChangeButton(
                     tint = colors.WHITE
                 )
             }
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(22.dp))
             Divider(
                 modifier = Modifier.fillMaxWidth(),
                 color = colors.WHITE.copy(0.15f)
