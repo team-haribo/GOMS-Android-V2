@@ -24,7 +24,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -44,9 +43,7 @@ import com.goms.login.component.InputLoginText
 import com.goms.login.viewmodel.LoginViewModel
 import com.goms.login.viewmodel.LoginUiState
 import com.goms.model.request.auth.LoginRequest
-import com.goms.ui.createToast
 import com.goms.ui.isStrongEmail
-import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun InputLoginRoute(
@@ -94,7 +91,6 @@ fun InputLoginScreen(
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     loginCallBack: () -> Unit
 ) {
-    val context = LocalContext.current
     val focusManager = LocalFocusManager.current
     val isKeyboardOpen by keyboardAsState()
     val animatedSpacerHeight by animateDpAsState(targetValue = if (!isKeyboardOpen) 100.dp else 16.dp)
