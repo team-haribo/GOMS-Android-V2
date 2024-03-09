@@ -29,7 +29,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.goms.common.result.Result
 import com.goms.design_system.component.button.ButtonState
 import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.button.GomsButton
@@ -42,6 +41,7 @@ import com.goms.model.enum.Gender
 import com.goms.model.enum.Major
 import com.goms.model.request.auth.SignUpRequest
 import com.goms.sign_up.component.PasswordText
+import com.goms.sign_up.viewmodel.SignUpUiState
 import com.goms.sign_up.viewmodel.SignUpViewModelProvider
 import com.goms.ui.isStrongPassword
 
@@ -87,7 +87,7 @@ fun PasswordScreen(
     checkPassword: String,
     onPasswordChange: (String) -> Unit,
     onCheckPasswordChange: (String) -> Unit,
-    signUpUiState: Result<Unit>,
+    signUpUiState: SignUpUiState,
     onBackClick: () -> Unit,
     onLoginClick: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
@@ -108,9 +108,14 @@ fun PasswordScreen(
 
     DisposableEffect(signUpUiState) {
         when (signUpUiState) {
-            is Result.Loading -> Unit
-            is Result.Success -> onLoginClick()
-            is Result.Error -> {
+            is SignUpUiState.Loading -> Unit
+            is SignUpUiState.Success -> onLoginClick()
+            is SignUpUiState.Conflict -> {
+                isLoading = false
+                isError = true
+                onErrorToast(null, "이미 존재하는 계정입니다")
+            }
+            is SignUpUiState.Error -> {
                 isLoading = false
                 isError = true
                 onErrorToast(signUpUiState.exception, null)
