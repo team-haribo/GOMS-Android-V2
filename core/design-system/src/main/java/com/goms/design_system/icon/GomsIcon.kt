@@ -3,13 +3,10 @@ package com.goms.design_system.icon
 import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import com.goms.design_system.R
-import com.goms.design_system.util.shadow
 
 @Composable
 fun GomsIcon(
@@ -64,6 +61,19 @@ fun ChevronRightIcon(
 ) {
     Image(
         painter = painterResource(id = R.drawable.ic_chevron_right),
+        contentDescription = "ChevronRight Icon",
+        modifier = modifier,
+        colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
+    )
+}
+
+@Composable
+fun ChevronDownIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+) {
+    Image(
+        painter = painterResource(id = R.drawable.ic_chevron_down),
         contentDescription = "ChevronRight Icon",
         modifier = modifier,
         colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
