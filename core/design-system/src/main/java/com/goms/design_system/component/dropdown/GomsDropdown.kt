@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
+import com.goms.design_system.component.clickable.gomsClickable
 import com.goms.design_system.theme.GomsTheme
 
 enum class DropdownState(val value: String) {
@@ -101,7 +102,7 @@ fun GomsDropdown(
                                         )
                                         .background(backgroundColor)
                                         .padding(12.dp)
-                                        .clickable {
+                                        .gomsClickable {
                                             onItemClick(index)
                                         },
                                     contentAlignment = Alignment.CenterStart
