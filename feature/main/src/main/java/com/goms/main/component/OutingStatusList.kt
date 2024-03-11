@@ -44,13 +44,16 @@ fun OutingStatusList(
     getOutingListUiState: GetOutingListUiState,
     getOutingCountUiState: GetOutingCountUiState,
     outingSearchUiState: OutingSearchUiState,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     onClick: (UUID) -> Unit
 ) {
     when (getOutingCountUiState) {
         GetOutingCountUiState.Loading -> {
             ShimmerOutingStatusListComponent(modifier = modifier)
         }
-        is GetOutingCountUiState.Error -> Unit
+        is GetOutingCountUiState.Error -> {
+            onErrorToast(getOutingCountUiState.exception, "외출학생 숫자를 가져오지 못했습니다")
+        }
         GetOutingCountUiState.Empty -> {
             Column(
                 modifier = Modifier
@@ -65,13 +68,17 @@ fun OutingStatusList(
                 OutingSearchUiState.Loading -> {
                     ShimmerOutingStatusListComponent(modifier = modifier)
                 }
-                is OutingSearchUiState.Error -> Unit
+                is OutingSearchUiState.Error -> {
+                    onErrorToast(outingSearchUiState.exception, "외출자 검색이 실패했습니다")
+                }
                 OutingSearchUiState.QueryEmpty -> {
                     when (getOutingListUiState) {
                         GetOutingListUiState.Loading -> {
                             ShimmerOutingStatusListComponent(modifier = modifier)
                         }
-                        is GetOutingListUiState.Error -> Unit
+                        is GetOutingListUiState.Error -> {
+                            onErrorToast(getOutingListUiState.exception, "외출자 정보를 가져오지 못했습니다")
+                        }
                         is GetOutingListUiState.Success -> {
                             val list = getOutingListUiState.getOutingListResponse
 

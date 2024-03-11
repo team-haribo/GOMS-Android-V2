@@ -29,27 +29,28 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.goms.common.result.Result
 import com.goms.design_system.component.button.ButtonState
 import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.button.GomsButton
 import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
 import com.goms.design_system.component.textfield.GomsPasswordTextField
 import com.goms.design_system.theme.GomsTheme
-import com.goms.design_system.util.isStrongPassword
 import com.goms.design_system.util.keyboardAsState
 import com.goms.design_system.util.lockScreenOrientation
 import com.goms.model.enum.Gender
 import com.goms.model.enum.Major
 import com.goms.model.request.auth.SignUpRequest
 import com.goms.sign_up.component.PasswordText
+import com.goms.sign_up.viewmodel.SignUpUiState
 import com.goms.sign_up.viewmodel.SignUpViewModelProvider
+import com.goms.ui.isStrongPassword
 
 @Composable
 fun PasswordRoute(
     viewModelStoreOwner: ViewModelStoreOwner,
     onBackClick: () -> Unit,
     onLoginClick: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
     SignUpViewModelProvider(viewModelStoreOwner = viewModelStoreOwner) { viewModel ->
         val signUpUiState by viewModel.signUpUiState.collectAsStateWithLifecycle()
@@ -64,6 +65,7 @@ fun PasswordRoute(
             signUpUiState = signUpUiState,
             onBackClick = onBackClick,
             onLoginClick = onLoginClick,
+            onErrorToast = onErrorToast,
             passwordCallback = {
                 viewModel.signUp(
                     body = SignUpRequest(
@@ -85,9 +87,10 @@ fun PasswordScreen(
     checkPassword: String,
     onPasswordChange: (String) -> Unit,
     onCheckPasswordChange: (String) -> Unit,
-    signUpUiState: Result<Unit>,
+    signUpUiState: SignUpUiState,
     onBackClick: () -> Unit,
     onLoginClick: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     passwordCallback: () -> Unit
 ) {
     val focusManager = LocalFocusManager.current
@@ -105,12 +108,17 @@ fun PasswordScreen(
 
     DisposableEffect(signUpUiState) {
         when (signUpUiState) {
-            is Result.Loading -> Unit
-            is Result.Success -> onLoginClick()
-            is Result.Error -> {
+            is SignUpUiState.Loading -> Unit
+            is SignUpUiState.Success -> onLoginClick()
+            is SignUpUiState.Conflict -> {
                 isLoading = false
                 isError = true
-                errorText = "오류가 발생하였습니다"
+                onErrorToast(null, "이미 존재하는 계정입니다")
+            }
+            is SignUpUiState.Error -> {
+                isLoading = false
+                isError = true
+                onErrorToast(signUpUiState.exception, null)
             }
         }
         onDispose {}
@@ -121,7 +129,7 @@ fun PasswordScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(colors.BLACK)
+                .background(colors.BACKGROUND)
                 .statusBarsPadding()
                 .navigationBarsPadding()
                 .imePadding()
@@ -170,9 +178,11 @@ fun PasswordScreen(
                     if (password != checkPassword) {
                         isError = true
                         errorText = "비밀번호가 일치하지 않습니다"
+                        onErrorToast(null, "비밀번호가 일치하지 않습니다")
                     } else if (!isStrongPassword(password)) {
                         isError = true
                         errorText = "비밀번호 요구사항을 충족하지 않습니다"
+                        onErrorToast(null, "비밀번호 요구사항을 충족하지 않습니다")
                     } else {
                         passwordCallback()
                         isLoading = true

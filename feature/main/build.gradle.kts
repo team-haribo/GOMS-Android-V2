@@ -6,3 +6,7 @@ plugins {
 android {
     namespace = "com.goms.main"
 }
+
+dependencies {
+    implementation(libs.swiperefresh)
+}

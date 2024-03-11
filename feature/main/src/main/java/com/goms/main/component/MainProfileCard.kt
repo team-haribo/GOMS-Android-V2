@@ -35,6 +35,7 @@ import com.goms.ui.toText
 fun MainProfileCard(
     modifier: Modifier = Modifier,
     getProfileUiState: GetProfileUiState,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
     when (getProfileUiState) {
         GetProfileUiState.Loading -> {
@@ -48,7 +49,9 @@ fun MainProfileCard(
                 data = data
             )
         }
-        is GetProfileUiState.Error -> Unit
+        is GetProfileUiState.Error -> {
+            onErrorToast(getProfileUiState.exception, "사용자 정보를 가져오지 못했습니다")
+        }
     }
 }
 

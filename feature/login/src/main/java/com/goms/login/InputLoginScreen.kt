@@ -43,11 +43,13 @@ import com.goms.login.component.InputLoginText
 import com.goms.login.viewmodel.LoginViewModel
 import com.goms.login.viewmodel.LoginUiState
 import com.goms.model.request.auth.LoginRequest
+import com.goms.ui.isStrongEmail
 
 @Composable
 fun InputLoginRoute(
     onBackClick: () -> Unit,
     onMainClick: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     viewModel: LoginViewModel = hiltViewModel(),
 ) {
     val loginUiState by viewModel.loginUiState.collectAsStateWithLifecycle()
@@ -64,6 +66,7 @@ fun InputLoginRoute(
         saveTokenUiState = saveTokenUiState,
         onBackClick = onBackClick,
         onMainClick = onMainClick,
+        onErrorToast = onErrorToast,
         loginCallBack = {
             viewModel.login(
                 body = LoginRequest(
@@ -75,7 +78,6 @@ fun InputLoginRoute(
     )
 }
 
-
 @Composable
 fun InputLoginScreen(
     email: String,
@@ -86,6 +88,7 @@ fun InputLoginScreen(
     saveTokenUiState: Result<Unit>,
     onBackClick: () -> Unit,
     onMainClick: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     loginCallBack: () -> Unit
 ) {
     val focusManager = LocalFocusManager.current
@@ -113,11 +116,22 @@ fun InputLoginScreen(
                     }
                 }
             }
-
+            is LoginUiState.BadRequest -> {
+                isLoading = false
+                isError = true
+                errorText = "비밀번호가 일치하지 않습니다"
+                onErrorToast(null, "비밀번호가 일치하지 않습니다")
+            }
+            is LoginUiState.NotFound -> {
+                isLoading = false
+                isError = true
+                errorText = "해당 유저가 존재하지 않습니다"
+                onErrorToast(null, "해당 유저가 존재하지 않습니다")
+            }
             is LoginUiState.Error -> {
                 isLoading = false
                 isError = true
-                errorText = "로그인에 실패하였습니다"
+                onErrorToast(loginUiState.exception, null)
             }
         }
         onDispose {}
@@ -128,7 +142,7 @@ fun InputLoginScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(colors.BLACK)
+                .background(colors.BACKGROUND)
                 .statusBarsPadding()
                 .navigationBarsPadding()
                 .imePadding()
@@ -175,8 +189,13 @@ fun InputLoginScreen(
                     state = if (email.isNotBlank() && password.isNotBlank()) ButtonState.Normal
                     else ButtonState.Enable
                 ) {
-                    loginCallBack()
-                    isLoading = true
+                    if (!isStrongEmail(email)) {
+                        isLoading = false
+                        onErrorToast(null, "이메일 형식이 올바르지 않습니다")
+                    } else {
+                        loginCallBack()
+                        isLoading = true
+                    }
                 }
                 Spacer(modifier = Modifier.height(animatedSpacerHeight))
             }

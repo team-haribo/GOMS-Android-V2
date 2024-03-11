@@ -34,6 +34,7 @@ import com.goms.ui.toText
 fun LateList(
     modifier: Modifier = Modifier,
     getLateListUiState: GetLateListUiState,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     onBottomSheetOpenClick: () -> Unit
 ) {
     GomsTheme { colors, typography ->
@@ -62,7 +63,9 @@ fun LateList(
                         }
                     }
                 }
-                is GetLateListUiState.Error -> Unit
+                is GetLateListUiState.Error -> {
+                    onErrorToast(getLateListUiState.exception, "지각자 리스트 정보를 가져오지 못했습니다")
+                }
                 GetLateListUiState.Empty -> {
                     Column(
                         modifier = Modifier

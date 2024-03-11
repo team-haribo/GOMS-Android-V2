@@ -40,6 +40,7 @@ fun MainOutingCard(
     role: Authority,
     getOutingListUiState: GetOutingListUiState,
     getOutingCountUiState: GetOutingCountUiState,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     onClick: () -> Unit
 ) {
     GomsTheme { colors, typography ->
@@ -93,7 +94,9 @@ fun MainOutingCard(
                                     .shimmerEffect(color = colors.WHITE)
                             )
                     }
-                    is GetOutingCountUiState.Error -> Unit
+                    is GetOutingCountUiState.Error -> {
+                        onErrorToast(getOutingCountUiState.exception, "외출학생 숫자를 가져오지 못했습니다")
+                    }
                     GetOutingCountUiState.Empty -> {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
@@ -131,7 +134,9 @@ fun MainOutingCard(
                                     }
                                 }
                             }
-                            is GetOutingListUiState.Error -> Unit
+                            is GetOutingListUiState.Error -> {
+                                onErrorToast(getOutingListUiState.exception, "외출자 정보를 가져오지 못했습니다")
+                            }
                             is GetOutingListUiState.Success -> {
                                 val count = getOutingCountUiState.getOutingCountResponse
                                 val list = getOutingListUiState.getOutingListResponse

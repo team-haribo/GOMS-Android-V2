@@ -1,7 +1,6 @@
 package com.goms.qrcode
 
-import android.util.Log
-import android.widget.Toast
+import android.content.pm.ActivityInfo
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -14,18 +13,17 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goms.design_system.component.button.GomsBackButton
+import com.goms.design_system.util.lockScreenOrientation
 import com.goms.qrcode.component.QrcodeGenerateText
 import com.goms.qrcode.component.QrcodeGenerateTimer
 import com.goms.qrcode.util.QrcodeGenerator
 import com.goms.qrcode.viewmodel.GetOutingUUIDUiState
 import com.goms.qrcode.viewmodel.QrcodeViewModel
-import java.util.UUID
 
 @Composable
 fun QrcodeGenerateRoute(
@@ -33,6 +31,7 @@ fun QrcodeGenerateRoute(
     viewModel: QrcodeViewModel = hiltViewModel(),
     onBackClick: () -> Unit,
     onTimerFinish: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
     val getOutingUUIDUiState by viewModel.getOutingUUIDState.collectAsStateWithLifecycle()
 
@@ -43,7 +42,8 @@ fun QrcodeGenerateRoute(
         },
         onBackClick = onBackClick,
         onRemoteError = onRemoteError,
-        onTimerFinish = onTimerFinish
+        onTimerFinish = onTimerFinish,
+        onErrorToast = onErrorToast
     )
 }
 
@@ -53,12 +53,14 @@ fun QrcodeGenerateScreen(
     onBackClick: () -> Unit,
     onQrCreate: () -> Unit,
     onRemoteError: () -> Unit,
-    onTimerFinish: () -> Unit
+    onTimerFinish: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
     LaunchedEffect("qr create") {
         onQrCreate()
     }
 
+    lockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -81,8 +83,8 @@ fun QrcodeGenerateScreen(
                     Image(painter = QrcodeGenerator(content = data.outingUUID), contentDescription = "outing qrcode image" )
                 }
                 is GetOutingUUIDUiState.Error -> {
-                    Toast.makeText(LocalContext.current,"네트워크 에러", Toast.LENGTH_LONG).show()
-                    onRemoteError
+                    onRemoteError()
+                    onErrorToast(getOutingUUIDUiState.exception, null)
                 }
             }
             Spacer(modifier = Modifier.height(32.dp))

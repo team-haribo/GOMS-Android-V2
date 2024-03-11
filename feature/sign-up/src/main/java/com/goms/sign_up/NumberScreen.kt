@@ -28,7 +28,6 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.goms.common.result.Result
 import com.goms.design_system.component.button.ButtonState
 import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.button.GomsButton
@@ -40,12 +39,14 @@ import com.goms.design_system.util.lockScreenOrientation
 import com.goms.model.request.auth.SendNumberRequest
 import com.goms.sign_up.component.NumberText
 import com.goms.sign_up.viewmodel.SignUpViewModelProvider
+import com.goms.sign_up.viewmodel.VerifyNumberUiState
 
 @Composable
 fun NumberRoute(
     viewModelStoreOwner: ViewModelStoreOwner,
     onBackClick: () -> Unit,
     onPasswordClick: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
     SignUpViewModelProvider(viewModelStoreOwner = viewModelStoreOwner) { viewModel ->
         val verifyNumberUiState by viewModel.verifyNumberUiState.collectAsState()
@@ -63,6 +64,7 @@ fun NumberRoute(
                     authCode = viewModel.number.value
                 )
             },
+            onErrorToast = onErrorToast,
             resentCallBack = { viewModel.sendNumber(body = SendNumberRequest("${viewModel.email.value}@gsm.hs.kr")) },
             initCallBack = { viewModel.initVerifyNumber() }
         )
@@ -73,10 +75,11 @@ fun NumberRoute(
 fun NumberScreen(
     number: String,
     onNumberChange: (String) -> Unit,
-    verifyNumberUiState: Result<Unit>,
+    verifyNumberUiState: VerifyNumberUiState,
     onBackClick: () -> Unit,
     onPasswordClick: () -> Unit,
     numberCallback: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     resentCallBack: () -> Unit,
     initCallBack: () -> Unit
 ) {
@@ -95,12 +98,24 @@ fun NumberScreen(
 
     DisposableEffect(verifyNumberUiState) {
         when (verifyNumberUiState) {
-            is Result.Loading -> Unit
-            is Result.Success -> onPasswordClick()
-            is Result.Error -> {
+            is VerifyNumberUiState.Loading -> Unit
+            is VerifyNumberUiState.Success -> onPasswordClick()
+            is VerifyNumberUiState.BadRequest -> {
+                isLoading = false
+                isError = true
+                errorText = "인증번호가 일치하지 않습니다"
+                onErrorToast(null, "인증번호가 일치하지 않습니다")
+            }
+            is VerifyNumberUiState.NotFound -> {
                 isLoading = false
                 isError = true
                 errorText = "잘못된 인증번호입니다"
+                onErrorToast(null, "잘못된 인증번호입니다")
+            }
+            is VerifyNumberUiState.Error -> {
+                isLoading = false
+                isError = true
+                onErrorToast(verifyNumberUiState.exception, null)
             }
         }
         onDispose { initCallBack() }
@@ -111,7 +126,7 @@ fun NumberScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(colors.BLACK)
+                .background(colors.BACKGROUND)
                 .statusBarsPadding()
                 .navigationBarsPadding()
                 .imePadding()

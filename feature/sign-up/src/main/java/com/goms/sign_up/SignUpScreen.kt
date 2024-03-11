@@ -45,12 +45,14 @@ import com.goms.model.enum.Major
 import com.goms.model.request.auth.SendNumberRequest
 import com.goms.sign_up.component.SignUpText
 import com.goms.sign_up.viewmodel.SignUpViewModelProvider
+import com.goms.ui.isStrongEmail
 
 @Composable
 fun SignUpRoute(
     viewModelStoreOwner: ViewModelStoreOwner,
     onBackClick: () -> Unit,
     onNumberClick: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
     SignUpViewModelProvider(viewModelStoreOwner = viewModelStoreOwner) { viewModel ->
         val sendNumberUiState by viewModel.sendNumberUiState.collectAsState()
@@ -71,6 +73,7 @@ fun SignUpRoute(
             sendNumberUiState = sendNumberUiState,
             onBackClick = onBackClick,
             onNumberClick = onNumberClick,
+            onErrorToast = onErrorToast,
             signUpCallBack = { viewModel.sendNumber(body = SendNumberRequest("${viewModel.email.value}@gsm.hs.kr")) },
             initCallBack = { viewModel.initSendNumber() }
         )
@@ -91,12 +94,12 @@ fun SignUpScreen(
     sendNumberUiState: Result<Unit>,
     onBackClick: () -> Unit,
     onNumberClick: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     signUpCallBack: () -> Unit,
     initCallBack: () -> Unit
 ) {
     val focusManager = LocalFocusManager.current
     val isKeyboardOpen by keyboardAsState()
-
     var onGenderBottomSheetOpenClick by rememberSaveable { mutableStateOf(false) }
     var onMajorBottomSheetOpenClick by rememberSaveable { mutableStateOf(false) }
     var isLoading by remember { mutableStateOf(false) }
@@ -111,7 +114,10 @@ fun SignUpScreen(
         when (sendNumberUiState) {
             is Result.Loading -> Unit
             is Result.Success -> onNumberClick()
-            is Result.Error -> isLoading = false
+            is Result.Error -> {
+                isLoading = false
+                onErrorToast(sendNumberUiState.exception, null)
+            }
         }
         onDispose { initCallBack() }
     }
@@ -121,7 +127,7 @@ fun SignUpScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(colors.BLACK)
+                .background(colors.BACKGROUND)
                 .statusBarsPadding()
                 .navigationBarsPadding()
                 .pointerInput(Unit) {
@@ -187,8 +193,13 @@ fun SignUpScreen(
                     state = if (name.isNotBlank() && email.isNotBlank() && gender.isNotBlank() && major.isNotBlank()) ButtonState.Normal
                     else ButtonState.Enable
                 ) {
-                    signUpCallBack()
-                    isLoading = true
+                    if (!isStrongEmail(email)) {
+                        isLoading = false
+                        onErrorToast(null, "이메일 형식이 올바르지 않습니다")
+                    } else {
+                        signUpCallBack()
+                        isLoading = true
+                    }
                 }
                 Spacer(modifier = Modifier.height(100.dp))
             }

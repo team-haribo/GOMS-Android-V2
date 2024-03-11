@@ -3,6 +3,7 @@ package com.goms.login.viewmodel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.goms.common.network.errorHandling
 import com.goms.common.result.Result
 import com.goms.common.result.asResult
 import com.goms.domain.auth.LoginUseCase
@@ -41,7 +42,13 @@ class LoginViewModel @Inject constructor(
                         _loginUiState.value = LoginUiState.Success(result.data)
                         saveToken(result.data)
                     }
-                    is Result.Error -> _loginUiState.value = LoginUiState.Error(result.exception)
+                    is Result.Error -> {
+                        _loginUiState.value = LoginUiState.Error(result.exception)
+                        result.exception.errorHandling(
+                            badRequestAction = { _loginUiState.value = LoginUiState.BadRequest },
+                            notFoundAction = { _loginUiState.value = LoginUiState.NotFound }
+                        )
+                    }
                 }
             }
     }

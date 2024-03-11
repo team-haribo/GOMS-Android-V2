@@ -45,7 +45,8 @@ import java.util.UUID
 @Composable
 fun OutingStatusRoute(
     viewModelStoreOwner: ViewModelStoreOwner,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
     MainViewModelProvider(viewModelStoreOwner = viewModelStoreOwner) { viewModel ->
         val role by viewModel.role.collectAsStateWithLifecycle(initialValue = "")
@@ -68,6 +69,7 @@ fun OutingStatusRoute(
             getOutingCountUiState = getOutingCountUiState,
             outingSearchUiState = outingSearchUiState,
             onBackClick = onBackClick,
+            onErrorToast = onErrorToast,
             outingSearchCallBack = { viewModel.outingSearch(it) },
             deleteOutingCallBack = { viewModel.deleteOuting(it) }
         )
@@ -83,6 +85,7 @@ fun OutingStatusScreen(
     getOutingCountUiState: GetOutingCountUiState,
     outingSearchUiState: OutingSearchUiState,
     onBackClick: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     outingSearchCallBack: (String) -> Unit,
     deleteOutingCallBack: (UUID) -> Unit
 ) {
@@ -118,7 +121,7 @@ fun OutingStatusScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(colors.BLACK)
+                .background(colors.BACKGROUND)
                 .statusBarsPadding()
                 .navigationBarsPadding()
                 .pointerInput(Unit) {
@@ -152,7 +155,8 @@ fun OutingStatusScreen(
                     role = role,
                     getOutingListUiState = getOutingListUiState,
                     getOutingCountUiState = getOutingCountUiState,
-                    outingSearchUiState = outingSearchUiState
+                    outingSearchUiState = outingSearchUiState,
+                    onErrorToast = onErrorToast
                 ) { selectedUuid ->
                     uuid = selectedUuid
                     openDialog = true

@@ -44,6 +44,7 @@ fun MainLateCard(
     modifier: Modifier = Modifier,
     role: Authority,
     getLateRankListUiState: GetLateRankListUiState,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     onClick: () -> Unit
 ) {
     var componentWidth by remember { mutableStateOf(0.dp) }
@@ -111,7 +112,9 @@ fun MainLateCard(
                             }
                         }
                     }
-                    is GetLateRankListUiState.Error -> Unit
+                    is GetLateRankListUiState.Error -> {
+                        onErrorToast(getLateRankListUiState.exception, "지각자 랭킹 정보를 가져오지 못했습니다")
+                    }
                 }
             }
         }

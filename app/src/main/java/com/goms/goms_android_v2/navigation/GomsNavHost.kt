@@ -1,17 +1,22 @@
 package com.goms.goms_android_v2.navigation
 
+import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.navigation.compose.NavHost
+import com.goms.common.exception.*
 import com.goms.goms_android_v2.ui.GomsAppState
 import com.goms.login.navigation.inputLoginScreen
 import com.goms.login.navigation.loginRoute
 import com.goms.login.navigation.loginScreen
 import com.goms.login.navigation.navigateToInputLogin
+import com.goms.login.navigation.navigateToLogin
 import com.goms.main.navigation.lateListScreen
 import com.goms.main.navigation.mainScreen
 import com.goms.main.navigation.navigateToLateList
+import com.goms.main.navigation.navigateToMain
 import com.goms.main.navigation.navigateToOutingStatus
 import com.goms.main.navigation.navigateToStudentManagement
 import com.goms.main.navigation.outingStatusScreen
@@ -29,6 +34,7 @@ import com.goms.sign_up.navigation.navigateToSignUp
 import com.goms.sign_up.navigation.numberScreen
 import com.goms.sign_up.navigation.passwordScreen
 import com.goms.sign_up.navigation.signUpScreen
+import com.goms.ui.createToast
 
 @Composable
 fun GomsNavHost(
@@ -36,10 +42,27 @@ fun GomsNavHost(
     modifier: Modifier = Modifier,
     startDestination: String = loginRoute
 ) {
+    val context = LocalContext.current
     val navController = appState.navController
     val signUpViewModelStoreOwner = checkNotNull(LocalViewModelStoreOwner.current)
     val settingViewModelStoreOwner = checkNotNull(LocalViewModelStoreOwner.current)
     val mainViewModelStoreOwner = checkNotNull(LocalViewModelStoreOwner.current)
+
+    val onErrorToast: (throwable: Throwable?, message: String?) -> Unit = { throwable, message ->
+        val errorMessage = throwable?.let {
+            when (it) {
+                is ForBiddenException -> "학생회 권한인 학생만 요청 가능해요"
+                is TimeOutException -> "시간이 너무 오래 걸려요"
+                is ServerException -> "서버 에러, 관리자에게 문의하세요"
+                is NoInternetException -> "네트워크가 불안정합니다, 데이터나 와이파이 연결 상태를 확인해주세요"
+                is OtherHttpException -> "알 수 없는 오류가 발생했습니다"
+                else -> message
+            }
+        } ?: message ?: "오류가 발생했습니다"
+
+        createToast(context, errorMessage)
+    }
+
     NavHost(
         navController = navController,
         startDestination = startDestination,
@@ -51,22 +74,26 @@ fun GomsNavHost(
         )
         inputLoginScreen(
             onBackClick = navController::popBackStack,
-            onMainClick = { appState.navigateToTopLevelDestination(TopLevelDestination.MAIN) }
+            onMainClick = { appState.navigateToTopLevelDestination(TopLevelDestination.MAIN) },
+            onErrorToast = onErrorToast
         )
         signUpScreen(
             viewModelStoreOwner = signUpViewModelStoreOwner,
             onBackClick = navController::popBackStack,
-            onNumberClick = navController::navigateToNumber
+            onNumberClick = navController::navigateToNumber,
+            onErrorToast = onErrorToast
         )
         numberScreen(
             viewModelStoreOwner = signUpViewModelStoreOwner,
             onBackClick = navController::popBackStack,
-            onPasswordClick = navController::navigateToPassword
+            onPasswordClick = navController::navigateToPassword,
+            onErrorToast = onErrorToast
         )
         passwordScreen(
             viewModelStoreOwner = signUpViewModelStoreOwner,
             onBackClick = navController::popBackStack,
-            onLoginClick = { appState.navigateToTopLevelDestination(TopLevelDestination.LOGIN) }
+            onLoginClick = { appState.navigateToTopLevelDestination(TopLevelDestination.LOGIN) },
+            onErrorToast = onErrorToast
         )
         mainScreen(
             viewModelStoreOwner = mainViewModelStoreOwner,
@@ -80,26 +107,32 @@ fun GomsNavHost(
                     navController.navigateToQrGenerate()
                 }
             },
+            onErrorToast = onErrorToast
+            },
             onSettingClick = navController::navigateToSettingScreen
         )
         qrcodeScanScreen(
             onPermissionBlock = navController::popBackStack,
             onError = navController::popBackStack,
             onSuccess = navController::popBackStack,
-            onBackClick = navController::popBackStack
+            onBackClick = navController::popBackStack,
+            onErrorToast = onErrorToast
         )
         qrcodeGenerateScreen(
             onTimerFinish = navController::popBackStack,
             onBackClick = navController::popBackStack,
-            onRemoteError = navController::popBackStack
+            onRemoteError = navController::popBackStack,
+            onErrorToast = onErrorToast
         )
         outingStatusScreen(
             viewModelStoreOwner = mainViewModelStoreOwner,
-            onBackClick = navController::popBackStack
+            onBackClick = navController::popBackStack,
+            onErrorToast = onErrorToast
         )
         lateListScreen(
             viewModelStoreOwner = mainViewModelStoreOwner,
-            onBackClick = navController::popBackStack
+            onBackClick = navController::popBackStack,
+            onErrorToast = onErrorToast
         )
         studentManagementScreen(
             viewModelStoreOwner = mainViewModelStoreOwner,
@@ -108,6 +141,8 @@ fun GomsNavHost(
         settingScreen(
             viewModelStoreOwner = settingViewModelStoreOwner,
             onBackClick = navController::popBackStack
+            onBackClick = navController::popBackStack,
+            onErrorToast = onErrorToast
         )
     }
 }

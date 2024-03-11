@@ -3,6 +3,7 @@ package com.goms.sign_up.viewmodel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.goms.common.network.errorHandling
 import com.goms.common.result.Result
 import com.goms.domain.auth.SendNumberUseCase
 import com.goms.domain.auth.SighUpUseCase
@@ -23,13 +24,13 @@ class SignUpViewModel @Inject constructor(
     private val sendNumberUseCase: SendNumberUseCase,
     private val verifyNumberUseCase: VerifyNumberUseCase
 ) : ViewModel() {
-    private val _signUpUiState = MutableStateFlow<Result<Unit>>(Result.Loading)
+    private val _signUpUiState = MutableStateFlow<SignUpUiState>(SignUpUiState.Loading)
     val signUpUiState = _signUpUiState.asStateFlow()
 
     private val _sendNumberUiState = MutableStateFlow<Result<Unit>>(Result.Loading)
     val sendNumberUiState = _sendNumberUiState.asStateFlow()
 
-    private val _verifyNumberUiState = MutableStateFlow<Result<Unit>>(Result.Loading)
+    private val _verifyNumberUiState = MutableStateFlow<VerifyNumberUiState>(VerifyNumberUiState.Loading)
     val verifyNumberUiState = _verifyNumberUiState.asStateFlow()
 
     var name = savedStateHandle.getStateFlow(key = NAME, initialValue = "")
@@ -41,15 +42,22 @@ class SignUpViewModel @Inject constructor(
     var checkPassword = savedStateHandle.getStateFlow(key = CHECK_PASSWORD, initialValue = "")
 
     fun signUp(body: SignUpRequest) = viewModelScope.launch {
+        _signUpUiState.value = SignUpUiState.Loading
         signUpUseCase(body = body)
             .onSuccess {
                 it.catch {  remoteError ->
-                    _signUpUiState.value = Result.Error(remoteError)
+                    _signUpUiState.value = SignUpUiState.Error(remoteError)
+                    remoteError.errorHandling(
+                        conflictAction = { _signUpUiState.value = SignUpUiState.Conflict }
+                    )
                 }.collect { result ->
-                    _signUpUiState.value = Result.Success(result)
+                    _signUpUiState.value = SignUpUiState.Success
                 }
             }.onFailure {
-                _signUpUiState.value = Result.Error(it)
+                _signUpUiState.value = SignUpUiState.Error(it)
+                it.errorHandling(
+                    conflictAction = { _signUpUiState.value = SignUpUiState.Conflict }
+                )
             }
     }
 
@@ -70,22 +78,29 @@ class SignUpViewModel @Inject constructor(
         _sendNumberUiState.value = Result.Loading
     }
 
-
     fun verifyNumber(email: String, authCode: String) = viewModelScope.launch {
         verifyNumberUseCase(email = email, authCode = authCode)
             .onSuccess {
                 it.catch {  remoteError ->
-                    _verifyNumberUiState.value = Result.Error(remoteError)
+                    _verifyNumberUiState.value = VerifyNumberUiState.Error(remoteError)
+                    remoteError.errorHandling(
+                        badRequestAction = { _verifyNumberUiState.value = VerifyNumberUiState.BadRequest },
+                        notFoundAction = { _verifyNumberUiState.value = VerifyNumberUiState.NotFound }
+                    )
                 }.collect { result ->
-                    _verifyNumberUiState.value = Result.Success(result)
+                    _verifyNumberUiState.value = VerifyNumberUiState.Success
                 }
             }.onFailure {
-                _verifyNumberUiState.value = Result.Error(it)
+                _verifyNumberUiState.value = VerifyNumberUiState.Error(it)
+                it.errorHandling(
+                    badRequestAction = { _verifyNumberUiState.value = VerifyNumberUiState.BadRequest },
+                    notFoundAction = { _verifyNumberUiState.value = VerifyNumberUiState.NotFound }
+                )
             }
     }
 
     fun initVerifyNumber() {
-        _verifyNumberUiState.value = Result.Loading
+        _verifyNumberUiState.value = VerifyNumberUiState.Loading
     }
 
     fun onNameChange(value: String) {
