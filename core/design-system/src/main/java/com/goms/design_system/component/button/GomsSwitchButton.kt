@@ -98,7 +98,7 @@ fun GomsSwitchButton(
                 horizontalArrangement = Arrangement.Start
             ) {
                 Box(
-                    Modifier
+                    modifier = Modifier
                         .offset { IntOffset(swipeableState.offset.value.roundToInt(), 0) }
                         .swipeable(
                             state = swipeableState,
