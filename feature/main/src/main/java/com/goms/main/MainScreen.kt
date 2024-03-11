@@ -44,7 +44,8 @@ fun MainRoute(
     onOutingStatusClick: () -> Unit,
     onLateListClick: () -> Unit,
     onStudentManagementClick: () -> Unit,
-    onQrcodeClick: (role: Authority) -> Unit
+    onQrcodeClick: (role: Authority) -> Unit,
+    onSettingClick: () -> Unit
 ) {
     MainViewModelProvider(viewModelStoreOwner = viewModelStoreOwner) { viewModel ->
         val role by viewModel.role.collectAsStateWithLifecycle(initialValue = "")
@@ -63,6 +64,7 @@ fun MainRoute(
             onLateListClick = onLateListClick,
             onStudentManagementClick = onStudentManagementClick,
             onQrcodeClick = onQrcodeClick,
+            onSettingClick = onSettingClick,
             mainCallBack = {
                 viewModel.getProfile()
                 viewModel.getLateRankList()
@@ -83,6 +85,7 @@ fun MainScreen(
     onLateListClick: () -> Unit,
     onStudentManagementClick: () -> Unit,
     onQrcodeClick: (role: Authority) -> Unit,
+    onSettingClick: () -> Unit,
     mainCallBack: () -> Unit
 ) {
     var isPermissionRequest by rememberSaveable { mutableStateOf(false) }
@@ -121,7 +124,7 @@ fun MainScreen(
                 GomsTopBar(
                     role = role,
                     icon = { SettingIcon(tint = colors.G7) },
-                    onSettingClick = {},
+                    onSettingClick = { onSettingClick() },
                     onAdminClick = { onStudentManagementClick() }
                 )
                 Column(

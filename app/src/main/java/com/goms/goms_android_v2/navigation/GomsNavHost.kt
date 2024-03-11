@@ -1,22 +1,17 @@
 package com.goms.goms_android_v2.navigation
 
-import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.navigation.compose.NavHost
-import com.goms.goms_android_v2.MainActivity
 import com.goms.goms_android_v2.ui.GomsAppState
 import com.goms.login.navigation.inputLoginScreen
 import com.goms.login.navigation.loginRoute
 import com.goms.login.navigation.loginScreen
 import com.goms.login.navigation.navigateToInputLogin
-import com.goms.login.navigation.navigateToLogin
 import com.goms.main.navigation.lateListScreen
 import com.goms.main.navigation.mainScreen
 import com.goms.main.navigation.navigateToLateList
-import com.goms.main.navigation.navigateToMain
 import com.goms.main.navigation.navigateToOutingStatus
 import com.goms.main.navigation.navigateToStudentManagement
 import com.goms.main.navigation.outingStatusScreen
@@ -26,6 +21,8 @@ import com.goms.qrcode.navigation.navigateToQrGenerate
 import com.goms.qrcode.navigation.navigateToQrScan
 import com.goms.qrcode.navigation.qrcodeGenerateScreen
 import com.goms.qrcode.navigation.qrcodeScanScreen
+import com.goms.setting.navigation.settingScreen
+import com.goms.setting.navigation.navigateToSettingScreen
 import com.goms.sign_up.navigation.navigateToNumber
 import com.goms.sign_up.navigation.navigateToPassword
 import com.goms.sign_up.navigation.navigateToSignUp
@@ -41,6 +38,7 @@ fun GomsNavHost(
 ) {
     val navController = appState.navController
     val signUpViewModelStoreOwner = checkNotNull(LocalViewModelStoreOwner.current)
+    val settingViewModelStoreOwner = checkNotNull(LocalViewModelStoreOwner.current)
     val mainViewModelStoreOwner = checkNotNull(LocalViewModelStoreOwner.current)
     NavHost(
         navController = navController,
@@ -81,7 +79,8 @@ fun GomsNavHost(
                 } else {
                     navController.navigateToQrGenerate()
                 }
-            }
+            },
+            onSettingClick = navController::navigateToSettingScreen
         )
         qrcodeScanScreen(
             onPermissionBlock = navController::popBackStack,
@@ -104,6 +103,10 @@ fun GomsNavHost(
         )
         studentManagementScreen(
             viewModelStoreOwner = mainViewModelStoreOwner,
+            onBackClick = navController::popBackStack
+        )
+        settingScreen(
+            viewModelStoreOwner = settingViewModelStoreOwner,
             onBackClick = navController::popBackStack
         )
     }
