@@ -40,7 +40,7 @@ fun SettingRoute(
 ) {
     SettingViewModelProvider(viewModelStoreOwner = viewModelStoreOwner) { viewModel ->
         val getProfileUiState by viewModel.getProfileUiState.collectAsStateWithLifecycle()
-        val role by viewModel.role.collectAsState(initial = "")
+        val role by viewModel.role.collectAsStateWithLifecycle(initialValue = "")
 
         SettingScreen(
             onBackClick = onBackClick,
