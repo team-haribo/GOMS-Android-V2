@@ -26,16 +26,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.goms.design_system.component.dropdown.DropdownState
 import com.goms.design_system.component.dropdown.GomsDropdown
 import com.goms.design_system.icon.ChevronDownIcon
 import com.goms.design_system.icon.ChevronUpIcon
 import com.goms.design_system.theme.GomsTheme
-
-enum class DropdownState(val value: String) {
-    Show("Show"),
-    Hide("Hide"),
-    OnDissmiss("OnDissmiss"),
-}
 
 @Composable
 fun SelectThemeDropDown(
