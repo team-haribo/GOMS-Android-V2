@@ -37,6 +37,9 @@ import com.goms.main.component.MainLateCard
 import com.goms.main.component.MainOutingCard
 import com.goms.main.component.MainProfileCard
 import com.goms.main.viewmodel.MainViewModelProvider
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
 @Composable
 fun MainRoute(
@@ -45,8 +48,7 @@ fun MainRoute(
     onLateListClick: () -> Unit,
     onStudentManagementClick: () -> Unit,
     onQrcodeClick: (role: Authority) -> Unit,
-    onSettingClick: () -> Unit
-    onQrcodeClick: (role: Authority) -> Unit,
+    onSettingClick: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
     MainViewModelProvider(viewModelStoreOwner = viewModelStoreOwner) { viewModel ->
@@ -121,50 +123,6 @@ fun MainScreen(
     val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = isRefreshing)
 
     GomsTheme { colors, typography ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .statusBarsPadding()
-                .navigationBarsPadding()
-                .background(colors.BLACK)
-        ) {
-            Column {
-                GomsTopBar(
-                    role = role,
-                    icon = { SettingIcon(tint = colors.G7) },
-                    onSettingClick = { onSettingClick() },
-                    onAdminClick = { onStudentManagementClick() }
-                )
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .verticalScroll(scrollState)
-                        .padding(horizontal = 16.dp),
-                    verticalArrangement = Arrangement.spacedBy(32.dp)
-                ) {
-                    MainProfileCard(getProfileUiState = getProfileUiState)
-                    MainLateCard(
-                        role = role,
-                        getLateRankListUiState = getLateRankListUiState
-                    ) {
-                        onLateListClick()
-                    }
-                    MainOutingCard(
-                        role = role,
-                        getOutingListUiState = getOutingListUiState,
-                        getOutingCountUiState = getOutingCountUiState
-                    ) {
-                        onOutingStatusClick()
-                    }
-                }
-            }
-            GomsFloatingButton(
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(end = 16.dp, bottom = 16.dp),
-                role = role
-            ) {
-                onQrcodeClick(role)
         SwipeRefresh(
             state = swipeRefreshState,
             onRefresh = { mainCallBack() },
@@ -188,7 +146,7 @@ fun MainScreen(
                     GomsTopBar(
                         role = role,
                         icon = { SettingIcon(tint = colors.G7) },
-                        onSettingClick = {},
+                        onSettingClick = onSettingClick,
                         onAdminClick = { onStudentManagementClick() }
                     )
                     Column(

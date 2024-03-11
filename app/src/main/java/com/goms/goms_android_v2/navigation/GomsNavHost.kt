@@ -107,8 +107,7 @@ fun GomsNavHost(
                     navController.navigateToQrGenerate()
                 }
             },
-            onErrorToast = onErrorToast
-            },
+            onErrorToast = onErrorToast,
             onSettingClick = navController::navigateToSettingScreen
         )
         qrcodeScanScreen(
@@ -136,13 +135,12 @@ fun GomsNavHost(
         )
         studentManagementScreen(
             viewModelStoreOwner = mainViewModelStoreOwner,
-            onBackClick = navController::popBackStack
+            onBackClick = navController::popBackStack,
+            onErrorToast = onErrorToast
         )
         settingScreen(
             viewModelStoreOwner = settingViewModelStoreOwner,
-            onBackClick = navController::popBackStack
             onBackClick = navController::popBackStack,
-            onErrorToast = onErrorToast
         )
     }
 }
