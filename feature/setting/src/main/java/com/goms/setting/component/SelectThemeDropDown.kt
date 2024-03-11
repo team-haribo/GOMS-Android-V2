@@ -47,10 +47,8 @@ fun SelectThemeDropDown(
     var selectedIndex by rememberSaveable { mutableIntStateOf(0) }
 
     LaunchedEffect(isOpen) {
-        Log.d("testt","lan")
         if (isOpen == DropdownState.OnDissmiss.name) {
             isOpen = DropdownState.Hide.name
-            Log.d("testt","lan-in")
         }
     }
 
@@ -80,7 +78,6 @@ fun SelectThemeDropDown(
                     .background(colors.G1)
                     .padding(12.dp)
                     .clickable {
-                        Log.d("testt","cilck")
                         isOpen = when (isOpen) {
                             DropdownState.Show.name -> DropdownState.Hide.name
                             DropdownState.Hide.name -> DropdownState.Show.name

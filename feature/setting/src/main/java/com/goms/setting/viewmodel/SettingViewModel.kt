@@ -29,7 +29,6 @@ class SettingViewModel @Inject constructor (
                 when (result) {
                     is Result.Loading -> _getProfileUiState.value = GetProfileUiState.Loading
                     is Result.Success -> {
-                        Log.d("testt","suc")
                         _getProfileUiState.value = GetProfileUiState.Success(result.data)
                     }
                     is Result.Error -> _getProfileUiState.value = GetProfileUiState.Error(result.exception)
