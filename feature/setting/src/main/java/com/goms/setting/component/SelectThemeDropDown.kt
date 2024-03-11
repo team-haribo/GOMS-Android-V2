@@ -1,6 +1,5 @@
 package com.goms.setting.component
 
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -29,7 +28,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.goms.design_system.component.dropdown.GomsDropdown
 import com.goms.design_system.icon.ChevronDownIcon
-import com.goms.design_system.icon.ChevronRightIcon
 import com.goms.design_system.icon.ChevronUpIcon
 import com.goms.design_system.theme.GomsTheme
 
@@ -43,13 +41,13 @@ enum class DropdownState(val value: String) {
 fun SelectThemeDropDown(
     modifier: Modifier,
 ) {
-    var isOpen by remember { mutableStateOf(DropdownState.Hide.name) }
+    var dropdownState by remember { mutableStateOf(DropdownState.Hide.name) }
     val dropdownList = listOf("다크(기본)","라이트","시스템 테마 설정")
     var selectedIndex by rememberSaveable { mutableIntStateOf(0) }
 
-    LaunchedEffect(isOpen) {
-        if (isOpen == DropdownState.OnDissmiss.name) {
-            isOpen = DropdownState.Hide.name
+    LaunchedEffect(dropdownState) {
+        if (dropdownState == DropdownState.OnDissmiss.name) {
+            dropdownState = DropdownState.Hide.name
         }
     }
 
@@ -79,10 +77,10 @@ fun SelectThemeDropDown(
                     .background(colors.G1)
                     .padding(12.dp)
                     .clickable {
-                        isOpen = when (isOpen) {
+                        dropdownState = when (dropdownState) {
                             DropdownState.Show.name -> DropdownState.Hide.name
                             DropdownState.Hide.name -> DropdownState.Show.name
-                            else -> isOpen
+                            else -> dropdownState
                         }
                     },
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -94,7 +92,7 @@ fun SelectThemeDropDown(
                     color = colors.G7,
                     fontWeight = FontWeight.Normal
                 )
-                if(isOpen == DropdownState.Show.name) {
+                if(dropdownState == DropdownState.Show.name) {
                     ChevronDownIcon(
                         tint = colors.G7
                     )
@@ -108,14 +106,14 @@ fun SelectThemeDropDown(
             GomsDropdown(
                 dropdownList = dropdownList,
                 dropdownListSize = dropdownList.size,
-                showDropdown = isOpen,
+                showDropdown = dropdownState,
                 selectedIndex = selectedIndex,
                 modifier = Modifier.padding(horizontal = 20.dp),
                 backgroundColor = colors.G1,
-                onDissmiss = { isOpen = DropdownState.OnDissmiss.name },
+                onDissmiss = { dropdownState = DropdownState.OnDissmiss.name },
                 onItemClick = {
                     selectedIndex = it
-                    isOpen = DropdownState.Hide.name
+                    dropdownState = DropdownState.Hide.name
                 }
             )
 
