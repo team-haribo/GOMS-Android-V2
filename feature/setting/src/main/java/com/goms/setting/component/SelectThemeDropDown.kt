@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import com.goms.design_system.component.dropdown.GomsDropdown
 import com.goms.design_system.icon.ChevronDownIcon
 import com.goms.design_system.icon.ChevronRightIcon
+import com.goms.design_system.icon.ChevronUpIcon
 import com.goms.design_system.theme.GomsTheme
 
 enum class DropdownState(val value: String) {
@@ -98,7 +99,7 @@ fun SelectThemeDropDown(
                         tint = colors.G7
                     )
                 } else {
-                    ChevronRightIcon(
+                    ChevronUpIcon(
                         tint = colors.G7
                     )
                 }
