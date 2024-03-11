@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.goms.design_system.component.clickable.gomsClickable
 import com.goms.design_system.icon.ChevronRightIcon
 import com.goms.design_system.theme.GomsTheme
 
@@ -24,9 +25,10 @@ fun PasswordChangeButton(
 ) {
     GomsTheme { colors, typography ->
         Column(
-            modifier = modifier.clickable { 
-                onClick
-            }
+            modifier = modifier
+                .gomsClickable {
+                    onClick()
+                }
         ) {
             Divider(
                 modifier = Modifier.fillMaxWidth(),

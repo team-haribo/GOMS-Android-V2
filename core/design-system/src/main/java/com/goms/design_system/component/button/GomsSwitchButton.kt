@@ -36,6 +36,7 @@ import androidx.wear.compose.material.ExperimentalWearMaterialApi
 import androidx.wear.compose.material.FractionalThreshold
 import androidx.wear.compose.material.rememberSwipeableState
 import androidx.wear.compose.material.swipeable
+import com.goms.design_system.component.clickable.gomsClickable
 import com.goms.design_system.theme.GomsTheme
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
@@ -71,7 +72,7 @@ fun GomsSwitchButton(
     }
     GomsTheme { colors, typography ->
         Box(
-            modifier = Modifier.clickable {
+            modifier = Modifier.gomsClickable {
                 clickListener = !clickListener
                 scope.launch {
                     if (clickListener) {

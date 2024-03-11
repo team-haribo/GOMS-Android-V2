@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.goms.design_system.component.clickable.gomsClickable
 import com.goms.design_system.component.dropdown.DropdownState
 import com.goms.design_system.component.dropdown.GomsDropdown
 import com.goms.design_system.icon.ChevronDownIcon
@@ -71,7 +72,7 @@ fun SelectThemeDropDown(
                     .clip(RoundedCornerShape(12.dp))
                     .background(colors.G1)
                     .padding(12.dp)
-                    .clickable {
+                    .gomsClickable {
                         dropdownState = when (dropdownState) {
                             DropdownState.Show.name -> DropdownState.Hide.name
                             DropdownState.Hide.name -> DropdownState.Show.name
