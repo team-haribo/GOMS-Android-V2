@@ -26,6 +26,7 @@ fun NavGraphBuilder.mainScreen(
     onLateListClick: () -> Unit,
     onStudentManagementClick: () -> Unit,
     onQrcodeClick: (role: Authority) -> Unit,
+    onSettingClick: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
     composable(route = mainRoute) {
@@ -35,6 +36,7 @@ fun NavGraphBuilder.mainScreen(
             onLateListClick = onLateListClick,
             onStudentManagementClick = onStudentManagementClick,
             onQrcodeClick = onQrcodeClick,
+            onSettingClick = onSettingClick,
             onErrorToast = onErrorToast
         )
     }

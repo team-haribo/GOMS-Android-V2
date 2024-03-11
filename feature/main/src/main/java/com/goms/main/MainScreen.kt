@@ -48,6 +48,7 @@ fun MainRoute(
     onLateListClick: () -> Unit,
     onStudentManagementClick: () -> Unit,
     onQrcodeClick: (role: Authority) -> Unit,
+    onSettingClick: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
     MainViewModelProvider(viewModelStoreOwner = viewModelStoreOwner) { viewModel ->
@@ -69,6 +70,7 @@ fun MainRoute(
             onLateListClick = onLateListClick,
             onStudentManagementClick = onStudentManagementClick,
             onQrcodeClick = onQrcodeClick,
+            onSettingClick = onSettingClick,
             onErrorToast = onErrorToast,
             mainCallBack = {
                 viewModel.getProfile()
@@ -91,6 +93,7 @@ fun MainScreen(
     onLateListClick: () -> Unit,
     onStudentManagementClick: () -> Unit,
     onQrcodeClick: (role: Authority) -> Unit,
+    onSettingClick: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     mainCallBack: () -> Unit
 ) {
@@ -143,7 +146,7 @@ fun MainScreen(
                     GomsTopBar(
                         role = role,
                         icon = { SettingIcon(tint = colors.G7) },
-                        onSettingClick = {},
+                        onSettingClick = onSettingClick,
                         onAdminClick = { onStudentManagementClick() }
                     )
                     Column(
