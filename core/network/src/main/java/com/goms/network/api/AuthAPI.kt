@@ -5,6 +5,7 @@ import com.goms.model.request.auth.SendNumberRequest
 import com.goms.model.request.auth.SignUpRequest
 import com.goms.model.response.auth.LoginResponse
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
@@ -30,4 +31,7 @@ interface AuthAPI {
         @Query("email") email: String,
         @Query("authCode") authCode: String
     )
+
+    @DELETE("/api/v2/auth")
+    suspend fun logout()
 }
