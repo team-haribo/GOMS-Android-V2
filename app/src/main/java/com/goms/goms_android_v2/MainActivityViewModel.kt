@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
@@ -63,6 +64,16 @@ class MainActivityViewModel @Inject constructor(
 
     fun setAuthority(authority: String) = viewModelScope.launch {
         authTokenDataSource.setAuthority(authority = authority)
+    }
+
+    fun logout() = viewModelScope.launch {
+        runBlocking {
+            authTokenDataSource.removeAccessToken()
+            authTokenDataSource.removeRefreshToken()
+            authTokenDataSource.removeAccessTokenExp()
+            authTokenDataSource.removeRefreshTokenExp()
+            authTokenDataSource.removeAuthority()
+        }
     }
 }
 

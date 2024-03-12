@@ -40,6 +40,7 @@ import com.goms.ui.createToast
 fun GomsNavHost(
     appState: GomsAppState,
     modifier: Modifier = Modifier,
+    onLogout: () -> Unit,
     startDestination: String = loginRoute
 ) {
     val context = LocalContext.current
@@ -141,6 +142,8 @@ fun GomsNavHost(
         settingScreen(
             viewModelStoreOwner = settingViewModelStoreOwner,
             onBackClick = navController::popBackStack,
+            onLogoutSuccess = onLogout,
+            onErrorToast = onErrorToast
         )
     }
 }
