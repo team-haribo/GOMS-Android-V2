@@ -66,14 +66,12 @@ class MainActivityViewModel @Inject constructor(
         authTokenDataSource.setAuthority(authority = authority)
     }
 
-    fun logout() = viewModelScope.launch {
-        runBlocking {
-            authTokenDataSource.removeAccessToken()
-            authTokenDataSource.removeRefreshToken()
-            authTokenDataSource.removeAccessTokenExp()
-            authTokenDataSource.removeRefreshTokenExp()
-            authTokenDataSource.removeAuthority()
-        }
+    suspend fun logout() = viewModelScope.launch {
+        authTokenDataSource.removeAccessToken()
+        authTokenDataSource.removeRefreshToken()
+        authTokenDataSource.removeAccessTokenExp()
+        authTokenDataSource.removeRefreshTokenExp()
+        authTokenDataSource.removeAuthority()
     }
 }
 

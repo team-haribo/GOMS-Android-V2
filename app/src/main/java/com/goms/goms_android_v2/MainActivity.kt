@@ -23,6 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -114,7 +115,10 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun logout() {
-        viewModel.logout()
+        runBlocking {
+            viewModel.logout()
+        }
+
         finish()
 
         val intent = Intent(this, MainActivity::class.java)
