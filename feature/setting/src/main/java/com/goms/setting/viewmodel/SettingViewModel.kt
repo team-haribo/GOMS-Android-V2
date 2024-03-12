@@ -53,18 +53,11 @@ class SettingViewModel @Inject constructor (
             .onSuccess {
                 it.catch {  remoteError ->
                     _logoutState.value = LogoutUiState.Error(remoteError)
-                    remoteError.errorHandling(
-                        badRequestAction = {  }
-                    )
                 }.collect {
-                    Log.d("testt","suc")
                     _logoutState.value = LogoutUiState.Success
                 }
             }.onFailure {
                 _logoutState.value = LogoutUiState.Error(it)
-                it.errorHandling(
-                    badRequestAction = { }
-                )
             }
     }
 }
