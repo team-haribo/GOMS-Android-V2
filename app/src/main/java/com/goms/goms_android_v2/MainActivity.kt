@@ -116,9 +116,8 @@ class MainActivity : ComponentActivity() {
 
     private fun logout() {
         runBlocking {
-            viewModel.logout()
+            viewModel.deleteToken()
         }
-
         finish()
 
         val intent = Intent(this, MainActivity::class.java)
