@@ -1,5 +1,6 @@
 package com.goms.goms_android_v2
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
@@ -22,6 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -64,6 +66,7 @@ class MainActivity : ComponentActivity() {
                     GomsTheme { _, _ ->
                         GomsApp(
                             windowSizeClass = calculateWindowSizeClass(this),
+                            onLogout = { logout() },
                             uiState = uiState
                         )
                     }
@@ -109,5 +112,15 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    private fun logout() {
+        runBlocking {
+            viewModel.deleteToken()
+        }
+        finish()
+
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
     }
 }

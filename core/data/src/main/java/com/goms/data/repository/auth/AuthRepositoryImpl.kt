@@ -38,4 +38,8 @@ class AuthRepositoryImpl @Inject constructor(
     override suspend fun verifyNumber(email: String, authCode: String): Flow<Unit> {
         return remoteAuthDataSource.verifyNumber(email = email, authCode = authCode)
     }
+
+    override suspend fun logout(): Flow<Unit> {
+        return remoteAuthDataSource.logout()
+    }
 }

@@ -46,4 +46,12 @@ class AuthDataSourceImpl @Inject constructor(
                 .sendRequest()
         )
     }.flowOn(Dispatchers.IO)
+
+    override suspend fun logout(): Flow<Unit> = flow {
+        emit(
+            GomsApiHandler<Unit>()
+                .httpRequest { authAPI.logout() }
+                .sendRequest()
+        )
+    }.flowOn(Dispatchers.IO)
 }
