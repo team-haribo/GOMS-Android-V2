@@ -73,7 +73,7 @@ fun PasswordRoute(
                         password = viewModel.password.value,
                         name = viewModel.name.value,
                         gender = Gender.values().find { it.value == viewModel.gender.value }!!.name,
-                        major = Major.values().find { it.value == viewModel.major.value }!!.name
+                        major = Major.values().find { it.fullName == viewModel.major.value }!!.name
                     )
                 )
             }
