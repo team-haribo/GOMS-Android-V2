@@ -60,7 +60,8 @@ fun SettingProfileCardComponent(
 ) {
     GomsTheme { colors, typography ->
         Row(
-            modifier = modifier.fillMaxWidth()
+            modifier = modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Box(
                 contentAlignment = Alignment.BottomEnd
@@ -98,13 +99,13 @@ fun SettingProfileCardComponent(
             Column {
                 Text(
                     text = data.name,
-                    style = typography.textMedium,
+                    style = typography.titleSmall,
                     color = colors.WHITE,
                     fontWeight = FontWeight.SemiBold
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = data.grade.toString() + "기 | " + data.major.toText(),
+                    text = "${data.grade}기 | ${data.major.toText()}",
                     style = typography.textMedium,
                     color = colors.G4,
                     fontWeight = FontWeight.Normal
