@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
@@ -35,6 +36,7 @@ enum class DropdownState(val value: String) {
     Hide("Hide"),
     OnDissmiss("OnDissmiss"),
 }
+
 @Composable
 fun GomsDropdown(
     dropdownList: List<String>,
@@ -107,7 +109,12 @@ fun GomsDropdown(
                                         },
                                     contentAlignment = Alignment.CenterStart
                                 ) {
-                                    Text(text = item)
+                                    Text(
+                                        text = item,
+                                        style = typography.textMedium,
+                                        color = colors.WHITE,
+                                        fontWeight = FontWeight.Normal
+                                    )
                                 }
                             }
                         }
