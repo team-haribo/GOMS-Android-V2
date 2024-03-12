@@ -15,6 +15,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -40,6 +41,12 @@ fun SelectThemeDropDown(
     var dropdownState by remember { mutableStateOf(DropdownState.Hide.name) }
     val dropdownList = listOf("다크(기본)","라이트","시스템 테마 설정")
     var selectedIndex by rememberSaveable { mutableIntStateOf(0) }
+
+    val derivedDropdownState = remember(dropdownState) {
+        derivedStateOf {
+            dropdownState
+        }
+    }
 
     LaunchedEffect(dropdownState) {
         if (dropdownState == DropdownState.OnDissmiss.name) {
@@ -73,10 +80,9 @@ fun SelectThemeDropDown(
                     .background(colors.G1)
                     .padding(12.dp)
                     .gomsClickable {
-                        dropdownState = when (dropdownState) {
-                            DropdownState.Show.name -> DropdownState.Hide.name
-                            DropdownState.Hide.name -> DropdownState.Show.name
-                            else -> dropdownState
+                        when (dropdownState) {
+                            DropdownState.Show.name -> dropdownState = DropdownState.Hide.name
+                            DropdownState.Hide.name -> dropdownState = DropdownState.Show.name
                         }
                     },
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -102,7 +108,7 @@ fun SelectThemeDropDown(
             GomsDropdown(
                 dropdownList = dropdownList,
                 dropdownListSize = dropdownList.size,
-                showDropdown = dropdownState,
+                showDropdown = derivedDropdownState.value,
                 selectedIndex = selectedIndex,
                 modifier = Modifier.padding(horizontal = 20.dp),
                 backgroundColor = colors.G1,
@@ -112,7 +118,6 @@ fun SelectThemeDropDown(
                     dropdownState = DropdownState.Hide.name
                 }
             )
-
         }
     }
 }
