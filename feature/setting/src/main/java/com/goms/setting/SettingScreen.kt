@@ -31,36 +31,57 @@ import com.goms.setting.component.PasswordChangeButton
 import com.goms.setting.component.SelectThemeDropDown
 import com.goms.setting.component.SettingSwitchComponent
 import com.goms.setting.viewmodel.GetProfileUiState
+import com.goms.setting.viewmodel.LogoutUiState
 import com.goms.setting.viewmodel.SettingViewModelProvider
 
 @Composable
 fun SettingRoute(
     onBackClick: () -> Unit,
+    onLogoutSuccess: () -> Unit,
     viewModelStoreOwner: ViewModelStoreOwner,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
     SettingViewModelProvider(viewModelStoreOwner = viewModelStoreOwner) { viewModel ->
         val getProfileUiState by viewModel.getProfileUiState.collectAsStateWithLifecycle()
         val role by viewModel.role.collectAsStateWithLifecycle(initialValue = "")
 
+        val logoutUiState by viewModel.logoutState.collectAsState()
+
         SettingScreen(
             onBackClick = onBackClick,
+            onLogoutClick = { viewModel.logout() },
+            onLogoutSuccess = onLogoutSuccess,
             getProfile = {
                 viewModel.initGetProfile()
                 viewModel.getProfile()
             },
             role = role,
-            getProfileUiState = getProfileUiState
+            logoutUiState = logoutUiState,
+            getProfileUiState = getProfileUiState,
+            onErrorToast = onErrorToast
         )
     }
 }
 @Composable
 fun SettingScreen(
     onBackClick: () -> Unit,
+    onLogoutClick: () -> Unit,
+    onLogoutSuccess: () -> Unit,
     getProfile: () -> Unit,
     role: String,
-    getProfileUiState: GetProfileUiState
+    logoutUiState: LogoutUiState,
+    getProfileUiState: GetProfileUiState,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
     LaunchedEffect("mypage init") { getProfile() }
+
+    when(logoutUiState) {
+        is LogoutUiState.Loading -> Unit
+        is LogoutUiState.Success -> { onLogoutSuccess() }
+        is LogoutUiState.Error -> {
+            onErrorToast(logoutUiState.exception, "네트워크 상태를 확인해 주세요")
+        }
+    }
 
     GomsTheme { colors, typography ->
         Column(
@@ -123,7 +144,7 @@ fun SettingScreen(
                 modifier = Modifier.fillMaxWidth(),
                 text = "로그아웃",
                 state = ButtonState.Logout,
-                onClick = {}
+                onClick = onLogoutClick
             )
         }
     }
