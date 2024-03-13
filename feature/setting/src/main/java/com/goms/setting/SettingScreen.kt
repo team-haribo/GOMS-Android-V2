@@ -31,6 +31,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goms.design_system.component.button.ButtonState
 import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.button.GomsButton
+import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
 import com.goms.design_system.theme.GomsTheme
 import com.goms.model.enum.Authority
 import com.goms.setting.component.SettingProfileCard
@@ -39,6 +40,7 @@ import com.goms.setting.component.SelectThemeDropDown
 import com.goms.setting.component.SettingSwitchComponent
 import com.goms.setting.viewmodel.GetProfileUiState
 import com.goms.setting.viewmodel.LogoutUiState
+import com.goms.setting.viewmodel.ProfileImageUiState
 import com.goms.setting.viewmodel.SettingViewModelProvider
 
 @Composable
@@ -49,9 +51,11 @@ fun SettingRoute(
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
     SettingViewModelProvider(viewModelStoreOwner = viewModelStoreOwner) { viewModel ->
-        val getProfileUiState by viewModel.getProfileUiState.collectAsStateWithLifecycle()
         val role by viewModel.role.collectAsStateWithLifecycle(initialValue = "")
         val context = LocalContext.current
+
+        val getProfileUiState by viewModel.getProfileUiState.collectAsStateWithLifecycle()
+        val profileImageUiState by viewModel.profileImageUiState.collectAsStateWithLifecycle()
 
         val logoutUiState by viewModel.logoutState.collectAsState()
         var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
@@ -82,6 +86,7 @@ fun SettingRoute(
             role = role,
             logoutUiState = logoutUiState,
             getProfileUiState = getProfileUiState,
+            profileImageUiState = profileImageUiState,
             onErrorToast = onErrorToast
         )
     }
@@ -96,16 +101,41 @@ fun SettingScreen(
     role: String,
     logoutUiState: LogoutUiState,
     getProfileUiState: GetProfileUiState,
+    profileImageUiState: ProfileImageUiState,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
-    var loadProfile by remember { mutableStateOf(false) }
-    LaunchedEffect(loadProfile) { getProfile() }
+    LaunchedEffect("load profile") { getProfile() }
 
-    when(logoutUiState) {
+    var isLoading by remember { mutableStateOf(false) }
+
+    when (getProfileUiState) {
+        is GetProfileUiState.Loading -> {}
+        is GetProfileUiState.Success -> {
+            Log.d("testt", "get")
+            isLoading = false
+        }
+        is GetProfileUiState.Error -> {
+            onErrorToast(getProfileUiState.exception, "네트워크 상태를 확인해 주세요")
+        }
+    }
+
+    when (logoutUiState) {
         is LogoutUiState.Loading -> Unit
         is LogoutUiState.Success -> { onLogoutSuccess() }
         is LogoutUiState.Error -> {
-            onErrorToast(logoutUiState.exception, "네트워크 상태를 확인해 주세요")
+            onErrorToast(logoutUiState.exception, "로그아웃에 실패 했습니다.")
+        }
+    }
+
+    when (profileImageUiState) {
+        is ProfileImageUiState.Loading -> {}
+        is ProfileImageUiState.Success -> {
+            Log.d("testt", "set")
+            isLoading = true
+            getProfile()
+        }
+        is ProfileImageUiState.Error -> {
+            onErrorToast(profileImageUiState.exception, "네트워크 상태를 확인해 주세요")
         }
     }
 
@@ -173,6 +203,9 @@ fun SettingScreen(
                 state = ButtonState.Logout,
                 onClick = onLogoutClick
             )
+        }
+        if (isLoading) {
+            GomsCircularProgressIndicator()
         }
     }
 }
