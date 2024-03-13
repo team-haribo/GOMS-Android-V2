@@ -67,7 +67,6 @@ fun SettingRoute(
             }
 
         LaunchedEffect(selectedImageUri) {
-            Log.d("testt",selectedImageUri.toString())
             if(selectedImageUri != null) {
                 viewModel.uploadProfileImage(context,selectedImageUri!!)
             }
