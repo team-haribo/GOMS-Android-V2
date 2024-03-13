@@ -25,7 +25,9 @@ fun NavGraphBuilder.mainScreen(
     onOutingStatusClick: () -> Unit,
     onLateListClick: () -> Unit,
     onStudentManagementClick: () -> Unit,
-    onQrcodeClick: (role: Authority) -> Unit
+    onQrcodeClick: (role: Authority) -> Unit,
+    onSettingClick: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
     composable(route = mainRoute) {
         MainRoute(
@@ -33,7 +35,9 @@ fun NavGraphBuilder.mainScreen(
             onOutingStatusClick = onOutingStatusClick,
             onLateListClick = onLateListClick,
             onStudentManagementClick = onStudentManagementClick,
-            onQrcodeClick = onQrcodeClick
+            onQrcodeClick = onQrcodeClick,
+            onSettingClick = onSettingClick,
+            onErrorToast = onErrorToast
         )
     }
 }
@@ -44,12 +48,14 @@ fun NavController.navigateToOutingStatus(navOptions: NavOptions? = null) {
 
 fun NavGraphBuilder.outingStatusScreen(
     viewModelStoreOwner: ViewModelStoreOwner,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
     composable(route = outingStatusRoute) {
         OutingStatusRoute(
             viewModelStoreOwner = viewModelStoreOwner,
-            onBackClick = onBackClick
+            onBackClick = onBackClick,
+            onErrorToast = onErrorToast
         )
     }
 }
@@ -60,12 +66,14 @@ fun NavController.navigateToLateList(navOptions: NavOptions? = null) {
 
 fun NavGraphBuilder.lateListScreen(
     viewModelStoreOwner: ViewModelStoreOwner,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
     composable(route = lateListRoute) {
         LateListRoute(
             viewModelStoreOwner = viewModelStoreOwner,
-            onBackClick = onBackClick
+            onBackClick = onBackClick,
+            onErrorToast = onErrorToast
         )
     }
 }
@@ -76,12 +84,14 @@ fun NavController.navigateToStudentManagement(navOptions: NavOptions? = null) {
 
 fun NavGraphBuilder.studentManagementScreen(
     viewModelStoreOwner: ViewModelStoreOwner,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
     composable(route = studentManagementRoute) {
         StudentManagementRoute(
             viewModelStoreOwner = viewModelStoreOwner,
-            onBackClick = onBackClick
+            onBackClick = onBackClick,
+            onErrorToast = onErrorToast
         )
     }
 }

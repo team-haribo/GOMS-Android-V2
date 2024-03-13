@@ -11,6 +11,7 @@ fun Throwable.errorHandling(
     timeOutAction: () -> Unit = {},
     conflictAction: () -> Unit = {},
     serverAction: () -> Unit = {},
+    noInternetAction: () -> Unit = {},
     otherHttpAction: () -> Unit = {},
     unknownAction: () -> Unit = {},
 ) {
@@ -23,6 +24,7 @@ fun Throwable.errorHandling(
         is TimeOutException -> timeOutAction()
         is ConflictException -> conflictAction()
         is ServerException -> serverAction()
+        is NoInternetException -> noInternetAction()
         is OtherHttpException -> otherHttpAction()
         else -> unknownAction()
     }

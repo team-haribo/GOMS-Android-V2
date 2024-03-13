@@ -19,8 +19,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -33,7 +33,6 @@ import com.goms.main.viewmodel.GetOutingCountUiState
 import com.goms.main.viewmodel.GetOutingListUiState
 import com.goms.model.enum.Authority
 import com.goms.model.response.outing.OutingResponse
-import com.goms.ui.createToast
 import com.goms.ui.toText
 
 @Composable
@@ -42,6 +41,7 @@ fun MainOutingCard(
     role: Authority,
     getOutingListUiState: GetOutingListUiState,
     getOutingCountUiState: GetOutingCountUiState,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     onClick: () -> Unit
 ) {
     GomsTheme { colors, typography ->
@@ -95,12 +95,7 @@ fun MainOutingCard(
                                     .shimmerEffect(color = colors.WHITE)
                             )
                     }
-                    is GetOutingCountUiState.Error -> {
-                        createToast(
-                            context = LocalContext.current,
-                            message = "외출학생 숫자를 가져오지 못했습니다"
-                        )
-                    }
+                    is GetOutingCountUiState.Error -> Unit
                     GetOutingCountUiState.Empty -> {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
@@ -138,12 +133,7 @@ fun MainOutingCard(
                                     }
                                 }
                             }
-                            is GetOutingListUiState.Error -> {
-                                createToast(
-                                    context = LocalContext.current,
-                                    message = "외출자 정보를 가져오지 못했습니다"
-                                )
-                            }
+                            is GetOutingListUiState.Error -> Unit
                             is GetOutingListUiState.Success -> {
                                 val count = getOutingCountUiState.getOutingCountResponse
                                 val list = getOutingListUiState.getOutingListResponse
@@ -206,7 +196,9 @@ fun MainOutingItem(
             } else {
                 AsyncImage(
                     model = list.profileUrl,
-                    modifier = Modifier.size(28.dp),
+                    modifier = Modifier
+                        .size(28.dp)
+                        .clip(RoundedCornerShape(40.dp)),
                     contentScale = ContentScale.Crop,
                     contentDescription = "Profile Image",
                 )

@@ -13,11 +13,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -34,6 +36,7 @@ import com.goms.ui.toText
 fun LateList(
     modifier: Modifier = Modifier,
     getLateListUiState: GetLateListUiState,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     onBottomSheetOpenClick: () -> Unit
 ) {
     GomsTheme { colors, typography ->
@@ -62,7 +65,9 @@ fun LateList(
                         }
                     }
                 }
-                is GetLateListUiState.Error -> Unit
+                is GetLateListUiState.Error -> {
+                    onErrorToast(getLateListUiState.exception, "지각자 리스트 정보를 가져오지 못했습니다")
+                }
                 GetLateListUiState.Empty -> {
                     Column(
                         modifier = Modifier
@@ -117,7 +122,9 @@ fun LateListItem(
             } else {
                 AsyncImage(
                     model = list.profileUrl,
-                    modifier = Modifier.size(48.dp),
+                    modifier = Modifier
+                        .size(48.dp)
+                        .clip(RoundedCornerShape(40.dp)),
                     contentScale = ContentScale.Crop,
                     contentDescription = "Profile Image",
                 )

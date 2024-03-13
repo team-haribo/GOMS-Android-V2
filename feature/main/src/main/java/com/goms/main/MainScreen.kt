@@ -1,6 +1,7 @@
 package com.goms.main
 
 import android.Manifest
+import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -37,6 +38,9 @@ import com.goms.main.component.MainLateCard
 import com.goms.main.component.MainOutingCard
 import com.goms.main.component.MainProfileCard
 import com.goms.main.viewmodel.MainViewModelProvider
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
 @Composable
 fun MainRoute(
@@ -44,10 +48,13 @@ fun MainRoute(
     onOutingStatusClick: () -> Unit,
     onLateListClick: () -> Unit,
     onStudentManagementClick: () -> Unit,
-    onQrcodeClick: (role: Authority) -> Unit
+    onQrcodeClick: (role: Authority) -> Unit,
+    onSettingClick: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
     MainViewModelProvider(viewModelStoreOwner = viewModelStoreOwner) { viewModel ->
         val role by viewModel.role.collectAsStateWithLifecycle(initialValue = "")
+        val isRefreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
         val getProfileUiState by viewModel.getProfileUiState.collectAsStateWithLifecycle()
         val getLateRankListUiState by viewModel.getLateRankListUiState.collectAsStateWithLifecycle()
         val getOutingListUiState by viewModel.getOutingListUiState.collectAsStateWithLifecycle()
@@ -55,6 +62,7 @@ fun MainRoute(
 
         MainScreen(
             role = if (role.isNotBlank()) Authority.valueOf(role) else Authority.ROLE_STUDENT,
+            isRefreshing = isRefreshing,
             getProfileUiState = getProfileUiState,
             getLateRankListUiState = getLateRankListUiState,
             getOutingListUiState = getOutingListUiState,
@@ -63,6 +71,8 @@ fun MainRoute(
             onLateListClick = onLateListClick,
             onStudentManagementClick = onStudentManagementClick,
             onQrcodeClick = onQrcodeClick,
+            onSettingClick = onSettingClick,
+            onErrorToast = onErrorToast,
             mainCallBack = {
                 viewModel.getProfile()
                 viewModel.getLateRankList()
@@ -75,6 +85,7 @@ fun MainRoute(
 @Composable
 fun MainScreen(
     role: Authority,
+    isRefreshing: Boolean,
     getProfileUiState: GetProfileUiState,
     getLateRankListUiState: GetLateRankListUiState,
     getOutingListUiState: GetOutingListUiState,
@@ -83,6 +94,8 @@ fun MainScreen(
     onLateListClick: () -> Unit,
     onStudentManagementClick: () -> Unit,
     onQrcodeClick: (role: Authority) -> Unit,
+    onSettingClick: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     mainCallBack: () -> Unit
 ) {
     var isPermissionRequest by rememberSaveable { mutableStateOf(false) }
@@ -96,6 +109,11 @@ fun MainScreen(
             permissionLauncher.launch(
                 arrayOf(
                     Manifest.permission.CAMERA,
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        Manifest.permission.READ_MEDIA_IMAGES
+                    } else {
+                        Manifest.permission.READ_EXTERNAL_STORAGE
+                    },
                     Manifest.permission.POST_NOTIFICATIONS
                 )
             )
@@ -108,52 +126,71 @@ fun MainScreen(
     }
 
     val scrollState = rememberScrollState()
+    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = isRefreshing)
 
     GomsTheme { colors, typography ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .statusBarsPadding()
-                .navigationBarsPadding()
-                .background(colors.BLACK)
-        ) {
-            Column {
-                GomsTopBar(
-                    role = role,
-                    icon = { SettingIcon(tint = colors.G7) },
-                    onSettingClick = {},
-                    onAdminClick = { onStudentManagementClick() }
+        SwipeRefresh(
+            state = swipeRefreshState,
+            onRefresh = { mainCallBack() },
+            indicator = { state, refreshTrigger ->
+                SwipeRefreshIndicator(
+                    state = state,
+                    refreshTriggerDistance = refreshTrigger,
+                    backgroundColor = colors.G2,
+                    contentColor = colors.WHITE
                 )
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .verticalScroll(scrollState)
-                        .padding(horizontal = 16.dp),
-                    verticalArrangement = Arrangement.spacedBy(32.dp)
-                ) {
-                    MainProfileCard(getProfileUiState = getProfileUiState)
-                    MainLateCard(
+            }
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .statusBarsPadding()
+                    .navigationBarsPadding()
+                    .background(colors.BACKGROUND)
+            ) {
+                Column {
+                    GomsTopBar(
                         role = role,
-                        getLateRankListUiState = getLateRankListUiState
+                        icon = { SettingIcon(tint = colors.G7) },
+                        onSettingClick = onSettingClick,
+                        onAdminClick = { onStudentManagementClick() }
+                    )
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .verticalScroll(scrollState)
+                            .padding(horizontal = 16.dp),
+                        verticalArrangement = Arrangement.spacedBy(32.dp)
                     ) {
-                        onLateListClick()
-                    }
-                    MainOutingCard(
-                        role = role,
-                        getOutingListUiState = getOutingListUiState,
-                        getOutingCountUiState = getOutingCountUiState
-                    ) {
-                        onOutingStatusClick()
+                        MainProfileCard(
+                            getProfileUiState = getProfileUiState,
+                            onErrorToast = onErrorToast
+                        )
+                        MainLateCard(
+                            role = role,
+                            getLateRankListUiState = getLateRankListUiState,
+                            onErrorToast = onErrorToast
+                        ) {
+                            onLateListClick()
+                        }
+                        MainOutingCard(
+                            role = role,
+                            getOutingListUiState = getOutingListUiState,
+                            getOutingCountUiState = getOutingCountUiState,
+                            onErrorToast = onErrorToast
+                        ) {
+                            onOutingStatusClick()
+                        }
                     }
                 }
-            }
-            GomsFloatingButton(
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(end = 16.dp, bottom = 16.dp),
-                role = role
-            ) {
-                onQrcodeClick(role)
+                GomsFloatingButton(
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(end = 16.dp, bottom = 16.dp),
+                    role = role
+                ) {
+                    onQrcodeClick(role)
+                }
             }
         }
     }

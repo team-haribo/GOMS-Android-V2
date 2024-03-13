@@ -13,12 +13,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -44,13 +46,16 @@ fun OutingStatusList(
     getOutingListUiState: GetOutingListUiState,
     getOutingCountUiState: GetOutingCountUiState,
     outingSearchUiState: OutingSearchUiState,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     onClick: (UUID) -> Unit
 ) {
     when (getOutingCountUiState) {
         GetOutingCountUiState.Loading -> {
             ShimmerOutingStatusListComponent(modifier = modifier)
         }
-        is GetOutingCountUiState.Error -> Unit
+        is GetOutingCountUiState.Error -> {
+            onErrorToast(getOutingCountUiState.exception, "외출학생 숫자를 가져오지 못했습니다")
+        }
         GetOutingCountUiState.Empty -> {
             Column(
                 modifier = Modifier
@@ -65,13 +70,17 @@ fun OutingStatusList(
                 OutingSearchUiState.Loading -> {
                     ShimmerOutingStatusListComponent(modifier = modifier)
                 }
-                is OutingSearchUiState.Error -> Unit
+                is OutingSearchUiState.Error -> {
+                    onErrorToast(outingSearchUiState.exception, "외출자 검색이 실패했습니다")
+                }
                 OutingSearchUiState.QueryEmpty -> {
                     when (getOutingListUiState) {
                         GetOutingListUiState.Loading -> {
                             ShimmerOutingStatusListComponent(modifier = modifier)
                         }
-                        is GetOutingListUiState.Error -> Unit
+                        is GetOutingListUiState.Error -> {
+                            onErrorToast(getOutingListUiState.exception, "외출자 정보를 가져오지 못했습니다")
+                        }
                         is GetOutingListUiState.Success -> {
                             val list = getOutingListUiState.getOutingListResponse
 
@@ -170,7 +179,9 @@ fun OutingStatusListItem(
             } else {
                 AsyncImage(
                     model = list.profileUrl,
-                    modifier = Modifier.size(48.dp),
+                    modifier = Modifier
+                        .size(48.dp)
+                        .clip(RoundedCornerShape(40.dp)),
                     contentScale = ContentScale.Crop,
                     contentDescription = "Profile Image",
                 )

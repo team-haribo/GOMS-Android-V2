@@ -1,7 +1,7 @@
 package com.goms.qrcode
 
 import android.Manifest
-import android.widget.Toast
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,12 +19,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.goms.common.result.Result
-import com.goms.design_system.component.dialog.GomsOneButtonDialog
 import com.goms.design_system.theme.GomsTheme
 import com.goms.qrcode.component.QrcodeScanGuide
 import com.goms.qrcode.component.QrcodeScanPreview
 import com.goms.qrcode.component.QrcodeScanTopBar
+import com.goms.qrcode.viewmodel.OutingUiState
 import com.goms.qrcode.viewmodel.QrcodeViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
@@ -41,6 +40,7 @@ fun QrcodeScanRoute(
     onError: () -> Unit,
     onSuccess: () -> Unit,
     viewModel: QrcodeViewModel = hiltViewModel(),
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
     val outingUiState by viewModel.outingState.collectAsState()
     val cameraPermissionState: PermissionState = rememberPermissionState(Manifest.permission.CAMERA)
@@ -56,10 +56,7 @@ fun QrcodeScanRoute(
             outingUiState = outingUiState,
             onQrcodeScan = { qrcodeData ->
                 viewModel.outing(UUID.fromString(qrcodeData))
-            },
-            onError = onError,
-            onSuccess = onSuccess,
-            onBackClick = onBackClick
+            }
         )
     } else {
         onPermissionBlock()
@@ -69,11 +66,7 @@ fun QrcodeScanRoute(
 @androidx.annotation.OptIn(androidx.camera.core.ExperimentalGetImage::class)
 @Composable
 fun QrcodeScanScreen(
-    outingUiState: Result<Unit>,
-    onQrcodeScan: (String?) -> Unit,
-    onBackClick: () -> Unit,
-    onError: () -> Unit,
-    onSuccess: () -> Unit
+    onQrcodeScan: (String?) -> Unit
 ) {
     var openDialog by remember { mutableStateOf(false) }
 
@@ -94,27 +87,5 @@ fun QrcodeScanScreen(
             Spacer(modifier = Modifier.height(224.dp))
             QrcodeScanGuide()
         }
-    }
-
-    when (outingUiState) {
-        is Result.Loading -> Unit
-        is Result.Success -> openDialog = true
-        is Result.Error -> {
-            onError()
-            Toast.makeText(LocalContext.current,"네트워크 에러",Toast.LENGTH_LONG).show()
-        }
-    }
-
-    if(openDialog) {
-        GomsOneButtonDialog(
-            openDialog = openDialog,
-            onStateChange = {
-                openDialog = it
-            },
-            title = "외출하기 성공",
-            content = "7시 25분 까지 복귀해 주세요!",
-            buttonText = "확인",
-            onClick = onSuccess
-        )
     }
 }

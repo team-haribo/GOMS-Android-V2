@@ -55,6 +55,45 @@ fun BackIcon(
 }
 
 @Composable
+fun ChevronRightIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+) {
+    Image(
+        painter = painterResource(id = R.drawable.ic_chevron_right),
+        contentDescription = "ChevronRight Icon",
+        modifier = modifier,
+        colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
+    )
+}
+
+@Composable
+fun ChevronDownIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+) {
+    Image(
+        painter = painterResource(id = R.drawable.ic_chevron_down),
+        contentDescription = "ChevronRight Icon",
+        modifier = modifier,
+        colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
+    )
+}
+
+@Composable
+fun ChevronUpIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+) {
+    Image(
+        painter = painterResource(id = R.drawable.ic_chevron_up),
+        contentDescription = "ChevronRight Icon",
+        modifier = modifier,
+        colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
+    )
+}
+
+@Composable
 fun CloseIcon(
     modifier: Modifier = Modifier,
     tint: Color = Color.Unspecified

@@ -32,12 +32,14 @@ fun NavController.navigateToInputLogin(navOptions: NavOptions? = null) {
 
 fun NavGraphBuilder.inputLoginScreen(
     onBackClick: () -> Unit,
-    onMainClick: () -> Unit
+    onMainClick: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
     composable(route = InputLoginRoute) {
         InputLoginRoute(
             onBackClick = onBackClick,
-            onMainClick = onMainClick
+            onMainClick = onMainClick,
+            onErrorToast = onErrorToast
         )
     }
 }

@@ -23,9 +23,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -38,7 +38,6 @@ import com.goms.design_system.theme.GomsTheme
 import com.goms.main.viewmodel.GetLateRankListUiState
 import com.goms.model.enum.Authority
 import com.goms.model.response.late.RankResponse
-import com.goms.ui.createToast
 import com.goms.ui.toText
 
 @Composable
@@ -46,6 +45,7 @@ fun MainLateCard(
     modifier: Modifier = Modifier,
     role: Authority,
     getLateRankListUiState: GetLateRankListUiState,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     onClick: () -> Unit
 ) {
     var componentWidth by remember { mutableStateOf(0.dp) }
@@ -113,12 +113,7 @@ fun MainLateCard(
                             }
                         }
                     }
-                    is GetLateRankListUiState.Error -> {
-                        createToast(
-                            context = LocalContext.current,
-                            message = "지각자 랭킹 정보를 가져오지 못했습니다"
-                        )
-                    }
+                    is GetLateRankListUiState.Error -> Unit
                 }
             }
         }
@@ -145,7 +140,9 @@ fun MainLateItem(
             } else {
                 AsyncImage(
                     model = list.profileUrl,
-                    modifier = Modifier.size(56.dp),
+                    modifier = Modifier
+                        .size(56.dp)
+                        .clip(RoundedCornerShape(40.dp)),
                     contentScale = ContentScale.Crop,
                     contentDescription = "Profile Image",
                 )

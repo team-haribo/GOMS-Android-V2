@@ -19,41 +19,36 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goms.common.result.Result
-import com.goms.design_system.component.bottomsheet.SelectorBottomSheet
 import com.goms.design_system.component.button.ButtonState
 import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.button.GomsButton
 import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
-import com.goms.design_system.component.textfield.GomsBottomSheetTextField
 import com.goms.design_system.component.textfield.GomsTextField
 import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.util.keyboardAsState
 import com.goms.design_system.util.lockScreenOrientation
-import com.goms.model.enum.Gender
-import com.goms.model.enum.Major
 import com.goms.model.request.auth.SendNumberRequest
+import com.goms.sign_up.component.SelectGenderDropDown
+import com.goms.sign_up.component.SelectMajorDropDown
 import com.goms.sign_up.component.SignUpText
 import com.goms.sign_up.viewmodel.SignUpViewModelProvider
-import com.goms.ui.createToast
-import com.goms.ui.isStrongEmail
 
 @Composable
 fun SignUpRoute(
     viewModelStoreOwner: ViewModelStoreOwner,
     onBackClick: () -> Unit,
     onNumberClick: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
     SignUpViewModelProvider(viewModelStoreOwner = viewModelStoreOwner) { viewModel ->
         val sendNumberUiState by viewModel.sendNumberUiState.collectAsState()
@@ -74,6 +69,7 @@ fun SignUpRoute(
             sendNumberUiState = sendNumberUiState,
             onBackClick = onBackClick,
             onNumberClick = onNumberClick,
+            onErrorToast = onErrorToast,
             signUpCallBack = { viewModel.sendNumber(body = SendNumberRequest("${viewModel.email.value}@gsm.hs.kr")) },
             initCallBack = { viewModel.initSendNumber() }
         )
@@ -94,12 +90,13 @@ fun SignUpScreen(
     sendNumberUiState: Result<Unit>,
     onBackClick: () -> Unit,
     onNumberClick: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     signUpCallBack: () -> Unit,
     initCallBack: () -> Unit
 ) {
-    val context = LocalContext.current
     val focusManager = LocalFocusManager.current
     val isKeyboardOpen by keyboardAsState()
+
     var onGenderBottomSheetOpenClick by rememberSaveable { mutableStateOf(false) }
     var onMajorBottomSheetOpenClick by rememberSaveable { mutableStateOf(false) }
     var isLoading by remember { mutableStateOf(false) }
@@ -114,13 +111,7 @@ fun SignUpScreen(
         when (sendNumberUiState) {
             is Result.Loading -> Unit
             is Result.Success -> onNumberClick()
-            is Result.Error -> {
-                isLoading = false
-                createToast(
-                    context = context,
-                    message = "오류가 발생하였습니다"
-                )
-            }
+            is Result.Error -> isLoading = false
         }
         onDispose { initCallBack() }
     }
@@ -130,7 +121,7 @@ fun SignUpScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(colors.BLACK)
+                .background(colors.BACKGROUND)
                 .statusBarsPadding()
                 .navigationBarsPadding()
                 .pointerInput(Unit) {
@@ -165,28 +156,19 @@ fun SignUpScreen(
                     onValueChange = onEmailChange,
                     singleLine = true
                 )
-                GomsBottomSheetTextField(
-                    modifier = Modifier.fillMaxWidth(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                    placeHolder = "성별",
-                    setText = gender,
-                    onValueChange = onGenderChange,
-                    readOnly = true,
-                    singleLine = true
+                SelectGenderDropDown(
+                    modifier = Modifier,
+                    gender = gender,
+                    onSelectGender = onGenderChange
                 ) {
-                    onGenderBottomSheetOpenClick = true
                     focusManager.clearFocus()
                 }
-                GomsBottomSheetTextField(
-                    modifier = Modifier.fillMaxWidth(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                    placeHolder = "과",
-                    setText = major,
-                    onValueChange = onMajorChange,
-                    readOnly = true,
-                    singleLine = true
+                Spacer(modifier = Modifier.height(30.dp))
+                SelectMajorDropDown(
+                    modifier = Modifier,
+                    major = major,
+                    onSelectMajor = onMajorChange
                 ) {
-                    onMajorBottomSheetOpenClick = true
                     focusManager.clearFocus()
                 }
                 Spacer(modifier = Modifier.weight(1f))
@@ -196,43 +178,11 @@ fun SignUpScreen(
                     state = if (name.isNotBlank() && email.isNotBlank() && gender.isNotBlank() && major.isNotBlank()) ButtonState.Normal
                     else ButtonState.Enable
                 ) {
-                    if (!isStrongEmail(email)) {
-                        isLoading = false
-                        createToast(
-                            context = context,
-                            message = "이메일 형식이 올바르지 않습니다"
-                        )
-                    } else {
-                        signUpCallBack()
-                        isLoading = true
-                    }
+                    signUpCallBack()
+                    isLoading = true
                 }
                 Spacer(modifier = Modifier.height(100.dp))
             }
-        }
-        if (onGenderBottomSheetOpenClick) {
-            SelectorBottomSheet(
-                modifier = Modifier.fillMaxWidth(),
-                title = "성별",
-                list = listOf(Gender.MAN.value, Gender.WOMAN.value),
-                selected = gender,
-                itemChange = onGenderChange,
-                closeSheet = {
-                    onGenderBottomSheetOpenClick = false
-                }
-            )
-        }
-        if (onMajorBottomSheetOpenClick) {
-            SelectorBottomSheet(
-                modifier = Modifier.fillMaxWidth(),
-                title = "과",
-                list = listOf(Major.SW_DEVELOP.value, Major.SMART_IOT.value, Major.AI.value),
-                selected = major,
-                itemChange = onMajorChange,
-                closeSheet = {
-                    onMajorBottomSheetOpenClick = false
-                }
-            )
         }
         if (isLoading) {
             GomsCircularProgressIndicator()

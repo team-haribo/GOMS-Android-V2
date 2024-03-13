@@ -60,10 +60,6 @@ class MainActivityViewModel @Inject constructor(
                 _saveDeviceTokenUiState.value = Result.Error(it)
             }
     }
-
-    fun setAuthority(authority: String) = viewModelScope.launch {
-        authTokenDataSource.setAuthority(authority = authority)
-    }
 }
 
 sealed interface MainActivityUiState {

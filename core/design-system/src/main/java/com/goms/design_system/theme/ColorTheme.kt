@@ -60,4 +60,6 @@ abstract class ColorTheme {
 
     abstract val BLACK: Color
     abstract val WHITE: Color
+
+    abstract val BACKGROUND: Color
 }

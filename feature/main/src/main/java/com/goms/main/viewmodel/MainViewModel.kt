@@ -48,6 +48,9 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
     val role = authTokenDataSource.getAuthority()
 
+    private val _isRefreshing = MutableStateFlow(false)
+    val isRefreshing = _isRefreshing.asStateFlow()
+
     private val _getProfileUiState = MutableStateFlow<GetProfileUiState>(GetProfileUiState.Loading)
     val getProfileUiState = _getProfileUiState.asStateFlow()
 

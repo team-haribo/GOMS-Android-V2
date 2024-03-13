@@ -18,8 +18,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -30,13 +30,13 @@ import com.goms.design_system.component.shimmer.shimmerEffect
 import com.goms.main.viewmodel.GetProfileUiState
 import com.goms.model.enum.Authority
 import com.goms.model.response.account.ProfileResponse
-import com.goms.ui.createToast
 import com.goms.ui.toText
 
 @Composable
 fun MainProfileCard(
     modifier: Modifier = Modifier,
     getProfileUiState: GetProfileUiState,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
     when (getProfileUiState) {
         GetProfileUiState.Loading -> {
@@ -50,12 +50,7 @@ fun MainProfileCard(
                 data = data
             )
         }
-        is GetProfileUiState.Error -> {
-            createToast(
-                context = LocalContext.current,
-                message = "사용자 정보를 가져오지 못했습니다"
-            )
-        }
+        is GetProfileUiState.Error -> Unit
     }
 }
 
@@ -91,12 +86,15 @@ fun MainProfileCardComponent(
                     Image(
                         painter = painterResource(R.drawable.ic_profile),
                         contentDescription = "Default Profile Image",
-                        modifier = Modifier.size(64.dp)
+                        modifier = Modifier
+                            .size(64.dp)
                     )
                 } else {
                     AsyncImage(
                         model = data.profileUrl,
-                        modifier = Modifier.size(64.dp),
+                        modifier = Modifier
+                            .size(64.dp)
+                            .clip(RoundedCornerShape(40.dp)),
                         contentScale = ContentScale.Crop,
                         contentDescription = "Profile Image",
                     )

@@ -22,9 +22,11 @@ dependencies {
     implementation(project(":core:data"))
     implementation(project(":core:model"))
     implementation(project(":core:domain"))
+    implementation(project(":core:ui"))
     implementation(project(":feature:login"))
     implementation(project(":feature:sign-up"))
     implementation(project(":feature:main"))
+    implementation(project(":feature:setting"))
     implementation(project(":feature:qrcode"))
 
     implementation(libs.junit)

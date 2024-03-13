@@ -43,7 +43,8 @@ import kotlinx.datetime.toLocalDateTime
 @Composable
 fun LateListRoute(
     viewModelStoreOwner: ViewModelStoreOwner,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
     MainViewModelProvider(viewModelStoreOwner = viewModelStoreOwner) { viewModel ->
         val getLateListUiState by viewModel.getLateListUiState.collectAsStateWithLifecycle()
@@ -51,7 +52,8 @@ fun LateListRoute(
         LateListScreen(
             getLateListUiState = getLateListUiState,
             onBackClick = onBackClick,
-            lateListCallBack = { viewModel.getLateList(it) }
+            lateListCallBack = { viewModel.getLateList(it) },
+            onErrorToast = onErrorToast
         )
     }
 }
@@ -61,11 +63,10 @@ fun LateListRoute(
 fun LateListScreen(
     getLateListUiState: GetLateListUiState,
     onBackClick: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     lateListCallBack: (LocalDate) -> Unit
 ) {
     val scrollState = rememberScrollState()
-    val focusManager = LocalFocusManager.current
-    val isKeyboardOpen by keyboardAsState()
     val datePickerState = rememberDatePickerState()
     var onDatePickerBottomSheetOpenClick by remember { mutableStateOf(false) }
     val selectedDateMillis = datePickerState.selectedDateMillis ?: getDefaultWednesday().toEpochMilliseconds()
@@ -77,24 +78,13 @@ fun LateListScreen(
         lateListCallBack(selectedLocalDate)
     }
 
-    LaunchedEffect(isKeyboardOpen) {
-        if (!isKeyboardOpen) {
-            focusManager.clearFocus()
-        }
-    }
-
     GomsTheme { colors, typography ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(colors.BLACK)
+                .background(colors.BACKGROUND)
                 .statusBarsPadding()
                 .navigationBarsPadding()
-                .pointerInput(Unit) {
-                    detectTapGestures {
-                        focusManager.clearFocus()
-                    }
-                }
         ) {
             GomsBackButton {
                 onBackClick()
@@ -109,7 +99,8 @@ fun LateListScreen(
                 Spacer(modifier = Modifier.height(8.dp))
                 LateList(
                     getLateListUiState = getLateListUiState,
-                    onBottomSheetOpenClick = { onDatePickerBottomSheetOpenClick = true }
+                    onBottomSheetOpenClick = { onDatePickerBottomSheetOpenClick = true },
+                    onErrorToast = onErrorToast
                 )
             }
         }

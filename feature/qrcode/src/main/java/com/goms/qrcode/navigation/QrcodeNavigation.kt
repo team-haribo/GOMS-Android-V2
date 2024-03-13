@@ -16,17 +16,11 @@ fun NavController.navigateToQrScan(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.qrcodeScanScreen(
-    onPermissionBlock: () -> Unit,
-    onError: () -> Unit,
-    onSuccess: () -> Unit,
-    onBackClick: () -> Unit,
+    onPermissionBlock: () -> Unit
 ) {
     composable(route = qrcodeScanRoute) {
         QrcodeScanRoute(
-            onPermissionBlock = onPermissionBlock,
-            onError = onError,
-            onSuccess = onSuccess,
-            onBackClick = onBackClick
+            onPermissionBlock = onPermissionBlock
         )
     }
 }
@@ -38,13 +32,15 @@ fun NavController.navigateToQrGenerate(navOptions: NavOptions? = null) {
 fun NavGraphBuilder.qrcodeGenerateScreen(
     onRemoteError: () -> Unit,
     onBackClick: () -> Unit,
-    onTimerFinish: () -> Unit
+    onTimerFinish: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
     composable(route = qrcodeGenerateRoute) {
         QrcodeGenerateRoute(
             onRemoteError = onRemoteError,
             onBackClick = onBackClick,
-            onTimerFinish = onTimerFinish
+            onTimerFinish = onTimerFinish,
+            onErrorToast = onErrorToast
         )
     }
 }
