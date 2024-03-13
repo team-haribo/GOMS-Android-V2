@@ -41,6 +41,7 @@ junit = "4.13.2"
 kotlin = "1.8.10"
 kotlinxCoroutines = "1.7.1"
 kotlinxDateTime = "0.4.0"
+kotlinxImmutable = "0.3.5"
 kotlinxSerializationJson = "1.5.1"
 ksp = "1.8.10-1.0.9"
 lint = "31.2.1"
@@ -114,6 +115,7 @@ kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 kotlinx-coroutines-guava = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-guava", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
 kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinxDateTime" }
+kotlinx-immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "kotlinxImmutable" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 lint-api = { group = "com.android.tools.lint", name = "lint-api", version.ref = "lint" }
 mlkit = { group = "com.google.mlkit", name = "barcode-scanning", version.ref = "mlkit" }

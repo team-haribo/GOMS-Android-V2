@@ -26,6 +26,7 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
                 add("implementation", libs.findLibrary("androidx.lifecycle.runtimeCompose").get())
                 add("implementation", libs.findLibrary("androidx.lifecycle.viewModelCompose").get())
                 add("implementation", libs.findLibrary("kotlinx.datetime").get())
+                add("implementation", libs.findLibrary("kotlinx.immutable").get())
             }
         }
     }
