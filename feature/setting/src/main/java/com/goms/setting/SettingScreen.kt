@@ -24,7 +24,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -80,6 +79,7 @@ fun SettingRoute(
             onLogoutClick = { viewModel.logout() },
             onLogoutSuccess = onLogoutSuccess,
             getProfile = {
+                viewModel.initProfileImage()
                 viewModel.initGetProfile()
                 viewModel.getProfile()
             },
@@ -108,17 +108,6 @@ fun SettingScreen(
 
     var isLoading by remember { mutableStateOf(false) }
 
-    when (getProfileUiState) {
-        is GetProfileUiState.Loading -> {}
-        is GetProfileUiState.Success -> {
-            Log.d("testt", "get")
-            isLoading = false
-        }
-        is GetProfileUiState.Error -> {
-            onErrorToast(getProfileUiState.exception, "네트워크 상태를 확인해 주세요")
-        }
-    }
-
     when (logoutUiState) {
         is LogoutUiState.Loading -> Unit
         is LogoutUiState.Success -> { onLogoutSuccess() }
@@ -128,9 +117,8 @@ fun SettingScreen(
     }
 
     when (profileImageUiState) {
-        is ProfileImageUiState.Loading -> {}
+        is ProfileImageUiState.Loading -> { isLoading = false }
         is ProfileImageUiState.Success -> {
-            Log.d("testt", "set")
             isLoading = true
             getProfile()
         }

@@ -2,6 +2,7 @@ package com.goms.setting.viewmodel
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.goms.common.result.Result
@@ -68,6 +69,11 @@ class SettingViewModel @Inject constructor (
                 _profileImageUiState.value = ProfileImageUiState.Error(it)
             }
     }
+
+    fun initProfileImage() {
+        _profileImageUiState.value = ProfileImageUiState.Loading
+    }
+
 
     fun logout() = viewModelScope.launch {
         logoutUseCase()
