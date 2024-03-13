@@ -7,6 +7,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -18,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,20 +32,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import com.goms.design_system.component.clickable.gomsClickable
+import com.goms.design_system.icon.ChevronDownIcon
+import com.goms.design_system.icon.ChevronUpIcon
 import com.goms.design_system.theme.GomsTheme
-
-enum class DropdownState(val value: String) {
-    Show("Show"),
-    Hide("Hide"),
-    OnDissmiss("OnDissmiss"),
-}
 
 @Composable
 fun GomsDropdown(
     dropdownList: List<String>,
     dropdownListSize: Int,
     onDissmiss: () -> Unit,
-    showDropdown: String,
     selectedIndex: Int,
     modifier: Modifier,
     height: Dp = 64.dp,
@@ -50,21 +48,64 @@ fun GomsDropdown(
     onItemClick: (Int) -> Unit
 ) {
     val scrollState = rememberScrollState()
+    var showDropdown: Boolean? by rememberSaveable { mutableStateOf(false) }
     var dropdownType: Boolean? by remember { mutableStateOf(null) }
 
     GomsTheme { colors, typography ->
         Column(
             modifier = Modifier,
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center) {
+            verticalArrangement = Arrangement.Center
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(64.dp)
+                    .border(
+                        BorderStroke(
+                            width = 1.dp,
+                            color = colors.WHITE.copy(0.15f)
+                        ),
+                        shape = RoundedCornerShape(12.dp)
+                    )
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(colors.G1)
+                    .padding(12.dp)
+                    .gomsClickable(
+                        interval = 100L
+                    ) {
+                        if(showDropdown != null && showDropdown == false) showDropdown = true
+                        if(showDropdown == null) showDropdown = false
+                    },
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = dropdownList[selectedIndex],
+                    style = typography.textMedium,
+                    color = colors.G7,
+                    fontWeight = FontWeight.Normal
+                )
+                if(showDropdown != null && showDropdown == true) {
+                    ChevronDownIcon(
+                        tint = colors.G7
+                    )
+                } else {
+                    ChevronUpIcon(
+                        tint = colors.G7
+                    )
+                }
+            }
+        }
+        Spacer(modifier = Modifier.height(8.dp))
             Box() {
-                if (showDropdown == DropdownState.Show.name) {
+                if (showDropdown != null && showDropdown == true) {
                     Popup(
                         alignment = Alignment.TopCenter,
                         properties = PopupProperties(
                             excludeFromSystemGesture = true,
                         ),
-                        onDismissRequest = onDissmiss
+                        onDismissRequest = { showDropdown = null }
                     ) {
                         Column(
                             modifier = modifier
@@ -106,6 +147,7 @@ fun GomsDropdown(
                                         .padding(12.dp)
                                         .gomsClickable {
                                             onItemClick(index)
+                                            showDropdown = !showDropdown!!
                                         },
                                     contentAlignment = Alignment.CenterStart
                                 ) {
@@ -123,4 +165,3 @@ fun GomsDropdown(
             }
         }
     }
-}
