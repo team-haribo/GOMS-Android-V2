@@ -12,7 +12,7 @@ fun RePasswordText(modifier: Modifier){
     GomsTheme { colors, typography ->
         Text(
             modifier = modifier,
-            text = "회원가입",
+            text = "비밀번호 재설정",
             style = typography.titleLarge,
             fontWeight = FontWeight.Bold,
             color = colors.WHITE
