@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.graphics.toColor
 import coil.compose.AsyncImage
 import com.goms.design_system.R
+import com.goms.design_system.component.clickable.gomsClickable
 import com.goms.design_system.component.shimmer.shimmerEffect
 import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.util.shadow
@@ -35,6 +36,7 @@ import com.goms.ui.toText
 @Composable
 fun SettingProfileCard(
     modifier: Modifier = Modifier,
+    onProfileClick: () -> Unit,
     getProfileUiState: GetProfileUiState,
 ) {
     when (getProfileUiState) {
@@ -46,6 +48,7 @@ fun SettingProfileCard(
 
             SettingProfileCardComponent(
                 modifier = modifier,
+                onProfileClick = onProfileClick,
                 data = data
             )
         }
@@ -56,6 +59,7 @@ fun SettingProfileCard(
 @Composable
 fun SettingProfileCardComponent(
     modifier: Modifier,
+    onProfileClick: () -> Unit,
     data: ProfileResponse
 ) {
     GomsTheme { colors, typography ->
@@ -64,7 +68,10 @@ fun SettingProfileCardComponent(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Box(
-                contentAlignment = Alignment.BottomEnd
+                contentAlignment = Alignment.BottomEnd,
+                modifier = Modifier.gomsClickable {
+                    onProfileClick()
+                }
             ) {
                 if (data.profileUrl.isNullOrEmpty()) {
                     Image(
