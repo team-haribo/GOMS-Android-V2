@@ -12,6 +12,7 @@ import retrofit2.http.Path
 interface AccountAPI {
     @GET("/api/v2/account/profile")
     suspend fun getProfile(): ProfileResponse
+
     @Multipart
     @POST("/api/v2/account/image")
     suspend fun uploadProfileImage(
