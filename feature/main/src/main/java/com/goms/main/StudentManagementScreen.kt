@@ -44,6 +44,7 @@ import com.goms.model.enum.Grade
 import com.goms.model.enum.Major
 import com.goms.model.enum.Status
 import com.goms.model.request.council.AuthorityRequest
+import kotlinx.collections.immutable.toPersistentList
 import java.util.UUID
 
 @Composable
@@ -229,7 +230,7 @@ fun StudentManagementScreen(
                     Status.ROLE_STUDENT.value,
                     Status.ROLE_STUDENT_COUNCIL.value,
                     Status.BLACK_LIST.value
-                ),
+                ).toPersistentList(),
                 selected = status,
                 itemChange = onStatusChange,
                 closeSheet = {
@@ -251,7 +252,7 @@ fun StudentManagementScreen(
                     Status.ROLE_STUDENT.value,
                     Status.ROLE_STUDENT_COUNCIL.value,
                     Status.BLACK_LIST.value
-                ),
+                ).toPersistentList(),
                 selected1 = filterStatus,
                 itemChange1 = onFilterStatusChange,
                 subTitle2 = "학년",
@@ -259,14 +260,14 @@ fun StudentManagementScreen(
                     Grade.FIRST_GRADE.value,
                     Grade.SECOND_GRADE.value,
                     Grade.THIRD_GRADE.value
-                ),
+                ).toPersistentList(),
                 selected2 = filterGrade,
                 itemChange2 = onFilterGradeChange,
                 subTitle3 = "성별",
                 list3 = listOf(
                     Gender.MAN.value,
                     Gender.WOMAN.value
-                ),
+                ).toPersistentList(),
                 selected3 = filterGender,
                 itemChange3 = onFilterGenderChange,
                 subTitle4 = "학과",
@@ -274,7 +275,7 @@ fun StudentManagementScreen(
                     Major.SW_DEVELOP.value,
                     Major.SMART_IOT.value,
                     Major.AI.value
-                ),
+                ).toPersistentList(),
                 selected4 = filterMajor,
                 itemChange4 = onFilterMajorChange,
                 initClick = {

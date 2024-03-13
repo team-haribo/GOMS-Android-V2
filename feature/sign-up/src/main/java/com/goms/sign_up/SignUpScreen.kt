@@ -46,6 +46,7 @@ import com.goms.model.request.auth.SendNumberRequest
 import com.goms.sign_up.component.SignUpText
 import com.goms.sign_up.viewmodel.SignUpViewModelProvider
 import com.goms.ui.isStrongEmail
+import kotlinx.collections.immutable.toPersistentList
 
 @Composable
 fun SignUpRoute(
@@ -208,7 +209,10 @@ fun SignUpScreen(
             SelectorBottomSheet(
                 modifier = Modifier.fillMaxWidth(),
                 title = "성별",
-                list = listOf(Gender.MAN.value, Gender.WOMAN.value),
+                list = listOf(
+                    Gender.MAN.value,
+                    Gender.WOMAN.value
+                ).toPersistentList(),
                 selected = gender,
                 itemChange = onGenderChange,
                 closeSheet = {
@@ -220,7 +224,11 @@ fun SignUpScreen(
             SelectorBottomSheet(
                 modifier = Modifier.fillMaxWidth(),
                 title = "과",
-                list = listOf(Major.SW_DEVELOP.value, Major.SMART_IOT.value, Major.AI.value),
+                list = listOf(
+                    Major.SW_DEVELOP.value,
+                    Major.SMART_IOT.value,
+                    Major.AI.value
+                ).toPersistentList(),
                 selected = major,
                 itemChange = onMajorChange,
                 closeSheet = {
