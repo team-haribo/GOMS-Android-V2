@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -82,7 +83,9 @@ fun SettingProfileCardComponent(
                 } else {
                     AsyncImage(
                         model = data.profileUrl,
-                        modifier = Modifier.size(64.dp),
+                        modifier = Modifier
+                            .size(64.dp)
+                            .clip(RoundedCornerShape(40.dp)),
                         contentScale = ContentScale.Crop,
                         contentDescription = "Profile Image",
                     )
