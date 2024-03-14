@@ -1,5 +1,6 @@
 package com.goms.main
 
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
@@ -22,10 +23,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModelStoreOwner
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goms.common.result.Result
 import com.goms.design_system.component.bottomsheet.AdminSelectorBottomSheet
@@ -37,7 +39,7 @@ import com.goms.design_system.util.keyboardAsState
 import com.goms.main.component.StudentManagementList
 import com.goms.main.component.StudentManagementText
 import com.goms.main.viewmodel.GetStudentListUiState
-import com.goms.main.viewmodel.MainViewModelProvider
+import com.goms.main.viewmodel.MainViewModel
 import com.goms.main.viewmodel.StudentSearchUiState
 import com.goms.model.enum.Gender
 import com.goms.model.enum.Grade
@@ -49,89 +51,90 @@ import java.util.UUID
 
 @Composable
 fun StudentManagementRoute(
-    viewModelStoreOwner: ViewModelStoreOwner,
     onBackClick: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
+    viewModel: MainViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
 ) {
-    MainViewModelProvider(viewModelStoreOwner = viewModelStoreOwner) { viewModel ->
-        val studentSearch by viewModel.studentSearch.collectAsStateWithLifecycle()
-        val status by viewModel.status.collectAsStateWithLifecycle()
-        val filterStatus by viewModel.filterStatus.collectAsStateWithLifecycle()
-        val filterGrade by viewModel.filterGrade.collectAsStateWithLifecycle()
-        val filterGender by viewModel.filterGender.collectAsStateWithLifecycle()
-        val filterMajor by viewModel.filterMajor.collectAsStateWithLifecycle()
-        val getStudentListUiState by viewModel.getStudentListUiState.collectAsStateWithLifecycle()
-        val changeAuthorityUiState by viewModel.changeAuthorityUiState.collectAsStateWithLifecycle()
-        val setBlackListUiState by viewModel.setBlackListUiState.collectAsStateWithLifecycle()
-        val deleteBlackListUiState by viewModel.deleteBlackListUiState.collectAsStateWithLifecycle()
-        val studentSearchUiState by viewModel.studentSearchUiState.collectAsStateWithLifecycle()
+    val studentSearch by viewModel.studentSearch.collectAsStateWithLifecycle()
+    val status by viewModel.status.collectAsStateWithLifecycle()
+    val filterStatus by viewModel.filterStatus.collectAsStateWithLifecycle()
+    val filterGrade by viewModel.filterGrade.collectAsStateWithLifecycle()
+    val filterGender by viewModel.filterGender.collectAsStateWithLifecycle()
+    val filterMajor by viewModel.filterMajor.collectAsStateWithLifecycle()
+    val getStudentListUiState by viewModel.getStudentListUiState.collectAsStateWithLifecycle()
+    val changeAuthorityUiState by viewModel.changeAuthorityUiState.collectAsStateWithLifecycle()
+    val setBlackListUiState by viewModel.setBlackListUiState.collectAsStateWithLifecycle()
+    val deleteBlackListUiState by viewModel.deleteBlackListUiState.collectAsStateWithLifecycle()
+    val studentSearchUiState by viewModel.studentSearchUiState.collectAsStateWithLifecycle()
 
-        when (changeAuthorityUiState) {
-            is Result.Loading -> Unit
-            is Result.Success -> {
-                viewModel.getStudentList()
-                viewModel.initChangeAuthority()
-            }
-            is Result.Error -> {
-                onErrorToast((changeAuthorityUiState as Result.Error).exception, "권한 변경이 실패했습니다")
-            }
+    when (changeAuthorityUiState) {
+        is Result.Loading -> Unit
+        is Result.Success -> {
+            viewModel.getStudentList()
+            viewModel.initChangeAuthority()
         }
-
-        when (setBlackListUiState) {
-            is Result.Loading -> Unit
-            is Result.Success -> {
-                viewModel.getStudentList()
-                viewModel.initSetBlackList()
-            }
-            is Result.Error -> {
-                onErrorToast((setBlackListUiState as Result.Error).exception, "권한 변경이 실패했습니다")
-            }
+        is Result.Error -> {
+            onErrorToast((changeAuthorityUiState as Result.Error).exception, "권한 변경이 실패했습니다")
         }
-
-        StudentManagementScreen(
-            studentSearch = studentSearch,
-            status = status,
-            filterStatus = filterStatus,
-            filterGrade = filterGrade,
-            filterGender = filterGender,
-            filterMajor = filterMajor,
-            onStudentSearchChange = viewModel::onStudentSearchChange,
-            onStatusChange = viewModel::onStatusChange,
-            onFilterStatusChange = viewModel::onFilterStatusChange,
-            onFilterGradeChange = viewModel::onFilterGradeChange,
-            onFilterGenderChange = viewModel::onFilterGenderChange,
-            onFilterMajorChange = viewModel::onFilterMajorChange,
-            getStudentListUiState = getStudentListUiState,
-            studentSearchUiState = studentSearchUiState,
-            onBackClick = onBackClick,
-            onErrorToast = onErrorToast,
-            studentListCallBack = { viewModel.getStudentList() },
-            studentSearchCallBack = { name ->
-                viewModel.studentSearch(
-                    grade = if (filterGrade.isNotBlank()) Grade.values().find { it.value == filterGrade }!!.enum else null,
-                    gender = if (filterGender.isNotBlank()) Gender.values().find { it.value == filterGender }!!.name else null,
-                    major = if (filterMajor.isNotBlank()) Major.values().find { it.value == filterMajor }!!.name else null,
-                    name = name.ifBlank { null },
-                    isBlackList = if (filterStatus.isBlank()) null
-                    else filterStatus == Status.BLACK_LIST.value,
-                    authority = if (filterStatus.isBlank() || filterStatus == Status.BLACK_LIST.value) null
-                    else Status.values().find { it.value ==  filterStatus }!!.name
-                )
-            },
-            changeAuthorityCallBack = { accountIdx, authority ->
-                viewModel.changeAuthority(
-                    body = AuthorityRequest(
-                        accountIdx = accountIdx.toString(),
-                        authority = Status.values().find { it.value == authority }!!.name
-                    )
-                )
-                viewModel.deleteBlackList(accountIdx = accountIdx)
-            },
-            setBlackListCallBack = { accountIdx ->
-                viewModel.setBlackList(accountIdx = accountIdx)
-            }
-        )
     }
+
+    when (setBlackListUiState) {
+        is Result.Loading -> Unit
+        is Result.Success -> {
+            viewModel.getStudentList()
+            viewModel.initSetBlackList()
+        }
+        is Result.Error -> {
+            onErrorToast((setBlackListUiState as Result.Error).exception, "권한 변경이 실패했습니다")
+        }
+    }
+
+    StudentManagementScreen(
+        studentSearch = studentSearch,
+        status = status,
+        filterStatus = filterStatus,
+        filterGrade = filterGrade,
+        filterGender = filterGender,
+        filterMajor = filterMajor,
+        onStudentSearchChange = viewModel::onStudentSearchChange,
+        onStatusChange = viewModel::onStatusChange,
+        onFilterStatusChange = viewModel::onFilterStatusChange,
+        onFilterGradeChange = viewModel::onFilterGradeChange,
+        onFilterGenderChange = viewModel::onFilterGenderChange,
+        onFilterMajorChange = viewModel::onFilterMajorChange,
+        getStudentListUiState = getStudentListUiState,
+        studentSearchUiState = studentSearchUiState,
+        onBackClick = onBackClick,
+        onErrorToast = onErrorToast,
+        studentListCallBack = { viewModel.getStudentList() },
+        studentSearchCallBack = { name ->
+            viewModel.studentSearch(
+                grade = if (filterGrade.isNotBlank()) Grade.values()
+                    .find { it.value == filterGrade }!!.enum else null,
+                gender = if (filterGender.isNotBlank()) Gender.values()
+                    .find { it.value == filterGender }!!.name else null,
+                major = if (filterMajor.isNotBlank()) Major.values()
+                    .find { it.value == filterMajor }!!.name else null,
+                name = name.ifBlank { null },
+                isBlackList = if (filterStatus.isBlank()) null
+                else filterStatus == Status.BLACK_LIST.value,
+                authority = if (filterStatus.isBlank() || filterStatus == Status.BLACK_LIST.value) null
+                else Status.values().find { it.value == filterStatus }!!.name
+            )
+        },
+        changeAuthorityCallBack = { accountIdx, authority ->
+            viewModel.changeAuthority(
+                body = AuthorityRequest(
+                    accountIdx = accountIdx.toString(),
+                    authority = Status.values().find { it.value == authority }!!.name
+                )
+            )
+            viewModel.deleteBlackList(accountIdx = accountIdx)
+        },
+        setBlackListCallBack = { accountIdx ->
+            viewModel.setBlackList(accountIdx = accountIdx)
+        }
+    )
 }
 
 @Composable

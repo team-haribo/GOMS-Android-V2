@@ -1,5 +1,6 @@
 package com.goms.main
 
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
@@ -22,10 +23,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModelStoreOwner
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goms.common.result.Result
 import com.goms.design_system.component.button.GomsBackButton
@@ -37,43 +39,41 @@ import com.goms.main.component.OutingStatusList
 import com.goms.main.component.OutingStatusText
 import com.goms.main.viewmodel.GetOutingCountUiState
 import com.goms.main.viewmodel.GetOutingListUiState
-import com.goms.main.viewmodel.MainViewModelProvider
+import com.goms.main.viewmodel.MainViewModel
 import com.goms.main.viewmodel.OutingSearchUiState
 import com.goms.model.enum.Authority
 import java.util.UUID
 
 @Composable
 fun OutingStatusRoute(
-    viewModelStoreOwner: ViewModelStoreOwner,
     onBackClick: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
+    viewModel: MainViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
 ) {
-    MainViewModelProvider(viewModelStoreOwner = viewModelStoreOwner) { viewModel ->
-        val role by viewModel.role.collectAsStateWithLifecycle(initialValue = "")
-        val outingSearch by viewModel.outingSearch.collectAsStateWithLifecycle()
-        val getOutingListUiState by viewModel.getOutingListUiState.collectAsStateWithLifecycle()
-        val getOutingCountUiState by viewModel.getOutingCountUiState.collectAsStateWithLifecycle()
-        val outingSearchUiState by viewModel.outingSearchUiState.collectAsStateWithLifecycle()
-        val deleteOutingUiState by viewModel.deleteOutingUiState.collectAsStateWithLifecycle()
+    val role by viewModel.role.collectAsStateWithLifecycle(initialValue = "")
+    val outingSearch by viewModel.outingSearch.collectAsStateWithLifecycle()
+    val getOutingListUiState by viewModel.getOutingListUiState.collectAsStateWithLifecycle()
+    val getOutingCountUiState by viewModel.getOutingCountUiState.collectAsStateWithLifecycle()
+    val outingSearchUiState by viewModel.outingSearchUiState.collectAsStateWithLifecycle()
+    val deleteOutingUiState by viewModel.deleteOutingUiState.collectAsStateWithLifecycle()
 
-        when (deleteOutingUiState) {
-            is Result.Success -> viewModel.getOutingCount()
-            else -> Unit
-        }
-
-        OutingStatusScreen(
-            role = if (role.isNotBlank()) Authority.valueOf(role) else Authority.ROLE_STUDENT,
-            outingSearch = outingSearch,
-            onOutingSearchChange = viewModel::onOutingSearchChange,
-            getOutingListUiState = getOutingListUiState,
-            getOutingCountUiState = getOutingCountUiState,
-            outingSearchUiState = outingSearchUiState,
-            onBackClick = onBackClick,
-            onErrorToast = onErrorToast,
-            outingSearchCallBack = { viewModel.outingSearch(it) },
-            deleteOutingCallBack = { viewModel.deleteOuting(it) }
-        )
+    when (deleteOutingUiState) {
+        is Result.Success -> viewModel.getOutingCount()
+        else -> Unit
     }
+
+    OutingStatusScreen(
+        role = if (role.isNotBlank()) Authority.valueOf(role) else Authority.ROLE_STUDENT,
+        outingSearch = outingSearch,
+        onOutingSearchChange = viewModel::onOutingSearchChange,
+        getOutingListUiState = getOutingListUiState,
+        getOutingCountUiState = getOutingCountUiState,
+        outingSearchUiState = outingSearchUiState,
+        onBackClick = onBackClick,
+        onErrorToast = onErrorToast,
+        outingSearchCallBack = { viewModel.outingSearch(it) },
+        deleteOutingCallBack = { viewModel.deleteOuting(it) }
+    )
 }
 
 @Composable

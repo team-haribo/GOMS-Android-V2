@@ -2,6 +2,7 @@ package com.goms.main
 
 import android.Manifest
 import android.os.Build
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -22,8 +23,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModelStoreOwner
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goms.design_system.icon.SettingIcon
 import com.goms.design_system.theme.GomsTheme
@@ -37,49 +39,47 @@ import com.goms.ui.GomsFloatingButton
 import com.goms.main.component.MainLateCard
 import com.goms.main.component.MainOutingCard
 import com.goms.main.component.MainProfileCard
-import com.goms.main.viewmodel.MainViewModelProvider
+import com.goms.main.viewmodel.MainViewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
 @Composable
 fun MainRoute(
-    viewModelStoreOwner: ViewModelStoreOwner,
     onOutingStatusClick: () -> Unit,
     onLateListClick: () -> Unit,
     onStudentManagementClick: () -> Unit,
     onQrcodeClick: (role: Authority) -> Unit,
     onSettingClick: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
+    viewModel: MainViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
 ) {
-    MainViewModelProvider(viewModelStoreOwner = viewModelStoreOwner) { viewModel ->
-        val role by viewModel.role.collectAsStateWithLifecycle(initialValue = "")
-        val isRefreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
-        val getProfileUiState by viewModel.getProfileUiState.collectAsStateWithLifecycle()
-        val getLateRankListUiState by viewModel.getLateRankListUiState.collectAsStateWithLifecycle()
-        val getOutingListUiState by viewModel.getOutingListUiState.collectAsStateWithLifecycle()
-        val getOutingCountUiState by viewModel.getOutingCountUiState.collectAsStateWithLifecycle()
+    val role by viewModel.role.collectAsStateWithLifecycle(initialValue = "")
+    val isRefreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
+    val getProfileUiState by viewModel.getProfileUiState.collectAsStateWithLifecycle()
+    val getLateRankListUiState by viewModel.getLateRankListUiState.collectAsStateWithLifecycle()
+    val getOutingListUiState by viewModel.getOutingListUiState.collectAsStateWithLifecycle()
+    val getOutingCountUiState by viewModel.getOutingCountUiState.collectAsStateWithLifecycle()
 
-        MainScreen(
-            role = if (role.isNotBlank()) Authority.valueOf(role) else Authority.ROLE_STUDENT,
-            isRefreshing = isRefreshing,
-            getProfileUiState = getProfileUiState,
-            getLateRankListUiState = getLateRankListUiState,
-            getOutingListUiState = getOutingListUiState,
-            getOutingCountUiState = getOutingCountUiState,
-            onOutingStatusClick = onOutingStatusClick,
-            onLateListClick = onLateListClick,
-            onStudentManagementClick = onStudentManagementClick,
-            onQrcodeClick = onQrcodeClick,
-            onSettingClick = onSettingClick,
-            onErrorToast = onErrorToast,
-            mainCallBack = {
-                viewModel.getProfile()
-                viewModel.getLateRankList()
-                viewModel.getOutingCount()
-            }
-        )
-    }
+    MainScreen(
+        role = if (role.isNotBlank()) Authority.valueOf(role) else Authority.ROLE_STUDENT,
+        isRefreshing = isRefreshing,
+        getProfileUiState = getProfileUiState,
+        getLateRankListUiState = getLateRankListUiState,
+        getOutingListUiState = getOutingListUiState,
+        getOutingCountUiState = getOutingCountUiState,
+        onOutingStatusClick = onOutingStatusClick,
+        onLateListClick = onLateListClick,
+        onStudentManagementClick = onStudentManagementClick,
+        onQrcodeClick = onQrcodeClick,
+        onSettingClick = onSettingClick,
+        onErrorToast = onErrorToast,
+        mainCallBack = {
+            viewModel.getProfile()
+            viewModel.getLateRankList()
+            viewModel.getOutingCount()
+        }
+    )
 }
 
 @Composable

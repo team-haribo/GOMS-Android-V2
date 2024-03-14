@@ -47,7 +47,6 @@ fun GomsNavHost(
     val navController = appState.navController
     val signUpViewModelStoreOwner = checkNotNull(LocalViewModelStoreOwner.current)
     val settingViewModelStoreOwner = checkNotNull(LocalViewModelStoreOwner.current)
-    val mainViewModelStoreOwner = checkNotNull(LocalViewModelStoreOwner.current)
 
     val onErrorToast: (throwable: Throwable?, message: String?) -> Unit = { throwable, message ->
         val errorMessage = throwable?.let {
@@ -79,25 +78,21 @@ fun GomsNavHost(
             onErrorToast = onErrorToast
         )
         signUpScreen(
-            viewModelStoreOwner = signUpViewModelStoreOwner,
             onBackClick = navController::popBackStack,
             onNumberClick = navController::navigateToNumber,
             onErrorToast = onErrorToast
         )
         numberScreen(
-            viewModelStoreOwner = signUpViewModelStoreOwner,
             onBackClick = navController::popBackStack,
             onPasswordClick = navController::navigateToPassword,
             onErrorToast = onErrorToast
         )
         passwordScreen(
-            viewModelStoreOwner = signUpViewModelStoreOwner,
             onBackClick = navController::popBackStack,
             onLoginClick = { appState.navigateToTopLevelDestination(TopLevelDestination.LOGIN) },
             onErrorToast = onErrorToast
         )
         mainScreen(
-            viewModelStoreOwner = mainViewModelStoreOwner,
             onOutingStatusClick = navController::navigateToOutingStatus,
             onLateListClick = navController::navigateToLateList,
             onStudentManagementClick = navController::navigateToStudentManagement,
@@ -125,17 +120,14 @@ fun GomsNavHost(
             onErrorToast = onErrorToast
         )
         outingStatusScreen(
-            viewModelStoreOwner = mainViewModelStoreOwner,
             onBackClick = navController::popBackStack,
             onErrorToast = onErrorToast
         )
         lateListScreen(
-            viewModelStoreOwner = mainViewModelStoreOwner,
             onBackClick = navController::popBackStack,
             onErrorToast = onErrorToast
         )
         studentManagementScreen(
-            viewModelStoreOwner = mainViewModelStoreOwner,
             onBackClick = navController::popBackStack,
             onErrorToast = onErrorToast
         )
