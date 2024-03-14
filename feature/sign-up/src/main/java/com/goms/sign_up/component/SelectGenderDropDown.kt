@@ -31,6 +31,7 @@ import com.goms.design_system.icon.ChevronUpIcon
 import com.goms.design_system.theme.GomsTheme
 import com.goms.model.enum.Gender
 import androidx.compose.runtime.derivedStateOf
+import kotlinx.collections.immutable.toPersistentList
 
 @Composable
 fun SelectGenderDropDown(
@@ -96,7 +97,7 @@ fun SelectGenderDropDown(
         }
         Spacer(modifier = Modifier.height(8.dp))
         GomsDropdown(
-            dropdownList = dropdownList,
+            dropdownList = dropdownList.toPersistentList(),
             dropdownListSize = dropdownList.size,
             showDropdown = derivedDropdownState.value,
             selectedIndex = selectedIndex,
