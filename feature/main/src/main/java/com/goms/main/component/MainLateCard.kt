@@ -113,7 +113,9 @@ fun MainLateCard(
                             }
                         }
                     }
-                    is GetLateRankListUiState.Error -> Unit
+                    is GetLateRankListUiState.Error -> {
+                        onErrorToast(getLateRankListUiState.exception, "지각자 랭킹 정보를 가져오지 못했습니다")
+                    }
                 }
             }
         }

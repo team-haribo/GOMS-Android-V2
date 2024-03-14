@@ -89,13 +89,15 @@ fun MainOutingCard(
                 Divider(modifier = Modifier.height(1.dp), color = colors.WHITE.copy(0.15f))
                 when (getOutingCountUiState) {
                     GetOutingCountUiState.Loading -> {
-                            Box(
-                                modifier = Modifier
-                                    .size(56.dp, 23.dp)
-                                    .shimmerEffect(color = colors.WHITE)
-                            )
+                        Box(
+                            modifier = Modifier
+                                .size(56.dp, 23.dp)
+                                .shimmerEffect(color = colors.WHITE)
+                        )
                     }
-                    is GetOutingCountUiState.Error -> Unit
+                    is GetOutingCountUiState.Error -> {
+                        onErrorToast(getOutingCountUiState.exception, "외출학생 숫자를 가져오지 못했습니다")
+                    }
                     GetOutingCountUiState.Empty -> {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
@@ -133,7 +135,9 @@ fun MainOutingCard(
                                     }
                                 }
                             }
-                            is GetOutingListUiState.Error -> Unit
+                            is GetOutingListUiState.Error -> {
+                                onErrorToast(getOutingListUiState.exception, "외출자 정보를 가져오지 못했습니다")
+                            }
                             is GetOutingListUiState.Success -> {
                                 val count = getOutingCountUiState.getOutingCountResponse
                                 val list = getOutingListUiState.getOutingListResponse

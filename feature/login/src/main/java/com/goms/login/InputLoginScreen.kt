@@ -40,9 +40,10 @@ import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.util.keyboardAsState
 import com.goms.design_system.util.lockScreenOrientation
 import com.goms.login.component.InputLoginText
-import com.goms.login.viewmodel.LoginViewModel
 import com.goms.login.viewmodel.LoginUiState
+import com.goms.login.viewmodel.LoginViewModel
 import com.goms.model.request.auth.LoginRequest
+import com.goms.ui.isStrongEmail
 
 @Composable
 fun InputLoginRoute(
@@ -130,7 +131,7 @@ fun InputLoginScreen(
             is LoginUiState.Error -> {
                 isLoading = false
                 isError = true
-                errorText = "로그인에 실패하였습니다"
+                onErrorToast(loginUiState.exception, null)
             }
         }
         onDispose {}
@@ -188,8 +189,13 @@ fun InputLoginScreen(
                     state = if (email.isNotBlank() && password.isNotBlank()) ButtonState.Normal
                     else ButtonState.Enable
                 ) {
-                    loginCallBack()
-                    isLoading = true
+                    if (!isStrongEmail(email)) {
+                        isLoading = false
+                        onErrorToast(null, "이메일 형식이 올바르지 않습니다")
+                    } else {
+                        loginCallBack()
+                        isLoading = true
+                    }
                 }
                 Spacer(modifier = Modifier.height(animatedSpacerHeight))
             }

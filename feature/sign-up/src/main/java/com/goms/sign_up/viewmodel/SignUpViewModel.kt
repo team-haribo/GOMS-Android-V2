@@ -44,7 +44,7 @@ class SignUpViewModel @Inject constructor(
     fun signUp(body: SignUpRequest) = viewModelScope.launch {
         _signUpUiState.value = SignUpUiState.Loading
         signUpUseCase(body = body)
-            .onSuccess  {
+            .onSuccess {
                 it.catch {  remoteError ->
                     _signUpUiState.value = SignUpUiState.Error(remoteError)
                     remoteError.errorHandling(

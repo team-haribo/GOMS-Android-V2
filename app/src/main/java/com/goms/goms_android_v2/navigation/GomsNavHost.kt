@@ -1,23 +1,22 @@
 package com.goms.goms_android_v2.navigation
 
+import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.navigation.compose.NavHost
-import com.goms.common.exception.ForBiddenException
-import com.goms.common.exception.NoInternetException
-import com.goms.common.exception.OtherHttpException
-import com.goms.common.exception.ServerException
-import com.goms.common.exception.TimeOutException
+import com.goms.common.exception.*
 import com.goms.goms_android_v2.ui.GomsAppState
 import com.goms.login.navigation.inputLoginScreen
 import com.goms.login.navigation.loginRoute
 import com.goms.login.navigation.loginScreen
 import com.goms.login.navigation.navigateToInputLogin
+import com.goms.login.navigation.navigateToLogin
 import com.goms.main.navigation.lateListScreen
 import com.goms.main.navigation.mainScreen
 import com.goms.main.navigation.navigateToLateList
+import com.goms.main.navigation.navigateToMain
 import com.goms.main.navigation.navigateToOutingStatus
 import com.goms.main.navigation.navigateToStudentManagement
 import com.goms.main.navigation.outingStatusScreen
@@ -27,13 +26,8 @@ import com.goms.qrcode.navigation.navigateToQrGenerate
 import com.goms.qrcode.navigation.navigateToQrScan
 import com.goms.qrcode.navigation.qrcodeGenerateScreen
 import com.goms.qrcode.navigation.qrcodeScanScreen
-import com.goms.re_password.navigation.emailCheckScreen
-import com.goms.re_password.navigation.navigateToEmailCheck
-import com.goms.re_password.navigation.navigateToRePassword
-import com.goms.re_password.navigation.passwordNumberScreen
-import com.goms.re_password.navigation.rePasswordScreen
-import com.goms.setting.navigation.navigateToSettingScreen
 import com.goms.setting.navigation.settingScreen
+import com.goms.setting.navigation.navigateToSettingScreen
 import com.goms.sign_up.navigation.navigateToNumber
 import com.goms.sign_up.navigation.navigateToPassword
 import com.goms.sign_up.navigation.navigateToSignUp
@@ -149,24 +143,7 @@ fun GomsNavHost(
             viewModelStoreOwner = settingViewModelStoreOwner,
             onBackClick = navController::popBackStack,
             onLogoutSuccess = onLogout,
-            onErrorToast = onErrorToast,
-            onEmailCheck = navController::navigateToEmailCheck
+            onErrorToast = onErrorToast
         )
-        emailCheckScreen(
-            viewModelStoreOwner = mainViewModelStoreOwner,
-            onBackClick = navController::popBackStack,
-            onNumberClick = navController::navigateToNumber
-        )
-        passwordNumberScreen(
-            viewModelStoreOwner = mainViewModelStoreOwner,
-            onBackClick = navController::popBackStack,
-            onRePasswordClick = navController::navigateToRePassword
-        )
-        rePasswordScreen(
-            viewModelStoreOwner = mainViewModelStoreOwner,
-            onBackClick = navController::popBackStack,
-            onSuccessClick = { appState.navigateToTopLevelDestination(TopLevelDestination.LOGIN) }
-        )
-
     }
 }

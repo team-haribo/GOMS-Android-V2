@@ -33,9 +33,14 @@ fun QrcodeScanTopBar(
         ) {
             GomsTextIcon(tint = Color.White)
             Box(
-                modifier = Modifier.size(64.dp, 56.dp),
+                modifier = Modifier
+                    .size(40.dp)
+                    .clip(CircleShape)
+                    .gomsClickable(isIndication = true) {
+                        onClick()
+                    },
                 contentAlignment = Alignment.Center
-                ) {
+            ) {
                 CloseIcon(tint = Color.White)
             }
         }
