@@ -43,6 +43,7 @@ import com.goms.model.request.auth.SignUpRequest
 import com.goms.sign_up.component.PasswordText
 import com.goms.sign_up.viewmodel.SignUpUiState
 import com.goms.sign_up.viewmodel.SignUpViewModelProvider
+import com.goms.ui.isStrongPassword
 
 @Composable
 fun PasswordRoute(
@@ -117,7 +118,7 @@ fun PasswordScreen(
             is SignUpUiState.Error -> {
                 isLoading = false
                 isError = true
-                errorText = "오류가 발생하였습니다"
+                onErrorToast(signUpUiState.exception, null)
             }
         }
         onDispose {}
@@ -177,9 +178,11 @@ fun PasswordScreen(
                     if (password != checkPassword) {
                         isError = true
                         errorText = "비밀번호가 일치하지 않습니다"
+                        onErrorToast(null, "비밀번호가 일치하지 않습니다")
                     } else if (!isStrongPassword(password)) {
                         isError = true
                         errorText = "비밀번호 요구사항을 충족하지 않습니다"
+                        onErrorToast(null, "비밀번호 요구사항을 충족하지 않습니다")
                     } else {
                         passwordCallback()
                         isLoading = true

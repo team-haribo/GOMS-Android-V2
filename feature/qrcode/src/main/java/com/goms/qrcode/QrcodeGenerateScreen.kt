@@ -1,6 +1,6 @@
 package com.goms.qrcode
 
-import android.util.Log
+import android.content.pm.ActivityInfo
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -13,6 +13,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -81,7 +82,10 @@ fun QrcodeGenerateScreen(
 
                     Image(painter = QrcodeGenerator(content = data.outingUUID), contentDescription = "outing qrcode image" )
                 }
-                is GetOutingUUIDUiState.Error -> onRemoteError
+                is GetOutingUUIDUiState.Error -> {
+                    onRemoteError()
+                    onErrorToast(getOutingUUIDUiState.exception, null)
+                }
             }
             Spacer(modifier = Modifier.height(32.dp))
             QrcodeGenerateTimer(

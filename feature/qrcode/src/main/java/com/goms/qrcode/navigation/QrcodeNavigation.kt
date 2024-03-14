@@ -6,7 +6,6 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.goms.qrcode.QrcodeGenerateRoute
 import com.goms.qrcode.QrcodeScanRoute
-import com.goms.qrcode.viewmodel.GetOutingUUIDUiState
 
 const val qrcodeScanRoute = "qrcode_scan_route"
 const val qrcodeGenerateRoute = "qrcode_generate_route"
@@ -16,11 +15,19 @@ fun NavController.navigateToQrScan(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.qrcodeScanScreen(
-    onPermissionBlock: () -> Unit
+    onPermissionBlock: () -> Unit,
+    onError: () -> Unit,
+    onSuccess: () -> Unit,
+    onBackClick: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
     composable(route = qrcodeScanRoute) {
         QrcodeScanRoute(
-            onPermissionBlock = onPermissionBlock
+            onPermissionBlock = onPermissionBlock,
+            onError = onError,
+            onSuccess = onSuccess,
+            onBackClick = onBackClick,
+            onErrorToast = onErrorToast
         )
     }
 }

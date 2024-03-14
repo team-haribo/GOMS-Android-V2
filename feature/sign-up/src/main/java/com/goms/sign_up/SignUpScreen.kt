@@ -42,6 +42,7 @@ import com.goms.sign_up.component.SelectGenderDropDown
 import com.goms.sign_up.component.SelectMajorDropDown
 import com.goms.sign_up.component.SignUpText
 import com.goms.sign_up.viewmodel.SignUpViewModelProvider
+import com.goms.ui.isStrongEmail
 
 @Composable
 fun SignUpRoute(
@@ -96,9 +97,6 @@ fun SignUpScreen(
 ) {
     val focusManager = LocalFocusManager.current
     val isKeyboardOpen by keyboardAsState()
-
-    var onGenderBottomSheetOpenClick by rememberSaveable { mutableStateOf(false) }
-    var onMajorBottomSheetOpenClick by rememberSaveable { mutableStateOf(false) }
     var isLoading by remember { mutableStateOf(false) }
 
     LaunchedEffect(isKeyboardOpen) {
@@ -111,7 +109,10 @@ fun SignUpScreen(
         when (sendNumberUiState) {
             is Result.Loading -> Unit
             is Result.Success -> onNumberClick()
-            is Result.Error -> isLoading = false
+            is Result.Error -> {
+                isLoading = false
+                onErrorToast(sendNumberUiState.exception, null)
+            }
         }
         onDispose { initCallBack() }
     }
@@ -178,8 +179,13 @@ fun SignUpScreen(
                     state = if (name.isNotBlank() && email.isNotBlank() && gender.isNotBlank() && major.isNotBlank()) ButtonState.Normal
                     else ButtonState.Enable
                 ) {
-                    signUpCallBack()
-                    isLoading = true
+                    if (!isStrongEmail(email)) {
+                        isLoading = false
+                        onErrorToast(null, "이메일 형식이 올바르지 않습니다")
+                    } else {
+                        signUpCallBack()
+                        isLoading = true
+                    }
                 }
                 Spacer(modifier = Modifier.height(100.dp))
             }

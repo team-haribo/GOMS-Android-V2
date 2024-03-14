@@ -45,13 +45,12 @@ class MainActivity : ComponentActivity() {
         var uiState: MainActivityUiState by mutableStateOf(MainActivityUiState.Loading)
 
         lifecycleScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState
-                    .onEach { uiState = it }
-                    .collectLatest {
-                        if (it is MainActivityUiState.Success) {
-                            getNotification()
-                        }
+            viewModel.uiState
+                .onEach { uiState = it }
+                .collectLatest {
+                    if (it is MainActivityUiState.Success) {
+                        getNotification()
+                        viewModel.setAuthority(authority = it.getProfileResponse.authority.toString())
                     }
                 }
         }

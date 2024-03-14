@@ -1,7 +1,7 @@
 package com.goms.qrcode
 
 import android.Manifest
-import androidx.compose.foundation.layout.Arrangement
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.goms.design_system.component.dialog.GomsOneButtonDialog
 import com.goms.design_system.theme.GomsTheme
 import com.goms.qrcode.component.QrcodeScanGuide
 import com.goms.qrcode.component.QrcodeScanPreview
@@ -56,7 +57,11 @@ fun QrcodeScanRoute(
             outingUiState = outingUiState,
             onQrcodeScan = { qrcodeData ->
                 viewModel.outing(UUID.fromString(qrcodeData))
-            }
+            },
+            onError = onError,
+            onSuccess = onSuccess,
+            onBackClick = onBackClick,
+            onErrorToast = onErrorToast
         )
     } else {
         onPermissionBlock()
@@ -66,7 +71,12 @@ fun QrcodeScanRoute(
 @androidx.annotation.OptIn(androidx.camera.core.ExperimentalGetImage::class)
 @Composable
 fun QrcodeScanScreen(
-    onQrcodeScan: (String?) -> Unit
+    outingUiState: OutingUiState,
+    onQrcodeScan: (String?) -> Unit,
+    onBackClick: () -> Unit,
+    onError: () -> Unit,
+    onSuccess: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
     var openDialog by remember { mutableStateOf(false) }
 
@@ -87,5 +97,33 @@ fun QrcodeScanScreen(
             Spacer(modifier = Modifier.height(224.dp))
             QrcodeScanGuide()
         }
+    }
+
+    Log.d("outinguistate", outingUiState.toString())
+
+    when (outingUiState) {
+        is OutingUiState.Loading -> Unit
+        is OutingUiState.Success -> openDialog = true
+        is OutingUiState.BadRequest -> {
+            onError()
+            onErrorToast(null, "외출 금지 상태이거나, 유효하지 않은 QR코드입니다")
+        }
+        is OutingUiState.Error -> {
+            onError()
+            onErrorToast(outingUiState.exception, null)
+        }
+    }
+
+    if(openDialog) {
+        GomsOneButtonDialog(
+            openDialog = openDialog,
+            onStateChange = {
+                openDialog = it
+            },
+            title = "외출하기 성공",
+            content = "7시 25분 까지 복귀해 주세요!",
+            buttonText = "확인",
+            onClick = onSuccess
+        )
     }
 }
