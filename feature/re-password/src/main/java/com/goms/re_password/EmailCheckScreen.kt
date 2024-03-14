@@ -62,7 +62,6 @@ fun EmailCheckRoute(
     }
 }
 
-
 @Composable
 fun EmailCheckScreen(
     email: String,
@@ -71,14 +70,12 @@ fun EmailCheckScreen(
     rePasswordCallBack: () -> Unit,
     onNumberClick: () -> Unit,
     initCallBack: () -> Unit
-){
+) {
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
     val isKeyboardOpen by keyboardAsState()
     var isLoading by remember { mutableStateOf(false) }
     val animatedSpacerHeight by animateDpAsState(targetValue = if (!isKeyboardOpen) 100.dp else 16.dp)
-
-
 
     LaunchedEffect(isKeyboardOpen) {
         if (!isKeyboardOpen) {
@@ -107,7 +104,7 @@ fun EmailCheckScreen(
             Column(
                 modifier = Modifier.padding(horizontal = 20.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
-            ){
+            ) {
                 RePasswordText(modifier = Modifier.align(Alignment.Start))
                 Spacer(modifier = Modifier.weight(1.1f))
                 GomsTextField(
@@ -124,8 +121,7 @@ fun EmailCheckScreen(
                     text = "인증번호 받기",
                     state = if (email.isNotBlank()) ButtonState.Normal
                     else ButtonState.Enable
-                )
-                {
+                ) {
                     if (!isStrongEmail(email)) {
                         isLoading = false
                         createToast(
