@@ -26,6 +26,8 @@ import coil.compose.AsyncImage
 import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.R
 import com.goms.design_system.component.shimmer.shimmerEffect
+import com.goms.main.data.ProfileData
+import com.goms.main.data.toData
 import com.goms.main.viewmodel.GetProfileUiState
 import com.goms.model.enum.Authority
 import com.goms.model.response.account.ProfileResponse
@@ -46,7 +48,7 @@ fun MainProfileCard(
 
             MainProfileCardComponent(
                 modifier = modifier,
-                data = data
+                data = data.toData()
             )
         }
         is GetProfileUiState.Error -> {
@@ -58,7 +60,7 @@ fun MainProfileCard(
 @Composable
 fun MainProfileCardComponent(
     modifier: Modifier,
-    data: ProfileResponse
+    data: ProfileData
 ) {
     GomsTheme { colors, typography ->
         val stateColor = if (data.isBlackList) colors.N5
