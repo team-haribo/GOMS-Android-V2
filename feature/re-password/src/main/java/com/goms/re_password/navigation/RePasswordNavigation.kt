@@ -31,7 +31,6 @@ fun NavGraphBuilder.emailCheckScreen(
     }
 }
 
-
 fun NavController.navigateToPasswordNumber(navOptions: NavOptions? = null) {
     this.navigate(numberRoute, navOptions)
 }
@@ -50,10 +49,10 @@ fun NavGraphBuilder.passwordNumberScreen(
     }
 }
 
-
 fun NavController.navigateToRePassword(navOptions: NavOptions? = null) {
     this.navigate(rePasswordRoute, navOptions)
 }
+
 fun NavGraphBuilder.rePasswordScreen(
     viewModelStoreOwner: ViewModelStoreOwner,
     onBackClick: () -> Unit,

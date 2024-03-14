@@ -76,6 +76,7 @@ class RePasswordViewmodel @Inject constructor(
     fun onCheckPasswordChange(value: String) {
         savedStateHandle[CHECK_PASSWORD] = value
     }
+
 }
 private const val EMAIL = "email"
 private const val PASSWORD = "password"

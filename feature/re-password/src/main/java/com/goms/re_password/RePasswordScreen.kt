@@ -38,7 +38,7 @@ fun RePasswordRoute(
     onBackClick: () -> Unit,
     onSuccessClick: () -> Unit,
 ) {
-    RePasswordViewmodelProvider(viewModelStoreOwner = viewModelStoreOwner) {viewModel ->
+    RePasswordViewmodelProvider(viewModelStoreOwner = viewModelStoreOwner) { viewModel ->
         val password by viewModel.password.collectAsStateWithLifecycle()
         val checkPassword by viewModel.email.collectAsStateWithLifecycle()
 
@@ -61,7 +61,7 @@ fun RePasswordScreen(
     onPasswordCheckChange: (String) -> Unit,
     onSuccessClick: () -> Unit,
     onBackClick: () -> Unit
-){
+) {
     val focusManager = LocalFocusManager.current
     val isKeyboardOpen by keyboardAsState()
 
@@ -115,7 +115,7 @@ fun RePasswordScreen(
                 GomsButton(
                     modifier = Modifier.fillMaxWidth(),
                     text = "완료",
-                    state = if (password.isNotBlank() && passwordCheck.isNotBlank() ) ButtonState.Normal
+                    state = if (password.isNotBlank() && passwordCheck.isNotBlank()) ButtonState.Normal
                     else ButtonState.Enable
                 ) {
                     onSuccessClick()
