@@ -29,10 +29,11 @@ import com.goms.design_system.R
 import com.goms.design_system.component.clickable.gomsClickable
 import com.goms.design_system.component.shimmer.shimmerEffect
 import com.goms.design_system.theme.GomsTheme
+import com.goms.main.data.OutingData
+import com.goms.main.data.toData
 import com.goms.main.viewmodel.GetOutingCountUiState
 import com.goms.main.viewmodel.GetOutingListUiState
 import com.goms.model.enum.Authority
-import com.goms.model.response.outing.OutingResponse
 import com.goms.ui.toText
 
 @Composable
@@ -167,7 +168,7 @@ fun MainOutingCard(
                                     items(list.size) {
                                         MainOutingItem(
                                             modifier = Modifier.fillMaxWidth(),
-                                            list = list[it]
+                                            data = list[it].toData()
                                         )
                                     }
                                 }
@@ -183,7 +184,7 @@ fun MainOutingCard(
 @Composable
 fun MainOutingItem(
     modifier: Modifier = Modifier,
-    list: OutingResponse
+    data: OutingData
 ) {
     GomsTheme { colors, typography ->
         Row(
@@ -191,7 +192,7 @@ fun MainOutingItem(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            if (list.profileUrl.isNullOrEmpty()) {
+            if (data.profileUrl.isNullOrEmpty()) {
                 Image(
                     painter = painterResource(R.drawable.ic_profile),
                     contentDescription = "Default Profile Image",
@@ -199,7 +200,7 @@ fun MainOutingItem(
                 )
             } else {
                 AsyncImage(
-                    model = list.profileUrl,
+                    model = data.profileUrl,
                     modifier = Modifier
                         .size(28.dp)
                         .clip(RoundedCornerShape(40.dp)),
@@ -208,13 +209,13 @@ fun MainOutingItem(
                 )
             }
             Text(
-                text = list.name,
+                text = data.name,
                 style = typography.textMedium,
                 fontWeight = FontWeight.SemiBold,
                 color = colors.G7
             )
             Text(
-                text = "${list.grade}기 | ${list.major.toText()}",
+                text = "${data.grade}기 | ${data.major.toText()}",
                 style = typography.caption,
                 fontWeight = FontWeight.Normal,
                 color = colors.G4

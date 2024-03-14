@@ -31,6 +31,8 @@ import com.goms.design_system.component.shimmer.shimmerEffect
 import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.util.shadow
 import com.goms.model.response.account.ProfileResponse
+import com.goms.setting.data.ProfileData
+import com.goms.setting.data.toData
 import com.goms.setting.viewmodel.GetProfileUiState
 import com.goms.ui.toText
 
@@ -50,7 +52,7 @@ fun SettingProfileCard(
             SettingProfileCardComponent(
                 modifier = modifier,
                 onProfileClick = onProfileClick,
-                data = data
+                data = data.toData()
             )
         }
         is GetProfileUiState.Error -> Unit
@@ -61,7 +63,7 @@ fun SettingProfileCard(
 fun SettingProfileCardComponent(
     modifier: Modifier,
     onProfileClick: () -> Unit,
-    data: ProfileResponse
+    data: ProfileData
 ) {
     GomsTheme { colors, typography ->
         Row(
@@ -152,7 +154,7 @@ fun SettingProfileCardComponent(
 
 @Composable
 fun ShimmerSettingProfileCardComponent(
-    modifier: Modifier,
+    modifier: Modifier
 ) {
     GomsTheme { colors, typography ->
         Row(

@@ -1,6 +1,7 @@
 package com.goms.sign_up
 
 import android.content.pm.ActivityInfo
+import androidx.activity.ComponentActivity
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -24,10 +25,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModelStoreOwner
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goms.design_system.component.button.ButtonState
 import com.goms.design_system.component.button.GomsBackButton
@@ -42,43 +44,41 @@ import com.goms.model.enum.Major
 import com.goms.model.request.auth.SignUpRequest
 import com.goms.sign_up.component.PasswordText
 import com.goms.sign_up.viewmodel.SignUpUiState
-import com.goms.sign_up.viewmodel.SignUpViewModelProvider
+import com.goms.sign_up.viewmodel.SignUpViewModel
 import com.goms.ui.isStrongPassword
 
 @Composable
 fun PasswordRoute(
-    viewModelStoreOwner: ViewModelStoreOwner,
     onBackClick: () -> Unit,
     onLoginClick: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
+    viewModel: SignUpViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
 ) {
-    SignUpViewModelProvider(viewModelStoreOwner = viewModelStoreOwner) { viewModel ->
-        val signUpUiState by viewModel.signUpUiState.collectAsStateWithLifecycle()
-        val password by viewModel.password.collectAsStateWithLifecycle()
-        val checkPassword by viewModel.checkPassword.collectAsStateWithLifecycle()
+    val signUpUiState by viewModel.signUpUiState.collectAsStateWithLifecycle()
+    val password by viewModel.password.collectAsStateWithLifecycle()
+    val checkPassword by viewModel.checkPassword.collectAsStateWithLifecycle()
 
-        PasswordScreen(
-            password = password,
-            checkPassword = checkPassword,
-            onPasswordChange = viewModel::onPasswordChange,
-            onCheckPasswordChange = viewModel::onCheckPasswordChange,
-            signUpUiState = signUpUiState,
-            onBackClick = onBackClick,
-            onLoginClick = onLoginClick,
-            onErrorToast = onErrorToast,
-            passwordCallback = {
-                viewModel.signUp(
-                    body = SignUpRequest(
-                        email = "${viewModel.email.value}@gsm.hs.kr",
-                        password = viewModel.password.value,
-                        name = viewModel.name.value,
-                        gender = Gender.values().find { it.value == viewModel.gender.value }!!.name,
-                        major = Major.values().find { it.fullName == viewModel.major.value }!!.name
-                    )
+    PasswordScreen(
+        password = password,
+        checkPassword = checkPassword,
+        onPasswordChange = viewModel::onPasswordChange,
+        onCheckPasswordChange = viewModel::onCheckPasswordChange,
+        signUpUiState = signUpUiState,
+        onBackClick = onBackClick,
+        onLoginClick = onLoginClick,
+        onErrorToast = onErrorToast,
+        passwordCallback = {
+            viewModel.signUp(
+                body = SignUpRequest(
+                    email = "${viewModel.email.value}@gsm.hs.kr",
+                    password = viewModel.password.value,
+                    name = viewModel.name.value,
+                    gender = Gender.values().find { it.value == viewModel.gender.value }!!.name,
+                    major = Major.values().find { it.fullName == viewModel.major.value }!!.name
                 )
-            }
-        )
-    }
+            )
+        }
+    )
 }
 
 @Composable

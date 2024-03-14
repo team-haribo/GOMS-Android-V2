@@ -30,6 +30,7 @@ import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import com.goms.design_system.component.clickable.gomsClickable
 import com.goms.design_system.theme.GomsTheme
+import kotlinx.collections.immutable.PersistentList
 
 enum class DropdownState(val value: String) {
     Show("Show"),
@@ -39,7 +40,7 @@ enum class DropdownState(val value: String) {
 
 @Composable
 fun GomsDropdown(
-    dropdownList: List<String>,
+    dropdownList: PersistentList<String>,
     dropdownListSize: Int,
     onDissmiss: () -> Unit,
     showDropdown: String,

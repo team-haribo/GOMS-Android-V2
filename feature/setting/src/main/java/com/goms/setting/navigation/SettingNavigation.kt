@@ -1,6 +1,5 @@
 package com.goms.setting.navigation
 
-import androidx.lifecycle.ViewModelStoreOwner
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -13,7 +12,6 @@ fun NavController.navigateToSettingScreen(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.settingScreen(
-    viewModelStoreOwner: ViewModelStoreOwner,
     onLogoutSuccess: () -> Unit,
     onBackClick: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
@@ -21,7 +19,6 @@ fun NavGraphBuilder.settingScreen(
 ) {
     composable(route = settingRoute) {
         SettingRoute(
-            viewModelStoreOwner = viewModelStoreOwner,
             onLogoutSuccess = onLogoutSuccess,
             onBackClick = onBackClick,
             onErrorToast = onErrorToast,

@@ -31,6 +31,7 @@ import com.goms.design_system.icon.ChevronDownIcon
 import com.goms.design_system.icon.ChevronUpIcon
 import com.goms.design_system.theme.GomsTheme
 import com.goms.model.enum.Major
+import kotlinx.collections.immutable.toPersistentList
 
 @Composable
 fun SelectMajorDropDown(
@@ -96,7 +97,7 @@ fun SelectMajorDropDown(
         }
         Spacer(modifier = Modifier.height(8.dp))
         GomsDropdown(
-            dropdownList = dropdownList,
+            dropdownList = dropdownList.toPersistentList(),
             dropdownListSize = dropdownList.size,
             showDropdown = derivedDropdownState.value,
             selectedIndex = selectedIndex,
