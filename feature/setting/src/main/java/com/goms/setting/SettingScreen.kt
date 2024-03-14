@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,7 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModelStoreOwner
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goms.design_system.component.button.ButtonState
 import com.goms.design_system.component.button.GomsBackButton
@@ -40,56 +39,55 @@ import com.goms.setting.component.SettingSwitchComponent
 import com.goms.setting.viewmodel.GetProfileUiState
 import com.goms.setting.viewmodel.LogoutUiState
 import com.goms.setting.viewmodel.ProfileImageUiState
-import com.goms.setting.viewmodel.SettingViewModelProvider
+import com.goms.setting.viewmodel.SettingViewModel
 
 @Composable
 fun SettingRoute(
     onBackClick: () -> Unit,
     onLogoutSuccess: () -> Unit,
-    viewModelStoreOwner: ViewModelStoreOwner,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
+    viewModel: SettingViewModel = hiltViewModel()
 ) {
-    SettingViewModelProvider(viewModelStoreOwner = viewModelStoreOwner) { viewModel ->
-        val role by viewModel.role.collectAsStateWithLifecycle(initialValue = "")
-        val context = LocalContext.current
+    val role by viewModel.role.collectAsStateWithLifecycle(initialValue = "")
+    val context = LocalContext.current
 
-        val getProfileUiState by viewModel.getProfileUiState.collectAsStateWithLifecycle()
-        val profileImageUiState by viewModel.profileImageUiState.collectAsStateWithLifecycle()
+    val getProfileUiState by viewModel.getProfileUiState.collectAsStateWithLifecycle()
+    val profileImageUiState by viewModel.profileImageUiState.collectAsStateWithLifecycle()
 
-        val logoutUiState by viewModel.logoutState.collectAsStateWithLifecycle()
-        var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
+    val logoutUiState by viewModel.logoutState.collectAsStateWithLifecycle()
+    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
 
-        val galleryLauncher =
-            rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
-                if (uri != null) {
-                    selectedImageUri = uri
-                }
-            }
-
-        LaunchedEffect(selectedImageUri) {
-            if(selectedImageUri != null) {
-                viewModel.uploadProfileImage(context,selectedImageUri!!)
+    val galleryLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+            if (uri != null) {
+                selectedImageUri = uri
             }
         }
 
-        SettingScreen(
-            onProfileClick = { galleryLauncher.launch("image/*") },
-            onBackClick = onBackClick,
-            onLogoutClick = { viewModel.logout() },
-            onLogoutSuccess = onLogoutSuccess,
-            getProfile = {
-                viewModel.initProfileImage()
-                viewModel.initGetProfile()
-                viewModel.getProfile()
-            },
-            role = role,
-            logoutUiState = logoutUiState,
-            getProfileUiState = getProfileUiState,
-            profileImageUiState = profileImageUiState,
-            onErrorToast = onErrorToast
-        )
+    LaunchedEffect(selectedImageUri) {
+        if (selectedImageUri != null) {
+            viewModel.uploadProfileImage(context, selectedImageUri!!)
+        }
     }
+
+    SettingScreen(
+        onProfileClick = { galleryLauncher.launch("image/*") },
+        onBackClick = onBackClick,
+        onLogoutClick = { viewModel.logout() },
+        onLogoutSuccess = onLogoutSuccess,
+        getProfile = {
+            viewModel.initProfileImage()
+            viewModel.initGetProfile()
+            viewModel.getProfile()
+        },
+        role = role,
+        logoutUiState = logoutUiState,
+        getProfileUiState = getProfileUiState,
+        profileImageUiState = profileImageUiState,
+        onErrorToast = onErrorToast
+    )
 }
+
 @Composable
 fun SettingScreen(
     onProfileClick: () -> Unit,
@@ -109,18 +107,25 @@ fun SettingScreen(
 
     when (logoutUiState) {
         is LogoutUiState.Loading -> Unit
-        is LogoutUiState.Success -> { onLogoutSuccess() }
+        is LogoutUiState.Success -> {
+            onLogoutSuccess()
+        }
+
         is LogoutUiState.Error -> {
             onErrorToast(logoutUiState.exception, "로그아웃에 실패 했습니다.")
         }
     }
 
     when (profileImageUiState) {
-        is ProfileImageUiState.Loading -> { isLoading = false }
+        is ProfileImageUiState.Loading -> {
+            isLoading = false
+        }
+
         is ProfileImageUiState.Success -> {
             isLoading = true
             getProfile()
         }
+
         is ProfileImageUiState.Error -> {
             onErrorToast(profileImageUiState.exception, "네트워크 상태를 확인해 주세요")
         }
@@ -152,8 +157,8 @@ fun SettingScreen(
                     detail = "외출할 시간이 될 때마다 알려드려요",
                     switchOnBackground = colors.P5,
                     switchOffBackground = colors.G4,
-                    onFunctionOff = { Log.d("testt","off1") },
-                    onFunctionOn = { Log.d("testt","on1") }
+                    onFunctionOff = { Log.d("testt", "off1") },
+                    onFunctionOn = { Log.d("testt", "on1") }
                 )
                 Spacer(modifier = Modifier.height(32.dp))
                 SettingSwitchComponent(
@@ -162,7 +167,7 @@ fun SettingScreen(
                     detail = "앱을 실행하면 즉시 카메라가 켜져요",
                     switchOnBackground = colors.P5,
                     switchOffBackground = colors.G4,
-                    onFunctionOff = {  },
+                    onFunctionOff = { },
                     onFunctionOn = { }
                 )
             } else {

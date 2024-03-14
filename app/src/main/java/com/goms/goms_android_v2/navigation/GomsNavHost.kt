@@ -45,8 +45,6 @@ fun GomsNavHost(
 ) {
     val context = LocalContext.current
     val navController = appState.navController
-    val signUpViewModelStoreOwner = checkNotNull(LocalViewModelStoreOwner.current)
-    val settingViewModelStoreOwner = checkNotNull(LocalViewModelStoreOwner.current)
 
     val onErrorToast: (throwable: Throwable?, message: String?) -> Unit = { throwable, message ->
         val errorMessage = throwable?.let {
@@ -132,7 +130,6 @@ fun GomsNavHost(
             onErrorToast = onErrorToast
         )
         settingScreen(
-            viewModelStoreOwner = settingViewModelStoreOwner,
             onBackClick = navController::popBackStack,
             onLogoutSuccess = onLogout,
             onErrorToast = onErrorToast
