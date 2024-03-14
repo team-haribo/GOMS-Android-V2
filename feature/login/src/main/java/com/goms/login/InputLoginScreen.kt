@@ -42,6 +42,7 @@ import com.goms.design_system.util.lockScreenOrientation
 import com.goms.login.component.InputLoginText
 import com.goms.login.viewmodel.LoginViewModel
 import com.goms.login.viewmodel.LoginUiState
+import com.goms.login.viewmodel.SaveTokenUiState
 import com.goms.model.request.auth.LoginRequest
 import com.goms.ui.isStrongEmail
 
@@ -85,7 +86,7 @@ fun InputLoginScreen(
     onEmailChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
     loginUiState: LoginUiState,
-    saveTokenUiState: Result<Unit>,
+    saveTokenUiState: SaveTokenUiState,
     onBackClick: () -> Unit,
     onMainClick: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
@@ -109,10 +110,12 @@ fun InputLoginScreen(
             is LoginUiState.Loading -> Unit
             is LoginUiState.Success -> {
                 when (saveTokenUiState) {
-                    is Result.Loading -> Unit
-                    is Result.Success -> onMainClick()
-                    is Result.Error -> {
+                    is SaveTokenUiState.Loading -> Unit
+                    is SaveTokenUiState.Success -> onMainClick()
+                    is SaveTokenUiState.Error -> {
                         isLoading = false
+                        isError = true
+                        onErrorToast(saveTokenUiState.exception, null)
                     }
                 }
             }
