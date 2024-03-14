@@ -31,7 +31,6 @@ class RePasswordViewmodel @Inject constructor(
     var checkPassword = savedStateHandle.getStateFlow(key = CHECK_PASSWORD, initialValue = "")
     var number = savedStateHandle.getStateFlow(key = NUMBER, initialValue = "")
 
-
     fun sendNumber(body: SendNumberRequest) = viewModelScope.launch {
         sendNumberUseCase(body = body)
             .onSuccess {

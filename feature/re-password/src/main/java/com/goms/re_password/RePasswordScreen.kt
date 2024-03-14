@@ -42,7 +42,6 @@ fun RePasswordRoute(
         val password by viewModel.password.collectAsStateWithLifecycle()
         val checkPassword by viewModel.email.collectAsStateWithLifecycle()
 
-
         RePasswordScreen(
             password = password,
             passwordCheck = checkPassword,
@@ -53,7 +52,6 @@ fun RePasswordRoute(
         )
     }
 }
-
 
 @Composable
 fun RePasswordScreen(
@@ -72,7 +70,6 @@ fun RePasswordScreen(
             focusManager.clearFocus()
         }
     }
-
 
     GomsTheme { colors, typography ->
         Column(
