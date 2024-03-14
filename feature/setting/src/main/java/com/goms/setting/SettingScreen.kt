@@ -56,7 +56,7 @@ fun SettingRoute(
         val getProfileUiState by viewModel.getProfileUiState.collectAsStateWithLifecycle()
         val profileImageUiState by viewModel.profileImageUiState.collectAsStateWithLifecycle()
 
-        val logoutUiState by viewModel.logoutState.collectAsState()
+        val logoutUiState by viewModel.logoutState.collectAsStateWithLifecycle()
         var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
 
         val galleryLauncher =
@@ -145,7 +145,7 @@ fun SettingScreen(
             Spacer(modifier = Modifier.height(24.dp))
             SelectThemeDropDown(modifier = Modifier.padding(horizontal = 20.dp))
             Spacer(modifier = Modifier.height(24.dp))
-            if(role == Authority.ROLE_STUDENT.name) {
+            if (role == Authority.ROLE_STUDENT.name) {
                 SettingSwitchComponent(
                     modifier = Modifier.padding(horizontal = 28.dp),
                     title = "외출제 푸시 알림",
