@@ -1,6 +1,7 @@
 package com.goms.sign_up
 
 import android.content.pm.ActivityInfo
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
@@ -19,17 +20,16 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModelStoreOwner
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.goms.common.result.Result
 import com.goms.design_system.component.button.ButtonState
 import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.button.GomsButton
@@ -43,41 +43,38 @@ import com.goms.sign_up.component.SelectGenderDropDown
 import com.goms.sign_up.component.SelectMajorDropDown
 import com.goms.sign_up.component.SignUpText
 import com.goms.sign_up.viewmodel.SendNumberUiState
-import com.goms.sign_up.viewmodel.SignUpViewModelProvider
+import com.goms.sign_up.viewmodel.SignUpViewModel
 import com.goms.ui.isStrongEmail
-import kotlinx.collections.immutable.toPersistentList
 
 @Composable
 fun SignUpRoute(
-    viewModelStoreOwner: ViewModelStoreOwner,
     onBackClick: () -> Unit,
     onNumberClick: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
+    viewModel: SignUpViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
 ) {
-    SignUpViewModelProvider(viewModelStoreOwner = viewModelStoreOwner) { viewModel ->
-        val sendNumberUiState by viewModel.sendNumberUiState.collectAsState()
-        val name by viewModel.name.collectAsStateWithLifecycle()
-        val email by viewModel.email.collectAsStateWithLifecycle()
-        val gender by viewModel.gender.collectAsStateWithLifecycle()
-        val major by viewModel.major.collectAsStateWithLifecycle()
+    val sendNumberUiState by viewModel.sendNumberUiState.collectAsState()
+    val name by viewModel.name.collectAsStateWithLifecycle()
+    val email by viewModel.email.collectAsStateWithLifecycle()
+    val gender by viewModel.gender.collectAsStateWithLifecycle()
+    val major by viewModel.major.collectAsStateWithLifecycle()
 
-        SignUpScreen(
-            name = name,
-            email = email,
-            gender = gender,
-            major = major,
-            onNameChange = viewModel::onNameChange,
-            onEmailChange = viewModel::onEmailChange,
-            onGenderChange = viewModel::onGenderChange,
-            onMajorChange = viewModel::onMajorChange,
-            sendNumberUiState = sendNumberUiState,
-            onBackClick = onBackClick,
-            onNumberClick = onNumberClick,
-            onErrorToast = onErrorToast,
-            signUpCallBack = { viewModel.sendNumber(body = SendNumberRequest("${viewModel.email.value}@gsm.hs.kr")) },
-            initCallBack = { viewModel.initSendNumber() }
-        )
-    }
+    SignUpScreen(
+        name = name,
+        email = email,
+        gender = gender,
+        major = major,
+        onNameChange = viewModel::onNameChange,
+        onEmailChange = viewModel::onEmailChange,
+        onGenderChange = viewModel::onGenderChange,
+        onMajorChange = viewModel::onMajorChange,
+        sendNumberUiState = sendNumberUiState,
+        onBackClick = onBackClick,
+        onNumberClick = onNumberClick,
+        onErrorToast = onErrorToast,
+        signUpCallBack = { viewModel.sendNumber(body = SendNumberRequest("${viewModel.email.value}@gsm.hs.kr")) },
+        initCallBack = { viewModel.initSendNumber() }
+    )
 }
 
 
