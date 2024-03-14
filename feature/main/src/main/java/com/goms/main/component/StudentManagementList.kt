@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -31,12 +30,15 @@ import com.goms.design_system.R
 import com.goms.design_system.component.shimmer.shimmerEffect
 import com.goms.design_system.icon.WriteIcon
 import com.goms.design_system.theme.GomsTheme
+import com.goms.main.data.StudentData
+import com.goms.main.data.toData
 import com.goms.main.viewmodel.GetStudentListUiState
 import com.goms.main.viewmodel.StudentSearchUiState
 import com.goms.model.enum.Authority
 import com.goms.model.enum.Status
-import com.goms.model.response.council.StudentResponse
 import com.goms.ui.toText
+import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.toPersistentList
 import java.util.UUID
 
 @Composable
@@ -68,7 +70,7 @@ fun StudentManagementList(
 
                     StudentManagementListComponent(
                         modifier = modifier,
-                        list = list,
+                        list = list.map { it.toData() }.toPersistentList(),
                         onBottomSheetOpenClick = onBottomSheetOpenClick,
                         onClick = onClick
                     )
@@ -96,7 +98,7 @@ fun StudentManagementList(
 
             StudentManagementListComponent(
                 modifier = modifier,
-                list = list,
+                list = list.map { it.toData() }.toPersistentList(),
                 onBottomSheetOpenClick = onBottomSheetOpenClick,
                 onClick = onClick
             )
@@ -107,7 +109,7 @@ fun StudentManagementList(
 @Composable
 fun StudentManagementListComponent(
     modifier: Modifier,
-    list: List<StudentResponse>,
+    list: PersistentList<StudentData>,
     onBottomSheetOpenClick: () -> Unit,
     onClick: (UUID, String) -> Unit
 ) {
@@ -129,7 +131,7 @@ fun StudentManagementListComponent(
                 items(list.size) {
                     StudentManagementListItem(
                         modifier = Modifier.fillMaxWidth(),
-                        list = list[it],
+                        data = list[it],
                         onClick = onClick
                     )
                     Divider(
@@ -145,7 +147,7 @@ fun StudentManagementListComponent(
 @Composable
 fun StudentManagementListItem(
     modifier: Modifier = Modifier,
-    list: StudentResponse,
+    data: StudentData,
     onClick: (UUID, String) -> Unit
 ) {
     GomsTheme { colors, typography ->
@@ -154,7 +156,7 @@ fun StudentManagementListItem(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            if (list.profileUrl.isNullOrEmpty()) {
+            if (data.profileUrl.isNullOrEmpty()) {
                 Image(
                     painter = painterResource(R.drawable.ic_profile),
                     contentDescription = "Default Profile Image",
@@ -162,21 +164,21 @@ fun StudentManagementListItem(
                         .size(48.dp)
                         .border(
                             width = 4.dp,
-                            color = if (list.isBlackList) colors.N5
-                            else if (list.authority == Authority.ROLE_STUDENT_COUNCIL) colors.A7
+                            color = if (data.isBlackList) colors.N5
+                            else if (data.authority == Authority.ROLE_STUDENT_COUNCIL) colors.A7
                             else Color.Transparent,
                             shape = CircleShape
                         )
                 )
             } else {
                 AsyncImage(
-                    model = list.profileUrl,
+                    model = data.profileUrl,
                     modifier = Modifier
                         .size(48.dp)
                         .border(
                             width = 4.dp,
-                            color = if (list.isBlackList) colors.N5
-                            else if (list.authority == Authority.ROLE_STUDENT_COUNCIL) colors.A7
+                            color = if (data.isBlackList) colors.N5
+                            else if (data.authority == Authority.ROLE_STUDENT_COUNCIL) colors.A7
                             else Color.Transparent,
                             shape = CircleShape
                         ),
@@ -186,15 +188,15 @@ fun StudentManagementListItem(
             }
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(
-                    text = list.name,
+                    text = data.name,
                     style = typography.textMedium,
                     fontWeight = FontWeight.SemiBold,
-                    color = if (list.isBlackList) colors.N5
-                    else if (list.authority == Authority.ROLE_STUDENT_COUNCIL) colors.A7
+                    color = if (data.isBlackList) colors.N5
+                    else if (data.authority == Authority.ROLE_STUDENT_COUNCIL) colors.A7
                     else colors.G7
                 )
                 Text(
-                    text = "${list.grade}기 | ${list.major.toText()}",
+                    text = "${data.grade}기 | ${data.major.toText()}",
                     style = typography.caption,
                     fontWeight = FontWeight.Normal,
                     color = colors.G4
@@ -203,9 +205,9 @@ fun StudentManagementListItem(
             Spacer(modifier = Modifier.weight(1f))
             IconButton(onClick = {
                 onClick(
-                    UUID.fromString(list.accountIdx),
-                    if (list.isBlackList) Status.BLACK_LIST.value
-                    else if (list.authority == Authority.ROLE_STUDENT_COUNCIL) Status.ROLE_STUDENT_COUNCIL.value
+                    UUID.fromString(data.accountIdx),
+                    if (data.isBlackList) Status.BLACK_LIST.value
+                    else if (data.authority == Authority.ROLE_STUDENT_COUNCIL) Status.ROLE_STUDENT_COUNCIL.value
                     else Status.ROLE_STUDENT.value
                 )
             }) {
