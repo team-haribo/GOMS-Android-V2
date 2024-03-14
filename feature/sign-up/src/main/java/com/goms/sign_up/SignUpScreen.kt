@@ -42,6 +42,7 @@ import com.goms.model.request.auth.SendNumberRequest
 import com.goms.sign_up.component.SelectGenderDropDown
 import com.goms.sign_up.component.SelectMajorDropDown
 import com.goms.sign_up.component.SignUpText
+import com.goms.sign_up.viewmodel.SendNumberUiState
 import com.goms.sign_up.viewmodel.SignUpViewModelProvider
 import com.goms.ui.isStrongEmail
 import kotlinx.collections.immutable.toPersistentList
@@ -90,7 +91,7 @@ fun SignUpScreen(
     onEmailChange: (String) -> Unit,
     onGenderChange: (String) -> Unit,
     onMajorChange: (String) -> Unit,
-    sendNumberUiState: Result<Unit>,
+    sendNumberUiState: SendNumberUiState,
     onBackClick: () -> Unit,
     onNumberClick: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
@@ -109,11 +110,11 @@ fun SignUpScreen(
 
     DisposableEffect(sendNumberUiState) {
         when (sendNumberUiState) {
-            is Result.Loading -> Unit
-            is Result.Success -> onNumberClick()
-            is Result.Error -> {
+            is SendNumberUiState.Loading -> Unit
+            is SendNumberUiState.Success -> onNumberClick()
+            is SendNumberUiState.Error -> {
                 isLoading = false
-                onErrorToast(sendNumberUiState.exception, null)
+                onErrorToast(sendNumberUiState.exception, "인증번호 전송이 실패했습니다.")
             }
         }
         onDispose { initCallBack() }
