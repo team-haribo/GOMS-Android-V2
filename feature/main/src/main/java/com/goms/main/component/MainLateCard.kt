@@ -34,9 +34,10 @@ import com.goms.design_system.R
 import com.goms.design_system.component.clickable.gomsClickable
 import com.goms.design_system.component.shimmer.shimmerEffect
 import com.goms.design_system.theme.GomsTheme
+import com.goms.main.data.RankData
+import com.goms.main.data.toData
 import com.goms.main.viewmodel.GetLateRankListUiState
 import com.goms.model.enum.Authority
-import com.goms.model.response.late.RankResponse
 import com.goms.ui.toText
 
 @Composable
@@ -107,7 +108,7 @@ fun MainLateCard(
                             items(list.take(3).size) {
                                 MainLateItem(
                                     modifier = Modifier.widthIn((componentWidth - 32.dp) / 3),
-                                    list = list[it]
+                                    data = list[it].toData()
                                 )
                             }
                         }
@@ -124,7 +125,7 @@ fun MainLateCard(
 @Composable
 fun MainLateItem(
     modifier: Modifier = Modifier,
-    list: RankResponse
+    data: RankData
 ) {
     GomsTheme { colors, typography ->
         Column(
@@ -132,7 +133,7 @@ fun MainLateItem(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            if (list.profileUrl.isNullOrEmpty()) {
+            if (data.profileUrl.isNullOrEmpty()) {
                 Image(
                     painter = painterResource(R.drawable.ic_profile),
                     contentDescription = "Default Profile Image",
@@ -140,20 +141,20 @@ fun MainLateItem(
                 )
             } else {
                 AsyncImage(
-                    model = list.profileUrl,
+                    model = data.profileUrl,
                     modifier = Modifier.size(56.dp),
                     contentScale = ContentScale.Crop,
                     contentDescription = "Profile Image",
                 )
             }
             Text(
-                text = list.name,
+                text = data.name,
                 style = typography.textMedium,
                 fontWeight = FontWeight.SemiBold,
                 color = colors.G7
             )
             Text(
-                text = "${list.grade}기 | ${list.major.toText()}",
+                text = "${data.grade}기 | ${data.major.toText()}",
                 style = typography.caption,
                 fontWeight = FontWeight.Normal,
                 color = colors.G4
