@@ -18,13 +18,11 @@ fun NavController.navigateToEmailCheck(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.emailCheckScreen(
-    viewModelStoreOwner: ViewModelStoreOwner,
     onBackClick: () -> Unit,
     onNumberClick: () -> Unit
 ) {
     composable(route = emailCheckRoute) {
         EmailCheckRoute(
-            viewModelStoreOwner = viewModelStoreOwner,
             onBackClick = onBackClick,
             onNumberClick = onNumberClick
         )
@@ -36,13 +34,11 @@ fun NavController.navigateToPasswordNumber(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.passwordNumberScreen(
-    viewModelStoreOwner: ViewModelStoreOwner,
     onBackClick: () -> Unit,
     onRePasswordClick: () -> Unit
 ) {
     composable(route = numberRoute) {
         NumberRoute(
-            viewModelStoreOwner = viewModelStoreOwner,
             onBackClick = onBackClick,
             onRePasswordClick = onRePasswordClick
         )
@@ -54,13 +50,11 @@ fun NavController.navigateToRePassword(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.rePasswordScreen(
-    viewModelStoreOwner: ViewModelStoreOwner,
     onBackClick: () -> Unit,
     onSuccessClick: () -> Unit
 ) {
     composable(route = rePasswordRoute) {
         RePasswordRoute(
-            viewModelStoreOwner = viewModelStoreOwner,
             onBackClick = onBackClick,
             onSuccessClick = onSuccessClick
         )

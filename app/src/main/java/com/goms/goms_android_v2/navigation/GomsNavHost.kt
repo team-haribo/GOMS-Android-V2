@@ -27,7 +27,12 @@ import com.goms.qrcode.navigation.navigateToQrGenerate
 import com.goms.qrcode.navigation.navigateToQrScan
 import com.goms.qrcode.navigation.qrcodeGenerateScreen
 import com.goms.qrcode.navigation.qrcodeScanScreen
+import com.goms.re_password.navigation.emailCheckScreen
 import com.goms.re_password.navigation.navigateToEmailCheck
+import com.goms.re_password.navigation.navigateToPasswordNumber
+import com.goms.re_password.navigation.navigateToRePassword
+import com.goms.re_password.navigation.passwordNumberScreen
+import com.goms.re_password.navigation.rePasswordScreen
 import com.goms.setting.navigation.navigateToSettingScreen
 import com.goms.setting.navigation.settingScreen
 import com.goms.sign_up.navigation.navigateToNumber
@@ -136,6 +141,18 @@ fun GomsNavHost(
             onLogoutSuccess = onLogout,
             onErrorToast = onErrorToast,
             onEmailCheck = navController::navigateToEmailCheck
+        )
+        emailCheckScreen(
+            onBackClick = navController::popBackStack,
+            onNumberClick = navController::navigateToPasswordNumber
+        )
+        passwordNumberScreen(
+            onBackClick = navController::popBackStack,
+            onRePasswordClick = navController::navigateToRePassword
+        )
+        rePasswordScreen(
+            onBackClick = navController::popBackStack,
+            onSuccessClick = { appState.navigateToTopLevelDestination(TopLevelDestination.LOGIN) }
         )
     }
 }

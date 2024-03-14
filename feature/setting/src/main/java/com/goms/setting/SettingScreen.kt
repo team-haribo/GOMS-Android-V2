@@ -35,7 +35,6 @@ import com.goms.model.enum.Authority
 import com.goms.setting.component.SettingProfileCard
 import com.goms.setting.component.PasswordChangeButton
 import com.goms.setting.component.SelectThemeDropDown
-import com.goms.setting.component.SettingProfileCard
 import com.goms.setting.component.SettingSwitchComponent
 import com.goms.setting.viewmodel.GetProfileUiState
 import com.goms.setting.viewmodel.LogoutUiState

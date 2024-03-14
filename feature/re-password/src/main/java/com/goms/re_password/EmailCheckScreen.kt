@@ -1,6 +1,7 @@
 package com.goms.re_password
 
 import android.content.pm.ActivityInfo
+import androidx.activity.ComponentActivity
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -27,7 +28,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModelStoreOwner
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goms.design_system.component.button.ButtonState
 import com.goms.design_system.component.button.GomsBackButton
@@ -38,28 +39,26 @@ import com.goms.design_system.util.keyboardAsState
 import com.goms.design_system.util.lockScreenOrientation
 import com.goms.model.request.auth.SendNumberRequest
 import com.goms.re_password.component.RePasswordText
-import com.goms.re_password.viewmodel.RePasswordViewmodelProvider
+import com.goms.re_password.viewmodel.RePasswordViewmodel
 import com.goms.ui.createToast
 import com.goms.ui.isStrongEmail
 
 @Composable
 fun EmailCheckRoute(
-    viewModelStoreOwner: ViewModelStoreOwner,
     onBackClick: () -> Unit,
-    onNumberClick: () -> Unit
+    onNumberClick: () -> Unit,
+    viewModel: RePasswordViewmodel = hiltViewModel(LocalContext.current as ComponentActivity)
 ) {
-    RePasswordViewmodelProvider(viewModelStoreOwner = viewModelStoreOwner) { viewModel ->
-        val email by viewModel.email.collectAsStateWithLifecycle()
+    val email by viewModel.email.collectAsStateWithLifecycle()
 
-        EmailCheckScreen(
-            email = email,
-            onEmailChange = viewModel::onEmailChange,
-            onBackClick = onBackClick,
-            rePasswordCallBack = { viewModel.sendNumber(body = SendNumberRequest("${viewModel.email.value}@gsm.hs.kr")) },
-            onNumberClick = onNumberClick,
-            initCallBack = { viewModel.initSendNumber() }
-        )
-    }
+    EmailCheckScreen(
+        email = email,
+        onEmailChange = viewModel::onEmailChange,
+        onBackClick = onBackClick,
+        rePasswordCallBack = { viewModel.sendNumber(body = SendNumberRequest("${viewModel.email.value}@gsm.hs.kr")) },
+        onNumberClick = onNumberClick,
+        initCallBack = { viewModel.initSendNumber() }
+    )
 }
 
 @Composable
