@@ -17,6 +17,7 @@ fun Modifier.gomsClickable(
     rippleColor: Color? = null,
     onClickLabel: String? = null,
     role: Role? = null,
+    interval: Long = 1000L,
     onClick: () -> Unit
 ) = composed(
     inspectorInfo = debugInspectorInfo {
@@ -27,7 +28,7 @@ fun Modifier.gomsClickable(
         properties["onClick"] = onClick
     }
 ) {
-    val multipleEventsCutter = remember { MultipleEventsCutter.get() }
+    val multipleEventsCutter = remember { MultipleEventsCutter.get(intervalMs = interval) }
     Modifier.clickable(
         enabled = enabled,
         onClickLabel = onClickLabel,

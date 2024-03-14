@@ -14,11 +14,13 @@ fun GomsApp(
     appState: GomsAppState = rememberBitgoeulAppState(
         windowSizeClass = windowSizeClass
     ),
+    onLogout: () -> Unit,
     uiState: MainActivityUiState
 ) {
     GomsTheme { _,_ ->
         GomsNavHost(
             appState = appState,
+            onLogout = onLogout,
             startDestination = when (uiState) {
                 is MainActivityUiState.Success -> mainRoute
                 is MainActivityUiState.Error -> loginRoute

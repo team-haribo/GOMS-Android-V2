@@ -25,6 +25,7 @@ class AuthInterceptor @Inject constructor(
         val ignorePath = "/auth"
         val ignoreMethodPost = "POST"
         val ignoreMethodGet = "GET"
+        val ignoreMethodDELETE = "DELETE"
         val path = request.url.encodedPath
         val method = request.method
 
@@ -79,6 +80,14 @@ class AuthInterceptor @Inject constructor(
             }
             val accessToken = dataSource.getAccessToken().first().replace("\"", "")
             builder.addHeader("Authorization", "Bearer $accessToken")
+
+            val isAuthEndpoint = path.endsWith("/auth")
+
+            if (isAuthEndpoint && method == ignoreMethodDELETE) {
+                val refreshToken = dataSource.getRefreshToken().first().replace("\"", "")
+                val refreshTokenWithBearer = "Bearer $refreshToken"
+                builder.addHeader("refreshToken", refreshTokenWithBearer)
+            }
         }
         val response = chain.proceed(builder.build())
 

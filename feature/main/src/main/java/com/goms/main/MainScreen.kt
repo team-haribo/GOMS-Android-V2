@@ -1,6 +1,7 @@
 package com.goms.main
 
 import android.Manifest
+import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -48,6 +49,7 @@ fun MainRoute(
     onLateListClick: () -> Unit,
     onStudentManagementClick: () -> Unit,
     onQrcodeClick: (role: Authority) -> Unit,
+    onSettingClick: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
     MainViewModelProvider(viewModelStoreOwner = viewModelStoreOwner) { viewModel ->
@@ -69,6 +71,7 @@ fun MainRoute(
             onLateListClick = onLateListClick,
             onStudentManagementClick = onStudentManagementClick,
             onQrcodeClick = onQrcodeClick,
+            onSettingClick = onSettingClick,
             onErrorToast = onErrorToast,
             mainCallBack = {
                 viewModel.getProfile()
@@ -91,6 +94,7 @@ fun MainScreen(
     onLateListClick: () -> Unit,
     onStudentManagementClick: () -> Unit,
     onQrcodeClick: (role: Authority) -> Unit,
+    onSettingClick: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     mainCallBack: () -> Unit
 ) {
@@ -105,6 +109,11 @@ fun MainScreen(
             permissionLauncher.launch(
                 arrayOf(
                     Manifest.permission.CAMERA,
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        Manifest.permission.READ_MEDIA_IMAGES
+                    } else {
+                        Manifest.permission.READ_EXTERNAL_STORAGE
+                    },
                     Manifest.permission.POST_NOTIFICATIONS
                 )
             )
@@ -143,7 +152,7 @@ fun MainScreen(
                     GomsTopBar(
                         role = role,
                         icon = { SettingIcon(tint = colors.G7) },
-                        onSettingClick = {},
+                        onSettingClick = onSettingClick,
                         onAdminClick = { onStudentManagementClick() }
                     )
                     Column(
