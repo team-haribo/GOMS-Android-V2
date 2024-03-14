@@ -47,7 +47,7 @@ fun EmailCheckRoute(
     viewModelStoreOwner: ViewModelStoreOwner,
     onBackClick: () -> Unit,
     onNumberClick: () -> Unit
-){
+) {
     RePasswordViewmodelProvider(viewModelStoreOwner = viewModelStoreOwner) { viewModel ->
         val email by viewModel.email.collectAsStateWithLifecycle()
 
