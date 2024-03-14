@@ -31,7 +31,6 @@ import com.goms.main.data.ProfileData
 import com.goms.main.data.toData
 import com.goms.main.viewmodel.GetProfileUiState
 import com.goms.model.enum.Authority
-import com.goms.model.response.account.ProfileResponse
 import com.goms.ui.toText
 
 @Composable

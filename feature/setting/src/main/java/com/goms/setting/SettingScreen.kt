@@ -35,6 +35,7 @@ import com.goms.model.enum.Authority
 import com.goms.setting.component.SettingProfileCard
 import com.goms.setting.component.PasswordChangeButton
 import com.goms.setting.component.SelectThemeDropDown
+import com.goms.setting.component.SettingProfileCard
 import com.goms.setting.component.SettingSwitchComponent
 import com.goms.setting.viewmodel.GetProfileUiState
 import com.goms.setting.viewmodel.LogoutUiState
@@ -45,8 +46,9 @@ import com.goms.setting.viewmodel.SettingViewModel
 fun SettingRoute(
     onBackClick: () -> Unit,
     onLogoutSuccess: () -> Unit,
+    onEmailCheck: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
-    viewModel: SettingViewModel = hiltViewModel()
+    viewModel: SettingViewModel = hiltViewModel(),
 ) {
     val role by viewModel.role.collectAsStateWithLifecycle(initialValue = "")
     val context = LocalContext.current
@@ -84,7 +86,8 @@ fun SettingRoute(
         logoutUiState = logoutUiState,
         getProfileUiState = getProfileUiState,
         profileImageUiState = profileImageUiState,
-        onErrorToast = onErrorToast
+        onErrorToast = onErrorToast,
+        onEmailCheck = onEmailCheck
     )
 }
 
@@ -99,7 +102,8 @@ fun SettingScreen(
     logoutUiState: LogoutUiState,
     getProfileUiState: GetProfileUiState,
     profileImageUiState: ProfileImageUiState,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
+    onEmailCheck: () -> Unit
 ) {
     LaunchedEffect("load profile") { getProfile() }
 
@@ -146,7 +150,9 @@ fun SettingScreen(
                 getProfileUiState = getProfileUiState
             )
             Spacer(modifier = Modifier.height(32.dp))
-            PasswordChangeButton(modifier = Modifier.padding(horizontal = 20.dp)) {}
+            PasswordChangeButton(modifier = Modifier.padding(horizontal = 20.dp)) {
+                onEmailCheck()
+            }
             Spacer(modifier = Modifier.height(24.dp))
             SelectThemeDropDown(modifier = Modifier.padding(horizontal = 20.dp))
             Spacer(modifier = Modifier.height(24.dp))

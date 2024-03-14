@@ -28,6 +28,7 @@ dependencies {
     implementation(project(":feature:main"))
     implementation(project(":feature:setting"))
     implementation(project(":feature:qrcode"))
+    implementation(project(":feature:re-password"))
 
     implementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext)
