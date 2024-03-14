@@ -40,8 +40,8 @@ import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.util.keyboardAsState
 import com.goms.design_system.util.lockScreenOrientation
 import com.goms.login.component.InputLoginText
-import com.goms.login.viewmodel.LoginViewModel
 import com.goms.login.viewmodel.LoginUiState
+import com.goms.login.viewmodel.LoginViewModel
 import com.goms.model.request.auth.LoginRequest
 import com.goms.ui.isStrongEmail
 

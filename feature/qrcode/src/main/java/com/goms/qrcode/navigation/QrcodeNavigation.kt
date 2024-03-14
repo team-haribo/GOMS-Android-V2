@@ -6,7 +6,6 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.goms.qrcode.QrcodeGenerateRoute
 import com.goms.qrcode.QrcodeScanRoute
-import com.goms.qrcode.viewmodel.GetOutingUUIDUiState
 
 const val qrcodeScanRoute = "qrcode_scan_route"
 const val qrcodeGenerateRoute = "qrcode_generate_route"

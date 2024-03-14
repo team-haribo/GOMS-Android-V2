@@ -5,6 +5,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import com.goms.setting.SettingRoute
 
 const val settingRoute = "setting_route"
 fun NavController.navigateToSettingScreen(navOptions: NavOptions? = null) {
@@ -15,14 +16,16 @@ fun NavGraphBuilder.settingScreen(
     viewModelStoreOwner: ViewModelStoreOwner,
     onLogoutSuccess: () -> Unit,
     onBackClick: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
+    onEmailCheck: () -> Unit
 ) {
     composable(route = settingRoute) {
-        com.goms.setting.SettingRoute(
+        SettingRoute(
             viewModelStoreOwner = viewModelStoreOwner,
             onLogoutSuccess = onLogoutSuccess,
             onBackClick = onBackClick,
-            onErrorToast = onErrorToast
+            onErrorToast = onErrorToast,
+            onEmailCheck = onEmailCheck
         )
     }
 }

@@ -89,11 +89,11 @@ fun MainOutingCard(
                 Divider(modifier = Modifier.height(1.dp), color = colors.WHITE.copy(0.15f))
                 when (getOutingCountUiState) {
                     GetOutingCountUiState.Loading -> {
-                            Box(
-                                modifier = Modifier
-                                    .size(56.dp, 23.dp)
-                                    .shimmerEffect(color = colors.WHITE)
-                            )
+                        Box(
+                            modifier = Modifier
+                                .size(56.dp, 23.dp)
+                                .shimmerEffect(color = colors.WHITE)
+                        )
                     }
                     is GetOutingCountUiState.Error -> {
                         onErrorToast(getOutingCountUiState.exception, "외출학생 숫자를 가져오지 못했습니다")

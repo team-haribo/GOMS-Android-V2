@@ -24,9 +24,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.R
 import com.goms.design_system.component.shimmer.shimmerEffect
+import com.goms.design_system.theme.GomsTheme
 import com.goms.main.viewmodel.GetProfileUiState
 import com.goms.model.enum.Authority
 import com.goms.model.response.account.ProfileResponse
