@@ -20,6 +20,14 @@ class AuthTokenDataSource @Inject constructor(
         }
     }
 
+    suspend fun removeAccessToken() {
+        authToken.updateData {
+            it.toBuilder()
+                .clearAccessToken()
+                .build()
+        }
+    }
+
     fun getAccessTokenExp(): Flow<String> = authToken.data.map {
         it.accessExp ?: ""
     }
@@ -28,6 +36,14 @@ class AuthTokenDataSource @Inject constructor(
         authToken.updateData {
             it.toBuilder()
                 .setAccessExp(accessTokenExp)
+                .build()
+        }
+    }
+
+    suspend fun removeAccessTokenExp() {
+        authToken.updateData {
+            it.toBuilder()
+                .clearAccessExp()
                 .build()
         }
     }
@@ -44,6 +60,14 @@ class AuthTokenDataSource @Inject constructor(
         }
     }
 
+    suspend fun removeRefreshToken() {
+        authToken.updateData {
+            it.toBuilder()
+                .clearRefreshToken()
+                .build()
+        }
+    }
+
     fun getRefreshTokenExp(): Flow<String> = authToken.data.map {
         it.refreshExp ?: ""
     }
@@ -56,6 +80,14 @@ class AuthTokenDataSource @Inject constructor(
         }
     }
 
+    suspend fun removeRefreshTokenExp() {
+        authToken.updateData {
+            it.toBuilder()
+                .clearRefreshExp()
+                .build()
+        }
+    }
+
     fun getAuthority(): Flow<String> = authToken.data.map {
         it.authority ?: ""
     }
@@ -64,6 +96,14 @@ class AuthTokenDataSource @Inject constructor(
         authToken.updateData {
             it.toBuilder()
                 .setAuthority(authority)
+                .build()
+        }
+    }
+
+    suspend fun removeAuthority() {
+        authToken.updateData {
+            it.toBuilder()
+                .clearAuthority()
                 .build()
         }
     }

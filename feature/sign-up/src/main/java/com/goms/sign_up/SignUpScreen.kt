@@ -19,7 +19,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,19 +29,17 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goms.common.result.Result
-import com.goms.design_system.component.bottomsheet.SelectorBottomSheet
 import com.goms.design_system.component.button.ButtonState
 import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.button.GomsButton
 import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
-import com.goms.design_system.component.textfield.GomsBottomSheetTextField
 import com.goms.design_system.component.textfield.GomsTextField
 import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.util.keyboardAsState
 import com.goms.design_system.util.lockScreenOrientation
-import com.goms.model.enum.Gender
-import com.goms.model.enum.Major
 import com.goms.model.request.auth.SendNumberRequest
+import com.goms.sign_up.component.SelectGenderDropDown
+import com.goms.sign_up.component.SelectMajorDropDown
 import com.goms.sign_up.component.SignUpText
 import com.goms.sign_up.viewmodel.SignUpViewModelProvider
 import com.goms.ui.isStrongEmail
@@ -101,8 +98,6 @@ fun SignUpScreen(
 ) {
     val focusManager = LocalFocusManager.current
     val isKeyboardOpen by keyboardAsState()
-    var onGenderBottomSheetOpenClick by rememberSaveable { mutableStateOf(false) }
-    var onMajorBottomSheetOpenClick by rememberSaveable { mutableStateOf(false) }
     var isLoading by remember { mutableStateOf(false) }
 
     LaunchedEffect(isKeyboardOpen) {
@@ -163,28 +158,19 @@ fun SignUpScreen(
                     onValueChange = onEmailChange,
                     singleLine = true
                 )
-                GomsBottomSheetTextField(
-                    modifier = Modifier.fillMaxWidth(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                    placeHolder = "성별",
-                    setText = gender,
-                    onValueChange = onGenderChange,
-                    readOnly = true,
-                    singleLine = true
+                SelectGenderDropDown(
+                    modifier = Modifier,
+                    gender = gender,
+                    onSelectGender = onGenderChange
                 ) {
-                    onGenderBottomSheetOpenClick = true
                     focusManager.clearFocus()
                 }
-                GomsBottomSheetTextField(
-                    modifier = Modifier.fillMaxWidth(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                    placeHolder = "과",
-                    setText = major,
-                    onValueChange = onMajorChange,
-                    readOnly = true,
-                    singleLine = true
+                Spacer(modifier = Modifier.height(30.dp))
+                SelectMajorDropDown(
+                    modifier = Modifier,
+                    major = major,
+                    onSelectMajor = onMajorChange
                 ) {
-                    onMajorBottomSheetOpenClick = true
                     focusManager.clearFocus()
                 }
                 Spacer(modifier = Modifier.weight(1f))
@@ -204,37 +190,6 @@ fun SignUpScreen(
                 }
                 Spacer(modifier = Modifier.height(100.dp))
             }
-        }
-        if (onGenderBottomSheetOpenClick) {
-            SelectorBottomSheet(
-                modifier = Modifier.fillMaxWidth(),
-                title = "성별",
-                list = listOf(
-                    Gender.MAN.value,
-                    Gender.WOMAN.value
-                ).toPersistentList(),
-                selected = gender,
-                itemChange = onGenderChange,
-                closeSheet = {
-                    onGenderBottomSheetOpenClick = false
-                }
-            )
-        }
-        if (onMajorBottomSheetOpenClick) {
-            SelectorBottomSheet(
-                modifier = Modifier.fillMaxWidth(),
-                title = "과",
-                list = listOf(
-                    Major.SW_DEVELOP.value,
-                    Major.SMART_IOT.value,
-                    Major.AI.value
-                ).toPersistentList(),
-                selected = major,
-                itemChange = onMajorChange,
-                closeSheet = {
-                    onMajorBottomSheetOpenClick = false
-                }
-            )
         }
         if (isLoading) {
             GomsCircularProgressIndicator()

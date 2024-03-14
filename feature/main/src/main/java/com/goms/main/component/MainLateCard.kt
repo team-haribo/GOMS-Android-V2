@@ -23,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
@@ -142,7 +143,9 @@ fun MainLateItem(
             } else {
                 AsyncImage(
                     model = data.profileUrl,
-                    modifier = Modifier.size(56.dp),
+                    modifier = Modifier
+                        .size(56.dp)
+                        .clip(RoundedCornerShape(40.dp)),
                     contentScale = ContentScale.Crop,
                     contentDescription = "Profile Image",
                 )

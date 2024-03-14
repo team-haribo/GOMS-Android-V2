@@ -16,4 +16,6 @@ interface AuthRepository {
     suspend fun sendNumber(body: SendNumberRequest): Flow<Unit>
 
     suspend fun verifyNumber(email: String, authCode: String): Flow<Unit>
+
+    suspend fun logout(): Flow<Unit>
 }
