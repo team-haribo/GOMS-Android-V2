@@ -9,7 +9,6 @@ import com.goms.re_password.EmailCheckRoute
 import com.goms.re_password.NumberRoute
 import com.goms.re_password.RePasswordRoute
 
-
 const val emailCheckRoute = "email_check_route"
 const val numberRoute = "number_route"
 const val rePasswordRoute = "re_password_route"

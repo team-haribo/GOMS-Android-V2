@@ -6,7 +6,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import com.goms.design_system.theme.GomsTheme
 
-
 @Composable
 fun RePasswordText(modifier: Modifier){
     GomsTheme { colors, typography ->
