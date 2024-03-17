@@ -7,8 +7,7 @@ import javax.inject.Inject
 
 class RePasswordUseCase @Inject constructor(
     private val accountRepository: AccountRepository
-)
-{
+) {
     suspend operator fun invoke(body: RePasswordRequest): Flow<Unit> {
         return accountRepository.rePassword(body = body)
     }
