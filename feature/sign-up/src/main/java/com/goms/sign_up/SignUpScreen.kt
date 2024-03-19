@@ -1,6 +1,7 @@
 package com.goms.sign_up
 
 import android.content.pm.ActivityInfo
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
@@ -23,12 +24,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModelStoreOwner
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.goms.common.result.Result
 import com.goms.design_system.component.button.ButtonState
 import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.button.GomsButton
@@ -41,40 +42,39 @@ import com.goms.model.request.auth.SendNumberRequest
 import com.goms.sign_up.component.SelectGenderDropDown
 import com.goms.sign_up.component.SelectMajorDropDown
 import com.goms.sign_up.component.SignUpText
-import com.goms.sign_up.viewmodel.SignUpViewModelProvider
+import com.goms.sign_up.viewmodel.SendNumberUiState
+import com.goms.sign_up.viewmodel.SignUpViewModel
 import com.goms.ui.isStrongEmail
 
 @Composable
 fun SignUpRoute(
-    viewModelStoreOwner: ViewModelStoreOwner,
     onBackClick: () -> Unit,
     onNumberClick: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
+    viewModel: SignUpViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
 ) {
-    SignUpViewModelProvider(viewModelStoreOwner = viewModelStoreOwner) { viewModel ->
-        val sendNumberUiState by viewModel.sendNumberUiState.collectAsState()
-        val name by viewModel.name.collectAsStateWithLifecycle()
-        val email by viewModel.email.collectAsStateWithLifecycle()
-        val gender by viewModel.gender.collectAsStateWithLifecycle()
-        val major by viewModel.major.collectAsStateWithLifecycle()
+    val sendNumberUiState by viewModel.sendNumberUiState.collectAsState()
+    val name by viewModel.name.collectAsStateWithLifecycle()
+    val email by viewModel.email.collectAsStateWithLifecycle()
+    val gender by viewModel.gender.collectAsStateWithLifecycle()
+    val major by viewModel.major.collectAsStateWithLifecycle()
 
-        SignUpScreen(
-            name = name,
-            email = email,
-            gender = gender,
-            major = major,
-            onNameChange = viewModel::onNameChange,
-            onEmailChange = viewModel::onEmailChange,
-            onGenderChange = viewModel::onGenderChange,
-            onMajorChange = viewModel::onMajorChange,
-            sendNumberUiState = sendNumberUiState,
-            onBackClick = onBackClick,
-            onNumberClick = onNumberClick,
-            onErrorToast = onErrorToast,
-            signUpCallBack = { viewModel.sendNumber(body = SendNumberRequest("${viewModel.email.value}@gsm.hs.kr")) },
-            initCallBack = { viewModel.initSendNumber() }
-        )
-    }
+    SignUpScreen(
+        name = name,
+        email = email,
+        gender = gender,
+        major = major,
+        onNameChange = viewModel::onNameChange,
+        onEmailChange = viewModel::onEmailChange,
+        onGenderChange = viewModel::onGenderChange,
+        onMajorChange = viewModel::onMajorChange,
+        sendNumberUiState = sendNumberUiState,
+        onBackClick = onBackClick,
+        onNumberClick = onNumberClick,
+        onErrorToast = onErrorToast,
+        signUpCallBack = { viewModel.sendNumber(body = SendNumberRequest("${viewModel.email.value}@gsm.hs.kr")) },
+        initCallBack = { viewModel.initSendNumber() }
+    )
 }
 
 
@@ -88,7 +88,7 @@ fun SignUpScreen(
     onEmailChange: (String) -> Unit,
     onGenderChange: (String) -> Unit,
     onMajorChange: (String) -> Unit,
-    sendNumberUiState: Result<Unit>,
+    sendNumberUiState: SendNumberUiState,
     onBackClick: () -> Unit,
     onNumberClick: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
@@ -107,11 +107,11 @@ fun SignUpScreen(
 
     DisposableEffect(sendNumberUiState) {
         when (sendNumberUiState) {
-            is Result.Loading -> Unit
-            is Result.Success -> onNumberClick()
-            is Result.Error -> {
+            is SendNumberUiState.Loading -> Unit
+            is SendNumberUiState.Success -> onNumberClick()
+            is SendNumberUiState.Error -> {
                 isLoading = false
-                onErrorToast(sendNumberUiState.exception, null)
+                onErrorToast(sendNumberUiState.exception, "인증번호 전송이 실패했습니다.")
             }
         }
         onDispose { initCallBack() }

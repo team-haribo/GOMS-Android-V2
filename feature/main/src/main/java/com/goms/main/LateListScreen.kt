@@ -1,7 +1,7 @@
 package com.goms.main
 
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,20 +21,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModelStoreOwner
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goms.design_system.component.bottomsheet.DatePickerBottomSheet
 import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.util.getDefaultWednesday
-import com.goms.design_system.util.keyboardAsState
 import com.goms.main.component.LateList
 import com.goms.main.component.LateListText
 import com.goms.main.viewmodel.GetLateListUiState
-import com.goms.main.viewmodel.MainViewModelProvider
+import com.goms.main.viewmodel.MainViewModel
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
@@ -42,20 +40,18 @@ import kotlinx.datetime.toLocalDateTime
 
 @Composable
 fun LateListRoute(
-    viewModelStoreOwner: ViewModelStoreOwner,
     onBackClick: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
+    viewModel: MainViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
 ) {
-    MainViewModelProvider(viewModelStoreOwner = viewModelStoreOwner) { viewModel ->
-        val getLateListUiState by viewModel.getLateListUiState.collectAsStateWithLifecycle()
+    val getLateListUiState by viewModel.getLateListUiState.collectAsStateWithLifecycle()
 
-        LateListScreen(
-            getLateListUiState = getLateListUiState,
-            onBackClick = onBackClick,
-            lateListCallBack = { viewModel.getLateList(it) },
-            onErrorToast = onErrorToast
-        )
-    }
+    LateListScreen(
+        getLateListUiState = getLateListUiState,
+        onBackClick = onBackClick,
+        lateListCallBack = { viewModel.getLateList(it) },
+        onErrorToast = onErrorToast
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

@@ -31,12 +31,15 @@ import com.goms.design_system.component.shimmer.shimmerEffect
 import com.goms.design_system.icon.DeleteIcon
 import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.util.formatTime
+import com.goms.main.data.OutingData
+import com.goms.main.data.toData
 import com.goms.main.viewmodel.GetOutingCountUiState
 import com.goms.main.viewmodel.GetOutingListUiState
 import com.goms.main.viewmodel.OutingSearchUiState
 import com.goms.model.enum.Authority
-import com.goms.model.response.outing.OutingResponse
 import com.goms.ui.toText
+import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.toPersistentList
 import java.util.UUID
 
 @Composable
@@ -87,7 +90,7 @@ fun OutingStatusList(
                             OutingStatusListComponent(
                                 modifier = modifier,
                                 role = role,
-                                list = list,
+                                list = list.map { it.toData() }.toPersistentList(),
                                 onClick = onClick
                             )
                         }
@@ -112,7 +115,7 @@ fun OutingStatusList(
                     OutingStatusListComponent(
                         modifier = modifier,
                         role = role,
-                        list = list,
+                        list = list.map { it.toData() }.toPersistentList(),
                         onClick = onClick
                     )
                 }
@@ -125,7 +128,7 @@ fun OutingStatusList(
 fun OutingStatusListComponent(
     modifier: Modifier,
     role: Authority,
-    list: List<OutingResponse>,
+    list: PersistentList<OutingData>,
     onClick: (UUID) -> Unit
 ) {
     GomsTheme { colors, typography ->
@@ -144,7 +147,7 @@ fun OutingStatusListComponent(
                     OutingStatusListItem(
                         modifier = Modifier.fillMaxWidth(),
                         role = role,
-                        list = list[it],
+                        data = list[it],
                         onClick = onClick
                     )
                     Divider(
@@ -161,7 +164,7 @@ fun OutingStatusListComponent(
 fun OutingStatusListItem(
     modifier: Modifier = Modifier,
     role: Authority,
-    list: OutingResponse,
+    data: OutingData,
     onClick: (UUID) -> Unit
 ) {
     GomsTheme { colors, typography ->
@@ -170,7 +173,7 @@ fun OutingStatusListItem(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            if (list.profileUrl.isNullOrEmpty()) {
+            if (data.profileUrl.isNullOrEmpty()) {
                 Image(
                     painter = painterResource(R.drawable.ic_profile),
                     contentDescription = "Default Profile Image",
@@ -178,7 +181,7 @@ fun OutingStatusListItem(
                 )
             } else {
                 AsyncImage(
-                    model = list.profileUrl,
+                    model = data.profileUrl,
                     modifier = Modifier
                         .size(48.dp)
                         .clip(RoundedCornerShape(40.dp)),
@@ -188,7 +191,7 @@ fun OutingStatusListItem(
             }
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(
-                    text = list.name,
+                    text = data.name,
                     style = typography.textMedium,
                     fontWeight = FontWeight.SemiBold,
                     color = colors.G7
@@ -198,7 +201,7 @@ fun OutingStatusListItem(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = "${list.grade}기 | ${list.major.toText()}",
+                        text = "${data.grade}기 | ${data.major.toText()}",
                         style = typography.caption,
                         fontWeight = FontWeight.Normal,
                         color = colors.G4
@@ -208,7 +211,7 @@ fun OutingStatusListItem(
                         color = colors.WHITE.copy(0.15f)
                     )
                     Text(
-                        text = "${list.createdTime.formatTime()}에 외출",
+                        text = "${data.createdTime.formatTime()}에 외출",
                         style = typography.caption,
                         fontWeight = FontWeight.Normal,
                         color = colors.G4
@@ -217,7 +220,7 @@ fun OutingStatusListItem(
             }
             Spacer(modifier = Modifier.weight(1f))
             if (role == Authority.ROLE_STUDENT_COUNCIL) {
-                IconButton(onClick = { onClick(UUID.fromString(list.accountIdx)) }) {
+                IconButton(onClick = { onClick(UUID.fromString(data.accountIdx)) }) {
                     DeleteIcon()
                 }
             }

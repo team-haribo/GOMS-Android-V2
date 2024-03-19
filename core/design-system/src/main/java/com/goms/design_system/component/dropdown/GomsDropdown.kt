@@ -34,10 +34,11 @@ import com.goms.design_system.component.clickable.gomsClickable
 import com.goms.design_system.icon.ChevronDownIcon
 import com.goms.design_system.icon.ChevronUpIcon
 import com.goms.design_system.theme.GomsTheme
+import kotlinx.collections.immutable.PersistentList
 
 @Composable
 fun GomsDropdown(
-    dropdownList: List<String>,
+    dropdownList: PersistentList<String>,
     dropdownListSize: Int,
     selectedIndex: Int,
     modifier: Modifier,

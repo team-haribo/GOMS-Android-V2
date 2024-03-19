@@ -30,7 +30,6 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.goms.common.result.Result
 import com.goms.design_system.component.button.ButtonState
 import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.button.GomsButton
@@ -42,6 +41,7 @@ import com.goms.design_system.util.lockScreenOrientation
 import com.goms.login.component.InputLoginText
 import com.goms.login.viewmodel.LoginViewModel
 import com.goms.login.viewmodel.LoginUiState
+import com.goms.login.viewmodel.SaveTokenUiState
 import com.goms.model.request.auth.LoginRequest
 import com.goms.ui.isStrongEmail
 
@@ -85,7 +85,7 @@ fun InputLoginScreen(
     onEmailChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
     loginUiState: LoginUiState,
-    saveTokenUiState: Result<Unit>,
+    saveTokenUiState: SaveTokenUiState,
     onBackClick: () -> Unit,
     onMainClick: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
@@ -109,10 +109,12 @@ fun InputLoginScreen(
             is LoginUiState.Loading -> Unit
             is LoginUiState.Success -> {
                 when (saveTokenUiState) {
-                    is Result.Loading -> Unit
-                    is Result.Success -> onMainClick()
-                    is Result.Error -> {
+                    is SaveTokenUiState.Loading -> Unit
+                    is SaveTokenUiState.Success -> onMainClick()
+                    is SaveTokenUiState.Error -> {
                         isLoading = false
+                        isError = true
+                        onErrorToast(saveTokenUiState.exception, null)
                     }
                 }
             }

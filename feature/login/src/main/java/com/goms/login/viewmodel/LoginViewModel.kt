@@ -26,7 +26,7 @@ class LoginViewModel @Inject constructor(
     private val _loginUiState = MutableStateFlow<LoginUiState>(LoginUiState.Loading)
     val loginUiState = _loginUiState.asStateFlow()
 
-    private val _saveTokenUiState = MutableStateFlow<Result<Unit>>(Result.Loading)
+    private val _saveTokenUiState = MutableStateFlow<SaveTokenUiState>(SaveTokenUiState.Loading)
     val saveTokenUiState = _saveTokenUiState.asStateFlow()
 
     var email = savedStateHandle.getStateFlow(key = EMAIL, initialValue = "")
@@ -54,11 +54,12 @@ class LoginViewModel @Inject constructor(
     }
 
     fun saveToken(token: LoginResponse) = viewModelScope.launch {
+        _saveTokenUiState.value = SaveTokenUiState.Loading
         saveTokenUseCase(token = token)
             .onSuccess {
-                _saveTokenUiState.value = Result.Success(it)
+                _saveTokenUiState.value = SaveTokenUiState.Success
             }.onFailure {
-                _saveTokenUiState.value = Result.Error(it)
+                _saveTokenUiState.value = SaveTokenUiState.Error(it)
             }
     }
 

@@ -27,7 +27,7 @@ class SignUpViewModel @Inject constructor(
     private val _signUpUiState = MutableStateFlow<SignUpUiState>(SignUpUiState.Loading)
     val signUpUiState = _signUpUiState.asStateFlow()
 
-    private val _sendNumberUiState = MutableStateFlow<Result<Unit>>(Result.Loading)
+    private val _sendNumberUiState = MutableStateFlow<SendNumberUiState>(SendNumberUiState.Loading)
     val sendNumberUiState = _sendNumberUiState.asStateFlow()
 
     private val _verifyNumberUiState = MutableStateFlow<VerifyNumberUiState>(VerifyNumberUiState.Loading)
@@ -65,17 +65,17 @@ class SignUpViewModel @Inject constructor(
         sendNumberUseCase(body = body)
             .onSuccess {
                 it.catch {  remoteError ->
-                    _sendNumberUiState.value = Result.Error(remoteError)
+                    _sendNumberUiState.value = SendNumberUiState.Error(remoteError)
                 }.collect { result ->
-                    _sendNumberUiState.value = Result.Success(result)
+                    _sendNumberUiState.value = SendNumberUiState.Success
                 }
             }.onFailure {
-                _sendNumberUiState.value = Result.Error(it)
+                _sendNumberUiState.value = SendNumberUiState.Error(it)
             }
     }
 
     fun initSendNumber() {
-        _sendNumberUiState.value = Result.Loading
+        _sendNumberUiState.value = SendNumberUiState.Loading
     }
 
     fun verifyNumber(email: String, authCode: String) = viewModelScope.launch {

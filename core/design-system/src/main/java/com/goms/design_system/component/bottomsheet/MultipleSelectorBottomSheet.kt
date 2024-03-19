@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import com.goms.design_system.component.button.AdminBottomSheetButton
 import com.goms.design_system.component.button.InitBottomSheetButton
 import com.goms.design_system.theme.GomsTheme
+import kotlinx.collections.immutable.PersistentList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -35,19 +36,19 @@ fun MultipleSelectorBottomSheet(
     modifier: Modifier,
     title: String,
     subTitle1: String,
-    list1: List<String>,
+    list1: PersistentList<String>,
     selected1: String,
     itemChange1: (String) -> Unit,
     subTitle2: String,
-    list2: List<String>,
+    list2: PersistentList<String>,
     selected2: String,
     itemChange2: (String) -> Unit,
     subTitle3: String,
-    list3: List<String>,
+    list3: PersistentList<String>,
     selected3: String,
     itemChange3: (String) -> Unit,
     subTitle4: String,
-    list4: List<String>,
+    list4: PersistentList<String>,
     selected4: String,
     itemChange4: (String) -> Unit,
     initClick: () -> Unit,

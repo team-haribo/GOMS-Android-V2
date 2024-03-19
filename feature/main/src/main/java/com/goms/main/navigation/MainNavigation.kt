@@ -21,7 +21,6 @@ fun NavController.navigateToMain(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.mainScreen(
-    viewModelStoreOwner: ViewModelStoreOwner,
     onOutingStatusClick: () -> Unit,
     onLateListClick: () -> Unit,
     onStudentManagementClick: () -> Unit,
@@ -31,7 +30,6 @@ fun NavGraphBuilder.mainScreen(
 ) {
     composable(route = mainRoute) {
         MainRoute(
-            viewModelStoreOwner = viewModelStoreOwner,
             onOutingStatusClick = onOutingStatusClick,
             onLateListClick = onLateListClick,
             onStudentManagementClick = onStudentManagementClick,
@@ -47,13 +45,11 @@ fun NavController.navigateToOutingStatus(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.outingStatusScreen(
-    viewModelStoreOwner: ViewModelStoreOwner,
     onBackClick: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
     composable(route = outingStatusRoute) {
         OutingStatusRoute(
-            viewModelStoreOwner = viewModelStoreOwner,
             onBackClick = onBackClick,
             onErrorToast = onErrorToast
         )
@@ -65,13 +61,11 @@ fun NavController.navigateToLateList(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.lateListScreen(
-    viewModelStoreOwner: ViewModelStoreOwner,
     onBackClick: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
     composable(route = lateListRoute) {
         LateListRoute(
-            viewModelStoreOwner = viewModelStoreOwner,
             onBackClick = onBackClick,
             onErrorToast = onErrorToast
         )
@@ -83,13 +77,11 @@ fun NavController.navigateToStudentManagement(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.studentManagementScreen(
-    viewModelStoreOwner: ViewModelStoreOwner,
     onBackClick: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
     composable(route = studentManagementRoute) {
         StudentManagementRoute(
-            viewModelStoreOwner = viewModelStoreOwner,
             onBackClick = onBackClick,
             onErrorToast = onErrorToast
         )

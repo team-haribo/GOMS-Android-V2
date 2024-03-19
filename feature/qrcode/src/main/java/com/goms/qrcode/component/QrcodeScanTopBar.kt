@@ -40,7 +40,7 @@ fun QrcodeScanTopBar(
                         onClick()
                     },
                 contentAlignment = Alignment.Center
-                ) {
+            ) {
                 CloseIcon(tint = Color.White)
             }
         }

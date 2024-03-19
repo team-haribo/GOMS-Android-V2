@@ -25,6 +25,7 @@ dependencies {
     implementation(libs.coil.kt.compose)
     implementation(libs.gauth)
     implementation(libs.kotlinx.datetime)
+    implementation(libs.kotlinx.immutable)
     implementation(libs.androidx.wear.compose)
 }
 
