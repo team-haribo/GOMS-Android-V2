@@ -21,14 +21,13 @@ fun SelectMajorDropDown(
     var selectedIndex by rememberSaveable { mutableIntStateOf(0) }
 
     GomsTheme { colors, typography ->
-
         GomsDropdown(
             dropdownList = dropdownList,
             dropdownListSize = dropdownList.size,
             selectedIndex = selectedIndex,
             modifier = Modifier.padding(horizontal = 20.dp),
             backgroundColor = colors.G1,
-            onDissmiss = { onClick() },
+            onClick = { onClick() },
             onItemClick = {
                 selectedIndex = it
                 onSelectMajor(dropdownList[selectedIndex])

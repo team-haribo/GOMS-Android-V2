@@ -41,7 +41,7 @@ fun SelectThemeDropDown(
                 selectedIndex = selectedIndex,
                 modifier = Modifier.padding(horizontal = 20.dp),
                 backgroundColor = colors.G1,
-                onDissmiss = {},
+                onClick = {},
                 onItemClick = {
                     selectedIndex = it
                 }
