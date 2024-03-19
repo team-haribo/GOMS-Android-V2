@@ -27,7 +27,7 @@ fun SelectGenderDropDown(
             selectedIndex = selectedIndex,
             modifier = Modifier.padding(horizontal = 20.dp),
             backgroundColor = colors.G1,
-            onDissmiss = { onClick() },
+            onClick = { onClick() },
             onItemClick = {
                 selectedIndex = it
                 onSelectGender(dropdownList[selectedIndex])
