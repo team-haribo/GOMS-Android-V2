@@ -11,7 +11,6 @@ import androidx.compose.ui.unit.dp
 import com.goms.design_system.component.dropdown.GomsDropdown
 import com.goms.design_system.theme.GomsTheme
 import com.goms.model.enum.Gender
-import androidx.compose.runtime.derivedStateOf
 import kotlinx.collections.immutable.toPersistentList
 
 @Composable
@@ -29,7 +28,7 @@ fun SelectGenderDropDown(
             selectedIndex = selectedIndex,
             modifier = Modifier.padding(horizontal = 20.dp),
             backgroundColor = colors.G1,
-            onClick = { onClick() },
+            onClick = onClick,
             onItemClick = {
                 selectedIndex = it
                 onSelectGender(dropdownList[selectedIndex])
