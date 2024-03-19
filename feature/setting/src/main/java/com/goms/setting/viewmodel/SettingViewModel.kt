@@ -2,12 +2,11 @@ package com.goms.setting.viewmodel
 
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.goms.common.result.Result
 import com.goms.common.result.asResult
-import com.goms.datastore.AuthTokenDataSource
+import com.goms.data.repository.auth.AuthRepository
 import com.goms.domain.account.GetProfileUseCase
 import com.goms.domain.account.UploadProfileImageUseCase
 import com.goms.domain.auth.LogoutUseCase
@@ -22,12 +21,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingViewModel @Inject constructor (
-    private val authTokenDataSource: AuthTokenDataSource,
     private val getProfileUseCase: GetProfileUseCase,
     private val uploadProfileImageUseCase: UploadProfileImageUseCase,
-    private val logoutUseCase: LogoutUseCase
+    private val logoutUseCase: LogoutUseCase,
+    private val authRepository: AuthRepository
 ) : ViewModel() {
-    val role = authTokenDataSource.getAuthority()
+    val role = authRepository.getRole()
 
     private val _logoutState = MutableStateFlow<LogoutUiState>(LogoutUiState.Loading)
     val logoutState = _logoutState.asStateFlow()
