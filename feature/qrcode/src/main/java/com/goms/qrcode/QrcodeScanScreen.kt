@@ -82,7 +82,6 @@ fun QrcodeScanScreen(
 
 
     QrcodeScanPreview(
-        context = LocalContext.current,
         onQrcodeScan = { qrcodeData ->
             onQrcodeScan(qrcodeData)
         }
