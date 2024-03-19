@@ -34,7 +34,7 @@ import com.goms.design_system.component.bottomsheet.AdminSelectorBottomSheet
 import com.goms.design_system.component.bottomsheet.MultipleSelectorBottomSheet
 import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.textfield.GomsSearchTextField
-import com.goms.design_system.theme.GomsTheme
+import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.util.keyboardAsState
 import com.goms.main.component.StudentManagementList
 import com.goms.main.component.StudentManagementText
@@ -73,6 +73,7 @@ fun StudentManagementRoute(
             viewModel.getStudentList()
             viewModel.initChangeAuthority()
         }
+
         is Result.Error -> {
             onErrorToast((changeAuthorityUiState as Result.Error).exception, "권한 변경이 실패했습니다")
         }
@@ -84,6 +85,7 @@ fun StudentManagementRoute(
             viewModel.getStudentList()
             viewModel.initSetBlackList()
         }
+
         is Result.Error -> {
             onErrorToast((setBlackListUiState as Result.Error).exception, "권한 변경이 실패했습니다")
         }
@@ -177,121 +179,119 @@ fun StudentManagementScreen(
         }
     }
 
-    GomsTheme { colors, typography ->
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(colors.BACKGROUND)
+            .statusBarsPadding()
+            .navigationBarsPadding()
+            .pointerInput(Unit) {
+                detectTapGestures {
+                    focusManager.clearFocus()
+                }
+            }
+    ) {
+        GomsBackButton {
+            onBackClick()
+        }
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .background(colors.BACKGROUND)
-                .statusBarsPadding()
-                .navigationBarsPadding()
-                .pointerInput(Unit) {
-                    detectTapGestures {
-                        focusManager.clearFocus()
-                    }
-                }
+                .verticalScroll(scrollState)
+                .padding(horizontal = 20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            GomsBackButton {
-                onBackClick()
-            }
-            Column(
-                modifier = Modifier
-                    .verticalScroll(scrollState)
-                    .padding(horizontal = 20.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                StudentManagementText(modifier = Modifier.align(Alignment.Start))
-                Spacer(modifier = Modifier.height(16.dp))
-                GomsSearchTextField(
-                    modifier = Modifier.fillMaxWidth(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                    placeHolder = "학생 검색...",
-                    setText = studentSearch,
-                    onValueChange = onStudentSearchChange,
-                    onSearchTextChange = studentSearchCallBack,
-                    singleLine = true
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                StudentManagementList(
-                    getStudentListUiState = getStudentListUiState,
-                    studentSearchUiState = studentSearchUiState,
-                    onBottomSheetOpenClick = { onFilterBottomSheetOpenClick = true },
-                    onErrorToast = onErrorToast,
-                    onClick = { accountIdx, authority ->
-                        onStatusBottomSheetOpenClick = true
-                        uuid = accountIdx
-                        onStatusChange(authority)
-                    }
-                )
-            }
-        }
-        if (onStatusBottomSheetOpenClick) {
-            AdminSelectorBottomSheet(
+            StudentManagementText(modifier = Modifier.align(Alignment.Start))
+            Spacer(modifier = Modifier.height(16.dp))
+            GomsSearchTextField(
                 modifier = Modifier.fillMaxWidth(),
-                title = "유저 권한 변경",
-                subTitle = "역할",
-                list = listOf(
-                    Status.ROLE_STUDENT.value,
-                    Status.ROLE_STUDENT_COUNCIL.value,
-                    Status.BLACK_LIST.value
-                ).toPersistentList(),
-                selected = status,
-                itemChange = onStatusChange,
-                closeSheet = {
-                    onStatusBottomSheetOpenClick = false
-                    if (status != Status.BLACK_LIST.value) {
-                        changeAuthorityCallBack(uuid, status)
-                    } else {
-                        setBlackListCallBack(uuid)
-                    }
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                placeHolder = "학생 검색...",
+                setText = studentSearch,
+                onValueChange = onStudentSearchChange,
+                onSearchTextChange = studentSearchCallBack,
+                singleLine = true
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            StudentManagementList(
+                getStudentListUiState = getStudentListUiState,
+                studentSearchUiState = studentSearchUiState,
+                onBottomSheetOpenClick = { onFilterBottomSheetOpenClick = true },
+                onErrorToast = onErrorToast,
+                onClick = { accountIdx, authority ->
+                    onStatusBottomSheetOpenClick = true
+                    uuid = accountIdx
+                    onStatusChange(authority)
                 }
             )
         }
-        if (onFilterBottomSheetOpenClick) {
-            MultipleSelectorBottomSheet(
-                modifier = Modifier.fillMaxWidth(),
-                title = "필터",
-                subTitle1 = "역할",
-                list1 = listOf(
-                    Status.ROLE_STUDENT.value,
-                    Status.ROLE_STUDENT_COUNCIL.value,
-                    Status.BLACK_LIST.value
-                ).toPersistentList(),
-                selected1 = filterStatus,
-                itemChange1 = onFilterStatusChange,
-                subTitle2 = "학년",
-                list2 = listOf(
-                    Grade.FIRST_GRADE.value,
-                    Grade.SECOND_GRADE.value,
-                    Grade.THIRD_GRADE.value
-                ).toPersistentList(),
-                selected2 = filterGrade,
-                itemChange2 = onFilterGradeChange,
-                subTitle3 = "성별",
-                list3 = listOf(
-                    Gender.MAN.value,
-                    Gender.WOMAN.value
-                ).toPersistentList(),
-                selected3 = filterGender,
-                itemChange3 = onFilterGenderChange,
-                subTitle4 = "학과",
-                list4 = listOf(
-                    Major.SW_DEVELOP.value,
-                    Major.SMART_IOT.value,
-                    Major.AI.value
-                ).toPersistentList(),
-                selected4 = filterMajor,
-                itemChange4 = onFilterMajorChange,
-                initClick = {
-                    onFilterStatusChange("")
-                    onFilterGradeChange("")
-                    onFilterGenderChange("")
-                    onFilterMajorChange("")
-                },
-                closeSheet = {
-                    onFilterBottomSheetOpenClick = false
-                    studentSearchCallBack(studentSearch)
-                },
-            )
-        }
+    }
+    if (onStatusBottomSheetOpenClick) {
+        AdminSelectorBottomSheet(
+            modifier = Modifier.fillMaxWidth(),
+            title = "유저 권한 변경",
+            subTitle = "역할",
+            list = listOf(
+                Status.ROLE_STUDENT.value,
+                Status.ROLE_STUDENT_COUNCIL.value,
+                Status.BLACK_LIST.value
+            ).toPersistentList(),
+            selected = status,
+            itemChange = onStatusChange,
+            closeSheet = {
+                onStatusBottomSheetOpenClick = false
+                if (status != Status.BLACK_LIST.value) {
+                    changeAuthorityCallBack(uuid, status)
+                } else {
+                    setBlackListCallBack(uuid)
+                }
+            }
+        )
+    }
+    if (onFilterBottomSheetOpenClick) {
+        MultipleSelectorBottomSheet(
+            modifier = Modifier.fillMaxWidth(),
+            title = "필터",
+            subTitle1 = "역할",
+            list1 = listOf(
+                Status.ROLE_STUDENT.value,
+                Status.ROLE_STUDENT_COUNCIL.value,
+                Status.BLACK_LIST.value
+            ).toPersistentList(),
+            selected1 = filterStatus,
+            itemChange1 = onFilterStatusChange,
+            subTitle2 = "학년",
+            list2 = listOf(
+                Grade.FIRST_GRADE.value,
+                Grade.SECOND_GRADE.value,
+                Grade.THIRD_GRADE.value
+            ).toPersistentList(),
+            selected2 = filterGrade,
+            itemChange2 = onFilterGradeChange,
+            subTitle3 = "성별",
+            list3 = listOf(
+                Gender.MAN.value,
+                Gender.WOMAN.value
+            ).toPersistentList(),
+            selected3 = filterGender,
+            itemChange3 = onFilterGenderChange,
+            subTitle4 = "학과",
+            list4 = listOf(
+                Major.SW_DEVELOP.value,
+                Major.SMART_IOT.value,
+                Major.AI.value
+            ).toPersistentList(),
+            selected4 = filterMajor,
+            itemChange4 = onFilterMajorChange,
+            initClick = {
+                onFilterStatusChange("")
+                onFilterGradeChange("")
+                onFilterGenderChange("")
+                onFilterMajorChange("")
+            },
+            closeSheet = {
+                onFilterBottomSheetOpenClick = false
+                studentSearchCallBack(studentSearch)
+            },
+        )
     }
 }

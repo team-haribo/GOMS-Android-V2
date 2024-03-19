@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goms.design_system.icon.SettingIcon
-import com.goms.design_system.theme.GomsTheme
+import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.main.viewmodel.GetLateRankListUiState
 import com.goms.main.viewmodel.GetOutingCountUiState
 import com.goms.main.viewmodel.GetOutingListUiState
@@ -128,69 +128,67 @@ fun MainScreen(
     val scrollState = rememberScrollState()
     val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = isRefreshing)
 
-    GomsTheme { colors, typography ->
-        SwipeRefresh(
-            state = swipeRefreshState,
-            onRefresh = { mainCallBack() },
-            indicator = { state, refreshTrigger ->
-                SwipeRefreshIndicator(
-                    state = state,
-                    refreshTriggerDistance = refreshTrigger,
-                    backgroundColor = colors.G2,
-                    contentColor = colors.WHITE
-                )
-            }
+    SwipeRefresh(
+        state = swipeRefreshState,
+        onRefresh = { mainCallBack() },
+        indicator = { state, refreshTrigger ->
+            SwipeRefreshIndicator(
+                state = state,
+                refreshTriggerDistance = refreshTrigger,
+                backgroundColor = colors.G2,
+                contentColor = colors.WHITE
+            )
+        }
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .statusBarsPadding()
+                .navigationBarsPadding()
+                .background(colors.BACKGROUND)
         ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .statusBarsPadding()
-                    .navigationBarsPadding()
-                    .background(colors.BACKGROUND)
-            ) {
-                Column {
-                    GomsTopBar(
-                        role = role,
-                        icon = { SettingIcon(tint = colors.G7) },
-                        onSettingClick = onSettingClick,
-                        onAdminClick = { onStudentManagementClick() }
+            Column {
+                GomsTopBar(
+                    role = role,
+                    icon = { SettingIcon(tint = colors.G7) },
+                    onSettingClick = onSettingClick,
+                    onAdminClick = { onStudentManagementClick() }
+                )
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(scrollState)
+                        .padding(horizontal = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(32.dp)
+                ) {
+                    MainProfileCard(
+                        getProfileUiState = getProfileUiState,
+                        onErrorToast = onErrorToast
                     )
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .verticalScroll(scrollState)
-                            .padding(horizontal = 16.dp),
-                        verticalArrangement = Arrangement.spacedBy(32.dp)
+                    MainLateCard(
+                        role = role,
+                        getLateRankListUiState = getLateRankListUiState,
+                        onErrorToast = onErrorToast
                     ) {
-                        MainProfileCard(
-                            getProfileUiState = getProfileUiState,
-                            onErrorToast = onErrorToast
-                        )
-                        MainLateCard(
-                            role = role,
-                            getLateRankListUiState = getLateRankListUiState,
-                            onErrorToast = onErrorToast
-                        ) {
-                            onLateListClick()
-                        }
-                        MainOutingCard(
-                            role = role,
-                            getOutingListUiState = getOutingListUiState,
-                            getOutingCountUiState = getOutingCountUiState,
-                            onErrorToast = onErrorToast
-                        ) {
-                            onOutingStatusClick()
-                        }
+                        onLateListClick()
+                    }
+                    MainOutingCard(
+                        role = role,
+                        getOutingListUiState = getOutingListUiState,
+                        getOutingCountUiState = getOutingCountUiState,
+                        onErrorToast = onErrorToast
+                    ) {
+                        onOutingStatusClick()
                     }
                 }
-                GomsFloatingButton(
-                    modifier = Modifier
-                        .align(Alignment.BottomEnd)
-                        .padding(end = 16.dp, bottom = 16.dp),
-                    role = role
-                ) {
-                    onQrcodeClick(role)
-                }
+            }
+            GomsFloatingButton(
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(end = 16.dp, bottom = 16.dp),
+                role = role
+            ) {
+                onQrcodeClick(role)
             }
         }
     }

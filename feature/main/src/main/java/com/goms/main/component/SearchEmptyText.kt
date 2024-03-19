@@ -11,30 +11,29 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.goms.design_system.theme.GomsTheme
+import com.goms.design_system.theme.GomsTheme.colors
+import com.goms.design_system.theme.GomsTheme.typography
 
 @Composable
 fun SearchEmptyText() {
-    GomsTheme { colors, typography ->
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            Text(
-                text = "\uD83E\uDD14",
-                fontSize = 80.sp,
-                fontWeight = FontWeight.Bold,
-                color = colors.WHITE
-            )
-            Text(
-                text = "검색 결과가 없습니다\n" +
-                        "검색 내용이 잘못되진 않았나요?",
-                style = typography.textMedium,
-                fontWeight = FontWeight.Normal,
-                color = colors.G4,
-                textAlign = TextAlign.Center
-            )
-        }
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Text(
+            text = "\uD83E\uDD14",
+            fontSize = 80.sp,
+            fontWeight = FontWeight.Bold,
+            color = colors.WHITE
+        )
+        Text(
+            text = "검색 결과가 없습니다\n" +
+                    "검색 내용이 잘못되진 않았나요?",
+            style = typography.textMedium,
+            fontWeight = FontWeight.Normal,
+            color = colors.G4,
+            textAlign = TextAlign.Center
+        )
     }
 }

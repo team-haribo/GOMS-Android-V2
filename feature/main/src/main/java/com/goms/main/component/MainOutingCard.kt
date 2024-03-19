@@ -28,7 +28,8 @@ import coil.compose.AsyncImage
 import com.goms.design_system.R
 import com.goms.design_system.component.clickable.gomsClickable
 import com.goms.design_system.component.shimmer.shimmerEffect
-import com.goms.design_system.theme.GomsTheme
+import com.goms.design_system.theme.GomsTheme.colors
+import com.goms.design_system.theme.GomsTheme.typography
 import com.goms.main.data.OutingData
 import com.goms.main.data.toData
 import com.goms.main.viewmodel.GetOutingCountUiState
@@ -45,132 +46,135 @@ fun MainOutingCard(
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     onClick: () -> Unit
 ) {
-    GomsTheme { colors, typography ->
-        Surface(
-            modifier = modifier,
-            color = colors.G1,
-            shape = RoundedCornerShape(12.dp),
-            border = BorderStroke(width = 1.dp, color = colors.WHITE.copy(0.15f))
+    Surface(
+        modifier = modifier,
+        color = colors.G1,
+        shape = RoundedCornerShape(12.dp),
+        border = BorderStroke(width = 1.dp, color = colors.WHITE.copy(0.15f))
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(6.dp)
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(6.dp)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
+                Text(
+                    text = "외출 현황",
+                    style = typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = colors.WHITE
+                )
+                if (role == Authority.ROLE_STUDENT) {
                     Text(
-                        text = "외출 현황",
-                        style = typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = colors.WHITE
+                        modifier = Modifier.gomsClickable { onClick() },
+                        text = "더보기",
+                        style = typography.buttonSmall,
+                        fontWeight = FontWeight.Normal,
+                        color = colors.G7
                     )
-                    if (role == Authority.ROLE_STUDENT) {
+                } else {
+                    Text(
+                        modifier = Modifier.gomsClickable { onClick() },
+                        text = "인원 관리하기",
+                        style = typography.buttonSmall,
+                        fontWeight = FontWeight.Normal,
+                        color = colors.G7
+                    )
+                }
+            }
+            Divider(modifier = Modifier.height(1.dp), color = colors.WHITE.copy(0.15f))
+            when (getOutingCountUiState) {
+                GetOutingCountUiState.Loading -> {
+                    Box(
+                        modifier = Modifier
+                            .size(56.dp, 23.dp)
+                            .shimmerEffect(color = colors.WHITE)
+                    )
+                }
+
+                is GetOutingCountUiState.Error -> {
+                    onErrorToast(getOutingCountUiState.exception, "외출학생 숫자를 가져오지 못했습니다")
+                }
+
+                GetOutingCountUiState.Empty -> {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
                         Text(
-                            modifier = Modifier.gomsClickable { onClick() },
-                            text = "더보기",
-                            style = typography.buttonSmall,
-                            fontWeight = FontWeight.Normal,
+                            text = "0",
+                            style = typography.textMedium,
+                            fontWeight = FontWeight.SemiBold,
                             color = colors.G7
                         )
-                    } else {
                         Text(
-                            modifier = Modifier.gomsClickable { onClick() },
-                            text = "인원 관리하기",
-                            style = typography.buttonSmall,
+                            text = "명이 외출중",
+                            style = typography.textMedium,
                             fontWeight = FontWeight.Normal,
-                            color = colors.G7
+                            color = colors.G4
                         )
                     }
                 }
-                Divider(modifier = Modifier.height(1.dp), color = colors.WHITE.copy(0.15f))
-                when (getOutingCountUiState) {
-                    GetOutingCountUiState.Loading -> {
-                        Box(
-                            modifier = Modifier
-                                .size(56.dp, 23.dp)
-                                .shimmerEffect(color = colors.WHITE)
-                        )
-                    }
-                    is GetOutingCountUiState.Error -> {
-                        onErrorToast(getOutingCountUiState.exception, "외출학생 숫자를 가져오지 못했습니다")
-                    }
-                    GetOutingCountUiState.Empty -> {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                text = "0",
-                                style = typography.textMedium,
-                                fontWeight = FontWeight.SemiBold,
-                                color = colors.G7
-                            )
-                            Text(
-                                text = "명이 외출중",
-                                style = typography.textMedium,
-                                fontWeight = FontWeight.Normal,
-                                color = colors.G4
-                            )
-                        }
-                    }
-                    is GetOutingCountUiState.Success -> {
-                        when (getOutingListUiState) {
-                            GetOutingListUiState.Loading -> {
-                                Box(
-                                    modifier = Modifier
-                                        .size(56.dp, 23.dp)
-                                        .shimmerEffect(color = colors.WHITE)
-                                )
-                                LazyColumn(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .heightIn(max = 10000.dp)
-                                ) {
-                                    items(5) {
-                                        ShimmerMainOutingItem(modifier = modifier)
-                                    }
-                                }
-                            }
-                            is GetOutingListUiState.Error -> {
-                                onErrorToast(getOutingListUiState.exception, "외출자 정보를 가져오지 못했습니다")
-                            }
-                            is GetOutingListUiState.Success -> {
-                                val count = getOutingCountUiState.getOutingCountResponse
-                                val list = getOutingListUiState.getOutingListResponse
 
-                                Row(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    Text(
-                                        text = "${count.outingCount}",
-                                        style = typography.textMedium,
-                                        fontWeight = FontWeight.SemiBold,
-                                        color = colors.G7
-                                    )
-                                    Text(
-                                        text = "명이 외출중",
-                                        style = typography.textMedium,
-                                        fontWeight = FontWeight.Normal,
-                                        color = colors.G4
-                                    )
+                is GetOutingCountUiState.Success -> {
+                    when (getOutingListUiState) {
+                        GetOutingListUiState.Loading -> {
+                            Box(
+                                modifier = Modifier
+                                    .size(56.dp, 23.dp)
+                                    .shimmerEffect(color = colors.WHITE)
+                            )
+                            LazyColumn(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .heightIn(max = 10000.dp)
+                            ) {
+                                items(5) {
+                                    ShimmerMainOutingItem(modifier = modifier)
                                 }
-                                LazyColumn(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .heightIn(max = 10000.dp)
-                                ) {
-                                    items(list.size) {
-                                        MainOutingItem(
-                                            modifier = Modifier.fillMaxWidth(),
-                                            data = list[it].toData()
-                                        )
-                                    }
+                            }
+                        }
+
+                        is GetOutingListUiState.Error -> {
+                            onErrorToast(getOutingListUiState.exception, "외출자 정보를 가져오지 못했습니다")
+                        }
+
+                        is GetOutingListUiState.Success -> {
+                            val count = getOutingCountUiState.getOutingCountResponse
+                            val list = getOutingListUiState.getOutingListResponse
+
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = "${count.outingCount}",
+                                    style = typography.textMedium,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = colors.G7
+                                )
+                                Text(
+                                    text = "명이 외출중",
+                                    style = typography.textMedium,
+                                    fontWeight = FontWeight.Normal,
+                                    color = colors.G4
+                                )
+                            }
+                            LazyColumn(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .heightIn(max = 10000.dp)
+                            ) {
+                                items(list.size) {
+                                    MainOutingItem(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        data = list[it].toData()
+                                    )
                                 }
                             }
                         }
@@ -186,41 +190,39 @@ fun MainOutingItem(
     modifier: Modifier = Modifier,
     data: OutingData
 ) {
-    GomsTheme { colors, typography ->
-        Row(
-            modifier = modifier.padding(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            if (data.profileUrl.isNullOrEmpty()) {
-                Image(
-                    painter = painterResource(R.drawable.ic_profile),
-                    contentDescription = "Default Profile Image",
-                    modifier = Modifier.size(28.dp)
-                )
-            } else {
-                AsyncImage(
-                    model = data.profileUrl,
-                    modifier = Modifier
-                        .size(28.dp)
-                        .clip(RoundedCornerShape(40.dp)),
-                    contentScale = ContentScale.Crop,
-                    contentDescription = "Profile Image",
-                )
-            }
-            Text(
-                text = data.name,
-                style = typography.textMedium,
-                fontWeight = FontWeight.SemiBold,
-                color = colors.G7
+    Row(
+        modifier = modifier.padding(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        if (data.profileUrl.isNullOrEmpty()) {
+            Image(
+                painter = painterResource(R.drawable.ic_profile),
+                contentDescription = "Default Profile Image",
+                modifier = Modifier.size(28.dp)
             )
-            Text(
-                text = "${data.grade}기 | ${data.major.toText()}",
-                style = typography.caption,
-                fontWeight = FontWeight.Normal,
-                color = colors.G4
+        } else {
+            AsyncImage(
+                model = data.profileUrl,
+                modifier = Modifier
+                    .size(28.dp)
+                    .clip(RoundedCornerShape(40.dp)),
+                contentScale = ContentScale.Crop,
+                contentDescription = "Profile Image",
             )
         }
+        Text(
+            text = data.name,
+            style = typography.textMedium,
+            fontWeight = FontWeight.SemiBold,
+            color = colors.G7
+        )
+        Text(
+            text = "${data.grade}기 | ${data.major.toText()}",
+            style = typography.caption,
+            fontWeight = FontWeight.Normal,
+            color = colors.G4
+        )
     }
 }
 
@@ -228,27 +230,25 @@ fun MainOutingItem(
 fun ShimmerMainOutingItem(
     modifier: Modifier = Modifier,
 ) {
-    GomsTheme { colors, typography ->
-        Row(
-            modifier = modifier.padding(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(28.dp)
-                    .shimmerEffect(color = colors.WHITE)
-            )
-            Box(
-                modifier = Modifier
-                    .size(56.dp, 23.dp)
-                    .shimmerEffect(color = colors.WHITE)
-            )
-            Box(
-                modifier = Modifier
-                    .size(60.dp, 16.dp)
-                    .shimmerEffect(color = colors.WHITE)
-            )
-        }
+    Row(
+        modifier = modifier.padding(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Box(
+            modifier = Modifier
+                .size(28.dp)
+                .shimmerEffect(color = colors.WHITE)
+        )
+        Box(
+            modifier = Modifier
+                .size(56.dp, 23.dp)
+                .shimmerEffect(color = colors.WHITE)
+        )
+        Box(
+            modifier = Modifier
+                .size(60.dp, 16.dp)
+                .shimmerEffect(color = colors.WHITE)
+        )
     }
 }

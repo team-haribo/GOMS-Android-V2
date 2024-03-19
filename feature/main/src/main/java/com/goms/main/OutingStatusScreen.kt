@@ -33,7 +33,7 @@ import com.goms.common.result.Result
 import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.dialog.GomsTwoButtonDialog
 import com.goms.design_system.component.textfield.GomsSearchTextField
-import com.goms.design_system.theme.GomsTheme
+import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.util.keyboardAsState
 import com.goms.main.component.OutingStatusList
 import com.goms.main.component.OutingStatusText
@@ -117,50 +117,48 @@ fun OutingStatusScreen(
         )
     }
 
-    GomsTheme { colors, typography ->
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(colors.BACKGROUND)
+            .statusBarsPadding()
+            .navigationBarsPadding()
+            .pointerInput(Unit) {
+                detectTapGestures {
+                    focusManager.clearFocus()
+                }
+            }
+    ) {
+        GomsBackButton {
+            onBackClick()
+        }
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .background(colors.BACKGROUND)
-                .statusBarsPadding()
-                .navigationBarsPadding()
-                .pointerInput(Unit) {
-                    detectTapGestures {
-                        focusManager.clearFocus()
-                    }
-                }
+                .verticalScroll(scrollState)
+                .padding(horizontal = 20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            GomsBackButton {
-                onBackClick()
-            }
-            Column(
-                modifier = Modifier
-                    .verticalScroll(scrollState)
-                    .padding(horizontal = 20.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                OutingStatusText(modifier = Modifier.align(Alignment.Start))
-                Spacer(modifier = Modifier.height(16.dp))
-                GomsSearchTextField(
-                    modifier = Modifier.fillMaxWidth(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                    placeHolder = "학생 검색...",
-                    setText = outingSearch,
-                    onValueChange = onOutingSearchChange,
-                    onSearchTextChange = outingSearchCallBack,
-                    singleLine = true
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                OutingStatusList(
-                    role = role,
-                    getOutingListUiState = getOutingListUiState,
-                    getOutingCountUiState = getOutingCountUiState,
-                    outingSearchUiState = outingSearchUiState,
-                    onErrorToast = onErrorToast
-                ) { selectedUuid ->
-                    uuid = selectedUuid
-                    openDialog = true
-                }
+            OutingStatusText(modifier = Modifier.align(Alignment.Start))
+            Spacer(modifier = Modifier.height(16.dp))
+            GomsSearchTextField(
+                modifier = Modifier.fillMaxWidth(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                placeHolder = "학생 검색...",
+                setText = outingSearch,
+                onValueChange = onOutingSearchChange,
+                onSearchTextChange = outingSearchCallBack,
+                singleLine = true
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            OutingStatusList(
+                role = role,
+                getOutingListUiState = getOutingListUiState,
+                getOutingCountUiState = getOutingCountUiState,
+                outingSearchUiState = outingSearchUiState,
+                onErrorToast = onErrorToast
+            ) { selectedUuid ->
+                uuid = selectedUuid
+                openDialog = true
             }
         }
     }
