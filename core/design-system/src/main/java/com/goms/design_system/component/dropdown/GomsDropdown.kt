@@ -74,8 +74,8 @@ fun GomsDropdown(
                     .gomsClickable(
                         interval = 10L
                     ) {
-                        if(showDropdown != null && showDropdown == false) showDropdown = true
-                        if(showDropdown == null) showDropdown = false
+                        if (showDropdown != null && showDropdown == false) showDropdown = true
+                        if (showDropdown == null) showDropdown = false
                         onClick()
                     },
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -87,7 +87,7 @@ fun GomsDropdown(
                     color = colors.G7,
                     fontWeight = FontWeight.Normal
                 )
-                if(showDropdown != null && showDropdown == true) {
+                if (showDropdown != null && showDropdown == true) {
                     ChevronDownIcon(
                         tint = colors.G7
                     )
@@ -99,66 +99,81 @@ fun GomsDropdown(
             }
         }
         Spacer(modifier = Modifier.height(8.dp))
-            Box() {
-                if (showDropdown != null && showDropdown == true) {
-                    Popup(
-                        alignment = Alignment.TopCenter,
-                        properties = PopupProperties(
-                            excludeFromSystemGesture = true,
-                        ),
-                        onDismissRequest = { showDropdown = null }
+        Box() {
+            if (showDropdown != null && showDropdown == true) {
+                Popup(
+                    alignment = Alignment.TopCenter,
+                    properties = PopupProperties(
+                        excludeFromSystemGesture = true,
+                    ),
+                    onDismissRequest = { showDropdown = null }
+                ) {
+                    Column(
+                        modifier = modifier
+                            .background(Color.Transparent)
+                            .verticalScroll(state = scrollState),
+                        horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
-                        Column(
-                            modifier = modifier
-                                .background(Color.Transparent)
-                                .verticalScroll(state = scrollState),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                        ) {
-                            dropdownList.onEachIndexed { index, item ->
-                                dropdownType = when (index) {
-                                    0 -> true
-                                    dropdownListSize - 1 -> false
-                                    else -> null
-                                }
+                        dropdownList.onEachIndexed { index, item ->
+                            dropdownType = when (index) {
+                                0 -> true
+                                dropdownListSize - 1 -> false
+                                else -> null
+                            }
 
-                                Box(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(height)
-                                        .border(
-                                            BorderStroke(
-                                                width = 1.dp,
-                                                color = colors.WHITE.copy(0.15f)
-                                            ),
-                                            shape =
-                                                when(dropdownType) {
-                                                    true -> RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
-                                                    false -> RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp)
-                                                    else -> RoundedCornerShape(0.dp)
-                                                }
-                                        )
-                                        .clip(
-                                            when(dropdownType) {
-                                                true -> RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp)
-                                                false -> RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp)
-                                                else -> RoundedCornerShape(0.dp)
-                                            }
-                                        )
-                                        .background(backgroundColor)
-                                        .padding(12.dp)
-                                        .gomsClickable {
-                                            onItemClick(index)
-                                            showDropdown = !showDropdown!!
-                                        },
-                                    contentAlignment = Alignment.CenterStart
-                                ) {
-                                    Text(
-                                        text = item,
-                                        style = typography.textMedium,
-                                        color = colors.WHITE,
-                                        fontWeight = FontWeight.Normal
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(height)
+                                    .border(
+                                        BorderStroke(
+                                            width = 1.dp,
+                                            color = colors.WHITE.copy(0.15f)
+                                        ),
+                                        shape =
+                                        when (dropdownType) {
+                                            true -> RoundedCornerShape(
+                                                topStart = 12.dp,
+                                                topEnd = 12.dp
+                                            )
+
+                                            false -> RoundedCornerShape(
+                                                bottomStart = 12.dp,
+                                                bottomEnd = 12.dp
+                                            )
+
+                                            else -> RoundedCornerShape(0.dp)
+                                        }
                                     )
-                                }
+                                    .clip(
+                                        when (dropdownType) {
+                                            true -> RoundedCornerShape(
+                                                topStart = 12.dp,
+                                                topEnd = 12.dp
+                                            )
+
+                                            false -> RoundedCornerShape(
+                                                bottomStart = 12.dp,
+                                                bottomEnd = 12.dp
+                                            )
+
+                                            else -> RoundedCornerShape(0.dp)
+                                        }
+                                    )
+                                    .background(backgroundColor)
+                                    .padding(12.dp)
+                                    .gomsClickable {
+                                        onItemClick(index)
+                                        showDropdown = !showDropdown!!
+                                    },
+                                contentAlignment = Alignment.CenterStart
+                            ) {
+                                Text(
+                                    text = item,
+                                    style = typography.textMedium,
+                                    color = colors.WHITE,
+                                    fontWeight = FontWeight.Normal
+                                )
                             }
                         }
                     }
@@ -166,3 +181,4 @@ fun GomsDropdown(
             }
         }
     }
+}
