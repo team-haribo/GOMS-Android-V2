@@ -1,6 +1,5 @@
 package com.goms.setting.component
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -55,12 +54,13 @@ fun SettingSwitchComponent(
                 switchOffBackground = switchOffBackground,
                 initialValue = 0,
                 onCheckedChanged = {
-                    if(it) onFunctionOn() else onFunctionOff()
+                    if (it) onFunctionOn() else onFunctionOff()
                 }
             )
         }
     }
 }
+
 
 @Composable
 @Preview(showBackground = true)
