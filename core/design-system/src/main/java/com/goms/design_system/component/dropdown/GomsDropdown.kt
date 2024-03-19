@@ -3,7 +3,6 @@ package com.goms.design_system.component.dropdown
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -40,12 +39,12 @@ import com.goms.design_system.theme.GomsTheme
 fun GomsDropdown(
     dropdownList: List<String>,
     dropdownListSize: Int,
-    onDissmiss: () -> Unit,
     selectedIndex: Int,
     modifier: Modifier,
     height: Dp = 64.dp,
     backgroundColor: Color = Color.Unspecified,
-    onItemClick: (Int) -> Unit
+    onItemClick: (Int) -> Unit,
+    onClick: () -> Unit,
 ) {
     val scrollState = rememberScrollState()
     var showDropdown: Boolean? by rememberSaveable { mutableStateOf(false) }
@@ -72,10 +71,11 @@ fun GomsDropdown(
                     .background(colors.G1)
                     .padding(12.dp)
                     .gomsClickable(
-                        interval = 100L
+                        interval = 10L
                     ) {
                         if(showDropdown != null && showDropdown == false) showDropdown = true
                         if(showDropdown == null) showDropdown = false
+                        onClick()
                     },
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
