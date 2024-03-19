@@ -17,15 +17,13 @@ fun GomsApp(
     onLogout: () -> Unit,
     uiState: MainActivityUiState
 ) {
-    GomsTheme { _,_ ->
-        GomsNavHost(
-            appState = appState,
-            onLogout = onLogout,
-            startDestination = when (uiState) {
-                is MainActivityUiState.Success -> mainRoute
-                is MainActivityUiState.Error -> loginRoute
-                else -> loginRoute
-            }
-        )
-    }
+    GomsNavHost(
+        appState = appState,
+        onLogout = onLogout,
+        startDestination = when (uiState) {
+            is MainActivityUiState.Success -> mainRoute
+            is MainActivityUiState.Error -> loginRoute
+            else -> loginRoute
+        }
+    )
 }
