@@ -13,7 +13,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.goms.design_system.component.clickable.gomsClickable
 import com.goms.design_system.icon.CloseIcon
-import com.goms.design_system.theme.GomsTheme
+import com.goms.design_system.theme.GomsTheme.colors
+import com.goms.design_system.theme.GomsTheme.typography
 
 @Composable
 fun BottomSheetHeader(
@@ -21,25 +22,23 @@ fun BottomSheetHeader(
     title: String,
     closeSheet: () -> Unit
 ) {
-    GomsTheme { colors, typography ->
-        Row(
-            modifier = modifier
-                .fillMaxWidth()
-                .height(32.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = title,
-                style = typography.titleSmall,
-                fontWeight = FontWeight.Bold,
-                color = colors.WHITE
-            )
-            CloseIcon(
-                modifier = Modifier.gomsClickable { closeSheet() },
-                tint = colors.WHITE
-            )
-        }
-        Spacer(modifier = Modifier.height(16.dp))
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(32.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = title,
+            style = typography.titleSmall,
+            fontWeight = FontWeight.Bold,
+            color = colors.WHITE
+        )
+        CloseIcon(
+            modifier = Modifier.gomsClickable { closeSheet() },
+            tint = colors.WHITE
+        )
     }
+    Spacer(modifier = Modifier.height(16.dp))
 }
