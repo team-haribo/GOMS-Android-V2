@@ -24,14 +24,13 @@ import java.util.concurrent.Executors
 @androidx.camera.core.ExperimentalGetImage
 @Composable
 fun QrcodeScanPreview(
-    context: Context,
     onQrcodeScan: (String?) -> Unit
 ) {
-    GomsTheme { _, _ ->
-        Scaffold(
-            modifier = Modifier.fillMaxSize(),
-        ) { innerPadding: PaddingValues ->
-            AndroidView({ context ->
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+    ) { innerPadding: PaddingValues ->
+        AndroidView(
+            { context ->
                 var isScanningEnabled = true
 
                 val cameraExecutor = Executors.newSingleThreadExecutor()
@@ -67,17 +66,22 @@ fun QrcodeScanPreview(
                         cameraProvider.unbindAll()
 
                         cameraProvider.bindToLifecycle(
-                            context as ComponentActivity, cameraSelector, preview, imageCapture, imageAnalyzer)
+                            context as ComponentActivity,
+                            cameraSelector,
+                            preview,
+                            imageCapture,
+                            imageAnalyzer
+                        )
 
-                    } catch(exc: Exception) {
+                    } catch (exc: Exception) {
                         Log.d("qrcode", "binding failed")
                     }
                 }, ContextCompat.getMainExecutor(context))
                 previewView
             },
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding))
-        }
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+        )
     }
 }

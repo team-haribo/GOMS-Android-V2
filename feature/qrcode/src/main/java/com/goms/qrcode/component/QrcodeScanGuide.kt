@@ -7,9 +7,7 @@ import com.goms.design_system.theme.GomsTheme
 
 @Composable
 fun QrcodeScanGuide() {
-    GomsTheme { _, _ ->
-        QrScanGuideIcon()
-    }
+    QrScanGuideIcon()
 }
 
 @Composable

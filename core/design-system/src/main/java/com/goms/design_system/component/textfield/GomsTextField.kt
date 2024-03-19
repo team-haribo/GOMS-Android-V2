@@ -162,55 +162,54 @@ fun NumberTextField(
         errorTextTextField.value = errorText
     }
 
-    GomsTheme { colors, typography ->
-        Column {
-            BasicTextField(
-                value = text.take(4),
-                onValueChange = {
-                    if (it.length <= 4) {
-                        onValueChange(it)
-                    }
-                },
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                decorationBox = {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        text.forEachIndexed { index, char ->
-                            NumberTextFieldCharContainer(
-                                modifier = Modifier,
-                                text = char,
-                                isError = isErrorTextField.value
-                            )
-                        }
-                        repeat(4 - text.length) {
-                            NumberTextFieldCharContainer(
-                                modifier = Modifier,
-                                text = ' ',
-                                isError = isErrorTextField.value
-                            )
-                        }
-                    }
-                },
-                singleLine = true
-            )
-            CountdownTimer(
-                isError = isErrorTextField.value,
-                errorText = errorTextTextField.value,
-                onTimerFinish = {
-                    isErrorTextField.value = true
-                    errorTextTextField.value = "시간이 만료되었습니다"
-                },
-                onTimerReset = {
-                    isErrorTextField.value = false
-                    errorTextTextField.value = ""
-                    onResendClick()
+    Column {
+        BasicTextField(
+            value = text.take(4),
+            onValueChange = {
+                if (it.length <= 4) {
+                    onValueChange(it)
                 }
-            )
-        }
+            },
+            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+            decorationBox = {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    text.forEachIndexed { index, char ->
+                        NumberTextFieldCharContainer(
+                            modifier = Modifier,
+                            text = char,
+                            isError = isErrorTextField.value
+                        )
+                    }
+                    repeat(4 - text.length) {
+                        NumberTextFieldCharContainer(
+                            modifier = Modifier,
+                            text = ' ',
+                            isError = isErrorTextField.value
+                        )
+                    }
+                }
+            },
+            singleLine = true
+        )
+        CountdownTimer(
+            isError = isErrorTextField.value,
+            errorText = errorTextTextField.value,
+            onTimerFinish = {
+                isErrorTextField.value = true
+                errorTextTextField.value = "시간이 만료되었습니다"
+            },
+            onTimerReset = {
+                isErrorTextField.value = false
+                errorTextTextField.value = ""
+                onResendClick()
+            }
+        )
     }
 }
+
 
 @Composable
 private fun NumberTextFieldCharContainer(
@@ -220,32 +219,30 @@ private fun NumberTextFieldCharContainer(
 ) {
     val shape = remember { RoundedCornerShape(12.dp) }
 
-    GomsTheme { colors, typography ->
-        Box(
-            modifier = modifier
-                .size(
-                    width = 74.dp,
-                    height = 64.dp,
-                )
-                .background(
-                    color = colors.G1,
-                    shape = shape,
-                )
-                .border(
-                    width = 1.dp,
-                    color = if (isError) colors.N5 else colors.WHITE.copy(0.15f),
-                    shape = shape
-                ),
-            contentAlignment = Alignment.Center,
-        ) {
-            Text(
-                text = text.toString(),
-                color = colors.WHITE,
-                style = typography.titleSmall,
-                fontWeight = FontWeight.SemiBold,
-                textAlign = TextAlign.Center
+    Box(
+        modifier = modifier
+            .size(
+                width = 74.dp,
+                height = 64.dp,
             )
-        }
+            .background(
+                color = colors.G1,
+                shape = shape,
+            )
+            .border(
+                width = 1.dp,
+                color = if (isError) colors.N5 else colors.WHITE.copy(0.15f),
+                shape = shape
+            ),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(
+            text = text.toString(),
+            color = colors.WHITE,
+            style = typography.titleSmall,
+            fontWeight = FontWeight.SemiBold,
+            textAlign = TextAlign.Center
+        )
     }
 }
 
@@ -275,75 +272,73 @@ fun GomsBottomSheetTextField(
         }
     }
 
-    GomsTheme { colors, typography ->
-        Box(modifier = modifier) {
-            Column {
-                OutlinedTextField(
-                    value = setText,
-                    onValueChange = {
-                        onValueChange(it)
-                    },
-                    keyboardOptions = keyboardOptions,
-                    keyboardActions = keyboardActions,
-                    placeholder = {
-                        Text(
-                            text = placeHolder,
-                            style = typography.textMedium,
-                            fontWeight = FontWeight.Normal,
-                            color = if (isError) colors.N5 else colors.G4
-                        )
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(64.dp)
-                        .focusRequester(focusRequester)
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(colors.G1)
-                        .border(
-                            width = 1.dp,
-                            color = if (isError) colors.N5 else colors.WHITE.copy(0.15f),
-                            shape = RoundedCornerShape(12.dp)
-                        )
-                        .onFocusChanged {
-                            isFocused.value = it.isFocused
-                        },
-                    maxLines = maxLines,
-                    singleLine = singleLine,
-                    textStyle = typography.textMedium,
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedTextColor = if (isError) colors.N5 else colors.WHITE,
-                        unfocusedTextColor = if (isError) colors.N5 else colors.WHITE,
-                        focusedPlaceholderColor = if (isError) colors.N5 else colors.G4,
-                        unfocusedPlaceholderColor = if (isError) colors.N5 else colors.G4,
-                        focusedBorderColor = Color.Transparent,
-                        unfocusedBorderColor = Color.Transparent,
-                        cursorColor = colors.I5
-                    ),
-                    readOnly = readOnly,
-                    visualTransformation = visualTransformation
-                )
-                Column(
-                    modifier = Modifier
-                        .height(32.dp)
-                        .padding(start = 8.dp),
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    if (isError) {
-                        Text(
-                            text = errorText,
-                            color = colors.N5,
-                            style = typography.buttonLarge
-                        )
-                    }
-                }
-            }
-            Box(
+    Box(modifier = modifier) {
+        Column {
+            OutlinedTextField(
+                value = setText,
+                onValueChange = {
+                    onValueChange(it)
+                },
+                keyboardOptions = keyboardOptions,
+                keyboardActions = keyboardActions,
+                placeholder = {
+                    Text(
+                        text = placeHolder,
+                        style = typography.textMedium,
+                        fontWeight = FontWeight.Normal,
+                        color = if (isError) colors.N5 else colors.G4
+                    )
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(64.dp)
-                    .gomsClickable { onClick() }
+                    .focusRequester(focusRequester)
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(colors.G1)
+                    .border(
+                        width = 1.dp,
+                        color = if (isError) colors.N5 else colors.WHITE.copy(0.15f),
+                        shape = RoundedCornerShape(12.dp)
+                    )
+                    .onFocusChanged {
+                        isFocused.value = it.isFocused
+                    },
+                maxLines = maxLines,
+                singleLine = singleLine,
+                textStyle = typography.textMedium,
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedTextColor = if (isError) colors.N5 else colors.WHITE,
+                    unfocusedTextColor = if (isError) colors.N5 else colors.WHITE,
+                    focusedPlaceholderColor = if (isError) colors.N5 else colors.G4,
+                    unfocusedPlaceholderColor = if (isError) colors.N5 else colors.G4,
+                    focusedBorderColor = Color.Transparent,
+                    unfocusedBorderColor = Color.Transparent,
+                    cursorColor = colors.I5
+                ),
+                readOnly = readOnly,
+                visualTransformation = visualTransformation
             )
+            Column(
+                modifier = Modifier
+                    .height(32.dp)
+                    .padding(start = 8.dp),
+                verticalArrangement = Arrangement.Center
+            ) {
+                if (isError) {
+                    Text(
+                        text = errorText,
+                        color = colors.N5,
+                        style = typography.buttonLarge
+                    )
+                }
+            }
         }
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(64.dp)
+                .gomsClickable { onClick() }
+        )
     }
 }
 
@@ -372,72 +367,70 @@ fun GomsPasswordTextField(
         }
     }
 
-    GomsTheme { colors, typography ->
-        Column {
-            OutlinedTextField(
-                value = setText,
-                onValueChange = {
-                    onValueChange(it)
+    Column {
+        OutlinedTextField(
+            value = setText,
+            onValueChange = {
+                onValueChange(it)
+            },
+            keyboardOptions = keyboardOptions,
+            keyboardActions = keyboardActions,
+            placeholder = {
+                Text(
+                    text = placeHolder,
+                    style = typography.textMedium,
+                    fontWeight = FontWeight.Normal,
+                    color = if (isError) colors.N5 else colors.G4
+                )
+            },
+            modifier = modifier
+                .fillMaxWidth()
+                .height(64.dp)
+                .focusRequester(focusRequester)
+                .clip(RoundedCornerShape(12.dp))
+                .background(colors.G1)
+                .border(
+                    width = 1.dp,
+                    color = if (isError) colors.N5 else colors.WHITE.copy(0.15f),
+                    shape = RoundedCornerShape(12.dp)
+                )
+                .onFocusChanged {
+                    isFocused.value = it.isFocused
                 },
-                keyboardOptions = keyboardOptions,
-                keyboardActions = keyboardActions,
-                placeholder = {
-                    Text(
-                        text = placeHolder,
-                        style = typography.textMedium,
-                        fontWeight = FontWeight.Normal,
-                        color = if (isError) colors.N5 else colors.G4
-                    )
-                },
-                modifier = modifier
-                    .fillMaxWidth()
-                    .height(64.dp)
-                    .focusRequester(focusRequester)
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(colors.G1)
-                    .border(
-                        width = 1.dp,
-                        color = if (isError) colors.N5 else colors.WHITE.copy(0.15f),
-                        shape = RoundedCornerShape(12.dp)
-                    )
-                    .onFocusChanged {
-                        isFocused.value = it.isFocused
-                    },
-                maxLines = maxLines,
-                singleLine = singleLine,
-                textStyle = typography.textMedium,
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedTextColor = if (isError) colors.N5 else colors.WHITE,
-                    unfocusedTextColor = if (isError) colors.N5 else colors.WHITE,
-                    focusedPlaceholderColor = if (isError) colors.N5 else colors.G4,
-                    unfocusedPlaceholderColor = if (isError) colors.N5 else colors.G4,
-                    focusedBorderColor = Color.Transparent,
-                    unfocusedBorderColor = Color.Transparent,
-                    cursorColor = colors.I5
-                ),
-                readOnly = readOnly,
-                visualTransformation = PasswordVisualTransformation()
-            )
-            Column(
-                modifier = Modifier
-                    .heightIn(min = 25.dp)
-                    .padding(start = 8.dp),
-                verticalArrangement = Arrangement.Center
-            ) {
-                if (isDescription) {
-                    Text(
-                        text = "대/소문자, 특수문자 6~15자",
-                        color = colors.G4,
-                        style = typography.buttonLarge
-                    )
-                }
-                if (isError) {
-                    Text(
-                        text = errorText,
-                        color = colors.N5,
-                        style = typography.buttonLarge
-                    )
-                }
+            maxLines = maxLines,
+            singleLine = singleLine,
+            textStyle = typography.textMedium,
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedTextColor = if (isError) colors.N5 else colors.WHITE,
+                unfocusedTextColor = if (isError) colors.N5 else colors.WHITE,
+                focusedPlaceholderColor = if (isError) colors.N5 else colors.G4,
+                unfocusedPlaceholderColor = if (isError) colors.N5 else colors.G4,
+                focusedBorderColor = Color.Transparent,
+                unfocusedBorderColor = Color.Transparent,
+                cursorColor = colors.I5
+            ),
+            readOnly = readOnly,
+            visualTransformation = PasswordVisualTransformation()
+        )
+        Column(
+            modifier = Modifier
+                .heightIn(min = 25.dp)
+                .padding(start = 8.dp),
+            verticalArrangement = Arrangement.Center
+        ) {
+            if (isDescription) {
+                Text(
+                    text = "대/소문자, 특수문자 6~15자",
+                    color = colors.G4,
+                    style = typography.buttonLarge
+                )
+            }
+            if (isError) {
+                Text(
+                    text = errorText,
+                    color = colors.N5,
+                    style = typography.buttonLarge
+                )
             }
         }
     }
@@ -473,55 +466,53 @@ fun GomsSearchTextField(
         onSearchTextChange(setText)
     }
 
-    GomsTheme { colors, typography ->
-        Column {
-            OutlinedTextField(
-                value = setText,
-                onValueChange = {
-                    onValueChange(it)
+    Column {
+        OutlinedTextField(
+            value = setText,
+            onValueChange = {
+                onValueChange(it)
+            },
+            keyboardOptions = keyboardOptions,
+            keyboardActions = keyboardActions,
+            placeholder = {
+                Text(
+                    text = placeHolder,
+                    style = typography.textMedium,
+                    fontWeight = FontWeight.Normal,
+                    color = colors.G4
+                )
+            },
+            modifier = modifier
+                .fillMaxWidth()
+                .focusRequester(focusRequester)
+                .clip(RoundedCornerShape(12.dp))
+                .background(colors.G1)
+                .border(
+                    width = 1.dp,
+                    color = colors.WHITE.copy(0.15f),
+                    shape = RoundedCornerShape(12.dp)
+                )
+                .onFocusChanged {
+                    isFocused.value = it.isFocused
                 },
-                keyboardOptions = keyboardOptions,
-                keyboardActions = keyboardActions,
-                placeholder = {
-                    Text(
-                        text = placeHolder,
-                        style = typography.textMedium,
-                        fontWeight = FontWeight.Normal,
-                        color = colors.G4
-                    )
-                },
-                modifier = modifier
-                    .fillMaxWidth()
-                    .focusRequester(focusRequester)
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(colors.G1)
-                    .border(
-                        width = 1.dp,
-                        color = colors.WHITE.copy(0.15f),
-                        shape = RoundedCornerShape(12.dp)
-                    )
-                    .onFocusChanged {
-                        isFocused.value = it.isFocused
-                    },
-                maxLines = maxLines,
-                singleLine = singleLine,
-                textStyle = typography.textMedium,
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedTextColor = colors.WHITE,
-                    unfocusedTextColor = colors.WHITE,
-                    focusedPlaceholderColor = colors.G4,
-                    unfocusedPlaceholderColor = colors.G4,
-                    focusedBorderColor = Color.Transparent,
-                    unfocusedBorderColor = Color.Transparent,
-                    cursorColor = colors.I5
-                ),
-                trailingIcon = {
-                    SearchIcon(tint = colors.G4)
-                },
-                readOnly = readOnly,
-                visualTransformation = visualTransformation
-            )
-        }
+            maxLines = maxLines,
+            singleLine = singleLine,
+            textStyle = typography.textMedium,
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedTextColor = colors.WHITE,
+                unfocusedTextColor = colors.WHITE,
+                focusedPlaceholderColor = colors.G4,
+                unfocusedPlaceholderColor = colors.G4,
+                focusedBorderColor = Color.Transparent,
+                unfocusedBorderColor = Color.Transparent,
+                cursorColor = colors.I5
+            ),
+            trailingIcon = {
+                SearchIcon(tint = colors.G4)
+            },
+            readOnly = readOnly,
+            visualTransformation = visualTransformation
+        )
     }
 }
 

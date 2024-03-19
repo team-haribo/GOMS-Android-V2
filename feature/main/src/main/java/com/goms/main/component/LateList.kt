@@ -28,6 +28,7 @@ import com.goms.design_system.R
 import com.goms.design_system.component.shimmer.shimmerEffect
 import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
+import com.goms.design_system.theme.GomsTheme.typography
 import com.goms.main.data.LateData
 import com.goms.main.data.toData
 import com.goms.main.viewmodel.GetLateListUiState
@@ -110,73 +111,69 @@ fun LateListItem(
     modifier: Modifier = Modifier,
     data: LateData
 ) {
-    GomsTheme { colors, typography ->
-        Row(
-            modifier = modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            if (data.profileUrl.isNullOrEmpty()) {
-                Image(
-                    painter = painterResource(R.drawable.ic_profile),
-                    contentDescription = "Default Profile Image",
-                    modifier = Modifier.size(48.dp)
-                )
-            } else {
-                AsyncImage(
-                    model = data.profileUrl,
-                    modifier = Modifier
-                        .size(48.dp)
-                        .clip(RoundedCornerShape(40.dp)),
-                    contentScale = ContentScale.Crop,
-                    contentDescription = "Profile Image",
-                )
-            }
-            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(
-                    text = data.name,
-                    style = typography.textMedium,
-                    fontWeight = FontWeight.SemiBold,
-                    color = colors.G7
-                )
-                Text(
-                    text = "${data.grade}기 | ${data.major.toText()}",
-                    style = typography.caption,
-                    fontWeight = FontWeight.Normal,
-                    color = colors.G4
-                )
-            }
+    Row(
+        modifier = modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        if (data.profileUrl.isNullOrEmpty()) {
+            Image(
+                painter = painterResource(R.drawable.ic_profile),
+                contentDescription = "Default Profile Image",
+                modifier = Modifier.size(48.dp)
+            )
+        } else {
+            AsyncImage(
+                model = data.profileUrl,
+                modifier = Modifier
+                    .size(48.dp)
+                    .clip(RoundedCornerShape(40.dp)),
+                contentScale = ContentScale.Crop,
+                contentDescription = "Profile Image",
+            )
+        }
+        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Text(
+                text = data.name,
+                style = typography.textMedium,
+                fontWeight = FontWeight.SemiBold,
+                color = colors.G7
+            )
+            Text(
+                text = "${data.grade}기 | ${data.major.toText()}",
+                style = typography.caption,
+                fontWeight = FontWeight.Normal,
+                color = colors.G4
+            )
         }
     }
 }
 
 @Composable
 fun ShimmerLateListItem(modifier: Modifier) {
-    GomsTheme { colors, typography ->
-        Row(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 12.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(
+            modifier = Modifier
+                .size(48.dp)
+                .shimmerEffect(color = colors.WHITE)
+        )
+        Spacer(modifier = Modifier.width(16.dp))
+        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Box(
                 modifier = Modifier
-                    .size(48.dp)
+                    .size(42.dp, 18.dp)
                     .shimmerEffect(color = colors.WHITE)
             )
-            Spacer(modifier = Modifier.width(16.dp))
-            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Box(
-                    modifier = Modifier
-                        .size(42.dp, 18.dp)
-                        .shimmerEffect(color = colors.WHITE)
-                )
-                Box(
-                    modifier = Modifier
-                        .size(50.dp, 14.dp)
-                        .shimmerEffect(color = colors.WHITE)
-                )
-            }
+            Box(
+                modifier = Modifier
+                    .size(50.dp, 14.dp)
+                    .shimmerEffect(color = colors.WHITE)
+            )
         }
     }
 }

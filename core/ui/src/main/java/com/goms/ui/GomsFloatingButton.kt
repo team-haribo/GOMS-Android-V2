@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.dp
 import com.goms.design_system.icon.QrCreateIcon
 import com.goms.design_system.icon.QrScanIcon
 import com.goms.design_system.theme.GomsTheme
+import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.model.enum.Authority
 
 @Composable
@@ -19,17 +20,15 @@ fun GomsFloatingButton(
     role: Authority,
     onClick: () -> Unit
 ) {
-    GomsTheme { colors, typography ->
-        FloatingActionButton(
-            modifier = modifier.size(64.dp),
-            containerColor = if (role == Authority.ROLE_STUDENT) colors.P5 else colors.A7,
-            onClick = { onClick() },
-            shape = CircleShape
-        ) {
-            when (role) {
-                Authority.ROLE_STUDENT -> QrScanIcon()
-                Authority.ROLE_STUDENT_COUNCIL -> QrCreateIcon()
-            }
+    FloatingActionButton(
+        modifier = modifier.size(64.dp),
+        containerColor = if (role == Authority.ROLE_STUDENT) colors.P5 else colors.A7,
+        onClick = { onClick() },
+        shape = CircleShape
+    ) {
+        when (role) {
+            Authority.ROLE_STUDENT -> QrScanIcon()
+            Authority.ROLE_STUDENT_COUNCIL -> QrCreateIcon()
         }
     }
 }

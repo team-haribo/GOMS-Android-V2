@@ -18,6 +18,7 @@ import com.goms.design_system.component.button.GomsButton
 import com.goms.design_system.component.text.LinkText
 import com.goms.design_system.icon.GomsIcon
 import com.goms.design_system.theme.GomsTheme
+import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.ThemeType
 import com.goms.design_system.util.lockScreenOrientation
 import com.goms.login.component.LoginText
@@ -42,7 +43,7 @@ fun LoginScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(GomsTheme.colors.BACKGROUND)
+            .background(colors.BACKGROUND)
             .padding(horizontal = 20.dp)
             .navigationBarsPadding(),
         horizontalAlignment = Alignment.CenterHorizontally
