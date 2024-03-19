@@ -16,6 +16,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import com.goms.common.result.Result
 import com.goms.design_system.theme.GomsTheme
+import com.goms.design_system.theme.ThemeType
 import com.goms.goms_android_v2.ui.GomsApp
 import com.goms.ui.createToast
 import com.google.firebase.messaging.FirebaseMessaging
@@ -62,8 +63,8 @@ class MainActivity : ComponentActivity() {
                 }
             }
             if (uiState !is MainActivityUiState.Loading) {
-                CompositionLocalProvider {
-                    GomsTheme { _, _ ->
+                GomsTheme(themeMode = ThemeType.Dark) { _, _ ->
+                    CompositionLocalProvider {
                         GomsApp(
                             windowSizeClass = calculateWindowSizeClass(this),
                             onLogout = { logout() },

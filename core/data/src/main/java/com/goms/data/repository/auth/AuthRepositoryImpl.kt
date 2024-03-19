@@ -31,6 +31,10 @@ class AuthRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun getRole(): Flow<String> {
+        return localAuthDataSource.getAuthority()
+    }
+
     override suspend fun sendNumber(body: SendNumberRequest): Flow<Unit> {
         return remoteAuthDataSource.sendNumber(body = body)
     }

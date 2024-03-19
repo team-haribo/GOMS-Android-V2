@@ -13,6 +13,8 @@ interface AuthRepository {
 
     suspend fun saveToken(token: LoginResponse)
 
+    fun getRole(): Flow<String>
+
     suspend fun sendNumber(body: SendNumberRequest): Flow<Unit>
 
     suspend fun verifyNumber(email: String, authCode: String): Flow<Unit>

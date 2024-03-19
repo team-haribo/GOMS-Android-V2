@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.goms.common.result.Result
 import com.goms.common.result.asResult
-import com.goms.datastore.AuthTokenDataSource
+import com.goms.data.repository.auth.AuthRepository
 import com.goms.domain.account.GetProfileUseCase
 import com.goms.domain.council.ChangeAuthorityUseCase
 import com.goms.domain.council.DeleteBlackListUseCase
@@ -44,9 +44,9 @@ class MainViewModel @Inject constructor(
     private val setBlackListUseCase: SetBlackListUseCase,
     private val deleteBlackListUseCase: DeleteBlackListUseCase,
     private val studentSearchUseCase: StudentSearchUseCase,
-    private val authTokenDataSource: AuthTokenDataSource
+    private val authRepository: AuthRepository
 ) : ViewModel() {
-    val role = authTokenDataSource.getAuthority()
+    val role = authRepository.getRole()
 
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing = _isRefreshing.asStateFlow()
