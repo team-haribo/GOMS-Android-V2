@@ -143,7 +143,8 @@ fun GomsNavHost(
         )
         emailCheckScreen(
             onBackClick = navController::popBackStack,
-            onNumberClick = navController::navigateToPasswordNumber
+            onNumberClick = navController::navigateToPasswordNumber,
+            onErrorToast = onErrorToast
         )
         passwordNumberScreen(
             onBackClick = navController::popBackStack,

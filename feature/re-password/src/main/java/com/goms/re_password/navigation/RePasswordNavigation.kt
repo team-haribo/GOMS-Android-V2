@@ -18,12 +18,14 @@ fun NavController.navigateToEmailCheck(navOptions: NavOptions? = null) {
 
 fun NavGraphBuilder.emailCheckScreen(
     onBackClick: () -> Unit,
-    onNumberClick: () -> Unit
+    onNumberClick: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
     composable(route = emailCheckRoute) {
         EmailCheckRoute(
             onBackClick = onBackClick,
-            onNumberClick = onNumberClick
+            onNumberClick = onNumberClick,
+            onErrorToast = onErrorToast
         )
     }
 }
