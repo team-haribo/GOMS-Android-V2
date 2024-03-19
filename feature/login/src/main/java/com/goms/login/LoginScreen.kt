@@ -18,6 +18,7 @@ import com.goms.design_system.component.button.GomsButton
 import com.goms.design_system.component.text.LinkText
 import com.goms.design_system.icon.GomsIcon
 import com.goms.design_system.theme.GomsTheme
+import com.goms.design_system.theme.ThemeType
 import com.goms.design_system.util.lockScreenOrientation
 import com.goms.login.component.LoginText
 
@@ -38,32 +39,30 @@ fun LoginScreen(
     onInputLoginClick: () -> Unit
 ) {
     lockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
-    GomsTheme { colors, typography ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(colors.BACKGROUND)
-                .padding(horizontal = 20.dp)
-                .navigationBarsPadding(),
-            horizontalAlignment = Alignment.CenterHorizontally
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(GomsTheme.colors.BACKGROUND)
+            .padding(horizontal = 20.dp)
+            .navigationBarsPadding(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Spacer(modifier = Modifier.weight(1f))
+        GomsIcon()
+        Spacer(modifier = Modifier.height(48.dp))
+        LoginText()
+        Spacer(modifier = Modifier.height(136.dp))
+        GomsButton(
+            modifier = Modifier.fillMaxWidth(),
+            text = "로그인",
+            state = ButtonState.Normal
         ) {
-            Spacer(modifier = Modifier.weight(1f))
-            GomsIcon()
-            Spacer(modifier = Modifier.height(48.dp))
-            LoginText()
-            Spacer(modifier = Modifier.height(136.dp))
-            GomsButton(
-                modifier = Modifier.fillMaxWidth(),
-                text = "로그인",
-                state = ButtonState.Normal
-            ) {
-                onInputLoginClick()
-            }
-            Spacer(modifier = Modifier.height(16.dp))
-            LinkText(text = "회원가입") {
-                onSignUpClick()
-            }
-            Spacer(modifier = Modifier.height(16.dp))
+            onInputLoginClick()
         }
+        Spacer(modifier = Modifier.height(16.dp))
+        LinkText(text = "회원가입") {
+            onSignUpClick()
+        }
+        Spacer(modifier = Modifier.height(16.dp))
     }
 }

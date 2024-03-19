@@ -35,7 +35,7 @@ import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.button.GomsButton
 import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
 import com.goms.design_system.component.textfield.GomsTextField
-import com.goms.design_system.theme.GomsTheme
+import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.util.keyboardAsState
 import com.goms.design_system.util.lockScreenOrientation
 import com.goms.login.component.InputLoginText
@@ -118,18 +118,21 @@ fun InputLoginScreen(
                     }
                 }
             }
+
             is LoginUiState.BadRequest -> {
                 isLoading = false
                 isError = true
                 errorText = "비밀번호가 일치하지 않습니다"
                 onErrorToast(null, "비밀번호가 일치하지 않습니다")
             }
+
             is LoginUiState.NotFound -> {
                 isLoading = false
                 isError = true
                 errorText = "해당 유저가 존재하지 않습니다"
                 onErrorToast(null, "해당 유저가 존재하지 않습니다")
             }
+
             is LoginUiState.Error -> {
                 isLoading = false
                 isError = true
@@ -140,70 +143,68 @@ fun InputLoginScreen(
     }
 
     lockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
-    GomsTheme { colors, typography ->
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(colors.BACKGROUND)
+            .statusBarsPadding()
+            .navigationBarsPadding()
+            .imePadding()
+            .pointerInput(Unit) {
+                detectTapGestures {
+                    focusManager.clearFocus()
+                }
+            }
+    ) {
+        GomsBackButton {
+            onBackClick()
+        }
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(colors.BACKGROUND)
-                .statusBarsPadding()
-                .navigationBarsPadding()
-                .imePadding()
-                .pointerInput(Unit) {
-                    detectTapGestures {
-                        focusManager.clearFocus()
-                    }
-                }
+            modifier = Modifier.padding(horizontal = 20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            GomsBackButton {
-                onBackClick()
-            }
-            Column(
-                modifier = Modifier.padding(horizontal = 20.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+            InputLoginText(modifier = Modifier.align(Alignment.Start))
+            Spacer(modifier = Modifier.weight(1.1f))
+            GomsTextField(
+                modifier = Modifier.fillMaxWidth(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                placeHolder = "이메일",
+                setText = email,
+                onValueChange = onEmailChange,
+                isError = isError,
+                singleLine = true
+            )
+            GomsTextField(
+                modifier = Modifier.fillMaxWidth(),
+                isEmail = false,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                placeHolder = "비밀번호",
+                setText = password,
+                onValueChange = onPasswordChange,
+                isError = isError,
+                errorText = errorText,
+                singleLine = true,
+                visualTransformation = PasswordVisualTransformation()
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            GomsButton(
+                modifier = Modifier.fillMaxWidth(),
+                text = "로그인",
+                state = if (email.isNotBlank() && password.isNotBlank()) ButtonState.Normal
+                else ButtonState.Enable
             ) {
-                InputLoginText(modifier = Modifier.align(Alignment.Start))
-                Spacer(modifier = Modifier.weight(1.1f))
-                GomsTextField(
-                    modifier = Modifier.fillMaxWidth(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                    placeHolder = "이메일",
-                    setText = email,
-                    onValueChange = onEmailChange,
-                    isError = isError,
-                    singleLine = true
-                )
-                GomsTextField(
-                    modifier = Modifier.fillMaxWidth(),
-                    isEmail = false,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                    placeHolder = "비밀번호",
-                    setText = password,
-                    onValueChange = onPasswordChange,
-                    isError = isError,
-                    errorText = errorText,
-                    singleLine = true,
-                    visualTransformation = PasswordVisualTransformation()
-                )
-                Spacer(modifier = Modifier.weight(1f))
-                GomsButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = "로그인",
-                    state = if (email.isNotBlank() && password.isNotBlank()) ButtonState.Normal
-                    else ButtonState.Enable
-                ) {
-                    if (!isStrongEmail(email)) {
-                        isLoading = false
-                        onErrorToast(null, "이메일 형식이 올바르지 않습니다")
-                    } else {
-                        loginCallBack()
-                        isLoading = true
-                    }
+                if (!isStrongEmail(email)) {
+                    isLoading = false
+                    onErrorToast(null, "이메일 형식이 올바르지 않습니다")
+                } else {
+                    loginCallBack()
+                    isLoading = true
                 }
-                Spacer(modifier = Modifier.height(animatedSpacerHeight))
             }
+            Spacer(modifier = Modifier.height(animatedSpacerHeight))
         }
-        if (isLoading) {
-            GomsCircularProgressIndicator()
-        }
+    }
+    if (isLoading) {
+        GomsCircularProgressIndicator()
     }
 }
