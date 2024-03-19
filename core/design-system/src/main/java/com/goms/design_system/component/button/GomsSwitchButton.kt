@@ -32,6 +32,7 @@ import androidx.wear.compose.material.rememberSwipeableState
 import androidx.wear.compose.material.swipeable
 import com.goms.design_system.component.clickable.gomsClickable
 import com.goms.design_system.theme.GomsTheme
+import com.goms.design_system.theme.GomsTheme.colors
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
@@ -64,54 +65,52 @@ fun GomsSwitchButton(
             if (clickListener) onCheckedChanged(true) else onCheckedChanged(false)
         }
     }
-    GomsTheme { colors, typography ->
-        Box(
-            modifier = Modifier.gomsClickable(
-                interval = 50L
-            ) {
-                clickListener = !clickListener
-                scope.launch {
-                    if (clickListener) {
-                        swipeableState.animateTo(stateOn)
-                    } else {
-                        swipeableState.animateTo(stateOff)
-                    }
+    Box(
+        modifier = Modifier.gomsClickable(
+            interval = 50L
+        ) {
+            clickListener = !clickListener
+            scope.launch {
+                if (clickListener) {
+                    swipeableState.animateTo(stateOn)
+                } else {
+                    swipeableState.animateTo(stateOff)
                 }
             }
+        }
+    ) {
+        Row(
+            modifier = Modifier
+                .height(height)
+                .width(width)
+                .clip(RoundedCornerShape(height))
+                .background(
+                    if (swipeableState.currentValue == stateOff) {
+                        if (clickListener) switchOnBackground else switchOffBackground
+                    } else {
+                        if (clickListener) switchOnBackground else switchOffBackground
+                    }
+                ),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start
         ) {
-            Row(
+            Box(
                 modifier = Modifier
-                    .height(height)
-                    .width(width)
-                    .clip(RoundedCornerShape(height))
-                    .background(
-                        if (swipeableState.currentValue == stateOff) {
-                            if (clickListener) switchOnBackground else switchOffBackground
-                        } else {
-                            if (clickListener) switchOnBackground else switchOffBackground
-                        }
-                    ),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Start
-            ) {
-                Box(
-                    modifier = Modifier
-                        .offset { IntOffset(swipeableState.offset.value.roundToInt(), 0) }
-                        .swipeable(
-                            state = swipeableState,
-                            anchors = anchors,
-                            thresholds = { _, _ -> FractionalThreshold(0.3f) },
-                            orientation = Orientation.Horizontal
-                        )
-                        .padding(
-                            horizontal = circleHorizontalButtonPadding,
-                            vertical = circleVerticalButtonPadding,
-                        )
-                        .clip(RoundedCornerShape(50))
-                        .background(color = colors.BLACK)
-                        .size(circleSize)
-                )
-            }
+                    .offset { IntOffset(swipeableState.offset.value.roundToInt(), 0) }
+                    .swipeable(
+                        state = swipeableState,
+                        anchors = anchors,
+                        thresholds = { _, _ -> FractionalThreshold(0.3f) },
+                        orientation = Orientation.Horizontal
+                    )
+                    .padding(
+                        horizontal = circleHorizontalButtonPadding,
+                        vertical = circleVerticalButtonPadding,
+                    )
+                    .clip(RoundedCornerShape(50))
+                    .background(color = colors.BLACK)
+                    .size(circleSize)
+            )
         }
     }
 }
