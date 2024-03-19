@@ -43,6 +43,8 @@ import com.goms.design_system.component.clickable.gomsClickable
 import com.goms.design_system.component.timer.CountdownTimer
 import com.goms.design_system.icon.SearchIcon
 import com.goms.design_system.theme.GomsTheme
+import com.goms.design_system.theme.GomsTheme.colors
+import com.goms.design_system.theme.GomsTheme.typography
 import kotlinx.coroutines.delay
 
 @Composable
@@ -71,76 +73,74 @@ fun GomsTextField(
         }
     }
 
-    GomsTheme { colors, typography ->
-        Column {
-            OutlinedTextField(
-                value = setText,
-                onValueChange = {
-                    onValueChange(it)
+    Column {
+        OutlinedTextField(
+            value = setText,
+            onValueChange = {
+                onValueChange(it)
+            },
+            keyboardOptions = keyboardOptions,
+            keyboardActions = keyboardActions,
+            placeholder = {
+                Text(
+                    text = placeHolder,
+                    style = typography.textMedium,
+                    fontWeight = FontWeight.Normal,
+                    color = if (isError) colors.N5 else colors.G4
+                )
+            },
+            modifier = modifier
+                .fillMaxWidth()
+                .height(64.dp)
+                .focusRequester(focusRequester)
+                .clip(RoundedCornerShape(12.dp))
+                .background(colors.G1)
+                .border(
+                    width = 1.dp,
+                    color = if (isError) colors.N5 else colors.WHITE.copy(0.15f),
+                    shape = RoundedCornerShape(12.dp)
+                )
+                .onFocusChanged {
+                    isFocused.value = it.isFocused
                 },
-                keyboardOptions = keyboardOptions,
-                keyboardActions = keyboardActions,
-                placeholder = {
+            maxLines = maxLines,
+            singleLine = singleLine,
+            textStyle = typography.textMedium,
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedTextColor = if (isError) colors.N5 else colors.WHITE,
+                unfocusedTextColor = if (isError) colors.N5 else colors.WHITE,
+                focusedPlaceholderColor = if (isError) colors.N5 else colors.G4,
+                unfocusedPlaceholderColor = if (isError) colors.N5 else colors.G4,
+                focusedBorderColor = Color.Transparent,
+                unfocusedBorderColor = Color.Transparent,
+                cursorColor = colors.I5
+            ),
+            trailingIcon = {
+                if (isEmail) {
                     Text(
-                        text = placeHolder,
+                        modifier = Modifier.padding(end = 16.dp),
+                        text = "@gsm.hs.kr",
                         style = typography.textMedium,
                         fontWeight = FontWeight.Normal,
                         color = if (isError) colors.N5 else colors.G4
                     )
-                },
-                modifier = modifier
-                    .fillMaxWidth()
-                    .height(64.dp)
-                    .focusRequester(focusRequester)
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(colors.G1)
-                    .border(
-                        width = 1.dp,
-                        color = if (isError) colors.N5 else colors.WHITE.copy(0.15f),
-                        shape = RoundedCornerShape(12.dp)
-                    )
-                    .onFocusChanged {
-                        isFocused.value = it.isFocused
-                    },
-                maxLines = maxLines,
-                singleLine = singleLine,
-                textStyle = typography.textMedium,
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedTextColor = if (isError) colors.N5 else colors.WHITE,
-                    unfocusedTextColor = if (isError) colors.N5 else colors.WHITE,
-                    focusedPlaceholderColor = if (isError) colors.N5 else colors.G4,
-                    unfocusedPlaceholderColor = if (isError) colors.N5 else colors.G4,
-                    focusedBorderColor = Color.Transparent,
-                    unfocusedBorderColor = Color.Transparent,
-                    cursorColor = colors.I5
-                ),
-                trailingIcon = {
-                    if (isEmail) {
-                        Text(
-                            modifier = Modifier.padding(end = 16.dp),
-                            text = "@gsm.hs.kr",
-                            style = typography.textMedium,
-                            fontWeight = FontWeight.Normal,
-                            color = if (isError) colors.N5 else colors.G4
-                        )
-                    }
-                },
-                readOnly = readOnly,
-                visualTransformation = visualTransformation
-            )
-            Column(
-                modifier = Modifier
-                    .height(32.dp)
-                    .padding(start = 8.dp),
-                verticalArrangement = Arrangement.Center
-            ) {
-                if (isError) {
-                    Text(
-                        text = errorText,
-                        color = colors.N5,
-                        style = typography.buttonLarge
-                    )
                 }
+            },
+            readOnly = readOnly,
+            visualTransformation = visualTransformation
+        )
+        Column(
+            modifier = Modifier
+                .height(32.dp)
+                .padding(start = 8.dp),
+            verticalArrangement = Arrangement.Center
+        ) {
+            if (isError) {
+                Text(
+                    text = errorText,
+                    color = colors.N5,
+                    style = typography.buttonLarge
+                )
             }
         }
     }
