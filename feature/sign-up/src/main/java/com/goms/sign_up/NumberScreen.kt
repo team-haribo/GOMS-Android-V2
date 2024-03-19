@@ -36,6 +36,7 @@ import com.goms.design_system.component.button.GomsButton
 import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
 import com.goms.design_system.component.textfield.NumberTextField
 import com.goms.design_system.theme.GomsTheme
+import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.util.keyboardAsState
 import com.goms.design_system.util.lockScreenOrientation
 import com.goms.model.request.auth.SendNumberRequest
@@ -106,12 +107,14 @@ fun NumberScreen(
                 errorText = "인증번호가 일치하지 않습니다"
                 onErrorToast(null, "인증번호가 일치하지 않습니다")
             }
+
             is VerifyNumberUiState.NotFound -> {
                 isLoading = false
                 isError = true
                 errorText = "잘못된 인증번호입니다"
                 onErrorToast(null, "잘못된 인증번호입니다")
             }
+
             is VerifyNumberUiState.Error -> {
                 isLoading = false
                 isError = true
@@ -122,52 +125,50 @@ fun NumberScreen(
     }
 
     lockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_LOCKED)
-    GomsTheme { colors, typography ->
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(colors.BACKGROUND)
+            .statusBarsPadding()
+            .navigationBarsPadding()
+            .imePadding()
+            .pointerInput(Unit) {
+                detectTapGestures {
+                    focusManager.clearFocus()
+                }
+            }
+    ) {
+        GomsBackButton {
+            onBackClick()
+        }
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(colors.BACKGROUND)
-                .statusBarsPadding()
-                .navigationBarsPadding()
-                .imePadding()
-                .pointerInput(Unit) {
-                    detectTapGestures {
-                        focusManager.clearFocus()
-                    }
-                }
+            modifier = Modifier.padding(horizontal = 20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            GomsBackButton {
-                onBackClick()
-            }
-            Column(
-                modifier = Modifier.padding(horizontal = 20.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                NumberText(modifier = Modifier.align(Alignment.Start))
-                Spacer(modifier = Modifier.weight(2.1f))
-                NumberTextField(
-                    text = number,
-                    isError = isError,
-                    errorText = errorText,
-                    onValueChange = onNumberChange,
-                    onResendClick = {
-                        resentCallBack()
-                    }
-                )
-                Spacer(modifier = Modifier.weight(1f))
-                GomsButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = "인증",
-                    state = if (number.isNotBlank()) ButtonState.Normal else ButtonState.Enable
-                ) {
-                    numberCallback()
-                    isLoading = true
+            NumberText(modifier = Modifier.align(Alignment.Start))
+            Spacer(modifier = Modifier.weight(2.1f))
+            NumberTextField(
+                text = number,
+                isError = isError,
+                errorText = errorText,
+                onValueChange = onNumberChange,
+                onResendClick = {
+                    resentCallBack()
                 }
-                Spacer(modifier = Modifier.height(animatedSpacerHeight))
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            GomsButton(
+                modifier = Modifier.fillMaxWidth(),
+                text = "인증",
+                state = if (number.isNotBlank()) ButtonState.Normal else ButtonState.Enable
+            ) {
+                numberCallback()
+                isLoading = true
             }
+            Spacer(modifier = Modifier.height(animatedSpacerHeight))
         }
-        if (isLoading) {
-            GomsCircularProgressIndicator()
-        }
+    }
+    if (isLoading) {
+        GomsCircularProgressIndicator()
     }
 }

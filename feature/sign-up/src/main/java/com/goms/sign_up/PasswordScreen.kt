@@ -37,6 +37,7 @@ import com.goms.design_system.component.button.GomsButton
 import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
 import com.goms.design_system.component.textfield.GomsPasswordTextField
 import com.goms.design_system.theme.GomsTheme
+import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.util.keyboardAsState
 import com.goms.design_system.util.lockScreenOrientation
 import com.goms.model.enum.Gender
@@ -115,6 +116,7 @@ fun PasswordScreen(
                 isError = true
                 onErrorToast(null, "이미 존재하는 계정입니다")
             }
+
             is SignUpUiState.Error -> {
                 isLoading = false
                 isError = true
@@ -125,74 +127,72 @@ fun PasswordScreen(
     }
 
     lockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
-    GomsTheme { colors, typography ->
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(colors.BACKGROUND)
+            .statusBarsPadding()
+            .navigationBarsPadding()
+            .imePadding()
+            .pointerInput(Unit) {
+                detectTapGestures {
+                    focusManager.clearFocus()
+                }
+            }
+    ) {
+        GomsBackButton {
+            onBackClick()
+        }
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(colors.BACKGROUND)
-                .statusBarsPadding()
-                .navigationBarsPadding()
-                .imePadding()
-                .pointerInput(Unit) {
-                    detectTapGestures {
-                        focusManager.clearFocus()
-                    }
-                }
+            modifier = Modifier.padding(horizontal = 20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            GomsBackButton {
-                onBackClick()
-            }
-            Column(
-                modifier = Modifier.padding(horizontal = 20.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+            PasswordText(modifier = Modifier.align(Alignment.Start))
+            Spacer(modifier = Modifier.weight(1.1f))
+            GomsPasswordTextField(
+                modifier = Modifier.fillMaxWidth(),
+                isError = isError,
+                isDescription = false,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                placeHolder = "비밀번호",
+                setText = password,
+                onValueChange = onPasswordChange,
+                singleLine = true
+            )
+            GomsPasswordTextField(
+                modifier = Modifier.fillMaxWidth(),
+                isDescription = true,
+                isError = isError,
+                errorText = errorText,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                placeHolder = "비밀번호 확인",
+                setText = checkPassword,
+                onValueChange = onCheckPasswordChange,
+                singleLine = true
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            GomsButton(
+                modifier = Modifier.fillMaxWidth(),
+                text = "회원가입",
+                state = if (password.isNotBlank() && checkPassword.isNotBlank()) ButtonState.Normal else ButtonState.Enable
             ) {
-                PasswordText(modifier = Modifier.align(Alignment.Start))
-                Spacer(modifier = Modifier.weight(1.1f))
-                GomsPasswordTextField(
-                    modifier = Modifier.fillMaxWidth(),
-                    isError = isError,
-                    isDescription = false,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                    placeHolder = "비밀번호",
-                    setText = password,
-                    onValueChange = onPasswordChange,
-                    singleLine = true
-                )
-                GomsPasswordTextField(
-                    modifier = Modifier.fillMaxWidth(),
-                    isDescription = true,
-                    isError = isError,
-                    errorText = errorText,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                    placeHolder = "비밀번호 확인",
-                    setText = checkPassword,
-                    onValueChange = onCheckPasswordChange,
-                    singleLine = true
-                )
-                Spacer(modifier = Modifier.weight(1f))
-                GomsButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = "회원가입",
-                    state = if (password.isNotBlank() && checkPassword.isNotBlank()) ButtonState.Normal else ButtonState.Enable
-                ) {
-                    if (password != checkPassword) {
-                        isError = true
-                        errorText = "비밀번호가 일치하지 않습니다"
-                        onErrorToast(null, "비밀번호가 일치하지 않습니다")
-                    } else if (!isStrongPassword(password)) {
-                        isError = true
-                        errorText = "비밀번호 요구사항을 충족하지 않습니다"
-                        onErrorToast(null, "비밀번호 요구사항을 충족하지 않습니다")
-                    } else {
-                        passwordCallback()
-                        isLoading = true
-                    }
+                if (password != checkPassword) {
+                    isError = true
+                    errorText = "비밀번호가 일치하지 않습니다"
+                    onErrorToast(null, "비밀번호가 일치하지 않습니다")
+                } else if (!isStrongPassword(password)) {
+                    isError = true
+                    errorText = "비밀번호 요구사항을 충족하지 않습니다"
+                    onErrorToast(null, "비밀번호 요구사항을 충족하지 않습니다")
+                } else {
+                    passwordCallback()
+                    isLoading = true
                 }
-                Spacer(modifier = Modifier.height(animatedSpacerHeight))
             }
+            Spacer(modifier = Modifier.height(animatedSpacerHeight))
         }
-        if (isLoading) {
-            GomsCircularProgressIndicator()
-        }
+    }
+    if (isLoading) {
+        GomsCircularProgressIndicator()
     }
 }
