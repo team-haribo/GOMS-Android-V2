@@ -158,16 +158,12 @@ fun SignUpScreen(
                     singleLine = true
                 )
                 SelectGenderDropDown(
-                    modifier = Modifier,
-                    gender = gender,
                     onSelectGender = onGenderChange
                 ) {
                     focusManager.clearFocus()
                 }
                 Spacer(modifier = Modifier.height(30.dp))
                 SelectMajorDropDown(
-                    modifier = Modifier,
-                    major = major,
                     onSelectMajor = onMajorChange
                 ) {
                     focusManager.clearFocus()
