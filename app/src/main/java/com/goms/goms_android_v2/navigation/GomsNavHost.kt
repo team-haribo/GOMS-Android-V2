@@ -3,7 +3,6 @@ package com.goms.goms_android_v2.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.navigation.compose.NavHost
 import com.goms.common.exception.ForBiddenException
 import com.goms.common.exception.NoInternetException
@@ -152,7 +151,8 @@ fun GomsNavHost(
         )
         rePasswordScreen(
             onBackClick = navController::popBackStack,
-            onSuccessClick = { appState.navigateToTopLevelDestination(TopLevelDestination.LOGIN) }
+            onSuccessClick = { appState.navigateToTopLevelDestination(TopLevelDestination.LOGIN) },
+            onErrorToast = onErrorToast
         )
     }
 }
