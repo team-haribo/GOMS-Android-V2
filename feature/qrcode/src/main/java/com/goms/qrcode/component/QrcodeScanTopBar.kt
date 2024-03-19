@@ -23,26 +23,24 @@ import com.goms.design_system.theme.GomsTheme
 fun QrcodeScanTopBar(
     onClick: () -> Unit
 ) {
-    GomsTheme { color, _ ->
-        Row(
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(end = 6.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        GomsTextIcon(tint = Color.White)
+        Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(end = 6.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+                .size(40.dp)
+                .clip(CircleShape)
+                .gomsClickable(isIndication = true) {
+                    onClick()
+                },
+            contentAlignment = Alignment.Center
         ) {
-            GomsTextIcon(tint = Color.White)
-            Box(
-                modifier = Modifier
-                    .size(40.dp)
-                    .clip(CircleShape)
-                    .gomsClickable(isIndication = true) {
-                        onClick()
-                    },
-                contentAlignment = Alignment.Center
-            ) {
-                CloseIcon(tint = Color.White)
-            }
+            CloseIcon(tint = Color.White)
         }
     }
 }
