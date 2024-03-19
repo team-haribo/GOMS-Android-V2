@@ -28,7 +28,7 @@ fun SelectMajorDropDown(
             selectedIndex = selectedIndex,
             modifier = Modifier.padding(horizontal = 20.dp),
             backgroundColor = colors.G1,
-            onClick = { onClick() },
+            onClick = onClick,
             onItemClick = {
                 selectedIndex = it
                 onSelectMajor(dropdownList[selectedIndex])
