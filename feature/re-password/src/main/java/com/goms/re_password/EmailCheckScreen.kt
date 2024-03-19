@@ -35,6 +35,7 @@ import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.button.GomsButton
 import com.goms.design_system.component.textfield.GomsTextField
 import com.goms.design_system.theme.GomsTheme
+import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.util.keyboardAsState
 import com.goms.design_system.util.lockScreenOrientation
 import com.goms.model.request.auth.SendNumberRequest
@@ -83,57 +84,55 @@ fun EmailCheckScreen(
     }
 
     lockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
-    GomsTheme { colors, typography ->
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(colors.BLACK)
+            .statusBarsPadding()
+            .navigationBarsPadding()
+            .imePadding()
+            .pointerInput(Unit) {
+                detectTapGestures {
+                    focusManager.clearFocus()
+                }
+            }
+    ) {
+        GomsBackButton {
+            onBackClick()
+        }
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(colors.BLACK)
-                .statusBarsPadding()
-                .navigationBarsPadding()
-                .imePadding()
-                .pointerInput(Unit) {
-                    detectTapGestures {
-                        focusManager.clearFocus()
-                    }
-                }
+            modifier = Modifier.padding(horizontal = 20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            GomsBackButton {
-                onBackClick()
-            }
-            Column(
-                modifier = Modifier.padding(horizontal = 20.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+            RePasswordText(modifier = Modifier.align(Alignment.Start))
+            Spacer(modifier = Modifier.weight(1.1f))
+            GomsTextField(
+                modifier = Modifier.fillMaxWidth(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                placeHolder = "이메일",
+                setText = email,
+                onValueChange = onEmailChange,
+                singleLine = true
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            GomsButton(
+                modifier = Modifier.fillMaxWidth(),
+                text = "인증번호 받기",
+                state = if (email.isNotBlank()) ButtonState.Normal
+                else ButtonState.Enable
             ) {
-                RePasswordText(modifier = Modifier.align(Alignment.Start))
-                Spacer(modifier = Modifier.weight(1.1f))
-                GomsTextField(
-                    modifier = Modifier.fillMaxWidth(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                    placeHolder = "이메일",
-                    setText = email,
-                    onValueChange = onEmailChange,
-                    singleLine = true
-                )
-                Spacer(modifier = Modifier.weight(1f))
-                GomsButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = "인증번호 받기",
-                    state = if (email.isNotBlank()) ButtonState.Normal
-                    else ButtonState.Enable
-                ) {
-                    if (!isStrongEmail(email)) {
-                        isLoading = false
-                        createToast(
-                            context = context,
-                            message = "이메일 형식이 올바르지 않습니다"
-                        )
-                    } else {
-                        onNumberClick()
-                        isLoading = true
-                    }
+                if (!isStrongEmail(email)) {
+                    isLoading = false
+                    createToast(
+                        context = context,
+                        message = "이메일 형식이 올바르지 않습니다"
+                    )
+                } else {
+                    onNumberClick()
+                    isLoading = true
                 }
-                Spacer(modifier = Modifier.height(animatedSpacerHeight))
             }
+            Spacer(modifier = Modifier.height(animatedSpacerHeight))
         }
     }
 }
