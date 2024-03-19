@@ -26,6 +26,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.goms.design_system.theme.GomsTheme
+import com.goms.design_system.theme.GomsTheme.colors
+import com.goms.design_system.theme.GomsTheme.typography
 
 @Composable
 fun GomsTwoButtonDialog(
@@ -42,82 +44,79 @@ fun GomsTwoButtonDialog(
 
     if (openDialog) {
         Dialog(onDismissRequest = { openDialog = false }) {
-            GomsTheme { colors, typography ->
-                Card(
-                    modifier = Modifier.width(280.dp),
-                    shape = RoundedCornerShape(12.dp),
-                    border = BorderStroke(width = 1.dp, color = colors.WHITE.copy(0.15f))
-                ) {
-                    Column(modifier = Modifier.background(colors.G1)) {
-                        Column(
-                            modifier = Modifier
+            Card(
+                modifier = Modifier.width(280.dp),
+                shape = RoundedCornerShape(12.dp),
+                border = BorderStroke(width = 1.dp, color = colors.WHITE.copy(0.15f))
+            ) {
+                Column(modifier = Modifier.background(colors.G1)) {
+                    Column(
+                        modifier = Modifier
                             .background(colors.G1)
                             .padding(top = 16.dp, start = 16.dp, end = 16.dp)
+                    ) {
+                        Text(
+                            text = title,
+                            modifier = Modifier.fillMaxWidth(),
+                            color = colors.WHITE,
+                            style = typography.titleSmall,
+                            fontWeight = FontWeight.SemiBold,
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = content,
+                            modifier = Modifier.fillMaxWidth(),
+                            color = colors.G7,
+                            style = typography.textMedium,
+                            fontWeight = FontWeight.Normal,
+                        )
+                    }
+                    Row(
+                        Modifier
+                            .fillMaxWidth()
+                            .height(64.dp)
+                            .padding(end = 8.dp)
+                            .background(colors.G1),
+                        horizontalArrangement = Arrangement.End,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        TextButton(
+                            modifier = Modifier
+                                .weight(1f)
+                                .height(60.dp),
+                            onClick = {
+                                openDialog = false
+                                onDismissClick()
+                            }
                         ) {
                             Text(
-                                text = title,
-                                modifier = Modifier.fillMaxWidth(),
-                                color = colors.WHITE,
-                                style = typography.titleSmall,
-                                fontWeight = FontWeight.SemiBold,
-                            )
-                            Spacer(modifier = Modifier.height(8.dp))
-                            Text(
-                                text = content,
-                                modifier = Modifier.fillMaxWidth(),
-                                color = colors.G7,
+                                text = dismissText,
+                                color = colors.I5,
                                 style = typography.textMedium,
-                                fontWeight = FontWeight.Normal,
+                                fontWeight = FontWeight.Medium,
                             )
                         }
-                        Row(
-                            Modifier
-                                .fillMaxWidth()
-                                .height(64.dp)
-                                .padding(end = 8.dp)
-                                .background(colors.G1),
-                            horizontalArrangement = Arrangement.End,
-                            verticalAlignment = Alignment.CenterVertically
+                        TextButton(
+                            modifier = Modifier
+                                .weight(1f)
+                                .height(60.dp),
+                            onClick = {
+                                openDialog = false
+                                onCheckClick()
+                            }
                         ) {
-                            TextButton(
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .height(60.dp),
-                                onClick = {
-                                    openDialog = false
-                                    onDismissClick()
-                                }
-                            ) {
-                                Text(
-                                    text = dismissText,
-                                    color = colors.I5,
-                                    style = typography.textMedium,
-                                    fontWeight = FontWeight.Medium,
-                                )
-                            }
-                            TextButton(
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .height(60.dp),
-                                onClick = {
-                                    openDialog = false
-                                    onCheckClick()
-                                }
-                            ) {
-                                Text(
-                                    text = checkText,
-                                    color = colors.N5,
-                                    style = typography.textMedium,
-                                    fontWeight = FontWeight.Medium,
-                                )
-                            }
+                            Text(
+                                text = checkText,
+                                color = colors.N5,
+                                style = typography.textMedium,
+                                fontWeight = FontWeight.Medium,
+                            )
                         }
                     }
                 }
             }
         }
-    }
-    else {
+    } else {
         onStateChange(openDialog)
     }
 }
