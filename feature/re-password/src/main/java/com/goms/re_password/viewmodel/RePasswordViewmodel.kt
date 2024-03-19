@@ -5,8 +5,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.goms.common.network.errorHandling
 import com.goms.common.result.Result
+import com.goms.domain.account.RePasswordUseCase
 import com.goms.domain.auth.SendNumberUseCase
 import com.goms.domain.auth.VerifyNumberUseCase
+import com.goms.model.request.account.RePasswordRequest
 import com.goms.model.request.auth.SendNumberRequest
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,9 +20,13 @@ import javax.inject.Inject
 @HiltViewModel
 class RePasswordViewmodel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
+    private val rePasswordUseCase: RePasswordUseCase,
     private val sendNumberUseCase: SendNumberUseCase,
     private val verifyNumberUseCase: VerifyNumberUseCase
 ) : ViewModel() {
+    private val _rePasswordUiState = MutableStateFlow<Result<Unit>>(Result.Loading)
+    val rePasswordUiState = _rePasswordUiState.asStateFlow()
+
     private val _sendNumberUiState = MutableStateFlow<Result<Unit>>(Result.Loading)
     val sendNumberUiState = _sendNumberUiState.asStateFlow()
 
@@ -31,6 +37,23 @@ class RePasswordViewmodel @Inject constructor(
     var password = savedStateHandle.getStateFlow(key = PASSWORD, initialValue = "")
     var checkPassword = savedStateHandle.getStateFlow(key = CHECK_PASSWORD, initialValue = "")
     var number = savedStateHandle.getStateFlow(key = NUMBER, initialValue = "")
+
+    fun rePassword(body: RePasswordRequest) = viewModelScope.launch {
+        rePasswordUseCase(body = body)
+            .onSuccess {
+                it.catch {  remoteError ->
+                    _rePasswordUiState.value = Result.Error(remoteError)
+                }.collect { result ->
+                    _rePasswordUiState.value = Result.Success(result)
+                }
+            }.onFailure {
+                _rePasswordUiState.value = Result.Error(it)
+            }
+    }
+
+    fun initRePassword() {
+        _rePasswordUiState.value = Result.Loading
+    }
 
     fun sendNumber(body: SendNumberRequest) = viewModelScope.launch {
         sendNumberUseCase(body = body)
@@ -87,6 +110,7 @@ class RePasswordViewmodel @Inject constructor(
         savedStateHandle[CHECK_PASSWORD] = value
     }
 }
+
 private const val EMAIL = "email"
 private const val PASSWORD = "password"
 private const val CHECK_PASSWORD = "check password"
