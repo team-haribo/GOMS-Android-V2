@@ -139,6 +139,7 @@ fun SettingScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(colors.BACKGROUND)
+            .navigationBarsPadding()
             .statusBarsPadding(),
     ) {
         GomsBackButton { onBackClick() }
