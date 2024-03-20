@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.goms.common.result.Result
 import com.goms.common.result.asResult
 import com.goms.data.repository.account.AccountRepository
-import com.goms.datastore.AuthTokenDataSource
+import com.goms.data.repository.auth.AuthRepository
 import com.goms.domain.notification.SaveDeviceTokenUseCase
 import com.goms.model.response.account.ProfileResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,7 +24,7 @@ import javax.inject.Inject
 class MainActivityViewModel @Inject constructor(
     private val accountRepository: AccountRepository,
     private val saveDeviceTokenUseCase: SaveDeviceTokenUseCase,
-    private val authTokenDataSource: AuthTokenDataSource
+    private val authRepository: AuthRepository
 ) : ViewModel() {
     val uiState: StateFlow<MainActivityUiState> = flow {
         accountRepository.getProfile().collect { profileResponse ->
@@ -62,15 +62,11 @@ class MainActivityViewModel @Inject constructor(
     }
 
     fun setAuthority(authority: String) = viewModelScope.launch {
-        authTokenDataSource.setAuthority(authority = authority)
+        authRepository.setRole(role = authority)
     }
 
-    suspend fun deleteToken() = viewModelScope.launch {
-        authTokenDataSource.removeAccessToken()
-        authTokenDataSource.removeRefreshToken()
-        authTokenDataSource.removeAccessTokenExp()
-        authTokenDataSource.removeRefreshTokenExp()
-        authTokenDataSource.removeAuthority()
+    fun deleteToken() = viewModelScope.launch {
+        authRepository.deleteToken()
     }
 }
 

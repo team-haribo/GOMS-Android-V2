@@ -14,7 +14,7 @@ plugins {
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.org.jetbrains.kotlin.android) apply false
     alias(libs.plugins.gms.google.service) apply false
-    alias(libs.plugins.ksp)
+    alias(libs.plugins.ksp) apply false
 }
 
 allprojects {
