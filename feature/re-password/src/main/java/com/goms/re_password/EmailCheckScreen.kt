@@ -150,8 +150,8 @@ fun EmailCheckScreen(
             }
             Spacer(modifier = Modifier.height(animatedSpacerHeight))
         }
-        if (isLoading) {
-            GomsCircularProgressIndicator()
-        }
+    }
+    if (isLoading) {
+        GomsCircularProgressIndicator()
     }
 }
