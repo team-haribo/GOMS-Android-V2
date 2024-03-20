@@ -116,7 +116,7 @@ fun SettingScreen(
         }
 
         is LogoutUiState.Error -> {
-            onErrorToast(logoutUiState.exception, "로그아웃에 실패 했습니다.")
+            onErrorToast(logoutUiState.exception, "로그아웃에 실패 했습니다")
         }
     }
 
