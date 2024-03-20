@@ -3,7 +3,6 @@ package com.goms.design_system.component.bottomsheet
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -28,6 +27,8 @@ import androidx.compose.ui.unit.dp
 import com.goms.design_system.component.button.AdminBottomSheetButton
 import com.goms.design_system.component.button.InitBottomSheetButton
 import com.goms.design_system.theme.GomsTheme
+import com.goms.design_system.theme.GomsTheme.colors
+import com.goms.design_system.theme.GomsTheme.typography
 import kotlinx.collections.immutable.PersistentList
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -54,7 +55,7 @@ fun MultipleSelectorBottomSheet(
     initClick: () -> Unit,
     closeSheet: () -> Unit
 ) {
-    var componentWidth by remember { mutableStateOf( 0.dp ) }
+    var componentWidth by remember { mutableStateOf(0.dp) }
     val density = LocalDensity.current
 
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -71,123 +72,121 @@ fun MultipleSelectorBottomSheet(
         bottomSheetSelected4 = selected4
     }
 
-    GomsTheme { colors, typography ->
-        ModalBottomSheet(
-            onDismissRequest = { closeSheet() },
-            sheetState = sheetState,
-            shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
-            containerColor = colors.G1
+    ModalBottomSheet(
+        onDismissRequest = { closeSheet() },
+        sheetState = sheetState,
+        shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
+        containerColor = colors.G1
+    ) {
+        Column(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(start = 20.dp, end = 20.dp, bottom = 16.dp)
+                .onGloballyPositioned {
+                    componentWidth = with(density) {
+                        it.size.width.toDp()
+                    }
+                },
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Column(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .padding(start = 20.dp, end = 20.dp, bottom = 16.dp)
-                    .onGloballyPositioned {
-                        componentWidth = with(density) {
-                            it.size.width.toDp()
-                        }
-                    },
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+            BottomSheetHeader(
+                modifier = Modifier,
+                title = title,
+                closeSheet = closeSheet
+            )
+            Text(
+                text = subTitle1,
+                style = typography.titleSmall,
+                fontWeight = FontWeight.SemiBold,
+                color = colors.WHITE
+            )
+            LazyRow(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                BottomSheetHeader(
-                    modifier = Modifier,
-                    title = title,
-                    closeSheet = closeSheet
-                )
-                Text(
-                    text = subTitle1,
-                    style = typography.titleSmall,
-                    fontWeight = FontWeight.SemiBold,
-                    color = colors.WHITE
-                )
-                LazyRow(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    items(list1.size) {
-                        AdminBottomSheetButton(
-                            modifier = Modifier.widthIn((componentWidth - 16.dp * list1.lastIndex) / list1.size),
-                            text = list1[it],
-                            selected = bottomSheetSelected1 == list1[it]
-                        ) {
-                            itemChange1(list1[it])
-                        }
+                items(list1.size) {
+                    AdminBottomSheetButton(
+                        modifier = Modifier.widthIn((componentWidth - 16.dp * list1.lastIndex) / list1.size),
+                        text = list1[it],
+                        selected = bottomSheetSelected1 == list1[it]
+                    ) {
+                        itemChange1(list1[it])
                     }
                 }
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = subTitle2,
-                    style = typography.titleSmall,
-                    fontWeight = FontWeight.SemiBold,
-                    color = colors.WHITE
-                )
-                LazyRow(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    items(list2.size) {
-                        AdminBottomSheetButton(
-                            modifier = Modifier.widthIn((componentWidth - 16.dp * list2.lastIndex) / list2.size),
-                            text = list2[it],
-                            selected = bottomSheetSelected2 == list2[it]
-                        ) {
-                            itemChange2(list2[it])
-                        }
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = subTitle2,
+                style = typography.titleSmall,
+                fontWeight = FontWeight.SemiBold,
+                color = colors.WHITE
+            )
+            LazyRow(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                items(list2.size) {
+                    AdminBottomSheetButton(
+                        modifier = Modifier.widthIn((componentWidth - 16.dp * list2.lastIndex) / list2.size),
+                        text = list2[it],
+                        selected = bottomSheetSelected2 == list2[it]
+                    ) {
+                        itemChange2(list2[it])
                     }
                 }
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = subTitle3,
-                    style = typography.titleSmall,
-                    fontWeight = FontWeight.SemiBold,
-                    color = colors.WHITE
-                )
-                LazyRow(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    items(list3.size) {
-                        AdminBottomSheetButton(
-                            modifier = Modifier.widthIn((componentWidth - 16.dp * list3.lastIndex) / list3.size),
-                            text = list3[it],
-                            selected = bottomSheetSelected3 == list3[it]
-                        ) {
-                            itemChange3(list3[it])
-                        }
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = subTitle3,
+                style = typography.titleSmall,
+                fontWeight = FontWeight.SemiBold,
+                color = colors.WHITE
+            )
+            LazyRow(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                items(list3.size) {
+                    AdminBottomSheetButton(
+                        modifier = Modifier.widthIn((componentWidth - 16.dp * list3.lastIndex) / list3.size),
+                        text = list3[it],
+                        selected = bottomSheetSelected3 == list3[it]
+                    ) {
+                        itemChange3(list3[it])
                     }
                 }
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = subTitle4,
-                    style = typography.titleSmall,
-                    fontWeight = FontWeight.SemiBold,
-                    color = colors.WHITE
-                )
-                LazyRow(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    items(list4.size) {
-                        AdminBottomSheetButton(
-                            modifier = Modifier.widthIn((componentWidth - 16.dp * list4.lastIndex) / list4.size),
-                            text = list4[it],
-                            selected = bottomSheetSelected4 == list4[it]
-                        ) {
-                            itemChange4(list4[it])
-                        }
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = subTitle4,
+                style = typography.titleSmall,
+                fontWeight = FontWeight.SemiBold,
+                color = colors.WHITE
+            )
+            LazyRow(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                items(list4.size) {
+                    AdminBottomSheetButton(
+                        modifier = Modifier.widthIn((componentWidth - 16.dp * list4.lastIndex) / list4.size),
+                        text = list4[it],
+                        selected = bottomSheetSelected4 == list4[it]
+                    ) {
+                        itemChange4(list4[it])
                     }
                 }
-                Spacer(modifier = Modifier.height(32.dp))
-                InitBottomSheetButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = "필터 초기화"
-                ) {
-                    bottomSheetSelected1 = ""
-                    bottomSheetSelected2 = ""
-                    bottomSheetSelected3 = ""
-                    bottomSheetSelected4 = ""
-                    initClick()
-                }
+            }
+            Spacer(modifier = Modifier.height(32.dp))
+            InitBottomSheetButton(
+                modifier = Modifier.fillMaxWidth(),
+                text = "필터 초기화"
+            ) {
+                bottomSheetSelected1 = ""
+                bottomSheetSelected2 = ""
+                bottomSheetSelected3 = ""
+                bottomSheetSelected4 = ""
+                initClick()
             }
         }
     }

@@ -34,7 +34,8 @@ import coil.compose.AsyncImage
 import com.goms.design_system.R
 import com.goms.design_system.component.clickable.gomsClickable
 import com.goms.design_system.component.shimmer.shimmerEffect
-import com.goms.design_system.theme.GomsTheme
+import com.goms.design_system.theme.GomsTheme.colors
+import com.goms.design_system.theme.GomsTheme.typography
 import com.goms.main.data.RankData
 import com.goms.main.data.toData
 import com.goms.main.viewmodel.GetLateRankListUiState
@@ -52,71 +53,72 @@ fun MainLateCard(
     var componentWidth by remember { mutableStateOf(0.dp) }
     val density = LocalDensity.current
 
-    GomsTheme { colors, typography ->
-        Surface(
-            modifier = modifier
-                .onGloballyPositioned {
-                    componentWidth = with(density) {
-                        it.size.width.toDp()
-                    }
-                },
-            color = colors.G1,
-            shape = RoundedCornerShape(12.dp),
-            border = BorderStroke(width = 1.dp, color = colors.WHITE.copy(0.15f))
+    Surface(
+        modifier = modifier
+            .onGloballyPositioned {
+                componentWidth = with(density) {
+                    it.size.width.toDp()
+                }
+            },
+        color = colors.G1,
+        shape = RoundedCornerShape(12.dp),
+        border = BorderStroke(width = 1.dp, color = colors.WHITE.copy(0.15f))
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
+                Text(
+                    text = "지각자 TOP 3",
+                    style = typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = colors.WHITE
+                )
+                if (role == Authority.ROLE_STUDENT_COUNCIL) {
                     Text(
-                        text = "지각자 TOP 3",
-                        style = typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = colors.WHITE
+                        modifier = Modifier.gomsClickable { onClick() },
+                        text = "더보기",
+                        style = typography.buttonSmall,
+                        fontWeight = FontWeight.Normal,
+                        color = colors.G7
                     )
-                    if (role == Authority.ROLE_STUDENT_COUNCIL) {
-                        Text(
-                            modifier = Modifier.gomsClickable { onClick() },
-                            text = "더보기",
-                            style = typography.buttonSmall,
-                            fontWeight = FontWeight.Normal,
-                            color = colors.G7
-                        )
+                }
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            when (getLateRankListUiState) {
+                GetLateRankListUiState.Loading -> {
+                    LazyRow(modifier = Modifier.fillMaxWidth()) {
+                        items(3) {
+                            ShimmerMainLateItem(modifier = Modifier.widthIn((componentWidth - 32.dp) / 3))
+                        }
                     }
                 }
-                Spacer(modifier = Modifier.height(16.dp))
-                when (getLateRankListUiState) {
-                    GetLateRankListUiState.Loading -> {
-                        LazyRow(modifier = Modifier.fillMaxWidth()) {
-                            items(3) {
-                                ShimmerMainLateItem(modifier = Modifier.widthIn((componentWidth - 32.dp) / 3))
-                            }
-                        }
-                    }
-                    GetLateRankListUiState.Empty -> {
-                        LateListEmptyText()
-                    }
-                    is GetLateRankListUiState.Success -> {
-                        val list = getLateRankListUiState.getLateRankListResponse
 
-                        LazyRow(modifier = Modifier.fillMaxWidth()) {
-                            items(list.take(3).size) {
-                                MainLateItem(
-                                    modifier = Modifier.widthIn((componentWidth - 32.dp) / 3),
-                                    data = list[it].toData()
-                                )
-                            }
+                GetLateRankListUiState.Empty -> {
+                    LateListEmptyText()
+                }
+
+                is GetLateRankListUiState.Success -> {
+                    val list = getLateRankListUiState.getLateRankListResponse
+
+                    LazyRow(modifier = Modifier.fillMaxWidth()) {
+                        items(list.take(3).size) {
+                            MainLateItem(
+                                modifier = Modifier.widthIn((componentWidth - 32.dp) / 3),
+                                data = list[it].toData()
+                            )
                         }
                     }
-                    is GetLateRankListUiState.Error -> {
-                        onErrorToast(getLateRankListUiState.exception, "지각자 랭킹 정보를 가져오지 못했습니다")
-                    }
+                }
+
+                is GetLateRankListUiState.Error -> {
+                    onErrorToast(getLateRankListUiState.exception, "지각자 랭킹 정보를 가져오지 못했습니다")
                 }
             }
         }
@@ -128,67 +130,63 @@ fun MainLateItem(
     modifier: Modifier = Modifier,
     data: RankData
 ) {
-    GomsTheme { colors, typography ->
-        Column(
-            modifier = modifier.padding(vertical = 16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            if (data.profileUrl.isNullOrEmpty()) {
-                Image(
-                    painter = painterResource(R.drawable.ic_profile),
-                    contentDescription = "Default Profile Image",
-                    modifier = Modifier.size(56.dp)
-                )
-            } else {
-                AsyncImage(
-                    model = data.profileUrl,
-                    modifier = Modifier
-                        .size(56.dp)
-                        .clip(RoundedCornerShape(40.dp)),
-                    contentScale = ContentScale.Crop,
-                    contentDescription = "Profile Image",
-                )
-            }
-            Text(
-                text = data.name,
-                style = typography.textMedium,
-                fontWeight = FontWeight.SemiBold,
-                color = colors.G7
+    Column(
+        modifier = modifier.padding(vertical = 16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        if (data.profileUrl.isNullOrEmpty()) {
+            Image(
+                painter = painterResource(R.drawable.ic_profile),
+                contentDescription = "Default Profile Image",
+                modifier = Modifier.size(56.dp)
             )
-            Text(
-                text = "${data.grade}기 | ${data.major.toText()}",
-                style = typography.caption,
-                fontWeight = FontWeight.Normal,
-                color = colors.G4
+        } else {
+            AsyncImage(
+                model = data.profileUrl,
+                modifier = Modifier
+                    .size(56.dp)
+                    .clip(RoundedCornerShape(40.dp)),
+                contentScale = ContentScale.Crop,
+                contentDescription = "Profile Image",
             )
         }
+        Text(
+            text = data.name,
+            style = typography.textMedium,
+            fontWeight = FontWeight.SemiBold,
+            color = colors.G7
+        )
+        Text(
+            text = "${data.grade}기 | ${data.major.toText()}",
+            style = typography.caption,
+            fontWeight = FontWeight.Normal,
+            color = colors.G4
+        )
     }
 }
 
 @Composable
 fun ShimmerMainLateItem(modifier: Modifier) {
-    GomsTheme { colors, typography ->
-        Column(
-            modifier = modifier.padding(vertical = 16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(56.dp)
-                    .shimmerEffect(color = colors.WHITE)
-            )
-            Box(
-                modifier = Modifier
-                    .size(56.dp, 23.dp)
-                    .shimmerEffect(color = colors.WHITE)
-            )
-            Box(
-                modifier = Modifier
-                    .size(60.dp, 16.dp)
-                    .shimmerEffect(color = colors.WHITE)
-            )
-        }
+    Column(
+        modifier = modifier.padding(vertical = 16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .size(56.dp)
+                .shimmerEffect(color = colors.WHITE)
+        )
+        Box(
+            modifier = Modifier
+                .size(56.dp, 23.dp)
+                .shimmerEffect(color = colors.WHITE)
+        )
+        Box(
+            modifier = Modifier
+                .size(60.dp, 16.dp)
+                .shimmerEffect(color = colors.WHITE)
+        )
     }
 }

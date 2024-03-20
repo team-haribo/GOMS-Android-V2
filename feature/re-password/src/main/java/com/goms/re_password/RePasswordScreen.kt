@@ -30,6 +30,7 @@ import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.button.GomsButton
 import com.goms.design_system.component.textfield.GomsPasswordTextField
 import com.goms.design_system.theme.GomsTheme
+import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.util.keyboardAsState
 import com.goms.re_password.component.RePasswordText
 import com.goms.re_password.viewmodel.RePasswordViewmodel
@@ -71,57 +72,55 @@ fun RePasswordScreen(
         }
     }
 
-    GomsTheme { colors, typography ->
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(colors.BACKGROUND)
+            .statusBarsPadding()
+            .navigationBarsPadding()
+            .imePadding()
+            .pointerInput(Unit) {
+                detectTapGestures {
+                    focusManager.clearFocus()
+                }
+            }
+    ) {
+        GomsBackButton {
+            onBackClick()
+        }
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(colors.BLACK)
-                .statusBarsPadding()
-                .navigationBarsPadding()
-                .imePadding()
-                .pointerInput(Unit) {
-                    detectTapGestures {
-                        focusManager.clearFocus()
-                    }
-                }
+            modifier = Modifier.padding(horizontal = 20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            GomsBackButton {
-                onBackClick()
-            }
-            Column(
-                modifier = Modifier.padding(horizontal = 20.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+            RePasswordText(modifier = Modifier.align(Alignment.Start))
+            Spacer(modifier = Modifier.weight(1.1f))
+            GomsPasswordTextField(
+                modifier = Modifier.fillMaxWidth(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                placeHolder = "비밀번호",
+                setText = password,
+                onValueChange = onPasswordChange,
+                singleLine = true
+            )
+            GomsPasswordTextField(
+                modifier = Modifier.fillMaxWidth(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                placeHolder = "비밀번호 확인",
+                setText = passwordCheck,
+                onValueChange = onPasswordCheckChange,
+                singleLine = true,
+                isDescription = true
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            GomsButton(
+                modifier = Modifier.fillMaxWidth(),
+                text = "완료",
+                state = if (password.isNotBlank() && passwordCheck.isNotBlank()) ButtonState.Normal
+                else ButtonState.Enable
             ) {
-                RePasswordText(modifier = Modifier.align(Alignment.Start))
-                Spacer(modifier = Modifier.weight(1.1f))
-                GomsPasswordTextField(
-                    modifier = Modifier.fillMaxWidth(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                    placeHolder = "비밀번호",
-                    setText = password,
-                    onValueChange = onPasswordChange,
-                    singleLine = true
-                )
-                GomsPasswordTextField(
-                    modifier = Modifier.fillMaxWidth(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                    placeHolder = "비밀번호 확인",
-                    setText = passwordCheck,
-                    onValueChange = onPasswordCheckChange,
-                    singleLine = true,
-                    isDescription = true
-                )
-                Spacer(modifier = Modifier.weight(1f))
-                GomsButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = "완료",
-                    state = if (password.isNotBlank() && passwordCheck.isNotBlank()) ButtonState.Normal
-                    else ButtonState.Enable
-                ) {
-                    onSuccessClick()
-                }
-                Spacer(modifier = Modifier.height(100.dp))
+                onSuccessClick()
             }
+            Spacer(modifier = Modifier.height(100.dp))
         }
     }
 }

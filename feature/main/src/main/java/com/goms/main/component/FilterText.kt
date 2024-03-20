@@ -9,23 +9,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.goms.design_system.component.clickable.gomsClickable
-import com.goms.design_system.theme.GomsTheme
+import com.goms.design_system.theme.GomsTheme.colors
+import com.goms.design_system.theme.GomsTheme.typography
 
 @Composable
 fun FilterText(onFilterTextClick: () -> Unit) {
-    GomsTheme { colors, typography ->
-        Box(
-            modifier = Modifier
-                .height(40.dp)
-                .gomsClickable { onFilterTextClick() }
-        ) {
-            Text(
-                modifier = Modifier.align(Alignment.Center),
-                text = "필터",
-                style = typography.buttonLarge,
-                fontWeight = FontWeight.Normal,
-                color = colors.I5
-            )
-        }
+    Box(
+        modifier = Modifier
+            .height(40.dp)
+            .gomsClickable { onFilterTextClick() }
+    ) {
+        Text(
+            modifier = Modifier.align(Alignment.Center),
+            text = "필터",
+            style = typography.buttonLarge,
+            fontWeight = FontWeight.Normal,
+            color = colors.I5
+        )
     }
 }

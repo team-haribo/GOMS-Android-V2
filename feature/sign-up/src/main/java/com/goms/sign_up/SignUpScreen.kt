@@ -36,6 +36,7 @@ import com.goms.design_system.component.button.GomsButton
 import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
 import com.goms.design_system.component.textfield.GomsTextField
 import com.goms.design_system.theme.GomsTheme
+import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.util.keyboardAsState
 import com.goms.design_system.util.lockScreenOrientation
 import com.goms.model.request.auth.SendNumberRequest
@@ -118,76 +119,74 @@ fun SignUpScreen(
     }
 
     lockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
-    GomsTheme { colors, typography ->
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(colors.BACKGROUND)
+            .statusBarsPadding()
+            .navigationBarsPadding()
+            .pointerInput(Unit) {
+                detectTapGestures {
+                    focusManager.clearFocus()
+                }
+            }
+    ) {
+        GomsBackButton {
+            onBackClick()
+        }
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(colors.BACKGROUND)
-                .statusBarsPadding()
-                .navigationBarsPadding()
-                .pointerInput(Unit) {
-                    detectTapGestures {
-                        focusManager.clearFocus()
-                    }
-                }
+            modifier = Modifier.padding(horizontal = 20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            GomsBackButton {
-                onBackClick()
-            }
-            Column(
-                modifier = Modifier.padding(horizontal = 20.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+            SignUpText(modifier = Modifier.align(Alignment.Start))
+            Spacer(modifier = Modifier.weight(1.1f))
+            GomsTextField(
+                modifier = Modifier.fillMaxWidth(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                placeHolder = "이름",
+                setText = name,
+                onValueChange = onNameChange,
+                isEmail = false,
+                singleLine = true
+            )
+            GomsTextField(
+                modifier = Modifier.fillMaxWidth(),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                placeHolder = "이메일",
+                setText = email,
+                onValueChange = onEmailChange,
+                singleLine = true
+            )
+            SelectGenderDropDown(
+                onSelectGender = onGenderChange
             ) {
-                SignUpText(modifier = Modifier.align(Alignment.Start))
-                Spacer(modifier = Modifier.weight(1.1f))
-                GomsTextField(
-                    modifier = Modifier.fillMaxWidth(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                    placeHolder = "이름",
-                    setText = name,
-                    onValueChange = onNameChange,
-                    isEmail = false,
-                    singleLine = true
-                )
-                GomsTextField(
-                    modifier = Modifier.fillMaxWidth(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                    placeHolder = "이메일",
-                    setText = email,
-                    onValueChange = onEmailChange,
-                    singleLine = true
-                )
-                SelectGenderDropDown(
-                    onSelectGender = onGenderChange
-                ) {
-                    focusManager.clearFocus()
-                }
-                Spacer(modifier = Modifier.height(30.dp))
-                SelectMajorDropDown(
-                    onSelectMajor = onMajorChange
-                ) {
-                    focusManager.clearFocus()
-                }
-                Spacer(modifier = Modifier.weight(1f))
-                GomsButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = "인증번호 받기",
-                    state = if (name.isNotBlank() && email.isNotBlank() && gender.isNotBlank() && major.isNotBlank()) ButtonState.Normal
-                    else ButtonState.Enable
-                ) {
-                    if (!isStrongEmail(email)) {
-                        isLoading = false
-                        onErrorToast(null, "이메일 형식이 올바르지 않습니다")
-                    } else {
-                        signUpCallBack()
-                        isLoading = true
-                    }
-                }
-                Spacer(modifier = Modifier.height(100.dp))
+                focusManager.clearFocus()
             }
+            Spacer(modifier = Modifier.height(30.dp))
+            SelectMajorDropDown(
+                onSelectMajor = onMajorChange
+            ) {
+                focusManager.clearFocus()
+            }
+            Spacer(modifier = Modifier.weight(1f))
+            GomsButton(
+                modifier = Modifier.fillMaxWidth(),
+                text = "인증번호 받기",
+                state = if (name.isNotBlank() && email.isNotBlank() && gender.isNotBlank() && major.isNotBlank()) ButtonState.Normal
+                else ButtonState.Enable
+            ) {
+                if (!isStrongEmail(email)) {
+                    isLoading = false
+                    onErrorToast(null, "이메일 형식이 올바르지 않습니다")
+                } else {
+                    signUpCallBack()
+                    isLoading = true
+                }
+            }
+            Spacer(modifier = Modifier.height(100.dp))
         }
-        if (isLoading) {
-            GomsCircularProgressIndicator()
-        }
+    }
+    if (isLoading) {
+        GomsCircularProgressIndicator()
     }
 }

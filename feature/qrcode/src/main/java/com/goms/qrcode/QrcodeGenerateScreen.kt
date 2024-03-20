@@ -2,11 +2,13 @@ package com.goms.qrcode
 
 import android.content.pm.ActivityInfo
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -18,6 +20,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goms.design_system.component.button.GomsBackButton
+import com.goms.design_system.theme.GomsTheme
+import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.util.lockScreenOrientation
 import com.goms.qrcode.component.QrcodeGenerateText
 import com.goms.qrcode.component.QrcodeGenerateTimer
@@ -64,6 +68,8 @@ fun QrcodeGenerateScreen(
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .background(colors.BACKGROUND)
+            .navigationBarsPadding()
             .statusBarsPadding()
     ) {
         GomsBackButton { onBackClick() }
