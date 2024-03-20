@@ -94,6 +94,19 @@ fun ChevronUpIcon(
 }
 
 @Composable
+fun CheckIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+) {
+    Image(
+        painter = painterResource(id = R.drawable.ic_check),
+        contentDescription = "ChevronRight Icon",
+        modifier = modifier,
+        colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
+    )
+}
+
+@Composable
 fun CloseIcon(
     modifier: Modifier = Modifier,
     tint: Color = Color.Unspecified
