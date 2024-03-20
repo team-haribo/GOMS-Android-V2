@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,16 +30,17 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.goms.common.result.Result
 import com.goms.design_system.component.button.ButtonState
 import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.button.GomsButton
+import com.goms.design_system.component.dialog.GomsOneButtonDialog
 import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
 import com.goms.design_system.component.textfield.GomsPasswordTextField
 import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.util.keyboardAsState
 import com.goms.model.request.account.RePasswordRequest
 import com.goms.re_password.component.RePasswordText
+import com.goms.re_password.viewmodel.RePasswordUiState
 import com.goms.re_password.viewmodel.RePasswordViewmodel
 import com.goms.ui.isStrongPassword
 
@@ -51,26 +53,17 @@ fun RePasswordRoute(
 ) {
     val rePasswordUiState by viewModel.rePasswordUiState.collectAsStateWithLifecycle()
     val password by viewModel.password.collectAsStateWithLifecycle()
-    val checkPassword by viewModel.email.collectAsStateWithLifecycle()
-
-    when (rePasswordUiState) {
-        is Result.Loading -> Unit
-        is Result.Success -> {
-            viewModel.initRePassword()
-        }
-        is Result.Error -> {
-            onErrorToast((rePasswordUiState as Result.Error).exception, "비밀번호 변경이 실패했습니다")
-        }
-    }
+    val passwordCheck by viewModel.passwordCheck.collectAsStateWithLifecycle()
 
     RePasswordScreen(
         password = password,
-        passwordCheck = checkPassword,
+        passwordCheck = passwordCheck,
         onPasswordChange = viewModel::onPasswordChange,
         onPasswordCheckChange = viewModel::onCheckPasswordChange,
         onSuccessClick = onSuccessClick,
         onBackClick = onBackClick,
         onErrorToast = onErrorToast,
+        rePasswordUiState = rePasswordUiState,
         rePasswordCallback = {
             viewModel.rePassword(
                 body = RePasswordRequest(
@@ -91,6 +84,7 @@ fun RePasswordScreen(
     onSuccessClick: () -> Unit,
     onBackClick: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
+    rePasswordUiState: RePasswordUiState,
     rePasswordCallback: () -> Unit
 ) {
     val focusManager = LocalFocusManager.current
@@ -99,11 +93,27 @@ fun RePasswordScreen(
     var isLoading by remember { mutableStateOf(false) }
     var isError by remember { mutableStateOf(false) }
     var errorText by remember { mutableStateOf("") }
+    var openDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(isKeyboardOpen) {
         if (!isKeyboardOpen) {
             focusManager.clearFocus()
         }
+    }
+
+    DisposableEffect(rePasswordUiState) {
+        when (rePasswordUiState) {
+            is RePasswordUiState.Loading -> Unit
+            is RePasswordUiState.Success -> {
+                openDialog = true
+                isLoading = false
+            }
+            is RePasswordUiState.Error -> {
+                isLoading = false
+                onErrorToast(rePasswordUiState.exception, "비밀번호 재설정이 실패했습니다")
+            }
+        }
+        onDispose { }
     }
 
     GomsTheme { colors, typography ->
@@ -131,7 +141,9 @@ fun RePasswordScreen(
                 Spacer(modifier = Modifier.weight(1.1f))
                 GomsPasswordTextField(
                     modifier = Modifier.fillMaxWidth(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                    isError = isError,
+                    isDescription = false,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                     placeHolder = "비밀번호",
                     setText = password,
                     onValueChange = onPasswordChange,
@@ -139,13 +151,14 @@ fun RePasswordScreen(
                 )
                 GomsPasswordTextField(
                     modifier = Modifier.fillMaxWidth(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                    isDescription = true,
+                    isError = isError,
                     errorText = errorText,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                     placeHolder = "비밀번호 확인",
                     setText = passwordCheck,
                     onValueChange = onPasswordCheckChange,
-                    singleLine = true,
-                    isDescription = true
+                    singleLine = true
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 GomsButton(
@@ -172,6 +185,18 @@ fun RePasswordScreen(
         }
         if (isLoading) {
             GomsCircularProgressIndicator()
+        }
+        if (openDialog) {
+            GomsOneButtonDialog(
+                openDialog = openDialog,
+                onStateChange = {
+                    openDialog = it
+                },
+                title = "재설정 완료",
+                content = "로그인 화면으로 돌아갑니다.",
+                buttonText = "확인",
+                onClick = onSuccessClick
+            )
         }
     }
 }
