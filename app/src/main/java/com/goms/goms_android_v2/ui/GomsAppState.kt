@@ -20,7 +20,7 @@ import com.goms.main.navigation.navigateToMain
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
-fun rememberBitgoeulAppState(
+fun rememberGomsAppState(
     windowSizeClass: WindowSizeClass,
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     navController: NavHostController = rememberNavController()
