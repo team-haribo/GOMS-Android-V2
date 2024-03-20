@@ -85,16 +85,16 @@ fun GomsDropdown(
             Text(
                 text = dropdownList[selectedIndex],
                 style = typography.textMedium,
-                color = colors.G7,
+                color =  if (showDropdown != null && showDropdown == true) colors.WHITE else colors.G7,
                 fontWeight = FontWeight.Normal
             )
             if (showDropdown != null && showDropdown == true) {
                 ChevronDownIcon(
-                    tint = colors.G7
+                    tint = if (showDropdown != null && showDropdown == true) colors.WHITE else colors.G7,
                 )
             } else {
                 ChevronUpIcon(
-                    tint = colors.G7
+                    tint = if (showDropdown != null && showDropdown == true) colors.WHITE else colors.G7,
                 )
             }
         }
