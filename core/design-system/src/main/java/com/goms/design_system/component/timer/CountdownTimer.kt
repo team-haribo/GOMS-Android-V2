@@ -17,6 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.goms.design_system.component.clickable.gomsClickable
 import com.goms.design_system.theme.GomsTheme
+import com.goms.design_system.theme.GomsTheme.colors
+import com.goms.design_system.theme.GomsTheme.typography
 import kotlinx.coroutines.delay
 import java.util.concurrent.TimeUnit
 
@@ -38,38 +40,36 @@ fun CountdownTimer(
         onTimerFinish()
     }
 
-    GomsTheme { colors, typography ->
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(32.dp)
-                .padding(horizontal = 8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            if (isError) {
-                Text(
-                    text = errorText,
-                    color = colors.N5,
-                    style = typography.buttonLarge
-                )
-            } else {
-                Text(
-                    text = formatTime(remainingTime.toLong()),
-                    color = colors.G4,
-                    style = typography.buttonLarge
-                )
-            }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(32.dp)
+            .padding(horizontal = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        if (isError) {
             Text(
-                modifier = Modifier.gomsClickable {
-                    remainingTime = 5 * 60
-                    onTimerReset()
-                },
-                text = "재발송",
-                color = colors.I5,
+                text = errorText,
+                color = colors.N5,
+                style = typography.buttonLarge
+            )
+        } else {
+            Text(
+                text = formatTime(remainingTime.toLong()),
+                color = colors.G4,
                 style = typography.buttonLarge
             )
         }
+        Text(
+            modifier = Modifier.gomsClickable {
+                remainingTime = 5 * 60
+                onTimerReset()
+            },
+            text = "재발송",
+            color = colors.I5,
+            style = typography.buttonLarge
+        )
     }
 }
 

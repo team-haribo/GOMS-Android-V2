@@ -1,6 +1,5 @@
 package com.goms.setting.component
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,6 +15,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.goms.design_system.component.button.GomsSwitchButton
 import com.goms.design_system.theme.GomsTheme
+import com.goms.design_system.theme.GomsTheme.colors
+import com.goms.design_system.theme.GomsTheme.typography
 
 @Composable
 fun SettingSwitchComponent(
@@ -27,38 +28,36 @@ fun SettingSwitchComponent(
     onFunctionOff: () -> Unit,
     onFunctionOn: () -> Unit
 ) {
-    GomsTheme { colors, typography ->
-        Row(
-            modifier = modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Column(
+            horizontalAlignment = Alignment.Start
         ) {
-            Column(
-                horizontalAlignment = Alignment.Start
-            ) {
-                Text(
-                    text = title,
-                    style = typography.textMedium,
-                    color = colors.WHITE,
-                    fontWeight = FontWeight.SemiBold
-                )
-                Text(
-                    text = detail,
-                    style = typography.caption,
-                    color = colors.G4,
-                    fontWeight = FontWeight.Normal
-                )
-            }
-            GomsSwitchButton(
-                stateOn = 1,
-                stateOff = 0,
-                switchOnBackground = switchOnBackground,
-                switchOffBackground = switchOffBackground,
-                initialValue = 0,
-                onCheckedChanged = {
-                    if(it) onFunctionOn() else onFunctionOff()
-                }
+            Text(
+                text = title,
+                style = typography.textMedium,
+                color = colors.WHITE,
+                fontWeight = FontWeight.SemiBold
+            )
+            Text(
+                text = detail,
+                style = typography.caption,
+                color = colors.G4,
+                fontWeight = FontWeight.Normal
             )
         }
+        GomsSwitchButton(
+            stateOn = 1,
+            stateOff = 0,
+            switchOnBackground = switchOnBackground,
+            switchOffBackground = switchOffBackground,
+            initialValue = 0,
+            onCheckedChanged = {
+                if (it) onFunctionOn() else onFunctionOff()
+            }
+        )
     }
 }
 

@@ -24,6 +24,8 @@ import com.goms.design_system.icon.GomsTextIcon
 import com.goms.design_system.icon.PersonIcon
 import com.goms.design_system.icon.SettingIcon
 import com.goms.design_system.theme.GomsTheme
+import com.goms.design_system.theme.GomsTheme.colors
+import com.goms.design_system.theme.GomsTheme.typography
 import com.goms.model.enum.Authority
 
 @Composable
@@ -34,65 +36,67 @@ fun GomsTopBar(
     onSettingClick: () -> Unit,
     onAdminClick: () -> Unit
 ) {
-    GomsTheme { colors, typography ->
-        Row(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(end = 6.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            GomsTextIcon(tint = if (role == Authority.ROLE_STUDENT) colors.P5 else colors.A7)
-            Spacer(modifier = Modifier.weight(1f))
-            if (role == Authority.ROLE_STUDENT_COUNCIL) {
-                Box(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(40.dp))
-                        .gomsClickable(
-                            isIndication = true,
-                            rippleColor = colors.G7.copy(0.5f)
-                        ) {
-                            onAdminClick()
-                        }
-                ) {
-                    Row(
-                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 5.dp),
-                        horizontalArrangement = Arrangement.End
-                    ) {
-                        PersonIcon(tint = colors.G7)
-                        Text(
-                            text = "학생 관리",
-                            style = typography.buttonSmall,
-                            fontWeight = FontWeight.SemiBold,
-                            color = colors.G7
-                        )
-                    }
-                }
-            }
-            Spacer(modifier = Modifier.width(32.dp))
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(end = 6.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        GomsTextIcon(tint = if (role == Authority.ROLE_STUDENT) colors.P5 else colors.A7)
+        Spacer(modifier = Modifier.weight(1f))
+        if (role == Authority.ROLE_STUDENT_COUNCIL) {
             Box(
                 modifier = Modifier
-                    .size(40.dp)
-                    .clip(CircleShape)
+                    .clip(RoundedCornerShape(40.dp))
                     .gomsClickable(
                         isIndication = true,
                         rippleColor = colors.G7.copy(0.5f)
                     ) {
-                        onSettingClick()
-                    },
-                contentAlignment = Alignment.Center
+                        onAdminClick()
+                    }
             ) {
-                icon()
+                Row(
+                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 5.dp),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    PersonIcon(tint = colors.G7)
+                    Text(
+                        text = "학생 관리",
+                        style = typography.buttonSmall,
+                        fontWeight = FontWeight.SemiBold,
+                        color = colors.G7
+                    )
+                }
             }
+        }
+        Spacer(modifier = Modifier.width(32.dp))
+        Box(
+            modifier = Modifier
+                .size(40.dp)
+                .clip(CircleShape)
+                .gomsClickable(
+                    isIndication = true,
+                    rippleColor = colors.G7.copy(0.5f)
+                ) {
+                    onSettingClick()
+                },
+            contentAlignment = Alignment.Center
+        ) {
+            icon()
         }
     }
 }
+
 
 @Composable
 @Preview(showBackground = true)
 fun GomsTopBarPreview() {
     Column {
         GomsTopBar(role = Authority.ROLE_STUDENT, icon = { SettingIcon() }, onSettingClick = {}) {}
-        GomsTopBar(role = Authority.ROLE_STUDENT_COUNCIL, icon = { SettingIcon() }, onSettingClick = {}) {}
+        GomsTopBar(
+            role = Authority.ROLE_STUDENT_COUNCIL,
+            icon = { SettingIcon() },
+            onSettingClick = {}) {}
     }
 }

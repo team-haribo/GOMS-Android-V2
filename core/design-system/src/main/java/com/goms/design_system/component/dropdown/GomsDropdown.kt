@@ -34,6 +34,8 @@ import com.goms.design_system.component.clickable.gomsClickable
 import com.goms.design_system.icon.ChevronDownIcon
 import com.goms.design_system.icon.ChevronUpIcon
 import com.goms.design_system.theme.GomsTheme
+import com.goms.design_system.theme.GomsTheme.colors
+import com.goms.design_system.theme.GomsTheme.typography
 import kotlinx.collections.immutable.PersistentList
 
 @Composable
@@ -51,130 +53,128 @@ fun GomsDropdown(
     var showDropdown: Boolean? by rememberSaveable { mutableStateOf(false) }
     var dropdownType: Boolean? by remember { mutableStateOf(null) }
 
-    GomsTheme { colors, typography ->
-        Column(
-            modifier = Modifier,
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(64.dp)
-                    .border(
-                        BorderStroke(
-                            width = 1.dp,
-                            color = colors.WHITE.copy(0.15f)
-                        ),
-                        shape = RoundedCornerShape(12.dp)
-                    )
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(colors.G1)
-                    .padding(12.dp)
-                    .gomsClickable(
-                        interval = 10L
-                    ) {
-                        if (showDropdown != null && showDropdown == false) showDropdown = true
-                        if (showDropdown == null) showDropdown = false
-                        onClick()
-                    },
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = dropdownList[selectedIndex],
-                    style = typography.textMedium,
-                    color = colors.G7,
-                    fontWeight = FontWeight.Normal
+    Column(
+        modifier = Modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(64.dp)
+                .border(
+                    BorderStroke(
+                        width = 1.dp,
+                        color = colors.WHITE.copy(0.15f)
+                    ),
+                    shape = RoundedCornerShape(12.dp)
                 )
-                if (showDropdown != null && showDropdown == true) {
-                    ChevronDownIcon(
-                        tint = colors.G7
-                    )
-                } else {
-                    ChevronUpIcon(
-                        tint = colors.G7
-                    )
-                }
+                .clip(RoundedCornerShape(12.dp))
+                .background(colors.G1)
+                .padding(12.dp)
+                .gomsClickable(
+                    interval = 10L
+                ) {
+                    if (showDropdown != null && showDropdown == false) showDropdown = true
+                    if (showDropdown == null) showDropdown = false
+                    onClick()
+                },
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = dropdownList[selectedIndex],
+                style = typography.textMedium,
+                color = colors.G7,
+                fontWeight = FontWeight.Normal
+            )
+            if (showDropdown != null && showDropdown == true) {
+                ChevronDownIcon(
+                    tint = colors.G7
+                )
+            } else {
+                ChevronUpIcon(
+                    tint = colors.G7
+                )
             }
         }
-        Spacer(modifier = Modifier.height(8.dp))
-        Box() {
-            if (showDropdown != null && showDropdown == true) {
-                Popup(
-                    alignment = Alignment.TopCenter,
-                    properties = PopupProperties(
-                        excludeFromSystemGesture = true,
-                    ),
-                    onDismissRequest = { showDropdown = null }
+    }
+    Spacer(modifier = Modifier.height(8.dp))
+    Box() {
+        if (showDropdown != null && showDropdown == true) {
+            Popup(
+                alignment = Alignment.TopCenter,
+                properties = PopupProperties(
+                    excludeFromSystemGesture = true,
+                ),
+                onDismissRequest = { showDropdown = null }
+            ) {
+                Column(
+                    modifier = modifier
+                        .background(Color.Transparent)
+                        .verticalScroll(state = scrollState),
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    Column(
-                        modifier = modifier
-                            .background(Color.Transparent)
-                            .verticalScroll(state = scrollState),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                    ) {
-                        dropdownList.onEachIndexed { index, item ->
-                            dropdownType = when (index) {
-                                0 -> true
-                                dropdownListSize - 1 -> false
-                                else -> null
-                            }
+                    dropdownList.onEachIndexed { index, item ->
+                        dropdownType = when (index) {
+                            0 -> true
+                            dropdownListSize - 1 -> false
+                            else -> null
+                        }
 
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(height)
-                                    .border(
-                                        BorderStroke(
-                                            width = 1.dp,
-                                            color = colors.WHITE.copy(0.15f)
-                                        ),
-                                        shape =
-                                        when (dropdownType) {
-                                            true -> RoundedCornerShape(
-                                                topStart = 12.dp,
-                                                topEnd = 12.dp
-                                            )
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(height)
+                                .border(
+                                    BorderStroke(
+                                        width = 1.dp,
+                                        color = colors.WHITE.copy(0.15f)
+                                    ),
+                                    shape =
+                                    when (dropdownType) {
+                                        true -> RoundedCornerShape(
+                                            topStart = 12.dp,
+                                            topEnd = 12.dp
+                                        )
 
-                                            false -> RoundedCornerShape(
-                                                bottomStart = 12.dp,
-                                                bottomEnd = 12.dp
-                                            )
+                                        false -> RoundedCornerShape(
+                                            bottomStart = 12.dp,
+                                            bottomEnd = 12.dp
+                                        )
 
-                                            else -> RoundedCornerShape(0.dp)
-                                        }
-                                    )
-                                    .clip(
-                                        when (dropdownType) {
-                                            true -> RoundedCornerShape(
-                                                topStart = 12.dp,
-                                                topEnd = 12.dp
-                                            )
-
-                                            false -> RoundedCornerShape(
-                                                bottomStart = 12.dp,
-                                                bottomEnd = 12.dp
-                                            )
-
-                                            else -> RoundedCornerShape(0.dp)
-                                        }
-                                    )
-                                    .background(backgroundColor)
-                                    .padding(12.dp)
-                                    .gomsClickable {
-                                        onItemClick(index)
-                                        showDropdown = !showDropdown!!
-                                    },
-                                contentAlignment = Alignment.CenterStart
-                            ) {
-                                Text(
-                                    text = item,
-                                    style = typography.textMedium,
-                                    color = colors.WHITE,
-                                    fontWeight = FontWeight.Normal
+                                        else -> RoundedCornerShape(0.dp)
+                                    }
                                 )
-                            }
+                                .clip(
+                                    when (dropdownType) {
+                                        true -> RoundedCornerShape(
+                                            topStart = 12.dp,
+                                            topEnd = 12.dp
+                                        )
+
+                                        false -> RoundedCornerShape(
+                                            bottomStart = 12.dp,
+                                            bottomEnd = 12.dp
+                                        )
+
+                                        else -> RoundedCornerShape(0.dp)
+                                    }
+                                )
+                                .background(backgroundColor)
+                                .padding(12.dp)
+                                .gomsClickable {
+                                    onItemClick(index)
+                                    showDropdown = !showDropdown!!
+                                },
+                            contentAlignment = Alignment.CenterStart
+                        ) {
+                            Text(
+                                text = item,
+                                style = typography.textMedium,
+                                color = colors.WHITE,
+                                fontWeight = FontWeight.Normal
+                            )
                         }
                     }
                 }
@@ -182,3 +182,4 @@ fun GomsDropdown(
         }
     }
 }
+

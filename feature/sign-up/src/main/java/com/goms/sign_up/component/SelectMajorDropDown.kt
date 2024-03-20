@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.goms.design_system.component.dropdown.GomsDropdown
 import com.goms.design_system.theme.GomsTheme
+import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.model.enum.Major
 import kotlinx.collections.immutable.toPersistentList
 
@@ -18,21 +19,20 @@ fun SelectMajorDropDown(
     onSelectMajor: (String) -> Unit,
     onClick: () -> Unit
 ) {
-    val dropdownList = listOf(Major.SW_DEVELOP.fullName, Major.SMART_IOT.fullName, Major.AI.fullName)
+    val dropdownList =
+        listOf(Major.SW_DEVELOP.fullName, Major.SMART_IOT.fullName, Major.AI.fullName)
     var selectedIndex by rememberSaveable { mutableIntStateOf(0) }
 
-    GomsTheme { colors, typography ->
-        GomsDropdown(
-            dropdownList = dropdownList.toPersistentList(),
-            dropdownListSize = dropdownList.size,
-            selectedIndex = selectedIndex,
-            modifier = Modifier.padding(horizontal = 20.dp),
-            backgroundColor = colors.G1,
-            onClick = onClick,
-            onItemClick = {
-                selectedIndex = it
-                onSelectMajor(dropdownList[selectedIndex])
-            }
-        )
-    }
+    GomsDropdown(
+        dropdownList = dropdownList.toPersistentList(),
+        dropdownListSize = dropdownList.size,
+        selectedIndex = selectedIndex,
+        modifier = Modifier.padding(horizontal = 20.dp),
+        backgroundColor = colors.G1,
+        onClick = onClick,
+        onItemClick = {
+            selectedIndex = it
+            onSelectMajor(dropdownList[selectedIndex])
+        }
+    )
 }

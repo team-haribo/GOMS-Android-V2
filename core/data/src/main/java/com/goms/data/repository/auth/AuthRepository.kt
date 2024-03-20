@@ -15,6 +15,10 @@ interface AuthRepository {
 
     fun getRole(): Flow<String>
 
+    suspend fun setRole(role: String)
+
+    suspend fun deleteToken()
+
     suspend fun sendNumber(body: SendNumberRequest): Flow<Unit>
 
     suspend fun verifyNumber(email: String, authCode: String): Flow<Unit>

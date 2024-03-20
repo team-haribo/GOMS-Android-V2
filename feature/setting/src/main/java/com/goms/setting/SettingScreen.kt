@@ -31,6 +31,7 @@ import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.button.GomsButton
 import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
 import com.goms.design_system.theme.GomsTheme
+import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.model.enum.Authority
 import com.goms.setting.component.SettingProfileCard
 import com.goms.setting.component.PasswordChangeButton
@@ -115,7 +116,7 @@ fun SettingScreen(
         }
 
         is LogoutUiState.Error -> {
-            onErrorToast(logoutUiState.exception, "로그아웃에 실패 했습니다.")
+            onErrorToast(logoutUiState.exception, "로그아웃에 실패 했습니다")
         }
     }
 
@@ -134,75 +135,74 @@ fun SettingScreen(
         }
     }
 
-    GomsTheme { colors, typography ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(colors.BLACK)
-                .statusBarsPadding(),
-        ) {
-            GomsBackButton { onBackClick() }
-            Spacer(modifier = Modifier.height(16.dp))
-            SettingProfileCard(
-                modifier = Modifier.padding(horizontal = 20.dp),
-                onProfileClick = onProfileClick,
-                getProfileUiState = getProfileUiState
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(colors.BACKGROUND)
+            .navigationBarsPadding()
+            .statusBarsPadding(),
+    ) {
+        GomsBackButton { onBackClick() }
+        Spacer(modifier = Modifier.height(16.dp))
+        SettingProfileCard(
+            modifier = Modifier.padding(horizontal = 20.dp),
+            onProfileClick = onProfileClick,
+            getProfileUiState = getProfileUiState
+        )
+        Spacer(modifier = Modifier.height(32.dp))
+        PasswordChangeButton(modifier = Modifier.padding(horizontal = 20.dp)) {
+            onEmailCheck()
+        }
+        Spacer(modifier = Modifier.height(24.dp))
+        SelectThemeDropDown(modifier = Modifier.padding(horizontal = 20.dp))
+        Spacer(modifier = Modifier.height(24.dp))
+        if (role == Authority.ROLE_STUDENT.name) {
+            SettingSwitchComponent(
+                modifier = Modifier.padding(horizontal = 28.dp),
+                title = "외출제 푸시 알림",
+                detail = "외출할 시간이 될 때마다 알려드려요",
+                switchOnBackground = colors.P5,
+                switchOffBackground = colors.G4,
+                onFunctionOff = { Log.d("testt", "off1") },
+                onFunctionOn = { Log.d("testt", "on1") }
             )
             Spacer(modifier = Modifier.height(32.dp))
-            PasswordChangeButton(modifier = Modifier.padding(horizontal = 20.dp)) {
-                onEmailCheck()
-            }
-            Spacer(modifier = Modifier.height(24.dp))
-            SelectThemeDropDown(modifier = Modifier.padding(horizontal = 20.dp))
-            Spacer(modifier = Modifier.height(24.dp))
-            if (role == Authority.ROLE_STUDENT.name) {
-                SettingSwitchComponent(
-                    modifier = Modifier.padding(horizontal = 28.dp),
-                    title = "외출제 푸시 알림",
-                    detail = "외출할 시간이 될 때마다 알려드려요",
-                    switchOnBackground = colors.P5,
-                    switchOffBackground = colors.G4,
-                    onFunctionOff = { Log.d("testt", "off1") },
-                    onFunctionOn = { Log.d("testt", "on1") }
-                )
-                Spacer(modifier = Modifier.height(32.dp))
-                SettingSwitchComponent(
-                    modifier = Modifier.padding(horizontal = 28.dp),
-                    title = "카메라 바로 켜기",
-                    detail = "앱을 실행하면 즉시 카메라가 켜져요",
-                    switchOnBackground = colors.P5,
-                    switchOffBackground = colors.G4,
-                    onFunctionOff = { },
-                    onFunctionOn = { }
-                )
-            } else {
-                SettingSwitchComponent(
-                    modifier = Modifier.padding(horizontal = 28.dp),
-                    title = "Qr 생성 바로 켜기",
-                    detail = "앱을 실행하면 즉시 Qr코드를 생성해요",
-                    switchOnBackground = colors.A7,
-                    switchOffBackground = colors.G4,
-                    onFunctionOff = { },
-                    onFunctionOn = { }
-                )
-            }
-        }
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(start = 20.dp, end = 20.dp, bottom = 40.dp)
-                .navigationBarsPadding(),
-            contentAlignment = Alignment.BottomCenter
-        ) {
-            GomsButton(
-                modifier = Modifier.fillMaxWidth(),
-                text = "로그아웃",
-                state = ButtonState.Logout,
-                onClick = onLogoutClick
+            SettingSwitchComponent(
+                modifier = Modifier.padding(horizontal = 28.dp),
+                title = "카메라 바로 켜기",
+                detail = "앱을 실행하면 즉시 카메라가 켜져요",
+                switchOnBackground = colors.P5,
+                switchOffBackground = colors.G4,
+                onFunctionOff = { },
+                onFunctionOn = { }
+            )
+        } else {
+            SettingSwitchComponent(
+                modifier = Modifier.padding(horizontal = 28.dp),
+                title = "Qr 생성 바로 켜기",
+                detail = "앱을 실행하면 즉시 Qr코드를 생성해요",
+                switchOnBackground = colors.A7,
+                switchOffBackground = colors.G4,
+                onFunctionOff = { },
+                onFunctionOn = { }
             )
         }
-        if (isLoading) {
-            GomsCircularProgressIndicator()
-        }
+    }
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(start = 20.dp, end = 20.dp, bottom = 40.dp)
+            .navigationBarsPadding(),
+        contentAlignment = Alignment.BottomCenter
+    ) {
+        GomsButton(
+            modifier = Modifier.fillMaxWidth(),
+            text = "로그아웃",
+            state = ButtonState.Logout,
+            onClick = onLogoutClick
+        )
+    }
+    if (isLoading) {
+        GomsCircularProgressIndicator()
     }
 }

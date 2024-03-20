@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -80,23 +81,22 @@ fun QrcodeScanScreen(
 ) {
     var openDialog by remember { mutableStateOf(false) }
 
-    GomsTheme { _, _ ->
-        QrcodeScanPreview(
-            context = LocalContext.current,
-            onQrcodeScan = { qrcodeData ->
-                onQrcodeScan(qrcodeData)
-            }
-        )
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .statusBarsPadding(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            QrcodeScanTopBar(onClick = onBackClick)
-            Spacer(modifier = Modifier.height(224.dp))
-            QrcodeScanGuide()
+
+    QrcodeScanPreview(
+        onQrcodeScan = { qrcodeData ->
+            onQrcodeScan(qrcodeData)
         }
+    )
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .navigationBarsPadding()
+            .statusBarsPadding(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        QrcodeScanTopBar(onClick = onBackClick)
+        Spacer(modifier = Modifier.height(224.dp))
+        QrcodeScanGuide()
     }
 
     Log.d("outinguistate", outingUiState.toString())
@@ -108,13 +108,14 @@ fun QrcodeScanScreen(
             onError()
             onErrorToast(null, "외출 금지 상태이거나, 유효하지 않은 QR코드입니다")
         }
+
         is OutingUiState.Error -> {
             onError()
             onErrorToast(outingUiState.exception, null)
         }
     }
 
-    if(openDialog) {
+    if (openDialog) {
         GomsOneButtonDialog(
             openDialog = openDialog,
             onStateChange = {

@@ -35,6 +35,18 @@ class AuthRepositoryImpl @Inject constructor(
         return localAuthDataSource.getAuthority()
     }
 
+    override suspend fun setRole(role: String) {
+        role.let { localAuthDataSource.setAuthority(it) }
+    }
+
+    override suspend fun deleteToken() {
+        localAuthDataSource.removeAccessToken()
+        localAuthDataSource.removeRefreshToken()
+        localAuthDataSource.removeAccessTokenExp()
+        localAuthDataSource.removeRefreshTokenExp()
+        localAuthDataSource.removeAuthority()
+    }
+
     override suspend fun sendNumber(body: SendNumberRequest): Flow<Unit> {
         return remoteAuthDataSource.sendNumber(body = body)
     }

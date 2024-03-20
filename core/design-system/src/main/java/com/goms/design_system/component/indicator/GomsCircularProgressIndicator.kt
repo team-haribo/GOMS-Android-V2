@@ -24,50 +24,51 @@ import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.unit.dp
 import com.goms.design_system.component.clickable.gomsClickable
 import com.goms.design_system.theme.GomsTheme
+import com.goms.design_system.theme.GomsTheme.colors
 
 @Composable
 fun GomsCircularProgressIndicator() {
-    GomsTheme { colors, typography ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Black.copy(alpha = 0.45f))
-                .gomsClickable {},
-            contentAlignment = Alignment.Center
-        ) {
-            val transition = rememberInfiniteTransition()
-            val translateAnimation by transition.animateFloat(
-                initialValue = 360f,
-                targetValue = 0f,
-                animationSpec = infiniteRepeatable(
-                    animation = tween(
-                        durationMillis = 1000,
-                        easing = LinearEasing
-                    ),
-                    repeatMode = RepeatMode.Restart
-                )
+    val colorsList = listOf(
+        colors.P5,
+        colors.P5.copy(alpha = 0f)
+    )
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black.copy(alpha = 0.45f))
+            .gomsClickable {},
+        contentAlignment = Alignment.Center
+    ) {
+        val transition = rememberInfiniteTransition()
+        val translateAnimation by transition.animateFloat(
+            initialValue = 360f,
+            targetValue = 0f,
+            animationSpec = infiniteRepeatable(
+                animation = tween(
+                    durationMillis = 1000,
+                    easing = LinearEasing
+                ),
+                repeatMode = RepeatMode.Restart
             )
+        )
 
-            Canvas(modifier = Modifier.size(size = 60.dp)) {
-                val startAngle = 5f
-                val sweepAngle = 350f
+        Canvas(modifier = Modifier.size(size = 60.dp)) {
+            val startAngle = 5f
+            val sweepAngle = 350f
 
-                rotate(translateAnimation) {
-                    drawArc(
-                        brush = Brush.sweepGradient(
-                            colors = listOf(
-                                colors.P5,
-                                colors.P5.copy(0f)
-                            ),
-                            center = Offset(size.width / 2f, size.height / 2f)
-                        ),
-                        startAngle = startAngle,
-                        sweepAngle = sweepAngle,
-                        useCenter = false,
-                        topLeft = Offset(6 / 2f, 6 / 2f),
-                        style = Stroke(width = 6.dp.toPx(), cap = StrokeCap.Round),
-                    )
-                }
+            rotate(translateAnimation) {
+                drawArc(
+                    brush = Brush.sweepGradient(
+                        colors = colorsList,
+                        center = Offset(size.width / 2f, size.height / 2f)
+                    ),
+                    startAngle = startAngle,
+                    sweepAngle = sweepAngle,
+                    useCenter = false,
+                    topLeft = Offset(6 / 2f, 6 / 2f),
+                    style = Stroke(width = 6.dp.toPx(), cap = StrokeCap.Round),
+                )
             }
         }
     }

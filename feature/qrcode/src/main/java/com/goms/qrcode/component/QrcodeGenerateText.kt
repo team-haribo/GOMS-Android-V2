@@ -8,20 +8,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.goms.design_system.theme.GomsTheme
+import com.goms.design_system.theme.GomsTheme.colors
+import com.goms.design_system.theme.GomsTheme.typography
 
 @Composable
 fun QrcodeGenerateText(
     modifier: Modifier
 ) {
-    GomsTheme { colors, typography ->
-        Box(
-            modifier = modifier.padding(20.dp)
-        ) {
-            Text(
-                text = "외출 QR코드",
-                style = typography.titleLarge,
-                fontWeight = FontWeight.Bold
-            )
-        }
+    Box(
+        modifier = modifier.padding(20.dp)
+    ) {
+        Text(
+            text = "외출 QR코드",
+            style = typography.titleLarge,
+            color = colors.WHITE,
+            fontWeight = FontWeight.Bold
+        )
     }
 }

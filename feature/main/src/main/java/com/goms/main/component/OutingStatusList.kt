@@ -29,7 +29,8 @@ import coil.compose.AsyncImage
 import com.goms.design_system.R
 import com.goms.design_system.component.shimmer.shimmerEffect
 import com.goms.design_system.icon.DeleteIcon
-import com.goms.design_system.theme.GomsTheme
+import com.goms.design_system.theme.GomsTheme.colors
+import com.goms.design_system.theme.GomsTheme.typography
 import com.goms.design_system.util.formatTime
 import com.goms.main.data.OutingData
 import com.goms.main.data.toData
@@ -56,9 +57,11 @@ fun OutingStatusList(
         GetOutingCountUiState.Loading -> {
             ShimmerOutingStatusListComponent(modifier = modifier)
         }
+
         is GetOutingCountUiState.Error -> {
             onErrorToast(getOutingCountUiState.exception, "외출학생 숫자를 가져오지 못했습니다")
         }
+
         GetOutingCountUiState.Empty -> {
             Column(
                 modifier = Modifier
@@ -68,22 +71,27 @@ fun OutingStatusList(
                 OutingListEmptyText()
             }
         }
+
         is GetOutingCountUiState.Success -> {
             when (outingSearchUiState) {
                 OutingSearchUiState.Loading -> {
                     ShimmerOutingStatusListComponent(modifier = modifier)
                 }
+
                 is OutingSearchUiState.Error -> {
                     onErrorToast(outingSearchUiState.exception, "외출자 검색이 실패했습니다")
                 }
+
                 OutingSearchUiState.QueryEmpty -> {
                     when (getOutingListUiState) {
                         GetOutingListUiState.Loading -> {
                             ShimmerOutingStatusListComponent(modifier = modifier)
                         }
+
                         is GetOutingListUiState.Error -> {
                             onErrorToast(getOutingListUiState.exception, "외출자 정보를 가져오지 못했습니다")
                         }
+
                         is GetOutingListUiState.Success -> {
                             val list = getOutingListUiState.getOutingListResponse
 
@@ -96,6 +104,7 @@ fun OutingStatusList(
                         }
                     }
                 }
+
                 OutingSearchUiState.Empty -> {
                     Column(
                         modifier = Modifier.fillMaxWidth(),
@@ -109,6 +118,7 @@ fun OutingStatusList(
                         SearchEmptyText()
                     }
                 }
+
                 is OutingSearchUiState.Success -> {
                     val list = outingSearchUiState.outingSearchResponse
 
@@ -131,34 +141,33 @@ fun OutingStatusListComponent(
     list: PersistentList<OutingData>,
     onClick: (UUID) -> Unit
 ) {
-    GomsTheme { colors, typography ->
-        Column(modifier = modifier.fillMaxWidth()) {
-            SearchResultText(
-                modifier = Modifier
-                    .align(Alignment.Start)
-                    .height(40.dp)
-            )
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(max = 10000.dp)
-            ) {
-                items(list.size) {
-                    OutingStatusListItem(
-                        modifier = Modifier.fillMaxWidth(),
-                        role = role,
-                        data = list[it],
-                        onClick = onClick
-                    )
-                    Divider(
-                        modifier = Modifier.fillMaxWidth(),
-                        color = colors.WHITE.copy(0.15f)
-                    )
-                }
+    Column(modifier = modifier.fillMaxWidth()) {
+        SearchResultText(
+            modifier = Modifier
+                .align(Alignment.Start)
+                .height(40.dp)
+        )
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(max = 10000.dp)
+        ) {
+            items(list.size) {
+                OutingStatusListItem(
+                    modifier = Modifier.fillMaxWidth(),
+                    role = role,
+                    data = list[it],
+                    onClick = onClick
+                )
+                Divider(
+                    modifier = Modifier.fillMaxWidth(),
+                    color = colors.WHITE.copy(0.15f)
+                )
             }
         }
     }
 }
+
 
 @Composable
 fun OutingStatusListItem(
@@ -167,120 +176,116 @@ fun OutingStatusListItem(
     data: OutingData,
     onClick: (UUID) -> Unit
 ) {
-    GomsTheme { colors, typography ->
-        Row(
-            modifier = modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            if (data.profileUrl.isNullOrEmpty()) {
-                Image(
-                    painter = painterResource(R.drawable.ic_profile),
-                    contentDescription = "Default Profile Image",
-                    modifier = Modifier.size(48.dp)
-                )
-            } else {
-                AsyncImage(
-                    model = data.profileUrl,
-                    modifier = Modifier
-                        .size(48.dp)
-                        .clip(RoundedCornerShape(40.dp)),
-                    contentScale = ContentScale.Crop,
-                    contentDescription = "Profile Image",
-                )
-            }
-            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+    Row(
+        modifier = modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        if (data.profileUrl.isNullOrEmpty()) {
+            Image(
+                painter = painterResource(R.drawable.ic_profile),
+                contentDescription = "Default Profile Image",
+                modifier = Modifier.size(48.dp)
+            )
+        } else {
+            AsyncImage(
+                model = data.profileUrl,
+                modifier = Modifier
+                    .size(48.dp)
+                    .clip(RoundedCornerShape(40.dp)),
+                contentScale = ContentScale.Crop,
+                contentDescription = "Profile Image",
+            )
+        }
+        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Text(
+                text = data.name,
+                style = typography.textMedium,
+                fontWeight = FontWeight.SemiBold,
+                color = colors.G7
+            )
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Text(
-                    text = data.name,
-                    style = typography.textMedium,
-                    fontWeight = FontWeight.SemiBold,
-                    color = colors.G7
+                    text = "${data.grade}기 | ${data.major.toText()}",
+                    style = typography.caption,
+                    fontWeight = FontWeight.Normal,
+                    color = colors.G4
                 )
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(4.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "${data.grade}기 | ${data.major.toText()}",
-                        style = typography.caption,
-                        fontWeight = FontWeight.Normal,
-                        color = colors.G4
-                    )
-                    Divider(
-                        modifier = Modifier.size(1.dp, 8.dp),
-                        color = colors.WHITE.copy(0.15f)
-                    )
-                    Text(
-                        text = "${data.createdTime.formatTime()}에 외출",
-                        style = typography.caption,
-                        fontWeight = FontWeight.Normal,
-                        color = colors.G4
-                    )
-                }
+                Divider(
+                    modifier = Modifier.size(1.dp, 8.dp),
+                    color = colors.WHITE.copy(0.15f)
+                )
+                Text(
+                    text = "${data.createdTime.formatTime()}에 외출",
+                    style = typography.caption,
+                    fontWeight = FontWeight.Normal,
+                    color = colors.G4
+                )
             }
-            Spacer(modifier = Modifier.weight(1f))
-            if (role == Authority.ROLE_STUDENT_COUNCIL) {
-                IconButton(onClick = { onClick(UUID.fromString(data.accountIdx)) }) {
-                    DeleteIcon()
-                }
+        }
+        Spacer(modifier = Modifier.weight(1f))
+        if (role == Authority.ROLE_STUDENT_COUNCIL) {
+            IconButton(onClick = { onClick(UUID.fromString(data.accountIdx)) }) {
+                DeleteIcon()
             }
         }
     }
 }
+
 
 @Composable
 fun ShimmerOutingStatusListComponent(modifier: Modifier) {
-    GomsTheme { colors, typography ->
-        Column(modifier = modifier.fillMaxWidth()) {
-            SearchResultText(
-                modifier = Modifier
-                    .align(Alignment.Start)
-                    .height(40.dp)
-            )
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(max = 10000.dp)
-            ) {
-                items(10) {
-                    ShimmerOutingStatusListItem(modifier = modifier)
-                    Divider(
-                        modifier = Modifier.fillMaxWidth(),
-                        color = colors.WHITE.copy(0.15f)
-                    )
-                }
+    Column(modifier = modifier.fillMaxWidth()) {
+        SearchResultText(
+            modifier = Modifier
+                .align(Alignment.Start)
+                .height(40.dp)
+        )
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(max = 10000.dp)
+        ) {
+            items(10) {
+                ShimmerOutingStatusListItem(modifier = modifier)
+                Divider(
+                    modifier = Modifier.fillMaxWidth(),
+                    color = colors.WHITE.copy(0.15f)
+                )
             }
         }
     }
 }
 
+
 @Composable
 fun ShimmerOutingStatusListItem(modifier: Modifier) {
-    GomsTheme { colors, typography ->
-        Row(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 12.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(
+            modifier = Modifier
+                .size(48.dp)
+                .shimmerEffect(color = colors.WHITE)
+        )
+        Spacer(modifier = Modifier.width(16.dp))
+        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Box(
                 modifier = Modifier
-                    .size(48.dp)
+                    .size(42.dp, 18.dp)
                     .shimmerEffect(color = colors.WHITE)
             )
-            Spacer(modifier = Modifier.width(16.dp))
-            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Box(
-                    modifier = Modifier
-                        .size(42.dp, 18.dp)
-                        .shimmerEffect(color = colors.WHITE)
-                )
-                Box(
-                    modifier = Modifier
-                        .size(120.dp, 14.dp)
-                        .shimmerEffect(color = colors.WHITE)
-                )
-            }
+            Box(
+                modifier = Modifier
+                    .size(120.dp, 14.dp)
+                    .shimmerEffect(color = colors.WHITE)
+            )
         }
     }
 }
