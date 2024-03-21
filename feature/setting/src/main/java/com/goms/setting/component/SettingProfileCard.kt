@@ -125,7 +125,7 @@ fun SettingProfileCardComponent(
                 fontWeight = FontWeight.Normal
             )
         }
-        Spacer(modifier = Modifier.width(122.dp))
+        Spacer(modifier = Modifier.weight(1f))
         Column(
             horizontalAlignment = Alignment.End
         ) {

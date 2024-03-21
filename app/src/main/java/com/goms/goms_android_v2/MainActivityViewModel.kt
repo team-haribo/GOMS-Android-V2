@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.goms.common.result.Result
 import com.goms.common.result.asResult
 import com.goms.data.repository.account.AccountRepository
+import com.goms.data.repository.auth.AuthRepository
+import com.goms.data.repository.setting.SettingRepository
 import com.goms.datastore.AuthTokenDataSource
 import com.goms.domain.notification.SaveDeviceTokenUseCase
 import com.goms.model.response.account.ProfileResponse
@@ -14,6 +16,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -24,7 +27,7 @@ import javax.inject.Inject
 class MainActivityViewModel @Inject constructor(
     private val accountRepository: AccountRepository,
     private val saveDeviceTokenUseCase: SaveDeviceTokenUseCase,
-    private val authTokenDataSource: AuthTokenDataSource,
+    private val authRepository: AuthRepository,
     private val settingRepository: SettingRepository
 ) : ViewModel() {
     val uiState: StateFlow<MainActivityUiState> = flow {
