@@ -12,6 +12,8 @@ import com.goms.data.repository.notification.NotificationRepository
 import com.goms.data.repository.notification.NotificationRepositoryImpl
 import com.goms.data.repository.outing.OutingRepository
 import com.goms.data.repository.outing.OutingRepositoryImpl
+import com.goms.data.repository.setting.SettingRepository
+import com.goms.data.repository.setting.SettingRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -39,6 +41,11 @@ abstract class RepositoryModule {
     abstract fun bindOutingRepository(
         outingRepositoryImpl: OutingRepositoryImpl
     ): OutingRepository
+
+    @Binds
+    abstract fun bindSettingRepository(
+        settingRepositoryImpl: SettingRepositoryImpl
+    ): SettingRepository
 
     @Binds
     abstract fun bindCouncilRepository(

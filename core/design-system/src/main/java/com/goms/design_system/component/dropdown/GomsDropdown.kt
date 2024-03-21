@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
 import com.goms.design_system.component.clickable.gomsClickable
+import com.goms.design_system.icon.CheckIcon
 import com.goms.design_system.icon.ChevronDownIcon
 import com.goms.design_system.icon.ChevronUpIcon
 import com.goms.design_system.theme.GomsTheme
@@ -85,16 +86,16 @@ fun GomsDropdown(
             Text(
                 text = dropdownList[selectedIndex],
                 style = typography.textMedium,
-                color = colors.G7,
+                color =  if (showDropdown != null && showDropdown == true) colors.WHITE else colors.G7,
                 fontWeight = FontWeight.Normal
             )
             if (showDropdown != null && showDropdown == true) {
                 ChevronDownIcon(
-                    tint = colors.G7
+                    tint = if (showDropdown != null && showDropdown == true) colors.WHITE else colors.G7,
                 )
             } else {
                 ChevronUpIcon(
-                    tint = colors.G7
+                    tint = if (showDropdown != null && showDropdown == true) colors.WHITE else colors.G7,
                 )
             }
         }
@@ -122,7 +123,7 @@ fun GomsDropdown(
                             else -> null
                         }
 
-                        Box(
+                        Row(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(height)
@@ -167,14 +168,18 @@ fun GomsDropdown(
                                     onItemClick(index)
                                     showDropdown = !showDropdown!!
                                 },
-                            contentAlignment = Alignment.CenterStart
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
                                 text = item,
                                 style = typography.textMedium,
-                                color = colors.WHITE,
+                                color = if (index == selectedIndex) colors.P5 else colors.WHITE,
                                 fontWeight = FontWeight.Normal
                             )
+                            if (index == selectedIndex) {
+                                CheckIcon()
+                            }
                         }
                     }
                 }

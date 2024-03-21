@@ -20,13 +20,14 @@ val LocalTypography = compositionLocalOf<GomsTypography> { error("No GomsTypogra
 
 @Composable
 fun GomsTheme(
-    themeMode: ThemeType = ThemeType.System,
+    themeMode: String = ThemeType.Dark.name,
     content: @Composable (colors: ColorTheme, typography: GomsTypography) -> Unit
 ) {
     val theme = when (themeMode) {
-        ThemeType.Dark -> true
-        ThemeType.Light -> false
-        ThemeType.System -> isSystemInDarkTheme()
+        ThemeType.Dark.name -> true
+        ThemeType.Light.name -> false
+        ThemeType.System.name -> isSystemInDarkTheme()
+        else -> true
     }
 
     val colors = if (theme) DarkColor else LightColor

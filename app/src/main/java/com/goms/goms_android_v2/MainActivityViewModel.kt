@@ -6,6 +6,8 @@ import com.goms.common.result.Result
 import com.goms.common.result.asResult
 import com.goms.data.repository.account.AccountRepository
 import com.goms.data.repository.auth.AuthRepository
+import com.goms.data.repository.setting.SettingRepository
+import com.goms.datastore.AuthTokenDataSource
 import com.goms.domain.notification.SaveDeviceTokenUseCase
 import com.goms.model.response.account.ProfileResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,6 +16,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -24,7 +27,8 @@ import javax.inject.Inject
 class MainActivityViewModel @Inject constructor(
     private val accountRepository: AccountRepository,
     private val saveDeviceTokenUseCase: SaveDeviceTokenUseCase,
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val settingRepository: SettingRepository
 ) : ViewModel() {
     val uiState: StateFlow<MainActivityUiState> = flow {
         accountRepository.getProfile().collect { profileResponse ->
@@ -48,10 +52,13 @@ class MainActivityViewModel @Inject constructor(
     private val _saveDeviceTokenUiState = MutableStateFlow<Result<Unit>>(Result.Loading)
     val saveDeviceTokenUiState = _saveDeviceTokenUiState.asStateFlow()
 
+    private val _themeState = MutableStateFlow("")
+    val themeState = _themeState.asStateFlow()
+
     fun saveDeviceToken(deviceToken: String) = viewModelScope.launch {
         saveDeviceTokenUseCase(deviceToken = deviceToken)
             .onSuccess {
-                it.catch {  remoteError ->
+                it.catch { remoteError ->
                     _saveDeviceTokenUiState.value = Result.Error(remoteError)
                 }.collect { result ->
                     _saveDeviceTokenUiState.value = Result.Success(result)
@@ -67,6 +74,11 @@ class MainActivityViewModel @Inject constructor(
 
     fun deleteToken() = viewModelScope.launch {
         authRepository.deleteToken()
+    }
+
+    fun getSettingInfo() = viewModelScope.launch {
+        val themeValue = settingRepository.getThemeValue().first().replace("\"","")
+        _themeState.value = themeValue
     }
 }
 

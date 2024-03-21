@@ -6,6 +6,9 @@ import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.dataStoreFile
 import com.goms.datastore.AuthToken
 import com.goms.datastore.AuthTokenSerializer
+import com.goms.datastore.SettingDataSource
+import com.goms.datastore.SettingInfo
+import com.goms.datastore.SettingSerializer
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,5 +29,17 @@ object DataSourceModule {
             serializer = authTokenSerializer,
         ) {
             context.dataStoreFile("authToken.pb")
+        }
+
+    @Provides
+    @Singleton
+    fun provideSettingInfoDataStore(
+        @ApplicationContext context: Context,
+        settingSerializer: SettingSerializer
+    ): DataStore<SettingInfo> =
+        DataStoreFactory.create(
+            serializer = settingSerializer,
+        ) {
+            context.dataStoreFile("settingInfo.pb")
         }
 }

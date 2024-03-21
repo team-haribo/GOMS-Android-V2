@@ -47,6 +47,7 @@ fun GomsNavHost(
     appState: GomsAppState,
     modifier: Modifier = Modifier,
     onLogout: () -> Unit,
+    onThemeSelect: () -> Unit,
     startDestination: String = loginRoute
 ) {
     val context = LocalContext.current
@@ -139,7 +140,8 @@ fun GomsNavHost(
             onBackClick = navController::popBackStack,
             onLogoutSuccess = onLogout,
             onErrorToast = onErrorToast,
-            onEmailCheck = navController::navigateToEmailCheck
+            onEmailCheck = navController::navigateToEmailCheck,
+            onThemeSelect = onThemeSelect
         )
         emailCheckScreen(
             onBackClick = navController::popBackStack,
