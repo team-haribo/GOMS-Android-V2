@@ -33,7 +33,8 @@ class SettingViewModel @Inject constructor (
 ) : ViewModel() {
     val role = authRepository.getRole()
 
-    val settingInfo = MutableStateFlow<List<String>>(emptyList())
+    private val _themeState = MutableStateFlow("")
+    val themeState = _themeState.asStateFlow()
 
     private val _setThemeState = MutableStateFlow<SetThemeUiState>(SetThemeUiState.Loading)
     val setThemeState = _setThemeState.asStateFlow()
@@ -89,6 +90,7 @@ class SettingViewModel @Inject constructor (
     fun setTheme(theme: String) = viewModelScope.launch {
        saveThemeUseCase(theme = theme)
            .onSuccess {
+               getThemeValue()
                _setThemeState.value = SetThemeUiState.Success
            }.onFailure {
                _setThemeState.value = SetThemeUiState.Error(it)
@@ -97,10 +99,7 @@ class SettingViewModel @Inject constructor (
 
     suspend fun getThemeValue() {
         val themeValue = settingRepository.getThemeValue().first().replace("\"","")
-        val alarmValue = settingRepository.getAlarmValue().first().replace("\"","")
-        val qrcodeValue = settingRepository.getQrcodeValue().first().replace("\"","")
-
-        settingInfo.emit(listOf(themeValue, alarmValue, qrcodeValue))
+        _themeState.value = themeValue
     }
 
     fun logout() = viewModelScope.launch {

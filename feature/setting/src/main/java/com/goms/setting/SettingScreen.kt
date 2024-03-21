@@ -59,7 +59,7 @@ fun SettingRoute(
 
     val getProfileUiState by viewModel.getProfileUiState.collectAsStateWithLifecycle()
     val profileImageUiState by viewModel.profileImageUiState.collectAsStateWithLifecycle()
-    val settingInfo by viewModel.settingInfo.collectAsStateWithLifecycle()
+    val themeState by viewModel.themeState.collectAsStateWithLifecycle()
 
     val logoutUiState by viewModel.logoutState.collectAsStateWithLifecycle()
     val setThemeUiState by viewModel.setThemeState.collectAsStateWithLifecycle()
@@ -102,7 +102,7 @@ fun SettingRoute(
         logoutUiState = logoutUiState,
         setThemeUiState = setThemeUiState,
         getProfileUiState = getProfileUiState,
-        settingInfo = settingInfo,
+        themeState = themeState,
         profileImageUiState = profileImageUiState,
         onErrorToast = onErrorToast,
         onEmailCheck = onEmailCheck
@@ -123,7 +123,7 @@ fun SettingScreen(
     logoutUiState: LogoutUiState,
     setThemeUiState: SetThemeUiState,
     getProfileUiState: GetProfileUiState,
-    settingInfo: List<String>,
+    themeState: String,
     profileImageUiState: ProfileImageUiState,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     onEmailCheck: () -> Unit
@@ -196,7 +196,8 @@ fun SettingScreen(
                     else -> "Dark"
                 }
                 onThemeSelect(selectedTheme)
-            }
+            },
+            themeState = themeState
         )
         Spacer(modifier = Modifier.height(24.dp))
         if (role == Authority.ROLE_STUDENT.name) {
