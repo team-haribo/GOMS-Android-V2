@@ -87,6 +87,7 @@ class SettingViewModel @Inject constructor (
     fun initSetTheme() {
         _setThemeState.value = SetThemeUiState.Loading
     }
+
     fun setTheme(theme: String) = viewModelScope.launch {
        saveThemeUseCase(theme = theme)
            .onSuccess {
@@ -97,7 +98,7 @@ class SettingViewModel @Inject constructor (
            }
     }
 
-    suspend fun getThemeValue() {
+    fun getThemeValue() = viewModelScope.launch {
         val themeValue = settingRepository.getThemeValue().first().replace("\"","")
         _themeState.value = themeValue
     }

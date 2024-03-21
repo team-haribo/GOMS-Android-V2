@@ -89,9 +89,7 @@ fun SettingRoute(
             viewModel.getProfile()
         },
         getSettingInfo = {
-            CoroutineScope(Dispatchers.IO).launch {
-                viewModel.getThemeValue()
-            }
+            viewModel.getThemeValue()
         },
         onThemeSelect = { selectedTheme ->
             viewModel.initSetTheme()
