@@ -1,6 +1,5 @@
 package com.goms.re_password.navigation
 
-import androidx.lifecycle.ViewModelStoreOwner
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -19,12 +18,14 @@ fun NavController.navigateToEmailCheck(navOptions: NavOptions? = null) {
 
 fun NavGraphBuilder.emailCheckScreen(
     onBackClick: () -> Unit,
-    onNumberClick: () -> Unit
+    onNumberClick: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
     composable(route = emailCheckRoute) {
         EmailCheckRoute(
             onBackClick = onBackClick,
-            onNumberClick = onNumberClick
+            onNumberClick = onNumberClick,
+            onErrorToast = onErrorToast
         )
     }
 }
@@ -51,12 +52,14 @@ fun NavController.navigateToRePassword(navOptions: NavOptions? = null) {
 
 fun NavGraphBuilder.rePasswordScreen(
     onBackClick: () -> Unit,
-    onSuccessClick: () -> Unit
+    onSuccessClick: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
     composable(route = rePasswordRoute) {
         RePasswordRoute(
             onBackClick = onBackClick,
-            onSuccessClick = onSuccessClick
+            onSuccessClick = onSuccessClick,
+            onErrorToast = onErrorToast
         )
     }
 }
