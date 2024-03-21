@@ -30,17 +30,20 @@ import com.goms.design_system.component.button.ButtonState
 import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.button.GomsButton
 import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
-import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.model.enum.Authority
-import com.goms.setting.component.SettingProfileCard
 import com.goms.setting.component.PasswordChangeButton
 import com.goms.setting.component.SelectThemeDropDown
+import com.goms.setting.component.SettingProfileCard
 import com.goms.setting.component.SettingSwitchComponent
 import com.goms.setting.viewmodel.GetProfileUiState
 import com.goms.setting.viewmodel.LogoutUiState
 import com.goms.setting.viewmodel.ProfileImageUiState
+import com.goms.setting.viewmodel.SetThemeUiState
 import com.goms.setting.viewmodel.SettingViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Composable
 fun SettingRoute(
@@ -48,6 +51,7 @@ fun SettingRoute(
     onLogoutSuccess: () -> Unit,
     onEmailCheck: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
+    onThemeSelect: () -> Unit,
     viewModel: SettingViewModel = hiltViewModel(),
 ) {
     val role by viewModel.role.collectAsStateWithLifecycle(initialValue = "")
@@ -55,8 +59,10 @@ fun SettingRoute(
 
     val getProfileUiState by viewModel.getProfileUiState.collectAsStateWithLifecycle()
     val profileImageUiState by viewModel.profileImageUiState.collectAsStateWithLifecycle()
+    val settingInfo by viewModel.settingInfo.collectAsStateWithLifecycle()
 
     val logoutUiState by viewModel.logoutState.collectAsStateWithLifecycle()
+    val setThemeUiState by viewModel.setThemeState.collectAsStateWithLifecycle()
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
 
     val galleryLauncher =
@@ -82,9 +88,21 @@ fun SettingRoute(
             viewModel.initGetProfile()
             viewModel.getProfile()
         },
+        getSettingInfo = {
+            CoroutineScope(Dispatchers.IO).launch {
+                viewModel.getThemeValue()
+            }
+        },
+        onThemeSelect = { selectedTheme ->
+            viewModel.initSetTheme()
+            viewModel.setTheme(selectedTheme)
+        },
+        onUpdateTheme = { onThemeSelect() },
         role = role,
         logoutUiState = logoutUiState,
+        setThemeUiState = setThemeUiState,
         getProfileUiState = getProfileUiState,
+        settingInfo = settingInfo,
         profileImageUiState = profileImageUiState,
         onErrorToast = onErrorToast,
         onEmailCheck = onEmailCheck
@@ -98,14 +116,22 @@ fun SettingScreen(
     onLogoutClick: () -> Unit,
     onLogoutSuccess: () -> Unit,
     getProfile: () -> Unit,
+    getSettingInfo: () -> Unit,
+    onThemeSelect: (String) -> Unit,
+    onUpdateTheme: () -> Unit,
     role: String,
     logoutUiState: LogoutUiState,
+    setThemeUiState: SetThemeUiState,
     getProfileUiState: GetProfileUiState,
+    settingInfo: List<String>,
     profileImageUiState: ProfileImageUiState,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     onEmailCheck: () -> Unit
 ) {
-    LaunchedEffect("load profile") { getProfile() }
+    LaunchedEffect("load data") {
+        getProfile()
+        getSettingInfo()
+    }
 
     var isLoading by remember { mutableStateOf(false) }
 
@@ -118,6 +144,12 @@ fun SettingScreen(
         is LogoutUiState.Error -> {
             onErrorToast(logoutUiState.exception, "로그아웃에 실패 했습니다.")
         }
+    }
+
+    when (setThemeUiState) {
+        is SetThemeUiState.Loading -> Unit
+        is SetThemeUiState.Success -> onUpdateTheme()
+        is SetThemeUiState.Error ->  Unit
     }
 
     when (profileImageUiState) {
@@ -154,7 +186,18 @@ fun SettingScreen(
             onEmailCheck()
         }
         Spacer(modifier = Modifier.height(24.dp))
-        SelectThemeDropDown(modifier = Modifier.padding(horizontal = 20.dp))
+        SelectThemeDropDown(
+            modifier = Modifier.padding(horizontal = 20.dp),
+            onThemeSelect = {
+                val selectedTheme = when (it) {
+                    0 -> "Dark"
+                    1 -> "Light"
+                    2 -> "System"
+                    else -> "Dark"
+                }
+                onThemeSelect(selectedTheme)
+            }
+        )
         Spacer(modifier = Modifier.height(24.dp))
         if (role == Authority.ROLE_STUDENT.name) {
             SettingSwitchComponent(
