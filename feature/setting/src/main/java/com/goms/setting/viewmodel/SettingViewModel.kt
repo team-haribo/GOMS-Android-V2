@@ -86,6 +86,15 @@ class SettingViewModel @Inject constructor (
     fun initSetTheme() {
         _setThemeState.value = SetThemeUiState.Loading
     }
+    fun setTheme(theme: String) = viewModelScope.launch {
+       saveThemeUseCase(theme = theme)
+           .onSuccess {
+               _setThemeState.value = SetThemeUiState.Success
+           }.onFailure {
+               _setThemeState.value = SetThemeUiState.Error(it)
+           }
+    }
+
     suspend fun getThemeValue() {
         val themeValue = settingRepository.getThemeValue().first().replace("\"","")
         val alarmValue = settingRepository.getAlarmValue().first().replace("\"","")
@@ -93,7 +102,6 @@ class SettingViewModel @Inject constructor (
 
         settingInfo.emit(listOf(themeValue, alarmValue, qrcodeValue))
     }
-
 
     fun logout() = viewModelScope.launch {
         logoutUseCase()
