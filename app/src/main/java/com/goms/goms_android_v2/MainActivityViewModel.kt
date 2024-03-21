@@ -32,9 +32,6 @@ class MainActivityViewModel @Inject constructor(
     private val authTokenDataSource: AuthTokenDataSource,
     private val settingRepository: SettingRepository
 ) : ViewModel() {
-    private val _themeState = MutableStateFlow("")
-    val themeState = _themeState.asStateFlow()
-
     val uiState: StateFlow<MainActivityUiState> = flow {
         accountRepository.getProfile().collect { profileResponse ->
             emit(profileResponse)
@@ -56,6 +53,9 @@ class MainActivityViewModel @Inject constructor(
 
     private val _saveDeviceTokenUiState = MutableStateFlow<Result<Unit>>(Result.Loading)
     val saveDeviceTokenUiState = _saveDeviceTokenUiState.asStateFlow()
+
+    private val _themeState = MutableStateFlow("")
+    val themeState = _themeState.asStateFlow()
 
     fun saveDeviceToken(deviceToken: String) = viewModelScope.launch {
         saveDeviceTokenUseCase(deviceToken = deviceToken)
