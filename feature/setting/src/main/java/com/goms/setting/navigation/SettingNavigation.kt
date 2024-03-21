@@ -15,14 +15,16 @@ fun NavGraphBuilder.settingScreen(
     onLogoutSuccess: () -> Unit,
     onBackClick: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
-    onEmailCheck: () -> Unit
+    onEmailCheck: () -> Unit,
+    onThemeSelect: () -> Unit,
 ) {
     composable(route = settingRoute) {
         SettingRoute(
             onLogoutSuccess = onLogoutSuccess,
             onBackClick = onBackClick,
             onErrorToast = onErrorToast,
-            onEmailCheck = onEmailCheck
+            onEmailCheck = onEmailCheck,
+            onThemeSelect = onThemeSelect
         )
     }
 }

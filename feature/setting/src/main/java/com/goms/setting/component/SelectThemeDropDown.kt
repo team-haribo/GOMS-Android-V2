@@ -23,6 +23,7 @@ import kotlinx.collections.immutable.toPersistentList
 @Composable
 fun SelectThemeDropDown(
     modifier: Modifier,
+    onThemeSelect: (Int) -> Unit
 ) {
     val dropdownList = listOf("다크(기본)", "라이트", "시스템 테마 설정")
     var selectedIndex by rememberSaveable { mutableIntStateOf(0) }
@@ -46,6 +47,7 @@ fun SelectThemeDropDown(
             onClick = {},
             onItemClick = {
                 selectedIndex = it
+                onThemeSelect(selectedIndex)
             }
         )
     }
