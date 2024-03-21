@@ -18,7 +18,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -53,7 +52,7 @@ fun EmailCheckRoute(
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     viewModel: RePasswordViewmodel = hiltViewModel(LocalContext.current as ComponentActivity)
 ) {
-    val sendNumberUiState by viewModel.sendNumberUiState.collectAsState()
+    val sendNumberUiState by viewModel.sendNumberUiState.collectAsStateWithLifecycle()
     val email by viewModel.email.collectAsStateWithLifecycle()
 
     EmailCheckScreen(
@@ -61,7 +60,10 @@ fun EmailCheckRoute(
         onEmailChange = viewModel::onEmailChange,
         onBackClick = onBackClick,
         sendNumberUiState = sendNumberUiState,
-        emailCheckCallBack = { viewModel.sendNumber(body = SendNumberRequest("${viewModel.email.value}@gsm.hs.kr")) },
+        emailCheckCallBack = {
+            viewModel.sendNumber(
+                body = SendNumberRequest("${viewModel.email.value}@gsm.hs.kr")
+        ) },
         onNumberClick = onNumberClick,
         initCallBack = { viewModel.initSendNumber() },
         onErrorToast = onErrorToast
