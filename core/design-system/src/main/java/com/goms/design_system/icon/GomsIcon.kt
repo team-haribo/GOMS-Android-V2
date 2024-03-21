@@ -100,7 +100,7 @@ fun CheckIcon(
 ) {
     Image(
         painter = painterResource(id = R.drawable.ic_check),
-        contentDescription = "ChevronRight Icon",
+        contentDescription = "Check Icon",
         modifier = modifier,
         colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
     )
