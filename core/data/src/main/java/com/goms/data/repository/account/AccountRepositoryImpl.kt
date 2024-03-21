@@ -1,5 +1,6 @@
 package com.goms.data.repository.account
 
+import com.goms.model.request.account.RePasswordRequest
 import com.goms.model.response.account.ProfileResponse
 import com.goms.network.datasource.account.AccountDataSource
 import kotlinx.coroutines.flow.Flow
@@ -15,5 +16,9 @@ class AccountRepositoryImpl @Inject constructor(
 
     override suspend fun uploadProfileImage(file: MultipartBody.Part): Flow<Unit> {
         return remoteAccountDataSource.uploadProfileImage(file)
+    }
+
+    override suspend fun rePassword(body: RePasswordRequest): Flow<Unit> {
+        return remoteAccountDataSource.rePassword(body = body)
     }
 }

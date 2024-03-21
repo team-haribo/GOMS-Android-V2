@@ -22,7 +22,7 @@ import com.goms.main.navigation.mainRoute
 @Composable
 fun GomsApp(
     windowSizeClass: WindowSizeClass,
-    appState: GomsAppState = rememberBitgoeulAppState(
+    appState: GomsAppState = rememberGomsAppState(
         windowSizeClass = windowSizeClass
     ),
     onLogout: () -> Unit,

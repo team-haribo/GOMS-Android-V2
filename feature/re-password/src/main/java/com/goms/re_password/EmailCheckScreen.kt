@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -33,32 +34,39 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goms.design_system.component.button.ButtonState
 import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.button.GomsButton
+import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
 import com.goms.design_system.component.textfield.GomsTextField
-import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.util.keyboardAsState
 import com.goms.design_system.util.lockScreenOrientation
 import com.goms.model.request.auth.SendNumberRequest
 import com.goms.re_password.component.RePasswordText
 import com.goms.re_password.viewmodel.RePasswordViewmodel
-import com.goms.ui.createToast
+import com.goms.re_password.viewmodel.SendNumberUiState
 import com.goms.ui.isStrongEmail
 
 @Composable
 fun EmailCheckRoute(
     onBackClick: () -> Unit,
     onNumberClick: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     viewModel: RePasswordViewmodel = hiltViewModel(LocalContext.current as ComponentActivity)
 ) {
+    val sendNumberUiState by viewModel.sendNumberUiState.collectAsStateWithLifecycle()
     val email by viewModel.email.collectAsStateWithLifecycle()
 
     EmailCheckScreen(
         email = email,
         onEmailChange = viewModel::onEmailChange,
         onBackClick = onBackClick,
-        rePasswordCallBack = { viewModel.sendNumber(body = SendNumberRequest("${viewModel.email.value}@gsm.hs.kr")) },
+        sendNumberUiState = sendNumberUiState,
+        emailCheckCallBack = {
+            viewModel.sendNumber(
+                body = SendNumberRequest("${viewModel.email.value}@gsm.hs.kr")
+        ) },
         onNumberClick = onNumberClick,
-        initCallBack = { viewModel.initSendNumber() }
+        initCallBack = { viewModel.initSendNumber() },
+        onErrorToast = onErrorToast
     )
 }
 
@@ -67,11 +75,12 @@ fun EmailCheckScreen(
     email: String,
     onEmailChange: (String) -> Unit,
     onBackClick: () -> Unit,
-    rePasswordCallBack: () -> Unit,
     onNumberClick: () -> Unit,
-    initCallBack: () -> Unit
+    emailCheckCallBack: () -> Unit,
+    initCallBack: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
+    sendNumberUiState: SendNumberUiState
 ) {
-    val context = LocalContext.current
     val focusManager = LocalFocusManager.current
     val isKeyboardOpen by keyboardAsState()
     var isLoading by remember { mutableStateOf(false) }
@@ -81,6 +90,18 @@ fun EmailCheckScreen(
         if (!isKeyboardOpen) {
             focusManager.clearFocus()
         }
+    }
+
+    DisposableEffect(sendNumberUiState) {
+        when (sendNumberUiState) {
+            is SendNumberUiState.Loading -> Unit
+            is SendNumberUiState.Success -> onNumberClick()
+            is SendNumberUiState.Error -> {
+                isLoading = false
+                onErrorToast(sendNumberUiState.exception, "인증번호 전송이 실패했습니다.")
+            }
+        }
+        onDispose { initCallBack() }
     }
 
     lockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
@@ -123,16 +144,16 @@ fun EmailCheckScreen(
             ) {
                 if (!isStrongEmail(email)) {
                     isLoading = false
-                    createToast(
-                        context = context,
-                        message = "이메일 형식이 올바르지 않습니다"
-                    )
+                    onErrorToast(null, "이메일 형식이 올바르지 않습니다")
                 } else {
-                    onNumberClick()
+                    emailCheckCallBack()
                     isLoading = true
                 }
             }
             Spacer(modifier = Modifier.height(animatedSpacerHeight))
         }
+    }
+    if (isLoading) {
+        GomsCircularProgressIndicator()
     }
 }

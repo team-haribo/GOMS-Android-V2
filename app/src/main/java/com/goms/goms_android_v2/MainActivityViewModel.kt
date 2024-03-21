@@ -1,13 +1,10 @@
 package com.goms.goms_android_v2
 
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.goms.common.result.Result
 import com.goms.common.result.asResult
 import com.goms.data.repository.account.AccountRepository
-import com.goms.data.repository.setting.SettingRepository
 import com.goms.datastore.AuthTokenDataSource
 import com.goms.domain.notification.SaveDeviceTokenUseCase
 import com.goms.model.response.account.ProfileResponse
@@ -17,12 +14,10 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
@@ -71,15 +66,11 @@ class MainActivityViewModel @Inject constructor(
     }
 
     fun setAuthority(authority: String) = viewModelScope.launch {
-        authTokenDataSource.setAuthority(authority = authority)
+        authRepository.setRole(role = authority)
     }
 
     fun deleteToken() = viewModelScope.launch {
-        authTokenDataSource.removeAccessToken()
-        authTokenDataSource.removeRefreshToken()
-        authTokenDataSource.removeAccessTokenExp()
-        authTokenDataSource.removeRefreshTokenExp()
-        authTokenDataSource.removeAuthority()
+        authRepository.deleteToken()
     }
 
     fun getSettingInfo() = viewModelScope.launch {
