@@ -8,19 +8,18 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import com.goms.common.result.Result
-import com.goms.design_system.theme.GomsTheme
-import com.goms.design_system.theme.ThemeType
 import com.goms.goms_android_v2.ui.GomsApp
 import com.goms.ui.createToast
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -62,16 +61,15 @@ class MainActivity : ComponentActivity() {
                     uiState is MainActivityUiState.Loading
                 }
             }
+            runBlocking {
+                viewModel.getSettingInfo()
+            }
             if (uiState !is MainActivityUiState.Loading) {
-                GomsTheme(themeMode = ThemeType.Dark) { _, _ ->
-                    CompositionLocalProvider {
-                        GomsApp(
-                            windowSizeClass = calculateWindowSizeClass(this),
-                            onLogout = { logout() },
-                            uiState = uiState
-                        )
-                    }
-                }
+                GomsApp(
+                    windowSizeClass = calculateWindowSizeClass(this),
+                    onLogout = { logout() },
+                    uiState = uiState,
+                )
             }
         }
     }

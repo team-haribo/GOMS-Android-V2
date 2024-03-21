@@ -1,5 +1,7 @@
 package com.goms.goms_android_v2
 
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.goms.common.result.Result
@@ -20,6 +22,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
@@ -29,7 +32,8 @@ class MainActivityViewModel @Inject constructor(
     private val authTokenDataSource: AuthTokenDataSource,
     private val settingRepository: SettingRepository
 ) : ViewModel() {
-    val settingInfo = MutableStateFlow<List<String>>(emptyList())
+    private val _themeState = MutableStateFlow("")
+    val themeState = _themeState.asStateFlow()
 
     val uiState: StateFlow<MainActivityUiState> = flow {
         accountRepository.getProfile().collect { profileResponse ->
@@ -70,7 +74,7 @@ class MainActivityViewModel @Inject constructor(
         authTokenDataSource.setAuthority(authority = authority)
     }
 
-    suspend fun deleteToken() = viewModelScope.launch {
+    fun deleteToken() = viewModelScope.launch {
         authTokenDataSource.removeAccessToken()
         authTokenDataSource.removeRefreshToken()
         authTokenDataSource.removeAccessTokenExp()
@@ -78,12 +82,9 @@ class MainActivityViewModel @Inject constructor(
         authTokenDataSource.removeAuthority()
     }
 
-    suspend fun getSettingInfo() = viewModelScope.launch {
+    fun getSettingInfo() = viewModelScope.launch {
         val themeValue = settingRepository.getThemeValue().first().replace("\"","")
-        val alarmValue = settingRepository.getAlarmValue().first().replace("\"","")
-        val qrcodeValue = settingRepository.getQrcodeValue().first().replace("\"","")
-
-        settingInfo.emit(listOf(themeValue, alarmValue, qrcodeValue))
+        _themeState.value = themeValue
     }
 }
 
