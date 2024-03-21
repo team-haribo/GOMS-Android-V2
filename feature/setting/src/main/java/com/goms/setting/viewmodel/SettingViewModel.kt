@@ -11,7 +11,7 @@ import com.goms.data.repository.setting.SettingRepository
 import com.goms.domain.account.GetProfileUseCase
 import com.goms.domain.account.UploadProfileImageUseCase
 import com.goms.domain.auth.LogoutUseCase
-import com.goms.domain.setting.SaveThemeUseCase
+import com.goms.domain.setting.SetThemeUseCase
 import com.goms.setting.util.getMultipartFile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,7 +28,7 @@ class SettingViewModel @Inject constructor (
     private val uploadProfileImageUseCase: UploadProfileImageUseCase,
     private val logoutUseCase: LogoutUseCase,
     private val settingRepository: SettingRepository,
-    private val saveThemeUseCase: SaveThemeUseCase,
+    private val saveThemeUseCase: SetThemeUseCase,
     private val authRepository: AuthRepository
 ) : ViewModel() {
     val role = authRepository.getRole()
