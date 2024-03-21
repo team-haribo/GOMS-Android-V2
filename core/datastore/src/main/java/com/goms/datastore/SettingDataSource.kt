@@ -9,7 +9,7 @@ class SettingDataSource @Inject constructor(
     private val settingInfo: DataStore<SettingInfo>
 ) {
     fun getThemeValue(): Flow<String> = settingInfo.data.map {
-        it.theme ?: "Dark"
+        if (it.theme.isNullOrEmpty()) "Dark" else it.theme
     }
 
     suspend fun setThemeValue(themeValue: String) {
@@ -21,7 +21,7 @@ class SettingDataSource @Inject constructor(
     }
 
     fun getAlarmValue(): Flow<String> = settingInfo.data.map {
-        it.alarm ?: "Off"
+        if (it.alarm.isNullOrEmpty()) "Off" else it.alarm
     }
 
     suspend fun setAlarmValue(alarmValue: String) {
@@ -33,7 +33,7 @@ class SettingDataSource @Inject constructor(
     }
 
     fun getQrcodeValue(): Flow<String> = settingInfo.data.map {
-        it.qrcode ?: "Off"
+        if (it.qrcode.isNullOrEmpty()) "Off" else it.qrcode
     }
 
     suspend fun setQrcodeValue(qrcodeValue: String) {
