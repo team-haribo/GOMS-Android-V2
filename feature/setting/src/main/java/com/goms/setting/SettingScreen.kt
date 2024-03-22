@@ -152,8 +152,6 @@ fun SettingScreen(
         getSettingInfo()
     }
 
-    Log.d("testt",qrcodeState)
-
     var isLoading by remember { mutableStateOf(false) }
 
     when (logoutUiState) {
