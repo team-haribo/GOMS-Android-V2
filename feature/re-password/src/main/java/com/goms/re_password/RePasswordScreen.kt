@@ -182,20 +182,21 @@ fun RePasswordScreen(
             }
             Spacer(modifier = Modifier.height(animatedSpacerHeight))
         }
-        if (isLoading) {
-            GomsCircularProgressIndicator()
-        }
-        if (openDialog) {
-            GomsOneButtonDialog(
-                openDialog = openDialog,
-                onStateChange = {
-                    openDialog = it
-                },
-                title = "재설정 완료",
-                content = "로그인 화면으로 돌아갑니다.",
-                buttonText = "확인",
-                onClick = onSuccessClick
-            )
-        }
+    }
+    if (isLoading) {
+        GomsCircularProgressIndicator()
+    }
+    if (openDialog) {
+        GomsOneButtonDialog(
+            openDialog = openDialog,
+            onStateChange = {
+                openDialog = it
+            },
+            title = "재설정 완료",
+            content = "비밀번호를 재설정했어요.\n" +
+                    "홈으로 돌아갈게요!",
+            buttonText = "확인",
+            onClick = onSuccessClick
+        )
     }
 }
