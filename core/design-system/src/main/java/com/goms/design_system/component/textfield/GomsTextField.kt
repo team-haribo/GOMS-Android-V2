@@ -97,7 +97,7 @@ fun GomsTextField(
                 .background(colors.G1)
                 .border(
                     width = 1.dp,
-                    color = if (isError) colors.N5 else colors.WHITE.copy(0.15f),
+                    color = if (isError) colors.N5 else Color.Transparent,
                     shape = RoundedCornerShape(12.dp)
                 )
                 .onFocusChanged {
