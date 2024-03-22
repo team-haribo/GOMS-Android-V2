@@ -21,6 +21,7 @@ fun NavController.navigateToMain(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.mainScreen(
+    qrcodeState: String,
     onOutingStatusClick: () -> Unit,
     onLateListClick: () -> Unit,
     onStudentManagementClick: () -> Unit,
@@ -30,6 +31,7 @@ fun NavGraphBuilder.mainScreen(
 ) {
     composable(route = mainRoute) {
         MainRoute(
+            qrcodeState = qrcodeState,
             onOutingStatusClick = onOutingStatusClick,
             onLateListClick = onLateListClick,
             onStudentManagementClick = onStudentManagementClick,

@@ -24,13 +24,15 @@ fun GomsApp(
     viewModel: MainActivityViewModel = hiltViewModel(),
 ) {
     val themeState by viewModel.themeState.collectAsState()
+    val qrcodeState by viewModel.qrcodeState.collectAsState()
 
     GomsTheme(themeMode = themeState) { _, _ ->
         CompositionLocalProvider {
             GomsNavHost(
                 appState = appState,
+                qrcodeState = qrcodeState,
                 onLogout = onLogout,
-                onThemeSelect = { viewModel.getSettingInfo() },
+                onThemeSelect = { viewModel.getTheme() },
                 startDestination = when (uiState) {
                     is MainActivityUiState.Success -> mainRoute
                     is MainActivityUiState.Error -> loginRoute

@@ -45,6 +45,7 @@ import com.goms.ui.createToast
 @Composable
 fun GomsNavHost(
     appState: GomsAppState,
+    qrcodeState: String,
     modifier: Modifier = Modifier,
     onLogout: () -> Unit,
     onThemeSelect: () -> Unit,
@@ -98,6 +99,7 @@ fun GomsNavHost(
             onErrorToast = onErrorToast
         )
         mainScreen(
+            qrcodeState = qrcodeState,
             onOutingStatusClick = navController::navigateToOutingStatus,
             onLateListClick = navController::navigateToLateList,
             onStudentManagementClick = navController::navigateToStudentManagement,
