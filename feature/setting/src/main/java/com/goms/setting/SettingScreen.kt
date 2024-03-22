@@ -243,7 +243,8 @@ fun SettingScreen(
                 onFunctionOff = { if (qrcodeState == "On") onUpdateQrcode("Off") },
                 onFunctionOn = { if (qrcodeState == "Off") onUpdateQrcode("On") }
             )
-        } else {
+        }
+        if (role == Authority.ROLE_STUDENT_COUNCIL.name) {
             SettingSwitchComponent(
                 modifier = Modifier.padding(horizontal = 28.dp),
                 title = "Qr 생성 바로 켜기",
