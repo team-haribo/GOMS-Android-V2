@@ -47,6 +47,7 @@ import com.goms.re_password.viewmodel.VerifyNumberUiState
 fun PasswordNumberRoute(
     onBackClick: () -> Unit,
     onRePasswordClick: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     viewModel: RePasswordViewmodel = hiltViewModel(LocalContext.current as ComponentActivity)
 ) {
     val verifyNumberUiState by viewModel.verifyNumberUiState.collectAsState()
@@ -58,6 +59,7 @@ fun PasswordNumberRoute(
         verifyNumberUiState = verifyNumberUiState,
         onBackClick = onBackClick,
         onRePasswordClick = onRePasswordClick,
+        onErrorToast = onErrorToast,
         numberCallback = {
             viewModel.verifyNumber(
                 email = "${viewModel.email.value}@gsm.hs.kr",
@@ -76,6 +78,7 @@ fun PasswordNumberScreen(
     verifyNumberUiState: VerifyNumberUiState,
     onBackClick: () -> Unit,
     onRePasswordClick: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     numberCallback: () -> Unit,
     resentCallBack: () -> Unit,
     initCallBack: () -> Unit
@@ -101,17 +104,20 @@ fun PasswordNumberScreen(
                 isLoading = false
                 isError = true
                 errorText = "인증번호가 일치하지 않습니다"
+                onErrorToast(null, "인증번호가 일치하지 않습니다")
             }
 
             is VerifyNumberUiState.NotFound -> {
                 isLoading = false
                 isError = true
                 errorText = "잘못된 인증번호입니다"
+                onErrorToast(null, "잘못된 인증번호입니다")
             }
 
             is VerifyNumberUiState.Error -> {
                 isLoading = false
                 isError = true
+                onErrorToast(verifyNumberUiState.exception, null)
             }
         }
         onDispose { initCallBack() }
@@ -144,6 +150,7 @@ fun PasswordNumberScreen(
                 setText = number,
                 isError = isError,
                 errorText = errorText,
+                placeHolder = "인증번호 입력",
                 onValueChange = onNumberChange,
                 onResendClick = {
                     resentCallBack()

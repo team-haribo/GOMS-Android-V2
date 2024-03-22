@@ -126,7 +126,7 @@ fun EmailCheckScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             RePasswordText(modifier = Modifier.align(Alignment.Start))
-            Spacer(modifier = Modifier.weight(1.1f))
+            Spacer(modifier = Modifier.height(28.dp))
             GomsTextField(
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),

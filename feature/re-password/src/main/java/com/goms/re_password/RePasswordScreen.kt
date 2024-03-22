@@ -138,7 +138,7 @@ fun RePasswordScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             RePasswordText(modifier = Modifier.align(Alignment.Start))
-            Spacer(modifier = Modifier.weight(1.1f))
+            Spacer(modifier = Modifier.height(28.dp))
             GomsPasswordTextField(
                 modifier = Modifier.fillMaxWidth(),
                 isError = isError,
