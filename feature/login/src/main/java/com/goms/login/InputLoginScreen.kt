@@ -4,6 +4,7 @@ import android.content.pm.ActivityInfo
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -34,6 +35,7 @@ import com.goms.design_system.component.button.ButtonState
 import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.button.GomsButton
 import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
+import com.goms.design_system.component.text.RowLinkText
 import com.goms.design_system.component.textfield.GomsTextField
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.util.keyboardAsState
@@ -49,6 +51,7 @@ import com.goms.ui.isStrongEmail
 fun InputLoginRoute(
     onBackClick: () -> Unit,
     onMainClick: () -> Unit,
+    onRePasswordClick: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     viewModel: LoginViewModel = hiltViewModel(),
 ) {
@@ -66,6 +69,7 @@ fun InputLoginRoute(
         saveTokenUiState = saveTokenUiState,
         onBackClick = onBackClick,
         onMainClick = onMainClick,
+        onRePasswordClick = onRePasswordClick,
         onErrorToast = onErrorToast,
         loginCallBack = {
             viewModel.login(
@@ -88,6 +92,7 @@ fun InputLoginScreen(
     saveTokenUiState: SaveTokenUiState,
     onBackClick: () -> Unit,
     onMainClick: () -> Unit,
+    onRePasswordClick: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     loginCallBack: () -> Unit
 ) {
@@ -96,7 +101,6 @@ fun InputLoginScreen(
     val animatedSpacerHeight by animateDpAsState(targetValue = if (!isKeyboardOpen) 100.dp else 16.dp)
     var isLoading by remember { mutableStateOf(false) }
     var isError by remember { mutableStateOf(false) }
-    var errorText by remember { mutableStateOf("") }
 
     LaunchedEffect(isKeyboardOpen) {
         if (!isKeyboardOpen) {
@@ -122,14 +126,12 @@ fun InputLoginScreen(
             is LoginUiState.BadRequest -> {
                 isLoading = false
                 isError = true
-                errorText = "비밀번호가 일치하지 않습니다"
                 onErrorToast(null, "비밀번호가 일치하지 않습니다")
             }
 
             is LoginUiState.NotFound -> {
                 isLoading = false
                 isError = true
-                errorText = "해당 유저가 존재하지 않습니다"
                 onErrorToast(null, "해당 유저가 존재하지 않습니다")
             }
 
@@ -161,10 +163,10 @@ fun InputLoginScreen(
         }
         Column(
             modifier = Modifier.padding(horizontal = 20.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             InputLoginText(modifier = Modifier.align(Alignment.Start))
-            Spacer(modifier = Modifier.weight(1.1f))
+            Spacer(modifier = Modifier.height(28.dp))
             GomsTextField(
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
@@ -174,6 +176,7 @@ fun InputLoginScreen(
                 isError = isError,
                 singleLine = true
             )
+            Spacer(modifier = Modifier.height(24.dp))
             GomsTextField(
                 modifier = Modifier.fillMaxWidth(),
                 isEmail = false,
@@ -182,10 +185,13 @@ fun InputLoginScreen(
                 setText = password,
                 onValueChange = onPasswordChange,
                 isError = isError,
-                errorText = errorText,
                 singleLine = true,
                 visualTransformation = PasswordVisualTransformation()
             )
+            Spacer(modifier = Modifier.height(8.dp))
+            RowLinkText {
+                onRePasswordClick()
+            }
             Spacer(modifier = Modifier.weight(1f))
             GomsButton(
                 modifier = Modifier.fillMaxWidth(),

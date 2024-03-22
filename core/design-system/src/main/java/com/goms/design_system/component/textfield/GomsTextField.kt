@@ -42,7 +42,6 @@ import androidx.compose.ui.unit.dp
 import com.goms.design_system.component.clickable.gomsClickable
 import com.goms.design_system.component.timer.CountdownTimer
 import com.goms.design_system.icon.SearchIcon
-import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
 import kotlinx.coroutines.delay
@@ -56,7 +55,6 @@ fun GomsTextField(
     readOnly: Boolean = false,
     focusManager: FocusManager = LocalFocusManager.current,
     focusRequester: FocusRequester = FocusRequester(),
-    errorText: String = "",
     setText: String,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
@@ -129,20 +127,6 @@ fun GomsTextField(
             readOnly = readOnly,
             visualTransformation = visualTransformation
         )
-        Column(
-            modifier = Modifier
-                .height(32.dp)
-                .padding(start = 8.dp),
-            verticalArrangement = Arrangement.Center
-        ) {
-            if (isError) {
-                Text(
-                    text = errorText,
-                    color = colors.N5,
-                    style = typography.buttonLarge
-                )
-            }
-        }
     }
 }
 
@@ -533,7 +517,6 @@ fun GomsTextFieldPreview() {
             modifier = Modifier.fillMaxWidth(),
             placeHolder = "Test",
             isError = true,
-            errorText = "오류",
             onValueChange = {},
             setText = ""
         )

@@ -81,6 +81,7 @@ fun GomsNavHost(
         inputLoginScreen(
             onBackClick = navController::popBackStack,
             onMainClick = { appState.navigateToTopLevelDestination(TopLevelDestination.MAIN) },
+            onRePasswordClick = navController::navigateToRePassword,
             onErrorToast = onErrorToast
         )
         signUpScreen(

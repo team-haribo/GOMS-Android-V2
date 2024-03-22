@@ -16,7 +16,7 @@ fun NavController.navigateToLogin(navOptions: NavOptions? = null) {
 
 fun NavGraphBuilder.loginScreen(
     onSignUpClick: () -> Unit,
-    onInputLoginClick: () -> Unit
+    onInputLoginClick: () -> Unit,
 ) {
     composable(route = loginRoute) {
         LoginRoute(
@@ -33,12 +33,14 @@ fun NavController.navigateToInputLogin(navOptions: NavOptions? = null) {
 fun NavGraphBuilder.inputLoginScreen(
     onBackClick: () -> Unit,
     onMainClick: () -> Unit,
+    onRePasswordClick: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
     composable(route = InputLoginRoute) {
         InputLoginRoute(
             onBackClick = onBackClick,
             onMainClick = onMainClick,
+            onRePasswordClick = onRePasswordClick,
             onErrorToast = onErrorToast
         )
     }
