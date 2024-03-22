@@ -7,7 +7,6 @@ import com.goms.common.result.asResult
 import com.goms.data.repository.account.AccountRepository
 import com.goms.data.repository.auth.AuthRepository
 import com.goms.data.repository.setting.SettingRepository
-import com.goms.datastore.AuthTokenDataSource
 import com.goms.domain.notification.SaveDeviceTokenUseCase
 import com.goms.model.response.account.ProfileResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -55,6 +54,9 @@ class MainActivityViewModel @Inject constructor(
     private val _themeState = MutableStateFlow("")
     val themeState = _themeState.asStateFlow()
 
+    private val _qrcodeState = MutableStateFlow("")
+    val qrcodeState = _qrcodeState.asStateFlow()
+
     fun saveDeviceToken(deviceToken: String) = viewModelScope.launch {
         saveDeviceTokenUseCase(deviceToken = deviceToken)
             .onSuccess {
@@ -76,9 +78,16 @@ class MainActivityViewModel @Inject constructor(
         authRepository.deleteToken()
     }
 
-    fun getSettingInfo() = viewModelScope.launch {
+    fun getTheme() = viewModelScope.launch {
         val themeValue = settingRepository.getThemeValue().first().replace("\"","")
         _themeState.value = themeValue
+    }
+
+    fun getSettingInfo() = viewModelScope.launch {
+        val themeValue = settingRepository.getThemeValue().first().replace("\"","")
+        val qrcodeValue = settingRepository.getQrcodeValue().first().replace("\"","")
+        _themeState.value = themeValue
+        _qrcodeState.value = qrcodeValue
     }
 }
 

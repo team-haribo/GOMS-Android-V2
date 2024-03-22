@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -59,6 +60,12 @@ fun GomsSwitchButton(
     val sizePx = with(LocalDensity.current) { (width - height).toPx() }
     val anchors = mapOf(0f to stateOff, sizePx to stateOn) // Maps anchor points (in px) to states
     val scope = rememberCoroutineScope()
+
+    LaunchedEffect("init") {
+        if(initialValue == stateOn) {
+            clickListener = true
+        }
+    }
 
     DisposableEffect(Unit) {
         onDispose {

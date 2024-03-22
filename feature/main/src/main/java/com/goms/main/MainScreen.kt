@@ -2,6 +2,7 @@ package com.goms.main
 
 import android.Manifest
 import android.os.Build
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -16,9 +17,11 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -46,6 +49,7 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
 @Composable
 fun MainRoute(
+    qrcodeState: String,
     onOutingStatusClick: () -> Unit,
     onLateListClick: () -> Unit,
     onStudentManagementClick: () -> Unit,
@@ -60,6 +64,15 @@ fun MainRoute(
     val getLateRankListUiState by viewModel.getLateRankListUiState.collectAsStateWithLifecycle()
     val getOutingListUiState by viewModel.getOutingListUiState.collectAsStateWithLifecycle()
     val getOutingCountUiState by viewModel.getOutingCountUiState.collectAsStateWithLifecycle()
+
+    var isQrcodeLaunch by rememberSaveable { mutableStateOf(true) }
+
+    LaunchedEffect(role) {
+        if(qrcodeState == "On" && isQrcodeLaunch && role.isNotBlank()) {
+            onQrcodeClick( Authority.valueOf(role) )
+            isQrcodeLaunch = false
+        }
+    }
 
     MainScreen(
         role = if (role.isNotBlank()) Authority.valueOf(role) else Authority.ROLE_STUDENT,
