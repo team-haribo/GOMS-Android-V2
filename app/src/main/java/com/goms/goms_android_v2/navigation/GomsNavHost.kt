@@ -153,7 +153,8 @@ fun GomsNavHost(
         )
         passwordNumberScreen(
             onBackClick = navController::popBackStack,
-            onRePasswordClick = navController::navigateToRePassword
+            onRePasswordClick = navController::navigateToRePassword,
+            onErrorToast = onErrorToast
         )
         rePasswordScreen(
             onBackClick = navController::popBackStack,

@@ -36,12 +36,14 @@ fun NavController.navigateToPasswordNumber(navOptions: NavOptions? = null) {
 
 fun NavGraphBuilder.passwordNumberScreen(
     onBackClick: () -> Unit,
-    onRePasswordClick: () -> Unit
+    onRePasswordClick: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
     composable(route = passwordNumberRoute) {
         PasswordNumberRoute(
             onBackClick = onBackClick,
-            onRePasswordClick = onRePasswordClick
+            onRePasswordClick = onRePasswordClick,
+            onErrorToast = onErrorToast
         )
     }
 }
