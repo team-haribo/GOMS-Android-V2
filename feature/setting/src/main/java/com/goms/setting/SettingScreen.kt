@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,9 +42,10 @@ import com.goms.setting.viewmodel.LogoutUiState
 import com.goms.setting.viewmodel.ProfileImageUiState
 import com.goms.setting.viewmodel.SetThemeUiState
 import com.goms.setting.viewmodel.SettingViewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+
 
 @Composable
 fun SettingRoute(
@@ -59,7 +61,11 @@ fun SettingRoute(
 
     val getProfileUiState by viewModel.getProfileUiState.collectAsStateWithLifecycle()
     val profileImageUiState by viewModel.profileImageUiState.collectAsStateWithLifecycle()
+
     val themeState by viewModel.themeState.collectAsStateWithLifecycle()
+    val qrcodeState by viewModel.qrcodeState.collectAsStateWithLifecycle()
+
+    var qrcodeData by remember { mutableStateOf("") }
 
     val logoutUiState by viewModel.logoutState.collectAsStateWithLifecycle()
     val setThemeUiState by viewModel.setThemeState.collectAsStateWithLifecycle()
@@ -78,6 +84,16 @@ fun SettingRoute(
         }
     }
 
+    DisposableEffect(Unit) {
+        onDispose {
+            if(!qrcodeData.isNullOrEmpty()) {
+                GlobalScope.launch(Dispatchers.IO) {
+                    viewModel.setQrcode(qrcodeData)
+                }
+            }
+        }
+    }
+
     SettingScreen(
         onProfileClick = { galleryLauncher.launch("image/*") },
         onBackClick = onBackClick,
@@ -90,17 +106,20 @@ fun SettingRoute(
         },
         getSettingInfo = {
             viewModel.getThemeValue()
+            viewModel.getQrcodeValue()
         },
         onThemeSelect = { selectedTheme ->
             viewModel.initSetTheme()
             viewModel.setTheme(selectedTheme)
         },
         onUpdateTheme = { onThemeSelect() },
+        onUpdateQrcode = { qrcodeData = it },
         role = role,
         logoutUiState = logoutUiState,
         setThemeUiState = setThemeUiState,
         getProfileUiState = getProfileUiState,
         themeState = themeState,
+        qrcodeState = qrcodeState,
         profileImageUiState = profileImageUiState,
         onErrorToast = onErrorToast,
         onEmailCheck = onEmailCheck
@@ -117,11 +136,13 @@ fun SettingScreen(
     getSettingInfo: () -> Unit,
     onThemeSelect: (String) -> Unit,
     onUpdateTheme: () -> Unit,
+    onUpdateQrcode: (String) -> Unit,
     role: String,
     logoutUiState: LogoutUiState,
     setThemeUiState: SetThemeUiState,
     getProfileUiState: GetProfileUiState,
     themeState: String,
+    qrcodeState: String,
     profileImageUiState: ProfileImageUiState,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     onEmailCheck: () -> Unit
@@ -130,6 +151,8 @@ fun SettingScreen(
         getProfile()
         getSettingInfo()
     }
+
+    Log.d("testt",qrcodeState)
 
     var isLoading by remember { mutableStateOf(false) }
 
@@ -147,7 +170,7 @@ fun SettingScreen(
     when (setThemeUiState) {
         is SetThemeUiState.Loading -> Unit
         is SetThemeUiState.Success -> onUpdateTheme()
-        is SetThemeUiState.Error ->  Unit
+        is SetThemeUiState.Error -> Unit
     }
 
     when (profileImageUiState) {
@@ -205,8 +228,9 @@ fun SettingScreen(
                 detail = "외출할 시간이 될 때마다 알려드려요",
                 switchOnBackground = colors.P5,
                 switchOffBackground = colors.G4,
-                onFunctionOff = { Log.d("testt", "off1") },
-                onFunctionOn = { Log.d("testt", "on1") }
+                isSwitchOn = false,
+                onFunctionOff = {},
+                onFunctionOn = {}
             )
             Spacer(modifier = Modifier.height(32.dp))
             SettingSwitchComponent(
@@ -215,8 +239,9 @@ fun SettingScreen(
                 detail = "앱을 실행하면 즉시 카메라가 켜져요",
                 switchOnBackground = colors.P5,
                 switchOffBackground = colors.G4,
-                onFunctionOff = { },
-                onFunctionOn = { }
+                isSwitchOn = qrcodeState == "On",
+                onFunctionOff = { if (qrcodeState == "On") onUpdateQrcode("Off") },
+                onFunctionOn = { if (qrcodeState == "Off") onUpdateQrcode("On") }
             )
         } else {
             SettingSwitchComponent(
@@ -225,6 +250,7 @@ fun SettingScreen(
                 detail = "앱을 실행하면 즉시 Qr코드를 생성해요",
                 switchOnBackground = colors.A7,
                 switchOffBackground = colors.G4,
+                isSwitchOn = qrcodeState == "On",
                 onFunctionOff = { },
                 onFunctionOn = { }
             )

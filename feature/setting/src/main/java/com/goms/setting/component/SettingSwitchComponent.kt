@@ -23,6 +23,7 @@ fun SettingSwitchComponent(
     modifier: Modifier,
     title: String,
     detail: String,
+    isSwitchOn: Boolean,
     switchOnBackground: Color = Color.Unspecified,
     switchOffBackground: Color = Color.Unspecified,
     onFunctionOff: () -> Unit,
@@ -53,7 +54,7 @@ fun SettingSwitchComponent(
             stateOff = 0,
             switchOnBackground = switchOnBackground,
             switchOffBackground = switchOffBackground,
-            initialValue = 0,
+            initialValue = if (isSwitchOn) 1 else 0,
             onCheckedChanged = {
                 if (it) onFunctionOn() else onFunctionOff()
             }
@@ -68,7 +69,9 @@ fun preasasdview() {
         modifier = Modifier.padding(20.dp),
         title = "외출제 푸시 알림",
         detail = "외출할 시간이 될 때마다 알려드려요",
-        onFunctionOff = {}) {
+        onFunctionOff = {},
+        isSwitchOn = false
+    ) {
 
     }
 }
