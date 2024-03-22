@@ -67,7 +67,7 @@ fun CountdownTimer(
                 onTimerReset()
             },
             text = "재발송",
-            color = colors.I5,
+            color = colors.P5,
             style = typography.buttonLarge
         )
     }

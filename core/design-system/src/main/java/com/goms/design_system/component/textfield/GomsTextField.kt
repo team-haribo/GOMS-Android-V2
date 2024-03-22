@@ -132,12 +132,17 @@ fun GomsTextField(
 
 @Composable
 fun NumberTextField(
-    text: String,
+    modifier: Modifier = Modifier,
+    setText: String,
+    placeHolder: String = "",
+    focusManager: FocusManager = LocalFocusManager.current,
+    focusRequester: FocusRequester = FocusRequester(),
     isError: Boolean,
     errorText: String = "",
     onValueChange: (String) -> Unit,
     onResendClick: () -> Unit,
 ) {
+    val isFocused = remember { mutableStateOf(false) }
     val isErrorTextField = remember { mutableStateOf(isError) }
     val errorTextTextField = remember { mutableStateOf(errorText) }
 
@@ -146,184 +151,71 @@ fun NumberTextField(
         errorTextTextField.value = errorText
     }
 
-    Column {
-        BasicTextField(
-            value = text.take(4),
-            onValueChange = {
-                if (it.length <= 4) {
-                    onValueChange(it)
-                }
-            },
-            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-            decorationBox = {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    text.forEachIndexed { index, char ->
-                        NumberTextFieldCharContainer(
-                            modifier = Modifier,
-                            text = char,
-                            isError = isErrorTextField.value
-                        )
-                    }
-                    repeat(4 - text.length) {
-                        NumberTextFieldCharContainer(
-                            modifier = Modifier,
-                            text = ' ',
-                            isError = isErrorTextField.value
-                        )
-                    }
-                }
-            },
-            singleLine = true
-        )
-        CountdownTimer(
-            isError = isErrorTextField.value,
-            errorText = errorTextTextField.value,
-            onTimerFinish = {
-                isErrorTextField.value = true
-                errorTextTextField.value = "시간이 만료되었습니다"
-            },
-            onTimerReset = {
-                isErrorTextField.value = false
-                errorTextTextField.value = ""
-                onResendClick()
-            }
-        )
-    }
-}
-
-
-@Composable
-private fun NumberTextFieldCharContainer(
-    modifier: Modifier,
-    text: Char,
-    isError: Boolean,
-) {
-    val shape = remember { RoundedCornerShape(12.dp) }
-
-    Box(
-        modifier = modifier
-            .size(
-                width = 74.dp,
-                height = 64.dp,
-            )
-            .background(
-                color = colors.G1,
-                shape = shape,
-            )
-            .border(
-                width = 1.dp,
-                color = if (isError) colors.N5 else colors.WHITE.copy(0.15f),
-                shape = shape
-            ),
-        contentAlignment = Alignment.Center,
-    ) {
-        Text(
-            text = text.toString(),
-            color = colors.WHITE,
-            style = typography.titleSmall,
-            fontWeight = FontWeight.SemiBold,
-            textAlign = TextAlign.Center
-        )
-    }
-}
-
-@Composable
-fun GomsBottomSheetTextField(
-    modifier: Modifier = Modifier,
-    isError: Boolean = false,
-    placeHolder: String = "",
-    readOnly: Boolean = false,
-    focusManager: FocusManager = LocalFocusManager.current,
-    focusRequester: FocusRequester = FocusRequester(),
-    errorText: String = "",
-    setText: String,
-    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    keyboardActions: KeyboardActions = KeyboardActions.Default,
-    maxLines: Int = Int.MAX_VALUE,
-    singleLine: Boolean = false,
-    visualTransformation: VisualTransformation = VisualTransformation.None,
-    onValueChange: (String) -> Unit = {},
-    onClick: () -> Unit
-) {
-    val isFocused = remember { mutableStateOf(false) }
-
     DisposableEffect(Unit) {
         onDispose {
             focusManager.clearFocus()
         }
     }
 
-    Box(modifier = modifier) {
-        Column {
-            OutlinedTextField(
-                value = setText,
-                onValueChange = {
-                    onValueChange(it)
-                },
-                keyboardOptions = keyboardOptions,
-                keyboardActions = keyboardActions,
-                placeholder = {
-                    Text(
-                        text = placeHolder,
-                        style = typography.textMedium,
-                        fontWeight = FontWeight.Normal,
-                        color = if (isError) colors.N5 else colors.G4
-                    )
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(64.dp)
-                    .focusRequester(focusRequester)
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(colors.G1)
-                    .border(
-                        width = 1.dp,
-                        color = if (isError) colors.N5 else colors.WHITE.copy(0.15f),
-                        shape = RoundedCornerShape(12.dp)
-                    )
-                    .onFocusChanged {
-                        isFocused.value = it.isFocused
-                    },
-                maxLines = maxLines,
-                singleLine = singleLine,
-                textStyle = typography.textMedium,
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedTextColor = if (isError) colors.N5 else colors.WHITE,
-                    unfocusedTextColor = if (isError) colors.N5 else colors.WHITE,
-                    focusedPlaceholderColor = if (isError) colors.N5 else colors.G4,
-                    unfocusedPlaceholderColor = if (isError) colors.N5 else colors.G4,
-                    focusedBorderColor = Color.Transparent,
-                    unfocusedBorderColor = Color.Transparent,
-                    cursorColor = colors.I5
-                ),
-                readOnly = readOnly,
-                visualTransformation = visualTransformation
-            )
-            Column(
-                modifier = Modifier
-                    .height(32.dp)
-                    .padding(start = 8.dp),
-                verticalArrangement = Arrangement.Center
-            ) {
-                if (isError) {
-                    Text(
-                        text = errorText,
-                        color = colors.N5,
-                        style = typography.buttonLarge
-                    )
-                }
-            }
-        }
-        Box(
-            modifier = Modifier
+    Column {
+        OutlinedTextField(
+            value = setText,
+            onValueChange = {
+                onValueChange(it)
+            },
+            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+            placeholder = {
+                Text(
+                    text = placeHolder,
+                    style = typography.textMedium,
+                    fontWeight = FontWeight.Normal,
+                    color = if (isError) colors.N5 else colors.G4
+                )
+            },
+            modifier = modifier
                 .fillMaxWidth()
                 .height(64.dp)
-                .gomsClickable { onClick() }
+                .focusRequester(focusRequester)
+                .clip(RoundedCornerShape(12.dp))
+                .background(colors.G1)
+                .border(
+                    width = 1.dp,
+                    color = if (isError) colors.N5 else Color.Transparent,
+                    shape = RoundedCornerShape(12.dp)
+                )
+                .onFocusChanged {
+                    isFocused.value = it.isFocused
+                    if (it.isFocused) {
+                        onValueChange("")
+                    }
+                },
+            maxLines = 1,
+            singleLine = true,
+            textStyle = typography.textMedium,
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedTextColor = if (isError) colors.N5 else colors.WHITE,
+                unfocusedTextColor = if (isError) colors.N5 else colors.WHITE,
+                focusedPlaceholderColor = if (isError) colors.N5 else colors.G4,
+                unfocusedPlaceholderColor = if (isError) colors.N5 else colors.G4,
+                focusedBorderColor = Color.Transparent,
+                unfocusedBorderColor = Color.Transparent,
+                cursorColor = colors.I5
+            )
         )
     }
+    CountdownTimer(
+        isError = isErrorTextField.value,
+        errorText = errorTextTextField.value,
+        onTimerFinish = {
+            isErrorTextField.value = true
+            errorTextTextField.value = "시간이 만료되었습니다"
+        },
+        onTimerReset = {
+            isErrorTextField.value = false
+            errorTextTextField.value = ""
+            onResendClick()
+        }
+    )
 }
 
 @Composable
@@ -375,7 +267,7 @@ fun GomsPasswordTextField(
                 .background(colors.G1)
                 .border(
                     width = 1.dp,
-                    color = if (isError) colors.N5 else colors.WHITE.copy(0.15f),
+                    color = if (isError) colors.N5 else Color.Transparent,
                     shape = RoundedCornerShape(12.dp)
                 )
                 .onFocusChanged {
@@ -398,13 +290,13 @@ fun GomsPasswordTextField(
         )
         Column(
             modifier = Modifier
-                .heightIn(min = 25.dp)
-                .padding(start = 8.dp),
+                .heightIn(min = 24.dp)
+                .padding(start = 8.dp, top = 4.dp),
             verticalArrangement = Arrangement.Center
         ) {
             if (isDescription) {
                 Text(
-                    text = "대/소문자, 특수문자 6~15자",
+                    text = "·  대/소문자, 특수문자 6~15자",
                     color = colors.G4,
                     style = typography.buttonLarge
                 )
@@ -521,17 +413,18 @@ fun GomsTextFieldPreview() {
             setText = ""
         )
         NumberTextField(
-            text = "1234",
-            isError = false,
-            onValueChange = {},
-            onResendClick = {},
-        )
-        NumberTextField(
-            text = "1234",
+            modifier = Modifier.fillMaxWidth(),
+            placeHolder = "Test",
             isError = true,
-            errorText = "오류",
             onValueChange = {},
-            onResendClick = {},
-        )
+            setText = ""
+        ) {}
+        NumberTextField(
+            modifier = Modifier.fillMaxWidth(),
+            placeHolder = "Test",
+            isError = true,
+            onValueChange = {},
+            setText = ""
+        ) {}
     }
 }

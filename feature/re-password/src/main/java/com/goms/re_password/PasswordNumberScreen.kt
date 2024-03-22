@@ -30,13 +30,11 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.goms.common.result.Result
 import com.goms.design_system.component.button.ButtonState
 import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.button.GomsButton
 import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
 import com.goms.design_system.component.textfield.NumberTextField
-import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.util.keyboardAsState
 import com.goms.design_system.util.lockScreenOrientation
@@ -46,7 +44,7 @@ import com.goms.re_password.viewmodel.RePasswordViewmodel
 import com.goms.re_password.viewmodel.VerifyNumberUiState
 
 @Composable
-fun NumberRoute(
+fun PasswordNumberRoute(
     onBackClick: () -> Unit,
     onRePasswordClick: () -> Unit,
     viewModel: RePasswordViewmodel = hiltViewModel(LocalContext.current as ComponentActivity)
@@ -54,7 +52,7 @@ fun NumberRoute(
     val verifyNumberUiState by viewModel.verifyNumberUiState.collectAsState()
     val number by viewModel.number.collectAsStateWithLifecycle()
 
-    NumberScreen(
+    PasswordNumberScreen(
         number = number,
         onNumberChange = viewModel::onNumberChange,
         verifyNumberUiState = verifyNumberUiState,
@@ -72,7 +70,7 @@ fun NumberRoute(
 }
 
 @Composable
-fun NumberScreen(
+fun PasswordNumberScreen(
     number: String,
     onNumberChange: (String) -> Unit,
     verifyNumberUiState: VerifyNumberUiState,
@@ -141,9 +139,9 @@ fun NumberScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             NumberText(modifier = Modifier.align(Alignment.Start))
-            Spacer(modifier = Modifier.weight(2.1f))
+            Spacer(modifier = Modifier.height(28.dp))
             NumberTextField(
-                text = number,
+                setText = number,
                 isError = isError,
                 errorText = errorText,
                 onValueChange = onNumberChange,
