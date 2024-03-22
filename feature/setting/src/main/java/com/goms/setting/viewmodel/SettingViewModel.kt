@@ -2,6 +2,7 @@ package com.goms.setting.viewmodel
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.goms.common.result.Result
@@ -11,6 +12,7 @@ import com.goms.data.repository.setting.SettingRepository
 import com.goms.domain.account.GetProfileUseCase
 import com.goms.domain.account.UploadProfileImageUseCase
 import com.goms.domain.auth.LogoutUseCase
+import com.goms.domain.setting.SetQrcodeUseCase
 import com.goms.domain.setting.SetThemeUseCase
 import com.goms.setting.util.getMultipartFile
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,13 +30,17 @@ class SettingViewModel @Inject constructor (
     private val uploadProfileImageUseCase: UploadProfileImageUseCase,
     private val logoutUseCase: LogoutUseCase,
     private val settingRepository: SettingRepository,
-    private val saveThemeUseCase: SetThemeUseCase,
+    private val setThemeUseCase: SetThemeUseCase,
+    private val setQrcodeUseCase: SetQrcodeUseCase,
     private val authRepository: AuthRepository
 ) : ViewModel() {
     val role = authRepository.getRole()
 
     private val _themeState = MutableStateFlow("")
     val themeState = _themeState.asStateFlow()
+
+    private val _qrcodeState = MutableStateFlow("")
+    val qrcodeState = _qrcodeState.asStateFlow()
 
     private val _setThemeState = MutableStateFlow<SetThemeUiState>(SetThemeUiState.Loading)
     val setThemeState = _setThemeState.asStateFlow()
@@ -89,7 +95,7 @@ class SettingViewModel @Inject constructor (
     }
 
     fun setTheme(theme: String) = viewModelScope.launch {
-       saveThemeUseCase(theme = theme)
+       setThemeUseCase(theme = theme)
            .onSuccess {
                getThemeValue()
                _setThemeState.value = SetThemeUiState.Success
@@ -98,9 +104,18 @@ class SettingViewModel @Inject constructor (
            }
     }
 
+    suspend fun setQrcode(qrcode: String) {
+        setQrcodeUseCase(qrcode = qrcode)
+    }
+
     fun getThemeValue() = viewModelScope.launch {
         val themeValue = settingRepository.getThemeValue().first().replace("\"","")
         _themeState.value = themeValue
+    }
+
+    fun getQrcodeValue() = viewModelScope.launch {
+        val qrcodeValue = settingRepository.getQrcodeValue().first().replace("\"","")
+        _qrcodeState.value = qrcodeValue
     }
 
     fun logout() = viewModelScope.launch {
