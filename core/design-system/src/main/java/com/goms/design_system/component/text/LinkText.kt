@@ -63,7 +63,7 @@ fun LinkText(
                 text = text,
                 style = typography.buttonLarge,
                 fontWeight = FontWeight.Normal,
-                color = colors.I5
+                color = colors.P5
             )
         }
     }
