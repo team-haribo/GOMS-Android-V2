@@ -23,13 +23,14 @@ class AuthInterceptor @Inject constructor(
         val builder = request.newBuilder()
         val currentTime = System.currentTimeMillis().toGomsTimeDate()
         val ignorePath = "/auth"
+        val ignorePath2 = "new-password"
         val ignoreMethodPost = "POST"
         val ignoreMethodGet = "GET"
         val ignoreMethodDELETE = "DELETE"
         val path = request.url.encodedPath
         val method = request.method
 
-        if (path.contains(ignorePath) && (method == ignoreMethodPost || method == ignoreMethodGet)) {
+        if (path.contains(ignorePath) && (method == ignoreMethodPost || method == ignoreMethodGet) || path.contains(ignorePath2)) {
             val response = chain.proceed(request)
             return if (response.code == 204) {
                 response.newBuilder().code(200).build()
