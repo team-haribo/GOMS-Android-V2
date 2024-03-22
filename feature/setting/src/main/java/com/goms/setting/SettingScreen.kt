@@ -251,8 +251,8 @@ fun SettingScreen(
                 switchOnBackground = colors.A7,
                 switchOffBackground = colors.G4,
                 isSwitchOn = qrcodeState == "On",
-                onFunctionOff = { },
-                onFunctionOn = { }
+                onFunctionOff = { if (qrcodeState == "On") onUpdateQrcode("Off") },
+                onFunctionOn = { if (qrcodeState == "Off") onUpdateQrcode("On") }
             )
         }
     }
