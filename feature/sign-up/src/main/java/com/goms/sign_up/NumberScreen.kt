@@ -146,10 +146,11 @@ fun NumberScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             NumberText(modifier = Modifier.align(Alignment.Start))
-            Spacer(modifier = Modifier.weight(2.1f))
+            Spacer(modifier = Modifier.height(28.dp))
             NumberTextField(
-                text = number,
+                setText = number,
                 isError = isError,
+                placeHolder = "인증번호 입력",
                 errorText = errorText,
                 onValueChange = onNumberChange,
                 onResendClick = {

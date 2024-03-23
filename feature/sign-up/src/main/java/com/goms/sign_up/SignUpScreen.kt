@@ -139,7 +139,7 @@ fun SignUpScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             SignUpText(modifier = Modifier.align(Alignment.Start))
-            Spacer(modifier = Modifier.weight(1.1f))
+            Spacer(modifier = Modifier.height(28.dp))
             GomsTextField(
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
@@ -149,6 +149,7 @@ fun SignUpScreen(
                 isEmail = false,
                 singleLine = true
             )
+            Spacer(modifier = Modifier.height(24.dp))
             GomsTextField(
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
@@ -157,12 +158,13 @@ fun SignUpScreen(
                 onValueChange = onEmailChange,
                 singleLine = true
             )
+            Spacer(modifier = Modifier.height(24.dp))
             SelectGenderDropDown(
                 onSelectGender = onGenderChange
             ) {
                 focusManager.clearFocus()
             }
-            Spacer(modifier = Modifier.height(30.dp))
+            Spacer(modifier = Modifier.height(24.dp))
             SelectMajorDropDown(
                 onSelectMajor = onMajorChange
             ) {

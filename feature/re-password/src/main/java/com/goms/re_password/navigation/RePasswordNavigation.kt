@@ -5,11 +5,11 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.goms.re_password.EmailCheckRoute
-import com.goms.re_password.NumberRoute
+import com.goms.re_password.PasswordNumberRoute
 import com.goms.re_password.RePasswordRoute
 
 const val emailCheckRoute = "email_check_route"
-const val numberRoute = "number_route"
+const val passwordNumberRoute = "password_number_route"
 const val rePasswordRoute = "re_password_route"
 
 fun NavController.navigateToEmailCheck(navOptions: NavOptions? = null) {
@@ -31,17 +31,19 @@ fun NavGraphBuilder.emailCheckScreen(
 }
 
 fun NavController.navigateToPasswordNumber(navOptions: NavOptions? = null) {
-    this.navigate(numberRoute, navOptions)
+    this.navigate(passwordNumberRoute, navOptions)
 }
 
 fun NavGraphBuilder.passwordNumberScreen(
     onBackClick: () -> Unit,
-    onRePasswordClick: () -> Unit
+    onRePasswordClick: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
-    composable(route = numberRoute) {
-        NumberRoute(
+    composable(route = passwordNumberRoute) {
+        PasswordNumberRoute(
             onBackClick = onBackClick,
-            onRePasswordClick = onRePasswordClick
+            onRePasswordClick = onRePasswordClick,
+            onErrorToast = onErrorToast
         )
     }
 }

@@ -66,7 +66,7 @@ fun GomsDropdown(
                 .border(
                     BorderStroke(
                         width = 1.dp,
-                        color = colors.WHITE.copy(0.15f)
+                        color = if (showDropdown == true) colors.WHITE.copy(0.15f) else Color.Transparent
                     ),
                     shape = RoundedCornerShape(12.dp)
                 )
