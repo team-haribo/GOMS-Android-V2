@@ -42,6 +42,7 @@ import com.goms.setting.viewmodel.LogoutUiState
 import com.goms.setting.viewmodel.ProfileImageUiState
 import com.goms.setting.viewmodel.SetThemeUiState
 import com.goms.setting.viewmodel.SettingViewModel
+import com.goms.ui.GomsRoleBackButton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -95,6 +96,7 @@ fun SettingRoute(
     }
 
     SettingScreen(
+        role = if (role.isNotBlank()) Authority.valueOf(role) else Authority.ROLE_STUDENT,
         onProfileClick = { galleryLauncher.launch("image/*") },
         onBackClick = onBackClick,
         onLogoutClick = { viewModel.logout() },
@@ -114,7 +116,6 @@ fun SettingRoute(
         },
         onUpdateTheme = { onThemeSelect() },
         onUpdateQrcode = { qrcodeData = it },
-        role = role,
         logoutUiState = logoutUiState,
         setThemeUiState = setThemeUiState,
         getProfileUiState = getProfileUiState,
@@ -128,6 +129,7 @@ fun SettingRoute(
 
 @Composable
 fun SettingScreen(
+    role: Authority,
     onProfileClick: () -> Unit,
     onBackClick: () -> Unit,
     onLogoutClick: () -> Unit,
@@ -137,7 +139,6 @@ fun SettingScreen(
     onThemeSelect: (String) -> Unit,
     onUpdateTheme: () -> Unit,
     onUpdateQrcode: (String) -> Unit,
-    role: String,
     logoutUiState: LogoutUiState,
     setThemeUiState: SetThemeUiState,
     getProfileUiState: GetProfileUiState,
@@ -193,7 +194,9 @@ fun SettingScreen(
             .navigationBarsPadding()
             .statusBarsPadding(),
     ) {
-        GomsBackButton { onBackClick() }
+        GomsRoleBackButton(role = role) {
+            onBackClick()
+        }
         Spacer(modifier = Modifier.height(16.dp))
         SettingProfileCard(
             modifier = Modifier.padding(horizontal = 20.dp),
@@ -219,7 +222,7 @@ fun SettingScreen(
             themeState = themeState
         )
         Spacer(modifier = Modifier.height(24.dp))
-        if (role == Authority.ROLE_STUDENT.name) {
+        if (role == Authority.ROLE_STUDENT) {
             SettingSwitchComponent(
                 modifier = Modifier.padding(horizontal = 28.dp),
                 title = "외출제 푸시 알림",
@@ -242,7 +245,7 @@ fun SettingScreen(
                 onFunctionOn = { if (qrcodeState == "Off") onUpdateQrcode("On") }
             )
         }
-        if (role == Authority.ROLE_STUDENT_COUNCIL.name) {
+        if (role == Authority.ROLE_STUDENT_COUNCIL) {
             SettingSwitchComponent(
                 modifier = Modifier.padding(horizontal = 28.dp),
                 title = "Qr 생성 바로 켜기",
