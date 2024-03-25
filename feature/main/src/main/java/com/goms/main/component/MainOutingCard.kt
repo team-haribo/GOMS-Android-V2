@@ -104,7 +104,7 @@ fun MainOutingCard(
                                 color = if (role == Authority.ROLE_STUDENT_COUNCIL) colors.A7 else colors.P5
                             )
                             Text(
-                                text = "명이 외출중",
+                                text = "명이 외출 중",
                                 style = typography.textMedium,
                                 fontWeight = FontWeight.Normal,
                                 color = colors.G4
