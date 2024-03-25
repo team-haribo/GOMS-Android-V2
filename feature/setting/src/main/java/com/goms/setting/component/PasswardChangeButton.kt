@@ -25,7 +25,10 @@ fun PasswordChangeButton(
 ) {
     Column(
         modifier = modifier
-            .gomsClickable {
+            .gomsClickable(
+                isIndication = true,
+                rippleColor = colors.G7.copy(0.5f)
+            ) {
                 onClick()
             }
     ) {
