@@ -24,7 +24,7 @@ fun FilterText(onFilterTextClick: () -> Unit) {
             text = "필터",
             style = typography.buttonLarge,
             fontWeight = FontWeight.Normal,
-            color = colors.I5
+            color = colors.A7
         )
     }
 }
