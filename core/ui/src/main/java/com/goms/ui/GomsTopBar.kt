@@ -43,7 +43,7 @@ fun GomsTopBar(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        GomsTextIcon(tint = if (role == Authority.ROLE_STUDENT) colors.P5 else colors.A7)
+        GomsTextIcon(tint = colors.G7)
         Spacer(modifier = Modifier.weight(1f))
         if (role == Authority.ROLE_STUDENT_COUNCIL) {
             Box(

@@ -63,11 +63,8 @@ fun OutingStatusList(
         }
 
         GetOutingCountUiState.Empty -> {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 100.dp)
-            ) {
+            Column {
+                Spacer(modifier = Modifier.height(16.dp))
                 OutingListEmptyText()
             }
         }
@@ -108,7 +105,7 @@ fun OutingStatusList(
                 OutingSearchUiState.Empty -> {
                     Column(
                         modifier = Modifier.fillMaxWidth(),
-                        verticalArrangement = Arrangement.spacedBy(60.dp)
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         SearchResultText(
                             modifier = Modifier

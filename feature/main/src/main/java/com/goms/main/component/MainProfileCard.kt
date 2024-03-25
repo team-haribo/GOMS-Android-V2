@@ -78,8 +78,7 @@ fun MainProfileCardComponent(
     Surface(
         modifier = modifier,
         color = colors.G1,
-        shape = RoundedCornerShape(12.dp),
-        border = BorderStroke(width = 1.dp, color = colors.WHITE.copy(0.15f))
+        shape = RoundedCornerShape(12.dp)
     ) {
         Row(
             modifier = Modifier
@@ -125,7 +124,7 @@ fun MainProfileCardComponent(
             Spacer(modifier = Modifier.weight(1f))
             Text(
                 text = stateText,
-                style = typography.titleSmall,
+                style = typography.textSmall,
                 fontWeight = FontWeight.SemiBold,
                 color = stateColor
             )
@@ -138,8 +137,7 @@ fun ShimmerMainProfileCardComponent(modifier: Modifier) {
     Surface(
         modifier = modifier,
         color = colors.G1,
-        shape = RoundedCornerShape(12.dp),
-        border = BorderStroke(width = 1.dp, color = colors.WHITE.copy(0.15f))
+        shape = RoundedCornerShape(12.dp)
     ) {
         Row(
             modifier = Modifier

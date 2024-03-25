@@ -30,7 +30,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goms.common.result.Result
-import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.dialog.GomsTwoButtonDialog
 import com.goms.design_system.component.textfield.GomsSearchTextField
 import com.goms.design_system.theme.GomsTheme.colors
@@ -42,6 +41,7 @@ import com.goms.main.viewmodel.GetOutingListUiState
 import com.goms.main.viewmodel.MainViewModel
 import com.goms.main.viewmodel.OutingSearchUiState
 import com.goms.model.enum.Authority
+import com.goms.ui.GomsRoleBackButton
 import java.util.UUID
 
 @Composable
@@ -129,7 +129,7 @@ fun OutingStatusScreen(
                 }
             }
     ) {
-        GomsBackButton {
+        GomsRoleBackButton(role = role) {
             onBackClick()
         }
         Column(
