@@ -2,15 +2,18 @@ package com.goms.main.component
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
@@ -46,21 +49,17 @@ fun MainOutingCard(
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     onClick: () -> Unit
 ) {
-    Surface(
-        modifier = modifier,
-        color = colors.G1,
-        shape = RoundedCornerShape(12.dp),
-        border = BorderStroke(width = 1.dp, color = colors.WHITE.copy(0.15f))
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(6.dp)
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(6.dp)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
@@ -69,6 +68,69 @@ fun MainOutingCard(
                     fontWeight = FontWeight.Bold,
                     color = colors.WHITE
                 )
+                when (getOutingCountUiState) {
+                    GetOutingCountUiState.Loading -> {
+                        Box(
+                            modifier = Modifier
+                                .size(56.dp, 23.dp)
+                                .shimmerEffect(color = colors.WHITE)
+                        )
+                    }
+
+                    is GetOutingCountUiState.Error -> {
+                        onErrorToast(getOutingCountUiState.exception, "외출학생 숫자를 가져오지 못했습니다")
+                    }
+
+                    GetOutingCountUiState.Empty -> {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                text = "0",
+                                style = typography.textMedium,
+                                fontWeight = FontWeight.SemiBold,
+                                color = if (role == Authority.ROLE_STUDENT_COUNCIL) colors.A7 else colors.P5
+                            )
+                            Text(
+                                text = "명이 외출중",
+                                style = typography.textMedium,
+                                fontWeight = FontWeight.Normal,
+                                color = colors.G4
+                            )
+                        }
+                    }
+
+                    is GetOutingCountUiState.Success -> {
+                        val count = getOutingCountUiState.getOutingCountResponse
+
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                text = "${count.outingCount}",
+                                style = typography.textMedium,
+                                fontWeight = FontWeight.SemiBold,
+                                color = if (role == Authority.ROLE_STUDENT_COUNCIL) colors.A7 else colors.P5
+                            )
+                            Text(
+                                text = "명이 외출중",
+                                style = typography.textMedium,
+                                fontWeight = FontWeight.Normal,
+                                color = colors.G4
+                            )
+                        }
+                    }
+                }
+            }
+            Box(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(colors.G1)
+                    .gomsClickable(
+                        isIndication = true,
+                        rippleColor = colors.G7.copy(0.5f)
+                    ) {
+                        onClick()
+                    }
+                    .padding(horizontal = 8.dp, vertical = 2.dp),
+                contentAlignment = Alignment.Center
+            ) {
                 if (role == Authority.ROLE_STUDENT) {
                     Text(
                         modifier = Modifier.gomsClickable { onClick() },
@@ -87,96 +149,43 @@ fun MainOutingCard(
                     )
                 }
             }
-            Divider(modifier = Modifier.height(1.dp), color = colors.WHITE.copy(0.15f))
-            when (getOutingCountUiState) {
-                GetOutingCountUiState.Loading -> {
+        }
+        if (getOutingCountUiState is GetOutingCountUiState.Success) {
+            when (getOutingListUiState) {
+                GetOutingListUiState.Loading -> {
                     Box(
                         modifier = Modifier
                             .size(56.dp, 23.dp)
                             .shimmerEffect(color = colors.WHITE)
                     )
-                }
-
-                is GetOutingCountUiState.Error -> {
-                    onErrorToast(getOutingCountUiState.exception, "외출학생 숫자를 가져오지 못했습니다")
-                }
-
-                GetOutingCountUiState.Empty -> {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(max = 10000.dp)
                     ) {
-                        Text(
-                            text = "0",
-                            style = typography.textMedium,
-                            fontWeight = FontWeight.SemiBold,
-                            color = colors.G7
-                        )
-                        Text(
-                            text = "명이 외출중",
-                            style = typography.textMedium,
-                            fontWeight = FontWeight.Normal,
-                            color = colors.G4
-                        )
+                        items(5) {
+                            ShimmerMainOutingItem(modifier = modifier)
+                        }
                     }
                 }
 
-                is GetOutingCountUiState.Success -> {
-                    when (getOutingListUiState) {
-                        GetOutingListUiState.Loading -> {
-                            Box(
-                                modifier = Modifier
-                                    .size(56.dp, 23.dp)
-                                    .shimmerEffect(color = colors.WHITE)
-                            )
-                            LazyColumn(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .heightIn(max = 10000.dp)
-                            ) {
-                                items(5) {
-                                    ShimmerMainOutingItem(modifier = modifier)
-                                }
-                            }
-                        }
+                is GetOutingListUiState.Error -> {
+                    onErrorToast(getOutingListUiState.exception, "외출자 정보를 가져오지 못했습니다")
+                }
 
-                        is GetOutingListUiState.Error -> {
-                            onErrorToast(getOutingListUiState.exception, "외출자 정보를 가져오지 못했습니다")
-                        }
+                is GetOutingListUiState.Success -> {
+                    val list = getOutingListUiState.getOutingListResponse
 
-                        is GetOutingListUiState.Success -> {
-                            val count = getOutingCountUiState.getOutingCountResponse
-                            val list = getOutingListUiState.getOutingListResponse
-
-                            Row(
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(max = 10000.dp)
+                    ) {
+                        items(list.size) {
+                            MainOutingItem(
                                 modifier = Modifier.fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Text(
-                                    text = "${count.outingCount}",
-                                    style = typography.textMedium,
-                                    fontWeight = FontWeight.SemiBold,
-                                    color = colors.G7
-                                )
-                                Text(
-                                    text = "명이 외출중",
-                                    style = typography.textMedium,
-                                    fontWeight = FontWeight.Normal,
-                                    color = colors.G4
-                                )
-                            }
-                            LazyColumn(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .heightIn(max = 10000.dp)
-                            ) {
-                                items(list.size) {
-                                    MainOutingItem(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        data = list[it].toData()
-                                    )
-                                }
-                            }
+                                data = list[it].toData()
+                            )
                         }
                     }
                 }
@@ -217,6 +226,7 @@ fun MainOutingItem(
             fontWeight = FontWeight.SemiBold,
             color = colors.G7
         )
+        Spacer(modifier = Modifier.weight(1f))
         Text(
             text = "${data.grade}기 | ${data.major.toText()}",
             style = typography.caption,
@@ -245,6 +255,7 @@ fun ShimmerMainOutingItem(
                 .size(56.dp, 23.dp)
                 .shimmerEffect(color = colors.WHITE)
         )
+        Spacer(modifier = Modifier.weight(1f))
         Box(
             modifier = Modifier
                 .size(60.dp, 16.dp)
