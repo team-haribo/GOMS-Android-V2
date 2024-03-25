@@ -128,7 +128,6 @@ fun MainOutingCard(
             ) {
                 if (role == Authority.ROLE_STUDENT) {
                     Text(
-                        modifier = Modifier.gomsClickable { onClick() },
                         text = "더보기",
                         style = typography.buttonSmall,
                         fontWeight = FontWeight.Normal,
@@ -136,7 +135,6 @@ fun MainOutingCard(
                     )
                 } else {
                     Text(
-                        modifier = Modifier.gomsClickable { onClick() },
                         text = "인원 관리하기",
                         style = typography.buttonSmall,
                         fontWeight = FontWeight.Normal,

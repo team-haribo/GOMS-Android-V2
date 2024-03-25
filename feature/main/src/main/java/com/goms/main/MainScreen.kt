@@ -148,7 +148,7 @@ fun MainScreen(
             SwipeRefreshIndicator(
                 state = state,
                 refreshTriggerDistance = refreshTrigger,
-                backgroundColor = colors.G2,
+                backgroundColor = colors.G1,
                 contentColor = colors.WHITE
             )
         }
