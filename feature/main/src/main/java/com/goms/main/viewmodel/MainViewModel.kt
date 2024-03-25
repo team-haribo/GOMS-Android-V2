@@ -191,6 +191,10 @@ class MainViewModel @Inject constructor(
             }
     }
 
+    fun initDeleteOuting() {
+        _deleteOutingUiState.value = Result.Loading
+    }
+
     fun getLateList(date: LocalDate) = viewModelScope.launch {
         getLateListUseCase(date = date)
             .asResult()
