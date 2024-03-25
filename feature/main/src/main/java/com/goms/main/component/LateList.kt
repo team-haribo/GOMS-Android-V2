@@ -41,7 +41,10 @@ fun LateList(
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     onBottomSheetOpenClick: () -> Unit
 ) {
-    Column(modifier = modifier.fillMaxWidth()) {
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
         Row(
             modifier = modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -72,13 +75,7 @@ fun LateList(
             }
 
             GetLateListUiState.Empty -> {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 60.dp)
-                ) {
-                    LateListEmptyText()
-                }
+                LateListEmptyText()
             }
 
             is GetLateListUiState.Success -> {
