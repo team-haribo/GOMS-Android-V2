@@ -18,6 +18,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -343,7 +344,7 @@ fun GomsSearchTextField(
     }
 
     Column {
-        OutlinedTextField(
+        TextField(
             value = setText,
             onValueChange = {
                 onValueChange(it)
@@ -363,11 +364,6 @@ fun GomsSearchTextField(
                 .focusRequester(focusRequester)
                 .clip(RoundedCornerShape(12.dp))
                 .background(colors.G1)
-                .border(
-                    width = 1.dp,
-                    color = colors.WHITE.copy(0.15f),
-                    shape = RoundedCornerShape(12.dp)
-                )
                 .onFocusChanged {
                     isFocused.value = it.isFocused
                 },
