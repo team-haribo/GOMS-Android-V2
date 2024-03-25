@@ -16,12 +16,14 @@ import com.goms.domain.setting.SetQrcodeUseCase
 import com.goms.domain.setting.SetThemeUseCase
 import com.goms.setting.util.getMultipartFile
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -104,8 +106,10 @@ class SettingViewModel @Inject constructor (
            }
     }
 
-    suspend fun setQrcode(qrcode: String) {
-        setQrcodeUseCase(qrcode = qrcode)
+    fun setQrcode(qrcode: String) = viewModelScope.launch {
+        withContext(Dispatchers.IO) {
+            setQrcodeUseCase(qrcode = qrcode)
+        }
     }
 
     fun getThemeValue() = viewModelScope.launch {

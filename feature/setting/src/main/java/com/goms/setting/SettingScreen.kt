@@ -87,9 +87,7 @@ fun SettingRoute(
     DisposableEffect(Unit) {
         onDispose {
             if(!qrcodeData.isNullOrEmpty()) {
-                GlobalScope.launch(Dispatchers.IO) {
-                    viewModel.setQrcode(qrcodeData)
-                }
+                viewModel.setQrcode(qrcodeData)
             }
         }
     }
