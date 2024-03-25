@@ -28,7 +28,7 @@ fun LateListEmptyText() {
     ) {
         FireIcon(tint = colors.WHITE)
         Text(
-            text = "이번 주 지각자가 없네요! 축하해요!",
+            text = "지각자가 없네요! 축하해요!",
             style = typography.textSmall,
             fontWeight = FontWeight.SemiBold,
             color = colors.WHITE
