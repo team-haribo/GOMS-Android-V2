@@ -148,7 +148,7 @@ fun MainScreen(
             SwipeRefreshIndicator(
                 state = state,
                 refreshTriggerDistance = refreshTrigger,
-                backgroundColor = colors.G2,
+                backgroundColor = colors.G1,
                 contentColor = colors.WHITE
             )
         }
@@ -163,7 +163,7 @@ fun MainScreen(
             Column {
                 GomsTopBar(
                     role = role,
-                    icon = { SettingIcon(tint = colors.G7) },
+                    icon = { SettingIcon(tint = colors.G4) },
                     onSettingClick = onSettingClick,
                     onAdminClick = { onStudentManagementClick() }
                 )

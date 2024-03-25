@@ -58,7 +58,10 @@ fun OutingStatusRoute(
     val deleteOutingUiState by viewModel.deleteOutingUiState.collectAsStateWithLifecycle()
 
     when (deleteOutingUiState) {
-        is Result.Success -> viewModel.getOutingCount()
+        is Result.Success -> {
+            viewModel.getOutingCount()
+            viewModel.initDeleteOuting()
+        }
         else -> Unit
     }
 
