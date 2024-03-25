@@ -45,7 +45,7 @@ fun SettingProfileCard(
 ) {
     when (getProfileUiState) {
         GetProfileUiState.Loading -> {
-            ShimmerSettingProfileCardComponent(Modifier.padding(20.dp))
+            ShimmerSettingProfileCardComponent(modifier = Modifier.padding(horizontal = 20.dp))
         }
 
         is GetProfileUiState.Success -> {
@@ -156,7 +156,7 @@ fun SettingProfileCardComponent(
 
 @Composable
 fun ShimmerSettingProfileCardComponent(
-    modifier: Modifier
+    modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier.fillMaxWidth()
@@ -204,7 +204,7 @@ fun ShimmerSettingProfileCardComponent(
                     )
             )
         }
-        Spacer(modifier = Modifier.width(122.dp))
+        Spacer(modifier = Modifier.weight(1f))
         Column(
             horizontalAlignment = Alignment.End
         ) {

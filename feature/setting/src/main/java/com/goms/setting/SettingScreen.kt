@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -148,12 +150,13 @@ fun SettingScreen(
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     onEmailCheck: () -> Unit
 ) {
+    val scrollState = rememberScrollState()
+    var isLoading by remember { mutableStateOf(false) }
+
     LaunchedEffect("load data") {
         getProfile()
         getSettingInfo()
     }
-
-    var isLoading by remember { mutableStateOf(false) }
 
     when (logoutUiState) {
         is LogoutUiState.Loading -> Unit
