@@ -44,6 +44,9 @@ class SettingViewModel @Inject constructor (
     private val _qrcodeState = MutableStateFlow("")
     val qrcodeState = _qrcodeState.asStateFlow()
 
+    private val _alarmState = MutableStateFlow("")
+    val alarmState = _alarmState.asStateFlow()
+
     private val _setThemeState = MutableStateFlow<SetThemeUiState>(SetThemeUiState.Loading)
     val setThemeState = _setThemeState.asStateFlow()
 
@@ -120,6 +123,11 @@ class SettingViewModel @Inject constructor (
     fun getQrcodeValue() = viewModelScope.launch {
         val qrcodeValue = settingRepository.getQrcodeValue().first().replace("\"","")
         _qrcodeState.value = qrcodeValue
+    }
+
+    fun getAlarmValue() = viewModelScope.launch {
+        val alarmValue = settingRepository.getQrcodeValue().first().replace("\"","")
+        _alarmState.value = alarmValue
     }
 
     fun logout() = viewModelScope.launch {

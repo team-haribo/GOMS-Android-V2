@@ -24,6 +24,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -64,6 +65,7 @@ fun SettingRoute(
 
     val themeState by viewModel.themeState.collectAsStateWithLifecycle()
     val qrcodeState by viewModel.qrcodeState.collectAsStateWithLifecycle()
+    val alarmState by viewModel.alarmState.collectAsStateWithLifecycle()
 
     var qrcodeData by remember { mutableStateOf("") }
 
@@ -105,6 +107,7 @@ fun SettingRoute(
         getSettingInfo = {
             viewModel.getThemeValue()
             viewModel.getQrcodeValue()
+            viewModel.getAlarmValue()
         },
         onThemeSelect = { selectedTheme ->
             viewModel.initSetTheme()
@@ -118,6 +121,7 @@ fun SettingRoute(
         getProfileUiState = getProfileUiState,
         themeState = themeState,
         qrcodeState = qrcodeState,
+        alarmState = alarmState,
         profileImageUiState = profileImageUiState,
         onErrorToast = onErrorToast,
         onEmailCheck = onEmailCheck
@@ -141,6 +145,7 @@ fun SettingScreen(
     getProfileUiState: GetProfileUiState,
     themeState: String,
     qrcodeState: String,
+    alarmState: String,
     profileImageUiState: ProfileImageUiState,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     onEmailCheck: () -> Unit
@@ -224,7 +229,7 @@ fun SettingScreen(
                 detail = "외출할 시간이 될 때마다 알려드려요",
                 switchOnBackground = colors.P5,
                 switchOffBackground = colors.G4,
-                isSwitchOn = false,
+                isSwitchOn = alarmState == "On",
                 onFunctionOff = {},
                 onFunctionOn = {}
             )
