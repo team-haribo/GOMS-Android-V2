@@ -1,4 +1,4 @@
-package com.goms.model.response.late
+package com.goms.network.dto.response.late
 
 import com.goms.model.enum.Gender
 import com.goms.model.enum.Major
