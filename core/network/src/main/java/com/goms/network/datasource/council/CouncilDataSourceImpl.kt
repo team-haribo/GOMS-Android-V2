@@ -1,10 +1,9 @@
 package com.goms.network.datasource.council
 
-import com.goms.model.request.council.AuthorityRequest
-import com.goms.model.response.council.LateResponse
-import com.goms.model.response.council.OutingUUIDResponse
-import com.goms.model.response.council.StudentResponse
-import com.goms.model.response.outing.OutingResponse
+import com.goms.network.dto.request.council.AuthorityRequest
+import com.goms.network.dto.response.council.LateResponse
+import com.goms.network.dto.response.council.OutingUUIDResponse
+import com.goms.network.dto.response.council.StudentResponse
 import com.goms.network.api.CouncilAPI
 import com.goms.network.util.GomsApiHandler
 import kotlinx.coroutines.Dispatchers
