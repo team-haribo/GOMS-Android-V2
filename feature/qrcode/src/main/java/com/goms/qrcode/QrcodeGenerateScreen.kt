@@ -19,8 +19,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.goms.design_system.component.button.GomsBackButton
-import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.util.lockScreenOrientation
 import com.goms.model.enum.Authority
@@ -91,7 +89,7 @@ fun QrcodeGenerateScreen(
                     Image(painter = painterResource(com.goms.design_system.R.drawable.ic_qrcode_load), contentDescription = "outing qrcode loading image")
                 }
                 is GetOutingUUIDUiState.Success -> {
-                    val data = getOutingUUIDUiState.getOutingUUIDResponse
+                    val data = getOutingUUIDUiState.getOutingUUIDResponseModel
 
                     Image(painter = QrcodeGenerator(content = data.outingUUID), contentDescription = "outing qrcode image" )
                 }
