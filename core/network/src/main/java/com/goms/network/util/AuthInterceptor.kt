@@ -2,7 +2,7 @@ package com.goms.network.util
 
 import com.goms.common.exception.TokenExpirationException
 import com.goms.datastore.AuthTokenDataSource
-import com.goms.model.response.auth.LoginResponse
+import com.goms.network.dto.response.auth.LoginResponse
 import com.goms.network.BuildConfig
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi

@@ -1,9 +1,9 @@
 package com.goms.network.api
 
-import com.goms.model.request.auth.LoginRequest
-import com.goms.model.request.auth.SendNumberRequest
-import com.goms.model.request.auth.SignUpRequest
-import com.goms.model.response.auth.LoginResponse
+import com.goms.network.dto.request.auth.LoginRequest
+import com.goms.network.dto.request.auth.SendNumberRequest
+import com.goms.network.dto.request.auth.SignUpRequest
+import com.goms.network.dto.response.auth.LoginResponse
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
