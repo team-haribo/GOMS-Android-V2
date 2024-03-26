@@ -26,12 +26,15 @@ dependencies {
 
     implementation(libs.kotlinx.datetime)
     implementation(libs.kotlinx.serialization.json)
-    //okhttp
+
     implementation(libs.okhttp.logging)
-    //retrofit
+    
     implementation(libs.retrofit.core)
     implementation(libs.retrofit.kotlin.serialization)
     implementation(libs.retrofit.moshi.converter)
+
+    implementation(libs.moshi)
+    ksp(libs.retrofit.moshi.codegen)
 }
 
 fun getApiKey(propertyKey: String): String {
