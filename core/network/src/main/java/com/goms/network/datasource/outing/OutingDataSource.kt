@@ -1,7 +1,7 @@
 package com.goms.network.datasource.outing
 
-import com.goms.model.response.outing.CountResponse
-import com.goms.model.response.outing.OutingResponse
+import com.goms.network.dto.response.outing.CountResponse
+import com.goms.network.dto.response.outing.OutingResponse
 import kotlinx.coroutines.flow.Flow
 import java.util.UUID
 

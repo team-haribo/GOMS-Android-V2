@@ -8,8 +8,8 @@ import com.goms.common.result.Result
 import com.goms.common.result.asResult
 import com.goms.domain.auth.LoginUseCase
 import com.goms.domain.auth.SaveTokenUseCase
-import com.goms.model.request.auth.LoginRequest
-import com.goms.model.response.auth.LoginResponse
+import com.goms.model.request.auth.LoginRequestModel
+import com.goms.model.response.auth.LoginResponseModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -32,7 +32,7 @@ class LoginViewModel @Inject constructor(
     var email = savedStateHandle.getStateFlow(key = EMAIL, initialValue = "")
     var password = savedStateHandle.getStateFlow(key = PASSWORD, initialValue = "")
 
-    fun login(body: LoginRequest) = viewModelScope.launch {
+    fun login(body: LoginRequestModel) = viewModelScope.launch {
         loginUseCase(body = body)
             .asResult()
             .collectLatest { result ->
@@ -53,7 +53,7 @@ class LoginViewModel @Inject constructor(
             }
     }
 
-    fun saveToken(token: LoginResponse) = viewModelScope.launch {
+    fun saveToken(token: LoginResponseModel) = viewModelScope.launch {
         _saveTokenUiState.value = SaveTokenUiState.Loading
         saveTokenUseCase(token = token)
             .onSuccess {

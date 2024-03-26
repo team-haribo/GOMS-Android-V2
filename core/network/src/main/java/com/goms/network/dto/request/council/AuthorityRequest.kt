@@ -1,4 +1,4 @@
-package com.goms.model.request.council
+package com.goms.network.dto.request.council
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass

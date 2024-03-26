@@ -45,7 +45,7 @@ import com.goms.model.enum.Gender
 import com.goms.model.enum.Grade
 import com.goms.model.enum.Major
 import com.goms.model.enum.Status
-import com.goms.model.request.council.AuthorityRequest
+import com.goms.model.request.council.AuthorityRequestModel
 import com.goms.ui.GomsRoleBackButton
 import kotlinx.collections.immutable.toPersistentList
 import java.util.UUID
@@ -129,7 +129,7 @@ fun StudentManagementRoute(
         },
         changeAuthorityCallBack = { accountIdx, authority ->
             viewModel.changeAuthority(
-                body = AuthorityRequest(
+                body = AuthorityRequestModel(
                     accountIdx = accountIdx.toString(),
                     authority = Status.values().find { it.value == authority }!!.name
                 )

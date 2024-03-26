@@ -1,9 +1,9 @@
 package com.goms.main.viewmodel
 
-import com.goms.model.response.council.StudentResponse
+import com.goms.model.response.council.StudentResponseModel
 
 sealed interface GetStudentListUiState {
     object Loading : GetStudentListUiState
-    data class Success(val getStudentResponse: List<StudentResponse>) : GetStudentListUiState
+    data class Success(val getStudentResponseModel: List<StudentResponseModel>) : GetStudentListUiState
     data class Error(val exception: Throwable) : GetStudentListUiState
 }

@@ -1,9 +1,9 @@
 package com.goms.network.api
 
-import com.goms.model.request.council.AuthorityRequest
-import com.goms.model.response.council.LateResponse
-import com.goms.model.response.council.OutingUUIDResponse
-import com.goms.model.response.council.StudentResponse
+import com.goms.network.dto.request.council.AuthorityRequest
+import com.goms.network.dto.response.council.LateResponse
+import com.goms.network.dto.response.council.OutingUUIDResponse
+import com.goms.network.dto.response.council.StudentResponse
 import kotlinx.datetime.LocalDate
 import retrofit2.http.Body
 import retrofit2.http.DELETE

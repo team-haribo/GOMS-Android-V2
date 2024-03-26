@@ -4,7 +4,6 @@ import android.content.pm.ActivityInfo
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -44,7 +43,7 @@ import com.goms.login.component.InputLoginText
 import com.goms.login.viewmodel.LoginViewModel
 import com.goms.login.viewmodel.LoginUiState
 import com.goms.login.viewmodel.SaveTokenUiState
-import com.goms.model.request.auth.LoginRequest
+import com.goms.model.request.auth.LoginRequestModel
 import com.goms.ui.isStrongEmail
 
 @Composable
@@ -73,7 +72,7 @@ fun InputLoginRoute(
         onErrorToast = onErrorToast,
         loginCallBack = {
             viewModel.login(
-                body = LoginRequest(
+                body = LoginRequestModel(
                     "${viewModel.email.value}@gsm.hs.kr",
                     viewModel.password.value
                 )

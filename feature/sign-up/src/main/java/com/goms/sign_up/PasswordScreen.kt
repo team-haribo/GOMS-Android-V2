@@ -36,13 +36,12 @@ import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.button.GomsButton
 import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
 import com.goms.design_system.component.textfield.GomsPasswordTextField
-import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.util.keyboardAsState
 import com.goms.design_system.util.lockScreenOrientation
 import com.goms.model.enum.Gender
 import com.goms.model.enum.Major
-import com.goms.model.request.auth.SignUpRequest
+import com.goms.model.request.auth.SignUpRequestModel
 import com.goms.sign_up.component.PasswordText
 import com.goms.sign_up.viewmodel.SignUpUiState
 import com.goms.sign_up.viewmodel.SignUpViewModel
@@ -70,7 +69,7 @@ fun PasswordRoute(
         onErrorToast = onErrorToast,
         passwordCallback = {
             viewModel.signUp(
-                body = SignUpRequest(
+                body = SignUpRequestModel(
                     email = "${viewModel.email.value}@gsm.hs.kr",
                     password = viewModel.password.value,
                     name = viewModel.name.value,

@@ -1,7 +1,7 @@
 package com.goms.network.datasource.account
 
-import com.goms.model.request.account.RePasswordRequest
-import com.goms.model.response.account.ProfileResponse
+import com.goms.network.dto.request.account.RePasswordRequest
+import com.goms.network.dto.response.account.ProfileResponse
 import kotlinx.coroutines.flow.Flow
 import okhttp3.MultipartBody
 

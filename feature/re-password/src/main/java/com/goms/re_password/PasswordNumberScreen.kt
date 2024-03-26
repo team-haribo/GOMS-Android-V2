@@ -38,7 +38,7 @@ import com.goms.design_system.component.textfield.NumberTextField
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.util.keyboardAsState
 import com.goms.design_system.util.lockScreenOrientation
-import com.goms.model.request.auth.SendNumberRequest
+import com.goms.model.request.auth.SendNumberRequestModel
 import com.goms.re_password.component.NumberText
 import com.goms.re_password.viewmodel.RePasswordViewmodel
 import com.goms.re_password.viewmodel.VerifyNumberUiState
@@ -66,7 +66,7 @@ fun PasswordNumberRoute(
                 authCode = viewModel.number.value
             )
         },
-        resentCallBack = { viewModel.sendNumber(body = SendNumberRequest("${viewModel.email.value}@gsm.hs.kr")) },
+        resentCallBack = { viewModel.sendNumber(body = SendNumberRequestModel("${viewModel.email.value}@gsm.hs.kr")) },
         initCallBack = { viewModel.initVerifyNumber() }
     )
 }

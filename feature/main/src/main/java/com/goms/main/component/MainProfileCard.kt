@@ -1,6 +1,5 @@
 package com.goms.main.component
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -46,7 +45,7 @@ fun MainProfileCard(
         }
 
         is GetProfileUiState.Success -> {
-            val data = getProfileUiState.getProfileResponse
+            val data = getProfileUiState.getProfileResponseModel
 
             MainProfileCardComponent(
                 modifier = modifier,

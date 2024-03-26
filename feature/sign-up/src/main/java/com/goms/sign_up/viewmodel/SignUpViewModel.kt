@@ -4,12 +4,11 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.goms.common.network.errorHandling
-import com.goms.common.result.Result
 import com.goms.domain.auth.SendNumberUseCase
 import com.goms.domain.auth.SighUpUseCase
 import com.goms.domain.auth.VerifyNumberUseCase
-import com.goms.model.request.auth.SendNumberRequest
-import com.goms.model.request.auth.SignUpRequest
+import com.goms.model.request.auth.SendNumberRequestModel
+import com.goms.model.request.auth.SignUpRequestModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -41,7 +40,7 @@ class SignUpViewModel @Inject constructor(
     var password = savedStateHandle.getStateFlow(key = PASSWORD, initialValue = "")
     var checkPassword = savedStateHandle.getStateFlow(key = CHECK_PASSWORD, initialValue = "")
 
-    fun signUp(body: SignUpRequest) = viewModelScope.launch {
+    fun signUp(body: SignUpRequestModel) = viewModelScope.launch {
         _signUpUiState.value = SignUpUiState.Loading
         signUpUseCase(body = body)
             .onSuccess {
@@ -61,7 +60,7 @@ class SignUpViewModel @Inject constructor(
             }
     }
 
-    fun sendNumber(body: SendNumberRequest) = viewModelScope.launch {
+    fun sendNumber(body: SendNumberRequestModel) = viewModelScope.launch {
         sendNumberUseCase(body = body)
             .onSuccess {
                 it.catch {  remoteError ->

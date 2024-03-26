@@ -1,4 +1,4 @@
-package com.goms.model.request.auth
+package com.goms.network.dto.request.auth
 
 import com.goms.model.enum.Gender
 import com.goms.model.enum.Major

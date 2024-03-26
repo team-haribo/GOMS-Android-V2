@@ -3,7 +3,7 @@ package com.goms.main.data
 import androidx.compose.runtime.Immutable
 import com.goms.model.enum.Gender
 import com.goms.model.enum.Major
-import com.goms.model.response.late.RankResponse
+import com.goms.model.response.late.RankResponseModel
 
 @Immutable
 data class RankData(
@@ -15,7 +15,7 @@ data class RankData(
     val profileUrl: String?
 )
 
-fun RankResponse.toData() =
+fun RankResponseModel.toData() =
     RankData(
         accountIdx = accountIdx,
         name = name,

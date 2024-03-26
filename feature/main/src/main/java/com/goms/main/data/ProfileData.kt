@@ -4,7 +4,7 @@ import androidx.compose.runtime.Immutable
 import com.goms.model.enum.Authority
 import com.goms.model.enum.Gender
 import com.goms.model.enum.Major
-import com.goms.model.response.account.ProfileResponse
+import com.goms.model.response.account.ProfileResponseModel
 
 @Immutable
 data class ProfileData(
@@ -19,7 +19,7 @@ data class ProfileData(
     val isBlackList: Boolean
 )
 
-fun ProfileResponse.toData() =
+fun ProfileResponseModel.toData() =
     ProfileData(
         name = name,
         grade = grade,

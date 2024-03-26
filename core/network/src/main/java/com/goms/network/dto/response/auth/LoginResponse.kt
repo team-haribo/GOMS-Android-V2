@@ -1,4 +1,4 @@
-package com.goms.model.response.auth
+package com.goms.network.dto.response.auth
 
 import com.goms.model.enum.Authority
 import com.squareup.moshi.Json
