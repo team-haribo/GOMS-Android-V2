@@ -94,7 +94,7 @@ fun MainOutingCard(
                     }
 
                     is GetOutingCountUiState.Success -> {
-                        val count = getOutingCountUiState.getOutingCountResponse
+                        val count = getOutingCountUiState.getOutingCountResponseModel
 
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(
