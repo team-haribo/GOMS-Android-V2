@@ -39,7 +39,7 @@ import com.goms.design_system.component.textfield.GomsTextField
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.util.keyboardAsState
 import com.goms.design_system.util.lockScreenOrientation
-import com.goms.model.request.auth.SendNumberRequest
+import com.goms.model.request.auth.SendNumberRequestModel
 import com.goms.re_password.component.RePasswordText
 import com.goms.re_password.viewmodel.RePasswordViewmodel
 import com.goms.re_password.viewmodel.SendNumberUiState
@@ -62,7 +62,7 @@ fun EmailCheckRoute(
         sendNumberUiState = sendNumberUiState,
         emailCheckCallBack = {
             viewModel.sendNumber(
-                body = SendNumberRequest("${viewModel.email.value}@gsm.hs.kr")
+                body = SendNumberRequestModel("${viewModel.email.value}@gsm.hs.kr")
         ) },
         onNumberClick = onNumberClick,
         initCallBack = { viewModel.initSendNumber() },
