@@ -1,4 +1,4 @@
-package com.goms.model.request.account
+package com.goms.network.dto.request.account
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass

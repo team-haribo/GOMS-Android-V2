@@ -36,10 +36,9 @@ import com.goms.design_system.component.button.GomsButton
 import com.goms.design_system.component.dialog.GomsOneButtonDialog
 import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
 import com.goms.design_system.component.textfield.GomsPasswordTextField
-import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.util.keyboardAsState
-import com.goms.model.request.account.RePasswordRequest
+import com.goms.model.request.account.RePasswordRequestModel
 import com.goms.re_password.component.RePasswordText
 import com.goms.re_password.viewmodel.RePasswordUiState
 import com.goms.re_password.viewmodel.RePasswordViewmodel
@@ -67,7 +66,7 @@ fun RePasswordRoute(
         rePasswordUiState = rePasswordUiState,
         rePasswordCallback = {
             viewModel.rePassword(
-                body = RePasswordRequest(
+                body = RePasswordRequestModel(
                     email = "${viewModel.email.value}@gsm.hs.kr",
                     password = viewModel.password.value
                 )
