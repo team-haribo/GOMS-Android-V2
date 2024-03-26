@@ -73,7 +73,7 @@ fun StudentManagementList(
                 }
 
                 is GetStudentListUiState.Success -> {
-                    val list = getStudentListUiState.getStudentResponse
+                    val list = getStudentListUiState.getStudentResponseModel
 
                     StudentManagementListComponent(
                         modifier = modifier,

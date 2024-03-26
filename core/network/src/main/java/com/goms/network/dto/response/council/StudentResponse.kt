@@ -1,4 +1,4 @@
-package com.goms.model.response.council
+package com.goms.network.dto.response.council
 
 import com.goms.model.enum.Authority
 import com.goms.model.enum.Gender
