@@ -18,7 +18,7 @@ import com.goms.domain.late.GetLateRankListUseCase
 import com.goms.domain.outing.GetOutingCountUseCase
 import com.goms.domain.outing.GetOutingListUseCase
 import com.goms.domain.outing.OutingSearchUseCase
-import com.goms.model.request.council.AuthorityRequest
+import com.goms.model.request.council.AuthorityRequestModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -225,7 +225,7 @@ class MainViewModel @Inject constructor(
             }
     }
 
-    fun changeAuthority(body: AuthorityRequest) = viewModelScope.launch {
+    fun changeAuthority(body: AuthorityRequestModel) = viewModelScope.launch {
         changeAuthorityUseCase(body = body)
             .onSuccess {
                 it.catch {  remoteError ->
