@@ -45,7 +45,7 @@ fun SettingProfileCard(
 ) {
     when (getProfileUiState) {
         GetProfileUiState.Loading -> {
-            ShimmerSettingProfileCardComponent(modifier = Modifier.padding(horizontal = 20.dp))
+            ShimmerSettingProfileCardComponent(modifier = Modifier)
         }
 
         is GetProfileUiState.Success -> {

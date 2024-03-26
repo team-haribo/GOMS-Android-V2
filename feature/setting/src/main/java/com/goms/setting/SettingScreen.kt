@@ -1,5 +1,6 @@
 package com.goms.setting
 
+import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -32,8 +33,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goms.design_system.component.button.ButtonState
 import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.button.GomsButton
+import com.goms.design_system.component.dialog.GomsTwoButtonDialog
 import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
 import com.goms.design_system.theme.GomsTheme.colors
+import com.goms.design_system.util.lockScreenOrientation
 import com.goms.model.enum.Authority
 import com.goms.setting.component.PasswordChangeButton
 import com.goms.setting.component.SelectThemeDropDown
@@ -59,20 +62,17 @@ fun SettingRoute(
     onThemeSelect: () -> Unit,
     viewModel: SettingViewModel = hiltViewModel(),
 ) {
-    val role by viewModel.role.collectAsStateWithLifecycle(initialValue = "")
     val context = LocalContext.current
-
+    val role by viewModel.role.collectAsStateWithLifecycle(initialValue = "")
     val getProfileUiState by viewModel.getProfileUiState.collectAsStateWithLifecycle()
     val profileImageUiState by viewModel.profileImageUiState.collectAsStateWithLifecycle()
-
     val themeState by viewModel.themeState.collectAsStateWithLifecycle()
     val qrcodeState by viewModel.qrcodeState.collectAsStateWithLifecycle()
-
-    var qrcodeData by remember { mutableStateOf("") }
-
     val logoutUiState by viewModel.logoutState.collectAsStateWithLifecycle()
     val setThemeUiState by viewModel.setThemeState.collectAsStateWithLifecycle()
+
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
+    var qrcodeData by remember { mutableStateOf("") }
 
     val galleryLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
@@ -150,8 +150,8 @@ fun SettingScreen(
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     onEmailCheck: () -> Unit
 ) {
-    val scrollState = rememberScrollState()
     var isLoading by remember { mutableStateOf(false) }
+    var openDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect("load data") {
         getProfile()
@@ -190,6 +190,7 @@ fun SettingScreen(
         }
     }
 
+    lockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -200,82 +201,97 @@ fun SettingScreen(
         GomsRoleBackButton(role = role) {
             onBackClick()
         }
-        Spacer(modifier = Modifier.height(16.dp))
-        SettingProfileCard(
+        Column(
             modifier = Modifier.padding(horizontal = 20.dp),
-            onProfileClick = onProfileClick,
-            getProfileUiState = getProfileUiState
-        )
-        Spacer(modifier = Modifier.height(32.dp))
-        PasswordChangeButton(modifier = Modifier.padding(horizontal = 20.dp)) {
-            onEmailCheck()
-        }
-        Spacer(modifier = Modifier.height(24.dp))
-        SelectThemeDropDown(
-            modifier = Modifier.padding(horizontal = 20.dp),
-            onThemeSelect = {
-                val selectedTheme = when (it) {
-                    0 -> "Dark"
-                    1 -> "Light"
-                    2 -> "System"
-                    else -> "Dark"
-                }
-                onThemeSelect(selectedTheme)
-            },
-            themeState = themeState
-        )
-        Spacer(modifier = Modifier.height(24.dp))
-        if (role == Authority.ROLE_STUDENT) {
-            SettingSwitchComponent(
-                modifier = Modifier.padding(horizontal = 28.dp),
-                title = "외출제 푸시 알림",
-                detail = "외출할 시간이 될 때마다 알려드려요",
-                switchOnBackground = colors.P5,
-                switchOffBackground = colors.G4,
-                isSwitchOn = false,
-                onFunctionOff = {},
-                onFunctionOn = {}
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Spacer(modifier = Modifier.height(16.dp))
+            SettingProfileCard(
+                modifier = Modifier,
+                onProfileClick = onProfileClick,
+                getProfileUiState = getProfileUiState
             )
             Spacer(modifier = Modifier.height(32.dp))
-            SettingSwitchComponent(
-                modifier = Modifier.padding(horizontal = 28.dp),
-                title = "카메라 바로 켜기",
-                detail = "앱을 실행하면 즉시 카메라가 켜져요",
-                switchOnBackground = colors.P5,
-                switchOffBackground = colors.G4,
-                isSwitchOn = qrcodeState == "On",
-                onFunctionOff = { if (qrcodeState == "On") onUpdateQrcode("Off") },
-                onFunctionOn = { if (qrcodeState == "Off") onUpdateQrcode("On") }
+            PasswordChangeButton(modifier = Modifier) {
+                onEmailCheck()
+            }
+            Spacer(modifier = Modifier.height(24.dp))
+            SelectThemeDropDown(
+                modifier = Modifier,
+                onThemeSelect = {
+                    val selectedTheme = when (it) {
+                        0 -> "Dark"
+                        1 -> "Light"
+                        2 -> "System"
+                        else -> "Dark"
+                    }
+                    onThemeSelect(selectedTheme)
+                },
+                themeState = themeState
             )
+            Spacer(modifier = Modifier.height(24.dp))
+            if (role == Authority.ROLE_STUDENT) {
+                SettingSwitchComponent(
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                    title = "외출제 푸시 알림",
+                    detail = "외출할 시간이 될 때마다 알려드려요",
+                    switchOnBackground = colors.P5,
+                    switchOffBackground = colors.G4,
+                    isSwitchOn = false,
+                    onFunctionOff = {},
+                    onFunctionOn = {}
+                )
+                Spacer(modifier = Modifier.height(32.dp))
+                SettingSwitchComponent(
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                    title = "카메라 바로 켜기",
+                    detail = "앱을 실행하면 즉시 카메라가 켜져요",
+                    switchOnBackground = colors.P5,
+                    switchOffBackground = colors.G4,
+                    isSwitchOn = qrcodeState == "On",
+                    onFunctionOff = { if (qrcodeState == "On") onUpdateQrcode("Off") },
+                    onFunctionOn = { if (qrcodeState == "Off") onUpdateQrcode("On") }
+                )
+            }
+            if (role == Authority.ROLE_STUDENT_COUNCIL) {
+                SettingSwitchComponent(
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                    title = "Qr 생성 바로 켜기",
+                    detail = "앱을 실행하면 즉시 Qr코드를 생성해요",
+                    switchOnBackground = colors.A7,
+                    switchOffBackground = colors.G4,
+                    isSwitchOn = qrcodeState == "On",
+                    onFunctionOff = { if (qrcodeState == "On") onUpdateQrcode("Off") },
+                    onFunctionOn = { if (qrcodeState == "Off") onUpdateQrcode("On") }
+                )
+            }
+            Spacer(modifier = Modifier.weight(1f))
+            GomsButton(
+                modifier = Modifier.fillMaxWidth(),
+                text = "로그아웃",
+                state = ButtonState.Logout
+            ) {
+                openDialog = true
+            }
+            Spacer(modifier = Modifier.height(40.dp))
         }
-        if (role == Authority.ROLE_STUDENT_COUNCIL) {
-            SettingSwitchComponent(
-                modifier = Modifier.padding(horizontal = 28.dp),
-                title = "Qr 생성 바로 켜기",
-                detail = "앱을 실행하면 즉시 Qr코드를 생성해요",
-                switchOnBackground = colors.A7,
-                switchOffBackground = colors.G4,
-                isSwitchOn = qrcodeState == "On",
-                onFunctionOff = { if (qrcodeState == "On") onUpdateQrcode("Off") },
-                onFunctionOn = { if (qrcodeState == "Off") onUpdateQrcode("On") }
-            )
-        }
-    }
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(start = 20.dp, end = 20.dp, bottom = 40.dp)
-            .navigationBarsPadding(),
-        contentAlignment = Alignment.BottomCenter
-    ) {
-        GomsButton(
-            modifier = Modifier.fillMaxWidth(),
-            text = "로그아웃",
-            state = ButtonState.Logout,
-            onClick = onLogoutClick
-        )
     }
     if (isLoading) {
         GomsCircularProgressIndicator()
+    }
+    if (openDialog) {
+        GomsTwoButtonDialog(
+            openDialog = openDialog,
+            onStateChange = {
+                openDialog = it
+            },
+            title = "로그아웃",
+            content = "로그아웃 하시겠습니까?",
+            dismissText = "취소",
+            checkText = "로그아웃",
+            onDismissClick = { openDialog = false }
+        ) {
+            onLogoutClick()
+        }
     }
 }

@@ -1,6 +1,5 @@
 package com.goms.design_system.component.dialog
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,7 +24,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
 
@@ -44,8 +42,7 @@ fun GomsOneButtonDialog(
         Dialog(onDismissRequest = { openDialog = false }) {
             Card(
                 modifier = Modifier.width(280.dp),
-                shape = RoundedCornerShape(12.dp),
-                border = BorderStroke(width = 1.dp, color = colors.WHITE.copy(0.15f))
+                shape = RoundedCornerShape(12.dp)
             ) {
                 Column(modifier = Modifier.background(colors.G1)) {
                     Column(
