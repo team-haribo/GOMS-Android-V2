@@ -1,0 +1,280 @@
+package com.goms.main.component
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Divider
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import com.goms.design_system.R
+import com.goms.design_system.component.shimmer.shimmerEffect
+import com.goms.design_system.icon.WriteIcon
+import com.goms.design_system.theme.GomsTheme.colors
+import com.goms.design_system.theme.GomsTheme.typography
+import com.goms.main.data.StudentData
+import com.goms.main.data.toData
+import com.goms.main.viewmodel.GetStudentListUiState
+import com.goms.main.viewmodel.StudentSearchUiState
+import com.goms.model.enum.Authority
+import com.goms.model.enum.Status
+import com.goms.ui.toText
+import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.toPersistentList
+import java.util.UUID
+
+@Composable
+fun StudentManagementList(
+    modifier: Modifier = Modifier,
+    getStudentListUiState: GetStudentListUiState,
+    studentSearchUiState: StudentSearchUiState,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
+    onBottomSheetOpenClick: () -> Unit,
+    onClick: (UUID, String) -> Unit
+) {
+    when (studentSearchUiState) {
+        StudentSearchUiState.Loading -> {
+            ShimmerStudentManagementListComponent(modifier = modifier)
+        }
+
+        is StudentSearchUiState.Error -> {
+            onErrorToast(studentSearchUiState.exception, "학생 검색이 실패했습니다")
+        }
+
+        StudentSearchUiState.QueryEmpty -> {
+            when (getStudentListUiState) {
+                GetStudentListUiState.Loading -> {
+                    ShimmerStudentManagementListComponent(modifier = modifier)
+                }
+
+                is GetStudentListUiState.Error -> {
+                    onErrorToast(getStudentListUiState.exception, "학생 리스트를 가져오지 못했습니다")
+                }
+
+                is GetStudentListUiState.Success -> {
+                    val list = getStudentListUiState.getStudentResponseModel
+
+                    StudentManagementListComponent(
+                        modifier = modifier,
+                        list = list.map { it.toData() }.toPersistentList(),
+                        onBottomSheetOpenClick = onBottomSheetOpenClick,
+                        onClick = onClick
+                    )
+                }
+            }
+        }
+
+        StudentSearchUiState.Empty -> {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Row(
+                    modifier = modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    SearchResultText(modifier = Modifier)
+                    FilterText(onFilterTextClick = onBottomSheetOpenClick)
+                }
+                SearchEmptyText()
+            }
+        }
+
+        is StudentSearchUiState.Success -> {
+            val list = studentSearchUiState.studentSearchResponse
+
+            StudentManagementListComponent(
+                modifier = modifier,
+                list = list.map { it.toData() }.toPersistentList(),
+                onBottomSheetOpenClick = onBottomSheetOpenClick,
+                onClick = onClick
+            )
+        }
+    }
+}
+
+@Composable
+fun StudentManagementListComponent(
+    modifier: Modifier,
+    list: PersistentList<StudentData>,
+    onBottomSheetOpenClick: () -> Unit,
+    onClick: (UUID, String) -> Unit
+) {
+    Column(modifier = modifier.fillMaxWidth()) {
+        Row(
+            modifier = modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            SearchResultText(modifier = Modifier)
+            FilterText(onFilterTextClick = onBottomSheetOpenClick)
+        }
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(max = 10000.dp)
+        ) {
+            items(list.size) {
+                StudentManagementListItem(
+                    modifier = Modifier.fillMaxWidth(),
+                    data = list[it],
+                    onClick = onClick
+                )
+                Divider(
+                    modifier = Modifier.fillMaxWidth(),
+                    color = colors.WHITE.copy(0.15f)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun StudentManagementListItem(
+    modifier: Modifier = Modifier,
+    data: StudentData,
+    onClick: (UUID, String) -> Unit
+) {
+    Row(
+        modifier = modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        if (data.profileUrl.isNullOrEmpty()) {
+            Image(
+                painter = painterResource(R.drawable.ic_profile),
+                contentDescription = "Default Profile Image",
+                modifier = Modifier
+                    .size(48.dp)
+                    .border(
+                        width = 4.dp,
+                        color = if (data.isBlackList) colors.N5
+                        else if (data.authority == Authority.ROLE_STUDENT_COUNCIL) colors.A7
+                        else Color.Transparent,
+                        shape = CircleShape
+                    )
+            )
+        } else {
+            AsyncImage(
+                model = data.profileUrl,
+                modifier = Modifier
+                    .size(48.dp)
+                    .clip(RoundedCornerShape(40.dp))
+                    .border(
+                        width = 4.dp,
+                        color = if (data.isBlackList) colors.N5
+                        else if (data.authority == Authority.ROLE_STUDENT_COUNCIL) colors.A7
+                        else Color.Transparent,
+                        shape = CircleShape
+                    ),
+                contentScale = ContentScale.Crop,
+                contentDescription = "Profile Image",
+            )
+        }
+        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Text(
+                text = data.name,
+                style = typography.textMedium,
+                fontWeight = FontWeight.SemiBold,
+                color = if (data.isBlackList) colors.N5
+                else if (data.authority == Authority.ROLE_STUDENT_COUNCIL) colors.A7
+                else colors.G7
+            )
+            Text(
+                text = "${data.grade}기 | ${data.major.toText()}",
+                style = typography.caption,
+                fontWeight = FontWeight.Normal,
+                color = colors.G4
+            )
+        }
+        Spacer(modifier = Modifier.weight(1f))
+        IconButton(onClick = {
+            onClick(
+                UUID.fromString(data.accountIdx),
+                if (data.isBlackList) Status.BLACK_LIST.value
+                else if (data.authority == Authority.ROLE_STUDENT_COUNCIL) Status.ROLE_STUDENT_COUNCIL.value
+                else Status.ROLE_STUDENT.value
+            )
+        }) {
+            WriteIcon()
+        }
+    }
+}
+
+@Composable
+fun ShimmerStudentManagementListComponent(modifier: Modifier) {
+    Column(modifier = modifier.fillMaxWidth()) {
+        Row(
+            modifier = modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            SearchResultText(modifier = Modifier)
+            FilterText(onFilterTextClick = {})
+        }
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(max = 10000.dp)
+        ) {
+            items(10) {
+                ShimmerStudentManagementListItem(modifier = modifier)
+                Divider(
+                    modifier = Modifier.fillMaxWidth(),
+                    color = colors.WHITE.copy(0.15f)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun ShimmerStudentManagementListItem(modifier: Modifier) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(
+            modifier = Modifier
+                .size(48.dp)
+                .shimmerEffect(color = colors.WHITE)
+        )
+        Spacer(modifier = Modifier.width(16.dp))
+        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Box(
+                modifier = Modifier
+                    .size(42.dp, 18.dp)
+                    .shimmerEffect(color = colors.WHITE)
+            )
+            Box(
+                modifier = Modifier
+                    .size(50.dp, 14.dp)
+                    .shimmerEffect(color = colors.WHITE)
+            )
+        }
+    }
+}

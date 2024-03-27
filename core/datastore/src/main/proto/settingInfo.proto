@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+option java_package = "com.goms.datastore";
+option java_multiple_files = true;
+
+message SettingInfo {
+  string theme = 1;
+  string alarm = 2;
+  string qrcode = 3;
+}
