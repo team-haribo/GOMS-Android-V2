@@ -18,4 +18,12 @@ class NotificationDataSourceImpl @Inject constructor(
                 .sendRequest()
         )
     }.flowOn(Dispatchers.IO)
+
+    override suspend fun deleteDeviceToken(): Flow<Unit> = flow {
+        emit(
+            GomsApiHandler<Unit>()
+                .httpRequest { notificationAPI.deleteDeviceToken() }
+                .sendRequest()
+        )
+    }.flowOn(Dispatchers.IO)
 }
