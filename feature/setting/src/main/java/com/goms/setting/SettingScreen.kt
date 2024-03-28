@@ -68,6 +68,7 @@ fun SettingRoute(
     val profileImageUiState by viewModel.profileImageUiState.collectAsStateWithLifecycle()
     val themeState by viewModel.themeState.collectAsStateWithLifecycle()
     val qrcodeState by viewModel.qrcodeState.collectAsStateWithLifecycle()
+    val alarmState by viewModel.alarmState.collectAsStateWithLifecycle()
     val logoutUiState by viewModel.logoutState.collectAsStateWithLifecycle()
     val setThemeUiState by viewModel.setThemeState.collectAsStateWithLifecycle()
 
@@ -96,7 +97,7 @@ fun SettingRoute(
     }
 
     SettingScreen(
-        role = if (role.isNotBlank()) Authority.valueOf(role) else Authority.ROLE_STUDENT,
+        role = role,
         onProfileClick = { galleryLauncher.launch("image/*") },
         onBackClick = onBackClick,
         onLogoutClick = { viewModel.logout() },
@@ -130,7 +131,7 @@ fun SettingRoute(
 
 @Composable
 fun SettingScreen(
-    role: Authority,
+    role: String,
     onProfileClick: () -> Unit,
     onBackClick: () -> Unit,
     onLogoutClick: () -> Unit,
@@ -198,7 +199,7 @@ fun SettingScreen(
             .navigationBarsPadding()
             .statusBarsPadding(),
     ) {
-        GomsRoleBackButton(role = role) {
+        GomsRoleBackButton(role = if(role.isNotBlank()) Authority.valueOf(role) else Authority.ROLE_STUDENT) {
             onBackClick()
         }
         Column(
@@ -230,7 +231,7 @@ fun SettingScreen(
                 themeState = themeState
             )
             Spacer(modifier = Modifier.height(24.dp))
-            if (role == Authority.ROLE_STUDENT) {
+            if (role == Authority.ROLE_STUDENT.name) {
                 SettingSwitchComponent(
                     modifier = Modifier.padding(horizontal = 8.dp),
                     title = "외출제 푸시 알림",
@@ -253,7 +254,7 @@ fun SettingScreen(
                     onFunctionOn = { if (qrcodeState == "Off") onUpdateQrcode("On") }
                 )
             }
-            if (role == Authority.ROLE_STUDENT_COUNCIL) {
+            if (role == Authority.ROLE_STUDENT_COUNCIL.name) {
                 SettingSwitchComponent(
                     modifier = Modifier.padding(horizontal = 8.dp),
                     title = "Qr 생성 바로 켜기",
