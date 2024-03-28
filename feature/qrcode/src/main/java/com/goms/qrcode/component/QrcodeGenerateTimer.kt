@@ -36,10 +36,7 @@ fun QrcodeGenerateTimer(
         }
     }
 
-    Column(
-        modifier = Modifier.size(100.dp, 56.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
             text = "QR코드 만료까지",
             color = colors.G7,
