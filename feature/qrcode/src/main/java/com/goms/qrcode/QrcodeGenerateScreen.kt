@@ -83,15 +83,21 @@ fun QrcodeGenerateScreen(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(120.dp))
+            Spacer(modifier = Modifier.weight(0.55f))
             when (getOutingUUIDUiState) {
                 GetOutingUUIDUiState.Loading -> {
-                    Image(painter = painterResource(com.goms.design_system.R.drawable.ic_qrcode_load), contentDescription = "outing qrcode loading image")
+                    Image(
+                        painter = painterResource(com.goms.design_system.R.drawable.ic_qrcode_load),
+                        contentDescription = "outing qrcode loading image"
+                    )
                 }
                 is GetOutingUUIDUiState.Success -> {
                     val data = getOutingUUIDUiState.getOutingUUIDResponseModel
 
-                    Image(painter = QrcodeGenerator(content = data.outingUUID), contentDescription = "outing qrcode image" )
+                    Image(
+                        painter = QrcodeGenerator(content = data.outingUUID),
+                        contentDescription = "outing qrcode image"
+                    )
                 }
                 is GetOutingUUIDUiState.Error -> {
                     onRemoteError()
@@ -102,6 +108,7 @@ fun QrcodeGenerateScreen(
             QrcodeGenerateTimer(
                 onTimerFinish = onTimerFinish
             )
+            Spacer(modifier = Modifier.weight(1f))
         }
     }
 }
