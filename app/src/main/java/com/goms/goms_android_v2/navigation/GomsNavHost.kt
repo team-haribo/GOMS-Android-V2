@@ -1,5 +1,7 @@
 package com.goms.goms_android_v2.navigation
 
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -72,6 +74,10 @@ fun GomsNavHost(
     NavHost(
         navController = navController,
         startDestination = startDestination,
+        enterTransition = { EnterTransition.None },
+        exitTransition = { ExitTransition.None },
+        popEnterTransition = { EnterTransition.None },
+        popExitTransition = { ExitTransition.None },
         modifier = modifier
     ) {
         loginScreen(
