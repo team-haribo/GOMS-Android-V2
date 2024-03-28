@@ -67,7 +67,7 @@ fun MainOutingCard(
                     GetOutingCountUiState.Loading -> {
                         Box(
                             modifier = Modifier
-                                .size(56.dp, 23.dp)
+                                .size(80.dp, 23.dp)
                                 .shimmerEffect(color = colors.WHITE)
                         )
                     }
