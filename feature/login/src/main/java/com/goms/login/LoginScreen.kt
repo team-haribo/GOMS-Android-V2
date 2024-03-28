@@ -48,11 +48,11 @@ fun LoginScreen(
             .navigationBarsPadding(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.weight(2f))
         GomsIcon()
         Spacer(modifier = Modifier.height(48.dp))
         LoginText()
-        Spacer(modifier = Modifier.height(136.dp))
+        Spacer(modifier = Modifier.weight(1.1f))
         GomsButton(
             modifier = Modifier.fillMaxWidth(),
             text = "로그인",
