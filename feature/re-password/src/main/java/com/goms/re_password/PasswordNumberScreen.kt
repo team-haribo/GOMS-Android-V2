@@ -30,54 +30,55 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.goms.common.result.Result
 import com.goms.design_system.component.button.ButtonState
 import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.button.GomsButton
 import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
 import com.goms.design_system.component.textfield.NumberTextField
-import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.util.keyboardAsState
 import com.goms.design_system.util.lockScreenOrientation
-import com.goms.model.request.auth.SendNumberRequest
+import com.goms.model.request.auth.SendNumberRequestModel
 import com.goms.re_password.component.NumberText
 import com.goms.re_password.viewmodel.RePasswordViewmodel
 import com.goms.re_password.viewmodel.VerifyNumberUiState
 
 @Composable
-fun NumberRoute(
+fun PasswordNumberRoute(
     onBackClick: () -> Unit,
     onRePasswordClick: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     viewModel: RePasswordViewmodel = hiltViewModel(LocalContext.current as ComponentActivity)
 ) {
     val verifyNumberUiState by viewModel.verifyNumberUiState.collectAsState()
     val number by viewModel.number.collectAsStateWithLifecycle()
 
-    NumberScreen(
+    PasswordNumberScreen(
         number = number,
         onNumberChange = viewModel::onNumberChange,
         verifyNumberUiState = verifyNumberUiState,
         onBackClick = onBackClick,
         onRePasswordClick = onRePasswordClick,
+        onErrorToast = onErrorToast,
         numberCallback = {
             viewModel.verifyNumber(
                 email = "${viewModel.email.value}@gsm.hs.kr",
                 authCode = viewModel.number.value
             )
         },
-        resentCallBack = { viewModel.sendNumber(body = SendNumberRequest("${viewModel.email.value}@gsm.hs.kr")) },
+        resentCallBack = { viewModel.sendNumber(body = SendNumberRequestModel("${viewModel.email.value}@gsm.hs.kr")) },
         initCallBack = { viewModel.initVerifyNumber() }
     )
 }
 
 @Composable
-fun NumberScreen(
+fun PasswordNumberScreen(
     number: String,
     onNumberChange: (String) -> Unit,
     verifyNumberUiState: VerifyNumberUiState,
     onBackClick: () -> Unit,
     onRePasswordClick: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     numberCallback: () -> Unit,
     resentCallBack: () -> Unit,
     initCallBack: () -> Unit
@@ -103,17 +104,20 @@ fun NumberScreen(
                 isLoading = false
                 isError = true
                 errorText = "인증번호가 일치하지 않습니다"
+                onErrorToast(null, "인증번호가 일치하지 않습니다")
             }
 
             is VerifyNumberUiState.NotFound -> {
                 isLoading = false
                 isError = true
                 errorText = "잘못된 인증번호입니다"
+                onErrorToast(null, "잘못된 인증번호입니다")
             }
 
             is VerifyNumberUiState.Error -> {
                 isLoading = false
                 isError = true
+                onErrorToast(verifyNumberUiState.exception, null)
             }
         }
         onDispose { initCallBack() }
@@ -141,11 +145,12 @@ fun NumberScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             NumberText(modifier = Modifier.align(Alignment.Start))
-            Spacer(modifier = Modifier.weight(2.1f))
+            Spacer(modifier = Modifier.height(28.dp))
             NumberTextField(
-                text = number,
+                setText = number,
                 isError = isError,
                 errorText = errorText,
+                placeHolder = "인증번호 입력",
                 onValueChange = onNumberChange,
                 onResendClick = {
                     resentCallBack()

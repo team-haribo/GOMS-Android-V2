@@ -48,7 +48,7 @@ class MainActivity : ComponentActivity() {
                 .collectLatest {
                     if (it is MainActivityUiState.Success) {
                         getNotification()
-                        viewModel.setAuthority(authority = it.getProfileResponse.authority.toString())
+                        viewModel.setAuthority(authority = it.getProfileResponseModel.authority.toString())
                     }
                 }
         }

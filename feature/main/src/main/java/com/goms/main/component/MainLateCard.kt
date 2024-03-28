@@ -1,16 +1,19 @@
 package com.goms.main.component
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -59,15 +62,12 @@ fun MainLateCard(
                 componentWidth = with(density) {
                     it.size.width.toDp()
                 }
-            },
-        color = colors.G1,
-        shape = RoundedCornerShape(12.dp),
-        border = BorderStroke(width = 1.dp, color = colors.WHITE.copy(0.15f))
+            }
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .background(color = colors.BACKGROUND)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -81,21 +81,41 @@ fun MainLateCard(
                     color = colors.WHITE
                 )
                 if (role == Authority.ROLE_STUDENT_COUNCIL) {
-                    Text(
-                        modifier = Modifier.gomsClickable { onClick() },
-                        text = "더보기",
-                        style = typography.buttonSmall,
-                        fontWeight = FontWeight.Normal,
-                        color = colors.G7
-                    )
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(colors.G1)
+                            .gomsClickable(
+                                isIndication = true,
+                                rippleColor = colors.G7.copy(0.5f)
+                            ) {
+                                onClick()
+                            }
+                            .padding(horizontal = 8.dp, vertical = 2.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "더보기",
+                            style = typography.buttonSmall,
+                            fontWeight = FontWeight.Normal,
+                            color = colors.G7
+                        )
+                    }
                 }
             }
             Spacer(modifier = Modifier.height(16.dp))
             when (getLateRankListUiState) {
                 GetLateRankListUiState.Loading -> {
-                    LazyRow(modifier = Modifier.fillMaxWidth()) {
+                    LazyRow(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
                         items(3) {
-                            ShimmerMainLateItem(modifier = Modifier.widthIn((componentWidth - 32.dp) / 3))
+                            ShimmerMainLateItem(
+                                modifier = Modifier
+                                    .widthIn((componentWidth - 24.dp) / 3)
+                                    .height(142.dp)
+                            )
                         }
                     }
                 }
@@ -107,10 +127,13 @@ fun MainLateCard(
                 is GetLateRankListUiState.Success -> {
                     val list = getLateRankListUiState.getLateRankListResponse
 
-                    LazyRow(modifier = Modifier.fillMaxWidth()) {
+                    LazyRow(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
                         items(list.take(3).size) {
                             MainLateItem(
-                                modifier = Modifier.widthIn((componentWidth - 32.dp) / 3),
+                                modifier = Modifier.widthIn((componentWidth - 24.dp) / 3),
                                 data = list[it].toData()
                             )
                         }
@@ -131,7 +154,10 @@ fun MainLateItem(
     data: RankData
 ) {
     Column(
-        modifier = modifier.padding(vertical = 16.dp),
+        modifier = modifier
+            .clip(RoundedCornerShape(8.dp))
+            .background(color = colors.G1)
+            .padding(vertical = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
@@ -168,25 +194,11 @@ fun MainLateItem(
 
 @Composable
 fun ShimmerMainLateItem(modifier: Modifier) {
-    Column(
-        modifier = modifier.padding(vertical = 16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        Box(
-            modifier = Modifier
-                .size(56.dp)
-                .shimmerEffect(color = colors.WHITE)
-        )
-        Box(
-            modifier = Modifier
-                .size(56.dp, 23.dp)
-                .shimmerEffect(color = colors.WHITE)
-        )
-        Box(
-            modifier = Modifier
-                .size(60.dp, 16.dp)
-                .shimmerEffect(color = colors.WHITE)
-        )
-    }
+    Box(
+        modifier = modifier
+            .shimmerEffect(
+                color = colors.WHITE,
+                shape = RoundedCornerShape(8.dp)
+            )
+    )
 }

@@ -17,11 +17,11 @@ fun ShimmerBrush(
     targetValue: Float = 1300f
 ): Brush {
     val shimmerColors = listOf(
-        color.copy(alpha = 0.15f),
-        color.copy(alpha = 0.13f),
         color.copy(alpha = 0.1f),
-        color.copy(alpha = 0.13f),
-        color.copy(alpha = 0.15f),
+        color.copy(alpha = 0.07f),
+        color.copy(alpha = 0.05f),
+        color.copy(alpha = 0.07f),
+        color.copy(alpha = 0.1f),
     )
 
     val transition = rememberInfiniteTransition()

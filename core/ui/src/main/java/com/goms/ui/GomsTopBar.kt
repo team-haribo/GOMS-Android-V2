@@ -43,7 +43,7 @@ fun GomsTopBar(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        GomsTextIcon(tint = if (role == Authority.ROLE_STUDENT) colors.P5 else colors.A7)
+        GomsTextIcon(tint = colors.G4)
         Spacer(modifier = Modifier.weight(1f))
         if (role == Authority.ROLE_STUDENT_COUNCIL) {
             Box(
@@ -60,12 +60,12 @@ fun GomsTopBar(
                     modifier = Modifier.padding(horizontal = 12.dp, vertical = 5.dp),
                     horizontalArrangement = Arrangement.End
                 ) {
-                    PersonIcon(tint = colors.G7)
+                    PersonIcon(tint = colors.G4)
                     Text(
                         text = "학생 관리",
                         style = typography.buttonSmall,
                         fontWeight = FontWeight.SemiBold,
-                        color = colors.G7
+                        color = colors.G4
                     )
                 }
             }

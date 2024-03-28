@@ -1,5 +1,6 @@
 package com.goms.setting
 
+import android.content.pm.ActivityInfo
 import android.net.Uri
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -14,6 +15,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -24,15 +27,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goms.design_system.component.button.ButtonState
 import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.button.GomsButton
+import com.goms.design_system.component.dialog.GomsTwoButtonDialog
 import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
 import com.goms.design_system.theme.GomsTheme.colors
+import com.goms.design_system.util.lockScreenOrientation
 import com.goms.model.enum.Authority
 import com.goms.setting.component.PasswordChangeButton
 import com.goms.setting.component.SelectThemeDropDown
@@ -43,6 +47,7 @@ import com.goms.setting.viewmodel.LogoutUiState
 import com.goms.setting.viewmodel.ProfileImageUiState
 import com.goms.setting.viewmodel.SetThemeUiState
 import com.goms.setting.viewmodel.SettingViewModel
+import com.goms.ui.GomsRoleBackButton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -57,21 +62,17 @@ fun SettingRoute(
     onThemeSelect: () -> Unit,
     viewModel: SettingViewModel = hiltViewModel(),
 ) {
-    val role by viewModel.role.collectAsStateWithLifecycle(initialValue = "")
     val context = LocalContext.current
-
+    val role by viewModel.role.collectAsStateWithLifecycle(initialValue = "")
     val getProfileUiState by viewModel.getProfileUiState.collectAsStateWithLifecycle()
     val profileImageUiState by viewModel.profileImageUiState.collectAsStateWithLifecycle()
-
     val themeState by viewModel.themeState.collectAsStateWithLifecycle()
     val qrcodeState by viewModel.qrcodeState.collectAsStateWithLifecycle()
-    val alarmState by viewModel.alarmState.collectAsStateWithLifecycle()
-
-    var qrcodeData by remember { mutableStateOf("") }
-
     val logoutUiState by viewModel.logoutState.collectAsStateWithLifecycle()
     val setThemeUiState by viewModel.setThemeState.collectAsStateWithLifecycle()
+
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
+    var qrcodeData by remember { mutableStateOf("") }
 
     val galleryLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
@@ -95,6 +96,7 @@ fun SettingRoute(
     }
 
     SettingScreen(
+        role = if (role.isNotBlank()) Authority.valueOf(role) else Authority.ROLE_STUDENT,
         onProfileClick = { galleryLauncher.launch("image/*") },
         onBackClick = onBackClick,
         onLogoutClick = { viewModel.logout() },
@@ -107,7 +109,6 @@ fun SettingRoute(
         getSettingInfo = {
             viewModel.getThemeValue()
             viewModel.getQrcodeValue()
-            viewModel.getAlarmValue()
         },
         onThemeSelect = { selectedTheme ->
             viewModel.initSetTheme()
@@ -115,7 +116,6 @@ fun SettingRoute(
         },
         onUpdateTheme = { onThemeSelect() },
         onUpdateQrcode = { qrcodeData = it },
-        role = role,
         logoutUiState = logoutUiState,
         setThemeUiState = setThemeUiState,
         getProfileUiState = getProfileUiState,
@@ -130,6 +130,7 @@ fun SettingRoute(
 
 @Composable
 fun SettingScreen(
+    role: Authority,
     onProfileClick: () -> Unit,
     onBackClick: () -> Unit,
     onLogoutClick: () -> Unit,
@@ -139,7 +140,6 @@ fun SettingScreen(
     onThemeSelect: (String) -> Unit,
     onUpdateTheme: () -> Unit,
     onUpdateQrcode: (String) -> Unit,
-    role: String,
     logoutUiState: LogoutUiState,
     setThemeUiState: SetThemeUiState,
     getProfileUiState: GetProfileUiState,
@@ -150,12 +150,13 @@ fun SettingScreen(
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     onEmailCheck: () -> Unit
 ) {
+    var isLoading by remember { mutableStateOf(false) }
+    var openDialog by remember { mutableStateOf(false) }
+
     LaunchedEffect("load data") {
         getProfile()
         getSettingInfo()
     }
-
-    var isLoading by remember { mutableStateOf(false) }
 
     when (logoutUiState) {
         is LogoutUiState.Loading -> Unit
@@ -189,6 +190,7 @@ fun SettingScreen(
         }
     }
 
+    lockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -196,83 +198,100 @@ fun SettingScreen(
             .navigationBarsPadding()
             .statusBarsPadding(),
     ) {
-        GomsBackButton { onBackClick() }
-        Spacer(modifier = Modifier.height(16.dp))
-        SettingProfileCard(
-            modifier = Modifier.padding(horizontal = 20.dp),
-            onProfileClick = onProfileClick,
-            getProfileUiState = getProfileUiState
-        )
-        Spacer(modifier = Modifier.height(32.dp))
-        PasswordChangeButton(modifier = Modifier.padding(horizontal = 20.dp)) {
-            onEmailCheck()
+        GomsRoleBackButton(role = role) {
+            onBackClick()
         }
-        Spacer(modifier = Modifier.height(24.dp))
-        SelectThemeDropDown(
+        Column(
             modifier = Modifier.padding(horizontal = 20.dp),
-            onThemeSelect = {
-                val selectedTheme = when (it) {
-                    0 -> "Dark"
-                    1 -> "Light"
-                    2 -> "System"
-                    else -> "Dark"
-                }
-                onThemeSelect(selectedTheme)
-            },
-            themeState = themeState
-        )
-        Spacer(modifier = Modifier.height(24.dp))
-        if (role == Authority.ROLE_STUDENT.name) {
-            SettingSwitchComponent(
-                modifier = Modifier.padding(horizontal = 28.dp),
-                title = "외출제 푸시 알림",
-                detail = "외출할 시간이 될 때마다 알려드려요",
-                switchOnBackground = colors.P5,
-                switchOffBackground = colors.G4,
-                isSwitchOn = alarmState == "On",
-                onFunctionOff = {},
-                onFunctionOn = {}
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Spacer(modifier = Modifier.height(16.dp))
+            SettingProfileCard(
+                modifier = Modifier,
+                onProfileClick = onProfileClick,
+                getProfileUiState = getProfileUiState
             )
             Spacer(modifier = Modifier.height(32.dp))
-            SettingSwitchComponent(
-                modifier = Modifier.padding(horizontal = 28.dp),
-                title = "카메라 바로 켜기",
-                detail = "앱을 실행하면 즉시 카메라가 켜져요",
-                switchOnBackground = colors.P5,
-                switchOffBackground = colors.G4,
-                isSwitchOn = qrcodeState == "On",
-                onFunctionOff = { if (qrcodeState == "On") onUpdateQrcode("Off") },
-                onFunctionOn = { if (qrcodeState == "Off") onUpdateQrcode("On") }
+            PasswordChangeButton(modifier = Modifier) {
+                onEmailCheck()
+            }
+            Spacer(modifier = Modifier.height(24.dp))
+            SelectThemeDropDown(
+                modifier = Modifier,
+                onThemeSelect = {
+                    val selectedTheme = when (it) {
+                        0 -> "Dark"
+                        1 -> "Light"
+                        2 -> "System"
+                        else -> "Dark"
+                    }
+                    onThemeSelect(selectedTheme)
+                },
+                themeState = themeState
             )
+            Spacer(modifier = Modifier.height(24.dp))
+            if (role == Authority.ROLE_STUDENT) {
+                SettingSwitchComponent(
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                    title = "외출제 푸시 알림",
+                    detail = "외출할 시간이 될 때마다 알려드려요",
+                    switchOnBackground = colors.P5,
+                    switchOffBackground = colors.G4,
+                    isSwitchOn = alarmState == "On",
+                    onFunctionOff = {},
+                    onFunctionOn = {}
+                )
+                Spacer(modifier = Modifier.height(32.dp))
+                SettingSwitchComponent(
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                    title = "카메라 바로 켜기",
+                    detail = "앱을 실행하면 즉시 카메라가 켜져요",
+                    switchOnBackground = colors.P5,
+                    switchOffBackground = colors.G4,
+                    isSwitchOn = qrcodeState == "On",
+                    onFunctionOff = { if (qrcodeState == "On") onUpdateQrcode("Off") },
+                    onFunctionOn = { if (qrcodeState == "Off") onUpdateQrcode("On") }
+                )
+            }
+            if (role == Authority.ROLE_STUDENT_COUNCIL) {
+                SettingSwitchComponent(
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                    title = "Qr 생성 바로 켜기",
+                    detail = "앱을 실행하면 즉시 Qr코드를 생성해요",
+                    switchOnBackground = colors.A7,
+                    switchOffBackground = colors.G4,
+                    isSwitchOn = qrcodeState == "On",
+                    onFunctionOff = { if (qrcodeState == "On") onUpdateQrcode("Off") },
+                    onFunctionOn = { if (qrcodeState == "Off") onUpdateQrcode("On") }
+                )
+            }
+            Spacer(modifier = Modifier.weight(1f))
+            GomsButton(
+                modifier = Modifier.fillMaxWidth(),
+                text = "로그아웃",
+                state = ButtonState.Logout
+            ) {
+                openDialog = true
+            }
+            Spacer(modifier = Modifier.height(40.dp))
         }
-        if (role == Authority.ROLE_STUDENT_COUNCIL.name) {
-            SettingSwitchComponent(
-                modifier = Modifier.padding(horizontal = 28.dp),
-                title = "Qr 생성 바로 켜기",
-                detail = "앱을 실행하면 즉시 Qr코드를 생성해요",
-                switchOnBackground = colors.A7,
-                switchOffBackground = colors.G4,
-                isSwitchOn = qrcodeState == "On",
-                onFunctionOff = { if (qrcodeState == "On") onUpdateQrcode("Off") },
-                onFunctionOn = { if (qrcodeState == "Off") onUpdateQrcode("On") }
-            )
-        }
-    }
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(start = 20.dp, end = 20.dp, bottom = 40.dp)
-            .navigationBarsPadding(),
-        contentAlignment = Alignment.BottomCenter
-    ) {
-        GomsButton(
-            modifier = Modifier.fillMaxWidth(),
-            text = "로그아웃",
-            state = ButtonState.Logout,
-            onClick = onLogoutClick
-        )
     }
     if (isLoading) {
         GomsCircularProgressIndicator()
+    }
+    if (openDialog) {
+        GomsTwoButtonDialog(
+            openDialog = openDialog,
+            onStateChange = {
+                openDialog = it
+            },
+            title = "로그아웃",
+            content = "로그아웃 하시겠습니까?",
+            dismissText = "취소",
+            checkText = "로그아웃",
+            onDismissClick = { openDialog = false }
+        ) {
+            onLogoutClick()
+        }
     }
 }

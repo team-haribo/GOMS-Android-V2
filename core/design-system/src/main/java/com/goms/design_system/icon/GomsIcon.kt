@@ -46,11 +46,13 @@ fun GAuthIcon(
 @Composable
 fun BackIcon(
     modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
 ) {
     Image(
         painter = painterResource(id = R.drawable.ic_back),
         contentDescription = "Back Icon",
-        modifier = modifier
+        modifier = modifier,
+        colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
     )
 }
 
@@ -210,5 +212,31 @@ fun WriteIcon(
         painter = painterResource(id = R.drawable.ic_write),
         contentDescription = "Write Icon",
         modifier = modifier
+    )
+}
+
+@Composable
+fun FireIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+) {
+    Image(
+        painter = painterResource(id = R.drawable.ic_fire),
+        contentDescription = "Fire Icon",
+        modifier = modifier,
+        colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
+    )
+}
+
+@Composable
+fun CoffeeIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+) {
+    Image(
+        painter = painterResource(id = R.drawable.ic_coffee),
+        contentDescription = "Coffee Icon",
+        modifier = modifier,
+        colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
     )
 }

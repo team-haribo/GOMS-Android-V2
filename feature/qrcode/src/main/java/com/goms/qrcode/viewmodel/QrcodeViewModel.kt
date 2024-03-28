@@ -1,18 +1,13 @@
 package com.goms.qrcode.viewmodel
 
-import android.util.Log
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.goms.common.network.errorHandling
 import com.goms.common.result.Result
 import com.goms.common.result.asResult
-import com.goms.domain.auth.LoginUseCase
-import com.goms.domain.auth.SaveTokenUseCase
+import com.goms.data.repository.auth.AuthRepository
 import com.goms.domain.council.GetOutingUUIDUseCase
 import com.goms.domain.outing.OutingUseCase
-import com.goms.model.request.auth.SignUpRequest
-import com.goms.model.response.council.OutingUUIDResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -25,8 +20,11 @@ import javax.inject.Inject
 @HiltViewModel
 class QrcodeViewModel @Inject constructor(
     private val outingUseCase: OutingUseCase,
-    private val getOutingUUIDUseCase: GetOutingUUIDUseCase
+    private val getOutingUUIDUseCase: GetOutingUUIDUseCase,
+    private val authRepository: AuthRepository
 ) : ViewModel() {
+    val role = authRepository.getRole()
+
     private val _outingState = MutableStateFlow<OutingUiState>(OutingUiState.Loading)
     val outingState = _outingState.asStateFlow()
 

@@ -1,4 +1,4 @@
-package com.goms.model.response.account
+package com.goms.network.dto.response.council
 
 import com.goms.model.enum.Authority
 import com.goms.model.enum.Gender
@@ -7,14 +7,13 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class ProfileResponse(
+data class StudentResponse(
+    @Json(name = "accountIdx") val accountIdx: String,
     @Json(name = "name") val name: String,
     @Json(name = "grade") val grade: Int,
-    @Json(name = "major") val major: Major,
     @Json(name = "gender") val gender: Gender,
-    @Json(name = "authority") val authority: Authority,
+    @Json(name = "major") val major: Major,
     @Json(name = "profileUrl") val profileUrl: String?,
-    @Json(name = "lateCount") val lateCount: Int,
-    @Json(name = "isOuting") val isOuting: Boolean,
+    @Json(name = "authority") val authority: Authority,
     @Json(name = "isBlackList") val isBlackList: Boolean
 )

@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -27,11 +26,9 @@ import coil.compose.AsyncImage
 import com.goms.design_system.R
 import com.goms.design_system.component.clickable.gomsClickable
 import com.goms.design_system.component.shimmer.shimmerEffect
-import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
 import com.goms.design_system.util.shadow
-import com.goms.model.response.account.ProfileResponse
 import com.goms.setting.data.ProfileData
 import com.goms.setting.data.toData
 import com.goms.setting.viewmodel.GetProfileUiState
@@ -45,11 +42,11 @@ fun SettingProfileCard(
 ) {
     when (getProfileUiState) {
         GetProfileUiState.Loading -> {
-            ShimmerSettingProfileCardComponent(Modifier.padding(20.dp))
+            ShimmerSettingProfileCardComponent(modifier = Modifier)
         }
 
         is GetProfileUiState.Success -> {
-            val data = getProfileUiState.getProfileResponse
+            val data = getProfileUiState.getProfileResponseModel
 
             SettingProfileCardComponent(
                 modifier = modifier,
@@ -156,7 +153,7 @@ fun SettingProfileCardComponent(
 
 @Composable
 fun ShimmerSettingProfileCardComponent(
-    modifier: Modifier
+    modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier.fillMaxWidth()
@@ -204,7 +201,7 @@ fun ShimmerSettingProfileCardComponent(
                     )
             )
         }
-        Spacer(modifier = Modifier.width(122.dp))
+        Spacer(modifier = Modifier.weight(1f))
         Column(
             horizontalAlignment = Alignment.End
         ) {

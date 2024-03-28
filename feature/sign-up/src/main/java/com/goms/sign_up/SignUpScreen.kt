@@ -35,11 +35,10 @@ import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.button.GomsButton
 import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
 import com.goms.design_system.component.textfield.GomsTextField
-import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.util.keyboardAsState
 import com.goms.design_system.util.lockScreenOrientation
-import com.goms.model.request.auth.SendNumberRequest
+import com.goms.model.request.auth.SendNumberRequestModel
 import com.goms.sign_up.component.SelectGenderDropDown
 import com.goms.sign_up.component.SelectMajorDropDown
 import com.goms.sign_up.component.SignUpText
@@ -73,7 +72,7 @@ fun SignUpRoute(
         onBackClick = onBackClick,
         onNumberClick = onNumberClick,
         onErrorToast = onErrorToast,
-        signUpCallBack = { viewModel.sendNumber(body = SendNumberRequest("${viewModel.email.value}@gsm.hs.kr")) },
+        signUpCallBack = { viewModel.sendNumber(body = SendNumberRequestModel("${viewModel.email.value}@gsm.hs.kr")) },
         initCallBack = { viewModel.initSendNumber() }
     )
 }
@@ -139,7 +138,7 @@ fun SignUpScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             SignUpText(modifier = Modifier.align(Alignment.Start))
-            Spacer(modifier = Modifier.weight(1.1f))
+            Spacer(modifier = Modifier.height(28.dp))
             GomsTextField(
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
@@ -149,6 +148,7 @@ fun SignUpScreen(
                 isEmail = false,
                 singleLine = true
             )
+            Spacer(modifier = Modifier.height(24.dp))
             GomsTextField(
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
@@ -157,12 +157,13 @@ fun SignUpScreen(
                 onValueChange = onEmailChange,
                 singleLine = true
             )
+            Spacer(modifier = Modifier.height(24.dp))
             SelectGenderDropDown(
                 onSelectGender = onGenderChange
             ) {
                 focusManager.clearFocus()
             }
-            Spacer(modifier = Modifier.height(30.dp))
+            Spacer(modifier = Modifier.height(24.dp))
             SelectMajorDropDown(
                 onSelectMajor = onMajorChange
             ) {

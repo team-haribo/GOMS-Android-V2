@@ -44,7 +44,7 @@ object LightColor : ColorTheme() {
     override val A8 = Color(0xFFD2B6FC)
     override val A9 = Color(0xFFF0E7FE)
 
-    override val G1 = Color(0xFFFFFFFF)
+    override val G1 = Color(0xFFF7F7F8)
     override val G2 = Color(0xFFE6E6E6)
     override val G3 = Color(0xFFCCCCCC)
     override val G4 = Color(0xFFB2B2B2)
@@ -57,5 +57,5 @@ object LightColor : ColorTheme() {
     override val BLACK = Color(0xFFFFFFFF)
     override val WHITE = Color(0xFF000000)
 
-    override val BACKGROUND = Color(0xFFFAFAFA)
+    override val BACKGROUND = Color(0xFFFFFFFF)
 }

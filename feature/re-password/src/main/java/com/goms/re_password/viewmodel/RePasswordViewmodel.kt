@@ -7,8 +7,8 @@ import com.goms.common.network.errorHandling
 import com.goms.domain.account.RePasswordUseCase
 import com.goms.domain.auth.SendNumberUseCase
 import com.goms.domain.auth.VerifyNumberUseCase
-import com.goms.model.request.account.RePasswordRequest
-import com.goms.model.request.auth.SendNumberRequest
+import com.goms.model.request.account.RePasswordRequestModel
+import com.goms.model.request.auth.SendNumberRequestModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -37,7 +37,7 @@ class RePasswordViewmodel @Inject constructor(
     var passwordCheck = savedStateHandle.getStateFlow(key = CHECK_PASSWORD, initialValue = "")
     var number = savedStateHandle.getStateFlow(key = NUMBER, initialValue = "")
 
-    fun rePassword(body: RePasswordRequest) = viewModelScope.launch {
+    fun rePassword(body: RePasswordRequestModel) = viewModelScope.launch {
         rePasswordUseCase(body = body)
             .onSuccess {
                 it.catch {  remoteError ->
@@ -50,7 +50,7 @@ class RePasswordViewmodel @Inject constructor(
             }
     }
 
-    fun sendNumber(body: SendNumberRequest) = viewModelScope.launch {
+    fun sendNumber(body: SendNumberRequestModel) = viewModelScope.launch {
         sendNumberUseCase(body = body)
             .onSuccess {
                 it.catch {  remoteError ->

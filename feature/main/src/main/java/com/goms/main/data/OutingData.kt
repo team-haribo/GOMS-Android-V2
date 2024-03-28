@@ -3,7 +3,7 @@ package com.goms.main.data
 import androidx.compose.runtime.Immutable
 import com.goms.model.enum.Gender
 import com.goms.model.enum.Major
-import com.goms.model.response.outing.OutingResponse
+import com.goms.model.response.outing.OutingResponseModel
 
 @Immutable
 data class OutingData(
@@ -16,7 +16,7 @@ data class OutingData(
     val createdTime: String
 )
 
-fun OutingResponse.toData() =
+fun OutingResponseModel.toData() =
     OutingData(
         accountIdx = accountIdx,
         name = name,

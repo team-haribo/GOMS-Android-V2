@@ -3,7 +3,7 @@ package com.goms.main.data
 import androidx.compose.runtime.Immutable
 import com.goms.model.enum.Gender
 import com.goms.model.enum.Major
-import com.goms.model.response.council.LateResponse
+import com.goms.model.response.council.LateResponseModel
 
 @Immutable
 data class LateData(
@@ -15,7 +15,7 @@ data class LateData(
     val profileUrl: String?
 )
 
-fun LateResponse.toData() =
+fun LateResponseModel.toData() =
     LateData(
         accountIdx = accountIdx,
         name = name,

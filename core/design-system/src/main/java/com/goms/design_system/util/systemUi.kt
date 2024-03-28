@@ -11,7 +11,7 @@ import androidx.core.view.WindowCompat
 fun ApplySystemUi(isDarkTheme: Boolean) {
     val view = LocalView.current
     val context = view.context as? Activity ?: return
-    val color = if (isDarkTheme) Color(0xFF0D0D0D) else Color(0xFFFAFAFA)
+    val color = if (isDarkTheme) Color(0xFF0D0D0D) else Color(0xFFFFFFFF)
 
     WindowCompat.setDecorFitsSystemWindows(context.window, false)
     val insetsController = WindowCompat.getInsetsController(context.window, view)

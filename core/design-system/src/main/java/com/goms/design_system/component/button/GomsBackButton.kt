@@ -28,13 +28,13 @@ fun GomsBackButton(
             .gomsClickable { onClick() },
         verticalAlignment = Alignment.CenterVertically
     ) {
-        BackIcon()
+        BackIcon(tint = colors.P5)
         Spacer(modifier = Modifier.width(7.dp))
         Text(
             text = "돌아가기",
             style = typography.textMedium,
             fontWeight = FontWeight.Normal,
-            color = colors.I5
+            color = colors.P5
         )
     }
 }

@@ -1,6 +1,6 @@
 package com.goms.network.datasource.late
 
-import com.goms.model.response.late.RankResponse
+import com.goms.network.dto.response.late.RankResponse
 import kotlinx.coroutines.flow.Flow
 
 interface LateDataSource {

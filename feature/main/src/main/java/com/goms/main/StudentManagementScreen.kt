@@ -32,7 +32,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goms.common.result.Result
 import com.goms.design_system.component.bottomsheet.AdminSelectorBottomSheet
 import com.goms.design_system.component.bottomsheet.MultipleSelectorBottomSheet
-import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.textfield.GomsSearchTextField
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.util.keyboardAsState
@@ -41,11 +40,13 @@ import com.goms.main.component.StudentManagementText
 import com.goms.main.viewmodel.GetStudentListUiState
 import com.goms.main.viewmodel.MainViewModel
 import com.goms.main.viewmodel.StudentSearchUiState
+import com.goms.model.enum.Authority
 import com.goms.model.enum.Gender
 import com.goms.model.enum.Grade
 import com.goms.model.enum.Major
 import com.goms.model.enum.Status
-import com.goms.model.request.council.AuthorityRequest
+import com.goms.model.request.council.AuthorityRequestModel
+import com.goms.ui.GomsRoleBackButton
 import kotlinx.collections.immutable.toPersistentList
 import java.util.UUID
 
@@ -55,6 +56,7 @@ fun StudentManagementRoute(
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     viewModel: MainViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
 ) {
+    val role by viewModel.role.collectAsStateWithLifecycle(initialValue = "")
     val studentSearch by viewModel.studentSearch.collectAsStateWithLifecycle()
     val status by viewModel.status.collectAsStateWithLifecycle()
     val filterStatus by viewModel.filterStatus.collectAsStateWithLifecycle()
@@ -92,6 +94,7 @@ fun StudentManagementRoute(
     }
 
     StudentManagementScreen(
+        role = if (role.isNotBlank()) Authority.valueOf(role) else Authority.ROLE_STUDENT,
         studentSearch = studentSearch,
         status = status,
         filterStatus = filterStatus,
@@ -126,7 +129,7 @@ fun StudentManagementRoute(
         },
         changeAuthorityCallBack = { accountIdx, authority ->
             viewModel.changeAuthority(
-                body = AuthorityRequest(
+                body = AuthorityRequestModel(
                     accountIdx = accountIdx.toString(),
                     authority = Status.values().find { it.value == authority }!!.name
                 )
@@ -141,6 +144,7 @@ fun StudentManagementRoute(
 
 @Composable
 fun StudentManagementScreen(
+    role: Authority,
     studentSearch: String,
     status: String,
     filterStatus: String,
@@ -191,7 +195,7 @@ fun StudentManagementScreen(
                 }
             }
     ) {
-        GomsBackButton {
+        GomsRoleBackButton(role = role) {
             onBackClick()
         }
         Column(

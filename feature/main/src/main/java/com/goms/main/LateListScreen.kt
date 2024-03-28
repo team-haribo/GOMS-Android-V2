@@ -26,13 +26,14 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goms.design_system.component.bottomsheet.DatePickerBottomSheet
-import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.util.getDefaultWednesday
 import com.goms.main.component.LateList
 import com.goms.main.component.LateListText
 import com.goms.main.viewmodel.GetLateListUiState
 import com.goms.main.viewmodel.MainViewModel
+import com.goms.model.enum.Authority
+import com.goms.ui.GomsRoleBackButton
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
@@ -44,9 +45,11 @@ fun LateListRoute(
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     viewModel: MainViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
 ) {
+    val role by viewModel.role.collectAsStateWithLifecycle(initialValue = "")
     val getLateListUiState by viewModel.getLateListUiState.collectAsStateWithLifecycle()
 
     LateListScreen(
+        role = if (role.isNotBlank()) Authority.valueOf(role) else Authority.ROLE_STUDENT,
         getLateListUiState = getLateListUiState,
         onBackClick = onBackClick,
         lateListCallBack = { viewModel.getLateList(it) },
@@ -57,6 +60,7 @@ fun LateListRoute(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LateListScreen(
+    role: Authority,
     getLateListUiState: GetLateListUiState,
     onBackClick: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
@@ -82,7 +86,7 @@ fun LateListScreen(
             .statusBarsPadding()
             .navigationBarsPadding()
     ) {
-        GomsBackButton {
+        GomsRoleBackButton(role = role) {
             onBackClick()
         }
         Column(

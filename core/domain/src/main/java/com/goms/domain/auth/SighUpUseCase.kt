@@ -1,13 +1,13 @@
 package com.goms.domain.auth
 
 import com.goms.data.repository.auth.AuthRepository
-import com.goms.model.request.auth.SignUpRequest
+import com.goms.model.request.auth.SignUpRequestModel
 import javax.inject.Inject
 
 class SighUpUseCase @Inject constructor(
     private val authRepository: AuthRepository
 ) {
-    suspend operator fun invoke(body: SignUpRequest) = kotlin.runCatching {
+    suspend operator fun invoke(body: SignUpRequestModel) = kotlin.runCatching {
         authRepository.signUp(body = body)
     }
 }

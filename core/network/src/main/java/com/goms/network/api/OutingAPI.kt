@@ -1,8 +1,7 @@
 package com.goms.network.api
 
-import com.goms.model.response.outing.CountResponse
-import com.goms.model.response.outing.OutingResponse
-import retrofit2.Response
+import com.goms.network.dto.response.outing.CountResponse
+import com.goms.network.dto.response.outing.OutingResponse
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path

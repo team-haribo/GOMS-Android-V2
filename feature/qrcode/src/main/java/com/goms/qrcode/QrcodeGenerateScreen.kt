@@ -19,15 +19,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.goms.design_system.component.button.GomsBackButton
-import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.util.lockScreenOrientation
+import com.goms.model.enum.Authority
 import com.goms.qrcode.component.QrcodeGenerateText
 import com.goms.qrcode.component.QrcodeGenerateTimer
 import com.goms.qrcode.util.QrcodeGenerator
 import com.goms.qrcode.viewmodel.GetOutingUUIDUiState
 import com.goms.qrcode.viewmodel.QrcodeViewModel
+import com.goms.ui.GomsRoleBackButton
 
 @Composable
 fun QrcodeGenerateRoute(
@@ -37,9 +37,11 @@ fun QrcodeGenerateRoute(
     onTimerFinish: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
+    val role by viewModel.role.collectAsStateWithLifecycle(initialValue = "")
     val getOutingUUIDUiState by viewModel.getOutingUUIDState.collectAsStateWithLifecycle()
 
     QrcodeGenerateScreen(
+        role = if (role.isNotBlank()) Authority.valueOf(role) else Authority.ROLE_STUDENT,
         getOutingUUIDUiState = getOutingUUIDUiState,
         onQrCreate = {
             viewModel.getOutingUUID()
@@ -53,6 +55,7 @@ fun QrcodeGenerateRoute(
 
 @Composable
 fun QrcodeGenerateScreen(
+    role: Authority,
     getOutingUUIDUiState: GetOutingUUIDUiState,
     onBackClick: () -> Unit,
     onQrCreate: () -> Unit,
@@ -72,7 +75,9 @@ fun QrcodeGenerateScreen(
             .navigationBarsPadding()
             .statusBarsPadding()
     ) {
-        GomsBackButton { onBackClick() }
+        GomsRoleBackButton(role = role) {
+            onBackClick()
+        }
         QrcodeGenerateText(Modifier)
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -84,7 +89,7 @@ fun QrcodeGenerateScreen(
                     Image(painter = painterResource(com.goms.design_system.R.drawable.ic_qrcode_load), contentDescription = "outing qrcode loading image")
                 }
                 is GetOutingUUIDUiState.Success -> {
-                    val data = getOutingUUIDUiState.getOutingUUIDResponse
+                    val data = getOutingUUIDUiState.getOutingUUIDResponseModel
 
                     Image(painter = QrcodeGenerator(content = data.outingUUID), contentDescription = "outing qrcode image" )
                 }

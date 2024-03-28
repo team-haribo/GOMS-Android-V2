@@ -8,7 +8,7 @@ import com.goms.data.repository.account.AccountRepository
 import com.goms.data.repository.auth.AuthRepository
 import com.goms.data.repository.setting.SettingRepository
 import com.goms.domain.notification.SaveDeviceTokenUseCase
-import com.goms.model.response.account.ProfileResponse
+import com.goms.model.response.account.ProfileResponseModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -93,6 +93,6 @@ class MainActivityViewModel @Inject constructor(
 
 sealed interface MainActivityUiState {
     object Loading : MainActivityUiState
-    data class Success(val getProfileResponse: ProfileResponse) : MainActivityUiState
+    data class Success(val getProfileResponseModel: ProfileResponseModel) : MainActivityUiState
     data class Error(val exception: Throwable) : MainActivityUiState
 }

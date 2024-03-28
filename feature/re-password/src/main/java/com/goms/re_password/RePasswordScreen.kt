@@ -36,10 +36,9 @@ import com.goms.design_system.component.button.GomsButton
 import com.goms.design_system.component.dialog.GomsOneButtonDialog
 import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
 import com.goms.design_system.component.textfield.GomsPasswordTextField
-import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.util.keyboardAsState
-import com.goms.model.request.account.RePasswordRequest
+import com.goms.model.request.account.RePasswordRequestModel
 import com.goms.re_password.component.RePasswordText
 import com.goms.re_password.viewmodel.RePasswordUiState
 import com.goms.re_password.viewmodel.RePasswordViewmodel
@@ -67,7 +66,7 @@ fun RePasswordRoute(
         rePasswordUiState = rePasswordUiState,
         rePasswordCallback = {
             viewModel.rePassword(
-                body = RePasswordRequest(
+                body = RePasswordRequestModel(
                     email = "${viewModel.email.value}@gsm.hs.kr",
                     password = viewModel.password.value
                 )
@@ -138,7 +137,7 @@ fun RePasswordScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             RePasswordText(modifier = Modifier.align(Alignment.Start))
-            Spacer(modifier = Modifier.weight(1.1f))
+            Spacer(modifier = Modifier.height(28.dp))
             GomsPasswordTextField(
                 modifier = Modifier.fillMaxWidth(),
                 isError = isError,
@@ -182,20 +181,21 @@ fun RePasswordScreen(
             }
             Spacer(modifier = Modifier.height(animatedSpacerHeight))
         }
-        if (isLoading) {
-            GomsCircularProgressIndicator()
-        }
-        if (openDialog) {
-            GomsOneButtonDialog(
-                openDialog = openDialog,
-                onStateChange = {
-                    openDialog = it
-                },
-                title = "재설정 완료",
-                content = "로그인 화면으로 돌아갑니다.",
-                buttonText = "확인",
-                onClick = onSuccessClick
-            )
-        }
+    }
+    if (isLoading) {
+        GomsCircularProgressIndicator()
+    }
+    if (openDialog) {
+        GomsOneButtonDialog(
+            openDialog = openDialog,
+            onStateChange = {
+                openDialog = it
+            },
+            title = "재설정 완료",
+            content = "비밀번호를 재설정했어요.\n" +
+                    "홈으로 돌아갈게요!",
+            buttonText = "확인",
+            onClick = onSuccessClick
+        )
     }
 }

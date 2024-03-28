@@ -1,7 +1,7 @@
 package com.goms.network.api
 
-import com.goms.model.request.account.RePasswordRequest
-import com.goms.model.response.account.ProfileResponse
+import com.goms.network.dto.request.account.RePasswordRequest
+import com.goms.network.dto.response.account.ProfileResponse
 import okhttp3.MultipartBody
 import retrofit2.http.Body
 import retrofit2.http.GET
