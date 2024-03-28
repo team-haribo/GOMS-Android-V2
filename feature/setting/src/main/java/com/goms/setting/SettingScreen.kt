@@ -74,6 +74,7 @@ fun SettingRoute(
 
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
     var qrcodeData by remember { mutableStateOf("") }
+    var alarmData by remember { mutableStateOf("") }
 
     val galleryLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
@@ -88,10 +89,14 @@ fun SettingRoute(
         }
     }
 
-    DisposableEffect(Unit) {
+    DisposableEffect("qrcode set") {
         onDispose {
-            if(!qrcodeData.isNullOrEmpty()) {
+            if (!qrcodeData.isNullOrEmpty()) {
                 viewModel.setQrcode(qrcodeData)
+            }
+
+            if (!alarmData.isNullOrEmpty()) {
+                viewModel.setAlarm(alarmData)
             }
         }
     }
@@ -110,6 +115,7 @@ fun SettingRoute(
         getSettingInfo = {
             viewModel.getThemeValue()
             viewModel.getQrcodeValue()
+            viewModel.getAlarmValue()
         },
         onThemeSelect = { selectedTheme ->
             viewModel.initSetTheme()
@@ -117,6 +123,7 @@ fun SettingRoute(
         },
         onUpdateTheme = { onThemeSelect() },
         onUpdateQrcode = { qrcodeData = it },
+        onUpdateAlarm = { alarmData = it },
         logoutUiState = logoutUiState,
         setThemeUiState = setThemeUiState,
         getProfileUiState = getProfileUiState,
@@ -141,6 +148,7 @@ fun SettingScreen(
     onThemeSelect: (String) -> Unit,
     onUpdateTheme: () -> Unit,
     onUpdateQrcode: (String) -> Unit,
+    onUpdateAlarm: (String) -> Unit,
     logoutUiState: LogoutUiState,
     setThemeUiState: SetThemeUiState,
     getProfileUiState: GetProfileUiState,
@@ -239,8 +247,8 @@ fun SettingScreen(
                     switchOnBackground = colors.P5,
                     switchOffBackground = colors.G4,
                     isSwitchOn = alarmState == "On",
-                    onFunctionOff = {},
-                    onFunctionOn = {}
+                    onFunctionOff = { if (alarmState == "On") onUpdateAlarm("Off") },
+                    onFunctionOn = { if (alarmState == "Off") onUpdateAlarm("On") }
                 )
                 Spacer(modifier = Modifier.height(32.dp))
                 SettingSwitchComponent(

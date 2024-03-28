@@ -12,6 +12,7 @@ import com.goms.data.repository.setting.SettingRepository
 import com.goms.domain.account.GetProfileUseCase
 import com.goms.domain.account.UploadProfileImageUseCase
 import com.goms.domain.auth.LogoutUseCase
+import com.goms.domain.setting.SetAlarmUseCase
 import com.goms.domain.setting.SetQrcodeUseCase
 import com.goms.domain.setting.SetThemeUseCase
 import com.goms.setting.util.getMultipartFile
@@ -34,6 +35,7 @@ class SettingViewModel @Inject constructor (
     private val settingRepository: SettingRepository,
     private val setThemeUseCase: SetThemeUseCase,
     private val setQrcodeUseCase: SetQrcodeUseCase,
+    private val setAlarmUseCase: SetAlarmUseCase,
     private val authRepository: AuthRepository
 ) : ViewModel() {
     val role = authRepository.getRole()
@@ -115,6 +117,12 @@ class SettingViewModel @Inject constructor (
         }
     }
 
+    fun setAlarm(alarm: String) = viewModelScope.launch {
+        withContext(Dispatchers.IO) {
+            setAlarmUseCase(alarm = alarm)
+        }
+    }
+
     fun getThemeValue() = viewModelScope.launch {
         val themeValue = settingRepository.getThemeValue().first().replace("\"","")
         _themeState.value = themeValue
@@ -126,7 +134,7 @@ class SettingViewModel @Inject constructor (
     }
 
     fun getAlarmValue() = viewModelScope.launch {
-        val alarmValue = settingRepository.getQrcodeValue().first().replace("\"","")
+        val alarmValue = settingRepository.getAlarmValue().first().replace("\"","")
         _alarmState.value = alarmValue
     }
 
