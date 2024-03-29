@@ -3,13 +3,16 @@ package com.goms.qrcode
 import android.content.pm.ActivityInfo
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -19,6 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.goms.design_system.component.shimmer.shimmerEffect
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.util.lockScreenOrientation
 import com.goms.model.enum.Authority
@@ -86,9 +90,13 @@ fun QrcodeGenerateScreen(
             Spacer(modifier = Modifier.weight(0.55f))
             when (getOutingUUIDUiState) {
                 GetOutingUUIDUiState.Loading -> {
-                    Image(
-                        painter = painterResource(com.goms.design_system.R.drawable.ic_qrcode_load),
-                        contentDescription = "outing qrcode loading image"
+                    Box(
+                        modifier = Modifier
+                            .size(200.dp)
+                            .shimmerEffect(
+                                color = colors.WHITE,
+                                shape = RoundedCornerShape(12.dp)
+                            )
                     )
                 }
                 is GetOutingUUIDUiState.Success -> {
