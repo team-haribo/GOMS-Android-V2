@@ -32,12 +32,11 @@ fun CountdownTimer(
     var remainingTime by remember { mutableIntStateOf(5 * 60) }
 
     LaunchedEffect(remainingTime) {
-        while (remainingTime > 0) {
-            delay(1000)
-            remainingTime--
+        if (remainingTime == 0) {
+            onTimerFinish()
         }
-
-        onTimerFinish()
+        delay(1000)
+        remainingTime--
     }
 
     Row(
