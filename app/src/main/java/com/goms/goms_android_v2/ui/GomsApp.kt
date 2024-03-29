@@ -20,6 +20,8 @@ fun GomsApp(
         windowSizeClass = windowSizeClass
     ),
     onLogout: () -> Unit,
+    onAlarmOff: () -> Unit,
+    onAlarmOn: () -> Unit,
     uiState: MainActivityUiState,
     viewModel: MainActivityViewModel = hiltViewModel(),
 ) {
@@ -33,6 +35,13 @@ fun GomsApp(
                 qrcodeState = qrcodeState,
                 onLogout = onLogout,
                 onThemeSelect = { viewModel.getTheme() },
+                onUpdateAlarm = {alarm ->
+                    if (alarm == "Off") {
+                        onAlarmOff()
+                    } else {
+                        onAlarmOn()
+                    }
+                },
                 startDestination = when (uiState) {
                     is MainActivityUiState.Success -> mainRoute
                     is MainActivityUiState.Error -> loginRoute

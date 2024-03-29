@@ -60,6 +60,7 @@ fun SettingRoute(
     onEmailCheck: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     onThemeSelect: () -> Unit,
+    onUpdateAlarm: (String) -> Unit,
     viewModel: SettingViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
@@ -97,6 +98,7 @@ fun SettingRoute(
 
             if (!alarmData.isNullOrEmpty()) {
                 viewModel.setAlarm(alarmData)
+                onUpdateAlarm(alarmData)
             }
         }
     }

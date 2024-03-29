@@ -66,6 +66,8 @@ class MainActivity : ComponentActivity() {
                 GomsApp(
                     windowSizeClass = calculateWindowSizeClass(this),
                     onLogout = { logout() },
+                    onAlarmOff = { viewModel.deleteDeviceToken() },
+                    onAlarmOn = { getNotification() },
                     uiState = uiState,
                 )
             }

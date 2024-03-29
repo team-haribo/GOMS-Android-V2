@@ -51,6 +51,7 @@ fun GomsNavHost(
     modifier: Modifier = Modifier,
     onLogout: () -> Unit,
     onThemeSelect: () -> Unit,
+    onUpdateAlarm: (String) -> Unit,
     startDestination: String = loginRoute
 ) {
     val context = LocalContext.current
@@ -150,6 +151,7 @@ fun GomsNavHost(
             onLogoutSuccess = onLogout,
             onErrorToast = onErrorToast,
             onEmailCheck = navController::navigateToEmailCheck,
+            onUpdateAlarm = { onUpdateAlarm(it) },
             onThemeSelect = onThemeSelect
         )
         emailCheckScreen(

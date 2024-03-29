@@ -16,6 +16,7 @@ fun NavGraphBuilder.settingScreen(
     onBackClick: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     onEmailCheck: () -> Unit,
+    onUpdateAlarm: (String) -> Unit,
     onThemeSelect: () -> Unit,
 ) {
     composable(route = settingRoute) {
@@ -24,6 +25,7 @@ fun NavGraphBuilder.settingScreen(
             onBackClick = onBackClick,
             onErrorToast = onErrorToast,
             onEmailCheck = onEmailCheck,
+            onUpdateAlarm = { onUpdateAlarm(it) },
             onThemeSelect = onThemeSelect
         )
     }
