@@ -60,6 +60,9 @@ class MainActivityViewModel @Inject constructor(
     private val _qrcodeState = MutableStateFlow("")
     val qrcodeState = _qrcodeState.asStateFlow()
 
+    private val _alarmState = MutableStateFlow("")
+    val alarmState = _alarmState.asStateFlow()
+
     fun saveDeviceToken(deviceToken: String) = viewModelScope.launch {
         saveDeviceTokenUseCase(deviceToken = deviceToken)
             .onSuccess {
@@ -93,8 +96,10 @@ class MainActivityViewModel @Inject constructor(
     fun getSettingInfo() = viewModelScope.launch {
         val themeValue = settingRepository.getThemeValue().first().replace("\"","")
         val qrcodeValue = settingRepository.getQrcodeValue().first().replace("\"","")
+        val alarmValue = settingRepository.getAlarmValue().first().replace("\"","")
         _themeState.value = themeValue
         _qrcodeState.value = qrcodeValue
+        _alarmState.value = alarmValue
     }
 }
 

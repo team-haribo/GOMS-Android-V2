@@ -47,7 +47,6 @@ class MainActivity : ComponentActivity() {
                 .onEach { uiState = it }
                 .collectLatest {
                     if (it is MainActivityUiState.Success) {
-                        getNotification()
                         viewModel.setAuthority(authority = it.getProfileResponseModel.authority.toString())
                     }
                 }
