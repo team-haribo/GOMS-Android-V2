@@ -151,7 +151,7 @@ fun GomsNavHost(
             onLogoutSuccess = onLogout,
             onErrorToast = onErrorToast,
             onEmailCheck = navController::navigateToEmailCheck,
-            onUpdateAlarm = { onUpdateAlarm(it) },
+            onUpdateAlarm = onUpdateAlarm,
             onThemeSelect = onThemeSelect
         )
         emailCheckScreen(

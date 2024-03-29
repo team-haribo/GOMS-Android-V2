@@ -25,7 +25,7 @@ fun NavGraphBuilder.settingScreen(
             onBackClick = onBackClick,
             onErrorToast = onErrorToast,
             onEmailCheck = onEmailCheck,
-            onUpdateAlarm = { onUpdateAlarm(it) },
+            onUpdateAlarm = onUpdateAlarm,
             onThemeSelect = onThemeSelect
         )
     }
