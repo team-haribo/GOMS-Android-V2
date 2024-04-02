@@ -18,7 +18,6 @@ import com.goms.goms_android_v2.ui.GomsApp
 import com.goms.ui.createToast
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -42,13 +41,12 @@ class MainActivity : ComponentActivity() {
 
         var uiState: MainActivityUiState by mutableStateOf(MainActivityUiState.Loading)
 
+        viewModel.tokenRefresh()
+
         lifecycleScope.launch {
             viewModel.uiState
-                .onEach { uiState = it }
-                .collectLatest {
-                    if (it is MainActivityUiState.Success) {
-                        viewModel.setAuthority(authority = it.getProfileResponseModel.authority.toString())
-                    }
+                .collect {
+                    uiState = it
                 }
         }
 
