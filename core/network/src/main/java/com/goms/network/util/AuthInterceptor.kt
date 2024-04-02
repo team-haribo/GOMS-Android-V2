@@ -18,19 +18,25 @@ import javax.inject.Inject
 class AuthInterceptor @Inject constructor(
     private val dataSource: AuthTokenDataSource,
 ): Interceptor {
+    private val ignorePaths by lazy {
+        listOf(
+            "/auth",
+            "/new-password"
+        )
+    }
+
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
         val builder = request.newBuilder()
         val currentTime = System.currentTimeMillis().toGomsTimeDate()
-        val ignorePath = "/auth"
-        val ignorePath2 = "new-password"
-        val ignoreMethodPost = "POST"
-        val ignoreMethodGet = "GET"
+        val ignoreMethodPOST = "POST"
+        val ignoreMethodGET = "GET"
         val ignoreMethodDELETE = "DELETE"
+        val ignoreMethodPATCH = "PATCH"
         val path = request.url.encodedPath
         val method = request.method
 
-        if (path.contains(ignorePath) && (method == ignoreMethodPost || method == ignoreMethodGet) || path.contains(ignorePath2)) {
+        if (ignorePaths.contains(path) && (method == ignoreMethodPOST || method == ignoreMethodGET)) {
             val response = chain.proceed(request)
             return if (response.code == 204) {
                 response.newBuilder().code(200).build()
@@ -84,7 +90,7 @@ class AuthInterceptor @Inject constructor(
 
             val isAuthEndpoint = path.endsWith("/auth")
 
-            if (isAuthEndpoint && method == ignoreMethodDELETE) {
+            if (isAuthEndpoint && method == ignoreMethodDELETE || method == ignoreMethodPATCH) {
                 val refreshToken = dataSource.getRefreshToken().first().replace("\"", "")
                 val refreshTokenWithBearer = "Bearer $refreshToken"
                 builder.addHeader("refreshToken", refreshTokenWithBearer)
