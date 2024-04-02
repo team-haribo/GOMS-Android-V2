@@ -1,5 +1,6 @@
 package com.goms.goms_android_v2.ui
 
+import android.util.Log
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -20,11 +21,16 @@ fun GomsApp(
         windowSizeClass = windowSizeClass
     ),
     onLogout: () -> Unit,
+    onAlarmOff: () -> Unit,
+    onAlarmOn: () -> Unit,
     uiState: MainActivityUiState,
     viewModel: MainActivityViewModel = hiltViewModel(),
 ) {
     val themeState by viewModel.themeState.collectAsState()
     val qrcodeState by viewModel.qrcodeState.collectAsState()
+    val alarmState by viewModel.alarmState.collectAsState()
+
+    if (alarmState == "On") onAlarmOn()
 
     GomsTheme(themeMode = themeState) { _, _ ->
         CompositionLocalProvider {
@@ -33,6 +39,13 @@ fun GomsApp(
                 qrcodeState = qrcodeState,
                 onLogout = onLogout,
                 onThemeSelect = { viewModel.getTheme() },
+                onUpdateAlarm = { alarm ->
+                    if (alarm == "Off") {
+                        onAlarmOff()
+                    } else {
+                        onAlarmOn()
+                    }
+                },
                 startDestination = when (uiState) {
                     is MainActivityUiState.Success -> mainRoute
                     is MainActivityUiState.Error -> loginRoute

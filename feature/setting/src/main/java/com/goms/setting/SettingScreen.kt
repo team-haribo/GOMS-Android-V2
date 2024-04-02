@@ -60,6 +60,7 @@ fun SettingRoute(
     onEmailCheck: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     onThemeSelect: () -> Unit,
+    onUpdateAlarm: (String) -> Unit,
     viewModel: SettingViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
@@ -68,11 +69,13 @@ fun SettingRoute(
     val profileImageUiState by viewModel.profileImageUiState.collectAsStateWithLifecycle()
     val themeState by viewModel.themeState.collectAsStateWithLifecycle()
     val qrcodeState by viewModel.qrcodeState.collectAsStateWithLifecycle()
+    val alarmState by viewModel.alarmState.collectAsStateWithLifecycle()
     val logoutUiState by viewModel.logoutState.collectAsStateWithLifecycle()
     val setThemeUiState by viewModel.setThemeState.collectAsStateWithLifecycle()
 
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
     var qrcodeData by remember { mutableStateOf("") }
+    var alarmData by remember { mutableStateOf("") }
 
     val galleryLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
@@ -87,18 +90,21 @@ fun SettingRoute(
         }
     }
 
-    DisposableEffect(Unit) {
+    DisposableEffect("qrcode set") {
         onDispose {
-            if(!qrcodeData.isNullOrEmpty()) {
-                GlobalScope.launch(Dispatchers.IO) {
-                    viewModel.setQrcode(qrcodeData)
-                }
+            if (!qrcodeData.isNullOrEmpty()) {
+                viewModel.setQrcode(qrcodeData)
+            }
+
+            if (!alarmData.isNullOrEmpty()) {
+                viewModel.setAlarm(alarmData)
+                onUpdateAlarm(alarmData)
             }
         }
     }
 
     SettingScreen(
-        role = if (role.isNotBlank()) Authority.valueOf(role) else Authority.ROLE_STUDENT,
+        role = role,
         onProfileClick = { galleryLauncher.launch("image/*") },
         onBackClick = onBackClick,
         onLogoutClick = { viewModel.logout() },
@@ -111,6 +117,7 @@ fun SettingRoute(
         getSettingInfo = {
             viewModel.getThemeValue()
             viewModel.getQrcodeValue()
+            viewModel.getAlarmValue()
         },
         onThemeSelect = { selectedTheme ->
             viewModel.initSetTheme()
@@ -118,11 +125,13 @@ fun SettingRoute(
         },
         onUpdateTheme = { onThemeSelect() },
         onUpdateQrcode = { qrcodeData = it },
+        onUpdateAlarm = { alarmData = it },
         logoutUiState = logoutUiState,
         setThemeUiState = setThemeUiState,
         getProfileUiState = getProfileUiState,
         themeState = themeState,
         qrcodeState = qrcodeState,
+        alarmState = alarmState,
         profileImageUiState = profileImageUiState,
         onErrorToast = onErrorToast,
         onEmailCheck = onEmailCheck
@@ -131,7 +140,7 @@ fun SettingRoute(
 
 @Composable
 fun SettingScreen(
-    role: Authority,
+    role: String,
     onProfileClick: () -> Unit,
     onBackClick: () -> Unit,
     onLogoutClick: () -> Unit,
@@ -141,11 +150,13 @@ fun SettingScreen(
     onThemeSelect: (String) -> Unit,
     onUpdateTheme: () -> Unit,
     onUpdateQrcode: (String) -> Unit,
+    onUpdateAlarm: (String) -> Unit,
     logoutUiState: LogoutUiState,
     setThemeUiState: SetThemeUiState,
     getProfileUiState: GetProfileUiState,
     themeState: String,
     qrcodeState: String,
+    alarmState: String,
     profileImageUiState: ProfileImageUiState,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     onEmailCheck: () -> Unit
@@ -198,7 +209,7 @@ fun SettingScreen(
             .navigationBarsPadding()
             .statusBarsPadding(),
     ) {
-        GomsRoleBackButton(role = role) {
+        GomsRoleBackButton(role = if(role.isNotBlank()) Authority.valueOf(role) else Authority.ROLE_STUDENT) {
             onBackClick()
         }
         Column(
@@ -230,16 +241,16 @@ fun SettingScreen(
                 themeState = themeState
             )
             Spacer(modifier = Modifier.height(24.dp))
-            if (role == Authority.ROLE_STUDENT) {
+            if (role == Authority.ROLE_STUDENT.name) {
                 SettingSwitchComponent(
                     modifier = Modifier.padding(horizontal = 8.dp),
                     title = "외출제 푸시 알림",
                     detail = "외출할 시간이 될 때마다 알려드려요",
                     switchOnBackground = colors.P5,
                     switchOffBackground = colors.G4,
-                    isSwitchOn = false,
-                    onFunctionOff = {},
-                    onFunctionOn = {}
+                    isSwitchOn = alarmState == "On",
+                    onFunctionOff = { if (alarmState == "On") onUpdateAlarm("Off") },
+                    onFunctionOn = { if (alarmState == "Off") onUpdateAlarm("On") }
                 )
                 Spacer(modifier = Modifier.height(32.dp))
                 SettingSwitchComponent(
@@ -253,7 +264,7 @@ fun SettingScreen(
                     onFunctionOn = { if (qrcodeState == "Off") onUpdateQrcode("On") }
                 )
             }
-            if (role == Authority.ROLE_STUDENT_COUNCIL) {
+            if (role == Authority.ROLE_STUDENT_COUNCIL.name) {
                 SettingSwitchComponent(
                     modifier = Modifier.padding(horizontal = 8.dp),
                     title = "Qr 생성 바로 켜기",

@@ -21,7 +21,7 @@ class SettingDataSource @Inject constructor(
     }
 
     fun getAlarmValue(): Flow<String> = settingInfo.data.map {
-        if (it.alarm.isNullOrEmpty()) "Off" else it.alarm
+        if (it.alarm.isNullOrEmpty()) "On" else it.alarm
     }
 
     suspend fun setAlarmValue(alarmValue: String) {

@@ -1,5 +1,6 @@
 package com.goms.goms_android_v2
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.goms.common.result.Result
@@ -7,6 +8,7 @@ import com.goms.common.result.asResult
 import com.goms.data.repository.account.AccountRepository
 import com.goms.data.repository.auth.AuthRepository
 import com.goms.data.repository.setting.SettingRepository
+import com.goms.domain.notification.DeleteDeviceTokenUseCase
 import com.goms.domain.notification.SaveDeviceTokenUseCase
 import com.goms.model.response.account.ProfileResponseModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,6 +28,7 @@ import javax.inject.Inject
 class MainActivityViewModel @Inject constructor(
     private val accountRepository: AccountRepository,
     private val saveDeviceTokenUseCase: SaveDeviceTokenUseCase,
+    private val deleteDeviceTokenUseCase: DeleteDeviceTokenUseCase,
     private val authRepository: AuthRepository,
     private val settingRepository: SettingRepository
 ) : ViewModel() {
@@ -57,6 +60,9 @@ class MainActivityViewModel @Inject constructor(
     private val _qrcodeState = MutableStateFlow("")
     val qrcodeState = _qrcodeState.asStateFlow()
 
+    private val _alarmState = MutableStateFlow("")
+    val alarmState = _alarmState.asStateFlow()
+
     fun saveDeviceToken(deviceToken: String) = viewModelScope.launch {
         saveDeviceTokenUseCase(deviceToken = deviceToken)
             .onSuccess {
@@ -68,6 +74,10 @@ class MainActivityViewModel @Inject constructor(
             }.onFailure {
                 _saveDeviceTokenUiState.value = Result.Error(it)
             }
+    }
+
+    fun deleteDeviceToken() = viewModelScope.launch {
+        deleteDeviceTokenUseCase()
     }
 
     fun setAuthority(authority: String) = viewModelScope.launch {
@@ -86,8 +96,10 @@ class MainActivityViewModel @Inject constructor(
     fun getSettingInfo() = viewModelScope.launch {
         val themeValue = settingRepository.getThemeValue().first().replace("\"","")
         val qrcodeValue = settingRepository.getQrcodeValue().first().replace("\"","")
+        val alarmValue = settingRepository.getAlarmValue().first().replace("\"","")
         _themeState.value = themeValue
         _qrcodeState.value = qrcodeValue
+        _alarmState.value = alarmValue
     }
 }
 

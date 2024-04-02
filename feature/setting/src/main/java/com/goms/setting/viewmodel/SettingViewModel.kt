@@ -12,16 +12,19 @@ import com.goms.data.repository.setting.SettingRepository
 import com.goms.domain.account.GetProfileUseCase
 import com.goms.domain.account.UploadProfileImageUseCase
 import com.goms.domain.auth.LogoutUseCase
+import com.goms.domain.setting.SetAlarmUseCase
 import com.goms.domain.setting.SetQrcodeUseCase
 import com.goms.domain.setting.SetThemeUseCase
 import com.goms.setting.util.getMultipartFile
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -32,6 +35,7 @@ class SettingViewModel @Inject constructor (
     private val settingRepository: SettingRepository,
     private val setThemeUseCase: SetThemeUseCase,
     private val setQrcodeUseCase: SetQrcodeUseCase,
+    private val setAlarmUseCase: SetAlarmUseCase,
     private val authRepository: AuthRepository
 ) : ViewModel() {
     val role = authRepository.getRole()
@@ -41,6 +45,9 @@ class SettingViewModel @Inject constructor (
 
     private val _qrcodeState = MutableStateFlow("")
     val qrcodeState = _qrcodeState.asStateFlow()
+
+    private val _alarmState = MutableStateFlow("")
+    val alarmState = _alarmState.asStateFlow()
 
     private val _setThemeState = MutableStateFlow<SetThemeUiState>(SetThemeUiState.Loading)
     val setThemeState = _setThemeState.asStateFlow()
@@ -104,8 +111,16 @@ class SettingViewModel @Inject constructor (
            }
     }
 
-    suspend fun setQrcode(qrcode: String) {
-        setQrcodeUseCase(qrcode = qrcode)
+    fun setQrcode(qrcode: String) = viewModelScope.launch {
+        withContext(Dispatchers.IO) {
+            setQrcodeUseCase(qrcode = qrcode)
+        }
+    }
+
+    fun setAlarm(alarm: String) = viewModelScope.launch {
+        withContext(Dispatchers.IO) {
+            setAlarmUseCase(alarm = alarm)
+        }
     }
 
     fun getThemeValue() = viewModelScope.launch {
@@ -116,6 +131,11 @@ class SettingViewModel @Inject constructor (
     fun getQrcodeValue() = viewModelScope.launch {
         val qrcodeValue = settingRepository.getQrcodeValue().first().replace("\"","")
         _qrcodeState.value = qrcodeValue
+    }
+
+    fun getAlarmValue() = viewModelScope.launch {
+        val alarmValue = settingRepository.getAlarmValue().first().replace("\"","")
+        _alarmState.value = alarmValue
     }
 
     fun logout() = viewModelScope.launch {

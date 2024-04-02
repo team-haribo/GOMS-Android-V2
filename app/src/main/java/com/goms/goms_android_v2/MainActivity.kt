@@ -47,7 +47,6 @@ class MainActivity : ComponentActivity() {
                 .onEach { uiState = it }
                 .collectLatest {
                     if (it is MainActivityUiState.Success) {
-                        getNotification()
                         viewModel.setAuthority(authority = it.getProfileResponseModel.authority.toString())
                     }
                 }
@@ -66,6 +65,8 @@ class MainActivity : ComponentActivity() {
                 GomsApp(
                     windowSizeClass = calculateWindowSizeClass(this),
                     onLogout = { logout() },
+                    onAlarmOff = { viewModel.deleteDeviceToken() },
+                    onAlarmOn = { getNotification() },
                     uiState = uiState,
                 )
             }
