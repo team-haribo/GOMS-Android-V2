@@ -45,8 +45,9 @@ class MainActivity : ComponentActivity() {
 
         lifecycleScope.launch {
             viewModel.uiState
-                .onEach { uiState = it }
-                .collect {}
+                .collect {
+                    uiState = it
+                }
         }
 
         setContent {
