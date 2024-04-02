@@ -7,6 +7,7 @@ import com.goms.network.dto.response.auth.LoginResponse
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Query
 
@@ -20,6 +21,9 @@ interface AuthAPI {
     suspend fun login(
         @Body body: LoginRequest
     ): LoginResponse
+
+    @PATCH("/api/v2/auth/")
+    suspend fun tokenRefresh(): LoginResponse
 
     @POST("/api/v2/auth/email/send")
     suspend fun sendNumber(
