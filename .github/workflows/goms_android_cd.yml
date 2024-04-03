@@ -87,7 +87,7 @@ jobs:
           webhook: ${{ secrets.GOMS_DISCORD_WEBHOOK }}
           status: ${{ job.status }}
           image: ${{ secrets.FAIL_IMAGE }}
-          description: 실패여
+          description: 실패요
           color: 00FF00
           url: "https://github.com/sarisia/actions-status-discord"
           username: GOMS CD 봇
