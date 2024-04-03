@@ -1,16 +1,16 @@
-name: Android CD
+name: Goms-Android CD
 
 on:
   push:
     branches: [ "master" ]
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
         with:
-          fetch-depth: 0
+          ref: master
 
       - name: Setup JDK 17
         uses: actions/setup-java@v3
@@ -21,34 +21,29 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v2
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-
-      - name: Cache Gradle Packages
+      - name: Cache Gradle packages
         uses: actions/cache@v2
         with:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: ${{runner.os}}-gradle-${{hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/buildSrc/**/*.kt')}}
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/buildSrc/**/*.kt') }}
           restore-keys: |
-            ${{runner.os}}-gradle-
+            ${{ runner.os }}-gradle-
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
 
       - name: Create LOCAL_PROPERTIES
         run: echo '${{ secrets.LOCAL_PROPERTIES }}' > ./local.properties
 
-      - name: Access GOOGLE_SERVICES
-        run: echo '${{ secrets.GOOGLE_SERVICES }}' > ./app/google-services.json
-
-      - name: Access SERVICE_ACCOUNT_JSON
+      - name: Create service_account.json
         run: echo '${{ secrets.SERVICE_ACCOUNT_JSON }}' > service_account.json
 
-      - name: Build Release AAB
-        id: buildRelease
+      - name: Assemble Release Bundle
         run: ./gradlew bundleRelease
 
-      - name: Sign AAB
-        id: sign
+      - name: Sign Release
         uses: r0adkll/sign-android-release@v1
         with:
           releaseDirectory: app/build/outputs/bundle/release
@@ -58,17 +53,41 @@ jobs:
           keyPassword: ${{ secrets.KEY_PASSWORD }}
 
       - name: Upload AAB
-        id: uploadArtifact
         uses: actions/upload-artifact@v1
         with:
           name: app
           path: app/build/outputs/bundle/release/app-release.aab
 
-      - name: Deploy to Play Store
-        id: deploy
+      - name: Deploy to production
         uses: r0adkll/upload-google-play@v1
         with:
           serviceAccountJson: service_account.json
           packageName: com.goms.goms_android_v2
           releaseFiles: app/build/outputs/bundle/release/app-release.aab
           track: beta
+
+      - name: SMS Android CD Discord Notification
+        uses: sarisia/actions-status-discord@v1
+        if: ${{ success() }}
+        with:
+          title: ✅ Goms-Android-CD 성공! ✅
+          webhook: ${{ secrets.GOMS_DISCORD_WEBHOOK }}
+          status: ${{ job.status }}
+          image: ${{ secrets.CD_SUCCESS_IMAGE }}
+          description: 드가자아!!!
+          color: 00FF00
+          url: "https://github.com/sarisia/actions-status-discord"
+          username: GOMS CD 봇
+
+      - name: SMS Android CD Discord Notification
+        uses: sarisia/actions-status-discord@v1
+        if: ${{ failure() }}
+        with:
+          title: ❗️ Goms-Android-CD 실패! ❗️
+          webhook: ${{ secrets.GOMS_DISCORD_WEBHOOK }}
+          status: ${{ job.status }}
+          image: ${{ secrets.CD_FAIL_IMAGE }}
+          description: 까비요
+          color: 00FF00
+          url: "https://github.com/sarisia/actions-status-discord"
+          username: GOMS CD 봇
