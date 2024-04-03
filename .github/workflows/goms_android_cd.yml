@@ -73,7 +73,7 @@ jobs:
           title: ✅ Goms-Android-CD 성공! ✅
           webhook: ${{ secrets.GOMS_DISCORD_WEBHOOK }}
           status: ${{ job.status }}
-          image: ${{ secrets.CD_SUCCESS_IMAGE }}
+          image: ${{ secrets.SUCCESS_IMAGE }}
           description: 드가자아!!!
           color: 00FF00
           url: "https://github.com/sarisia/actions-status-discord"
@@ -86,7 +86,7 @@ jobs:
           title: ❗️ Goms-Android-CD 실패! ❗️
           webhook: ${{ secrets.GOMS_DISCORD_WEBHOOK }}
           status: ${{ job.status }}
-          image: ${{ secrets.CD_FAIL_IMAGE }}
+          image: ${{ secrets.FAIL_IMAGE }}
           description: 까비요
           color: 00FF00
           url: "https://github.com/sarisia/actions-status-discord"
