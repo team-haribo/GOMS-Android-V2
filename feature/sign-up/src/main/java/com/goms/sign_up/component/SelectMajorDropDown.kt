@@ -26,6 +26,8 @@ fun SelectMajorDropDown(
     GomsDropdown(
         dropdownList = dropdownList.toPersistentList(),
         dropdownListSize = dropdownList.size,
+        useDefaultText = true,
+        defaultText = "학과",
         selectedIndex = selectedIndex,
         modifier = Modifier.padding(horizontal = 20.dp),
         backgroundColor = colors.G1,

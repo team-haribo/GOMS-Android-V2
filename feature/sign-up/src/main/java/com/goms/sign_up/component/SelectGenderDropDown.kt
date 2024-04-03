@@ -25,6 +25,8 @@ fun SelectGenderDropDown(
     GomsDropdown(
         dropdownList = dropdownList.toPersistentList(),
         dropdownListSize = dropdownList.size,
+        useDefaultText = true,
+        defaultText = "성별",
         selectedIndex = selectedIndex,
         modifier = Modifier.padding(horizontal = 20.dp),
         backgroundColor = colors.G1,
