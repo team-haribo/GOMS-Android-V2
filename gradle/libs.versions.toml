@@ -37,6 +37,7 @@ gmsPlugin = "4.3.15"
 gauth = "v1.1.2"
 hilt = "2.48"
 hiltExt = "1.1.0"
+inAppUpdate = "2.1.0"
 junit4 = "4.13.2"
 junit = "4.13.2"
 kotlin = "1.8.10"
@@ -112,6 +113,7 @@ hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testi
 hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 hilt-ext-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "hiltExt" }
 hilt-ext-work = { group = "androidx.hilt", name = "hilt-work", version.ref = "hiltExt" }
+in-app-update = { group = "com.google.android.play", name = "app-update-ktx", version.ref = "inAppUpdate"}
 kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8", version.ref = "kotlin" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-guava = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-guava", version.ref = "kotlinxCoroutines" }
