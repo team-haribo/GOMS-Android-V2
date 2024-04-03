@@ -102,7 +102,7 @@ fun GomsDropdown(
             }
         }
     }
-    Spacer(modifier = Modifier.height(8.dp))
+    if (showDropdown != null && showDropdown == true) Spacer(modifier = Modifier.height(8.dp))
     Box() {
         if (showDropdown != null && showDropdown == true) {
             Popup(
