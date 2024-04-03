@@ -66,7 +66,7 @@ jobs:
           releaseFiles: app/build/outputs/bundle/release/app-release.aab
           track: beta
 
-      - name: SMS Android CD Discord Notification
+      - name: Goms Android CD Discord Notification
         uses: sarisia/actions-status-discord@v1
         if: ${{ success() }}
         with:
@@ -79,7 +79,7 @@ jobs:
           url: "https://github.com/sarisia/actions-status-discord"
           username: GOMS CD 봇
 
-      - name: SMS Android CD Discord Notification
+      - name: Goms Android CD Discord Notification
         uses: sarisia/actions-status-discord@v1
         if: ${{ failure() }}
         with:
