@@ -2,7 +2,6 @@ package com.goms.setting.viewmodel
 
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.goms.common.result.Result
@@ -10,7 +9,7 @@ import com.goms.common.result.asResult
 import com.goms.data.repository.auth.AuthRepository
 import com.goms.data.repository.setting.SettingRepository
 import com.goms.domain.account.GetProfileUseCase
-import com.goms.domain.account.UploadProfileImageUseCase
+import com.goms.domain.account.SetProfileImageUseCase
 import com.goms.domain.auth.LogoutUseCase
 import com.goms.domain.setting.SetAlarmUseCase
 import com.goms.domain.setting.SetQrcodeUseCase
@@ -30,7 +29,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SettingViewModel @Inject constructor (
     private val getProfileUseCase: GetProfileUseCase,
-    private val uploadProfileImageUseCase: UploadProfileImageUseCase,
+    private val setProfileImageUseCase: SetProfileImageUseCase,
     private val logoutUseCase: LogoutUseCase,
     private val settingRepository: SettingRepository,
     private val setThemeUseCase: SetThemeUseCase,
@@ -81,7 +80,7 @@ class SettingViewModel @Inject constructor (
     fun uploadProfileImage(context: Context, file: Uri) = viewModelScope.launch {
         val multipartFile = getMultipartFile(context, file)
 
-        uploadProfileImageUseCase(multipartFile!!)
+        setProfileImageUseCase(multipartFile!!)
             .onSuccess {
                 it.catch {remoteError ->
                     _profileImageUiState.value = ProfileImageUiState.Error(remoteError)

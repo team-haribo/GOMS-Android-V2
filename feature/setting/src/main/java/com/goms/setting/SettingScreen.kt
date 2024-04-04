@@ -30,6 +30,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.goms.design_system.component.bottomsheet.ProfileBottomSheet
 import com.goms.design_system.component.button.ButtonState
 import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.button.GomsButton
@@ -41,7 +42,10 @@ import com.goms.model.enum.Authority
 import com.goms.setting.component.PasswordChangeButton
 import com.goms.setting.component.SelectThemeDropDown
 import com.goms.setting.component.SettingProfileCard
+import com.goms.setting.component.SettingProfileCardComponent
 import com.goms.setting.component.SettingSwitchComponent
+import com.goms.setting.component.ShimmerSettingProfileCardComponent
+import com.goms.setting.data.toData
 import com.goms.setting.viewmodel.GetProfileUiState
 import com.goms.setting.viewmodel.LogoutUiState
 import com.goms.setting.viewmodel.ProfileImageUiState
@@ -85,8 +89,16 @@ fun SettingRoute(
         }
 
     LaunchedEffect(selectedImageUri) {
-        if (selectedImageUri != null) {
-            viewModel.uploadProfileImage(context, selectedImageUri!!)
+        if (selectedImageUri != null && getProfileUiState is GetProfileUiState.Success) {
+            val data = (getProfileUiState as GetProfileUiState.Success)
+                .getProfileResponseModel
+                .toData()
+
+            if (data.profileUrl.isNullOrEmpty()) {
+                viewModel.uploadProfileImage(context, selectedImageUri!!)
+            } else {
+
+            }
         }
     }
 
@@ -105,7 +117,9 @@ fun SettingRoute(
 
     SettingScreen(
         role = role,
-        onProfileClick = { galleryLauncher.launch("image/*") },
+        onProfileClick = { isGallery ->
+            if (isGallery) { galleryLauncher.launch("image/*") }
+        },
         onBackClick = onBackClick,
         onLogoutClick = { viewModel.logout() },
         onLogoutSuccess = onLogoutSuccess,
@@ -141,7 +155,7 @@ fun SettingRoute(
 @Composable
 fun SettingScreen(
     role: String,
-    onProfileClick: () -> Unit,
+    onProfileClick: (Boolean) -> Unit,
     onBackClick: () -> Unit,
     onLogoutClick: () -> Unit,
     onLogoutSuccess: () -> Unit,
@@ -163,6 +177,7 @@ fun SettingScreen(
 ) {
     var isLoading by remember { mutableStateOf(false) }
     var openDialog by remember { mutableStateOf(false) }
+    var openBottomSheet by remember { mutableStateOf(false) }
 
     LaunchedEffect("load data") {
         getProfile()
@@ -209,7 +224,7 @@ fun SettingScreen(
             .navigationBarsPadding()
             .statusBarsPadding(),
     ) {
-        GomsRoleBackButton(role = if(role.isNotBlank()) Authority.valueOf(role) else Authority.ROLE_STUDENT) {
+        GomsRoleBackButton(role = if (role.isNotBlank()) Authority.valueOf(role) else Authority.ROLE_STUDENT) {
             onBackClick()
         }
         Column(
@@ -219,7 +234,7 @@ fun SettingScreen(
             Spacer(modifier = Modifier.height(16.dp))
             SettingProfileCard(
                 modifier = Modifier,
-                onProfileClick = onProfileClick,
+                onProfileClick = { openBottomSheet = true },
                 getProfileUiState = getProfileUiState
             )
             Spacer(modifier = Modifier.height(32.dp))
@@ -304,5 +319,19 @@ fun SettingScreen(
         ) {
             onLogoutClick()
         }
+    }
+    if (openBottomSheet) {
+        ProfileBottomSheet(
+            modifier = Modifier.padding(horizontal = 20.dp),
+            closeSheet = { openBottomSheet = false },
+            onGalleryClick = {
+                openBottomSheet = false
+                onProfileClick(true)
+            },
+            onDefaultImageClick = {
+                openBottomSheet = false
+                onProfileClick(false)
+            }
+        )
     }
 }
