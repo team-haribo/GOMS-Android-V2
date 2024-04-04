@@ -2,11 +2,9 @@ package com.goms.setting
 
 import android.content.pm.ActivityInfo
 import android.net.Uri
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,8 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -32,7 +28,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goms.design_system.component.bottomsheet.ProfileBottomSheet
 import com.goms.design_system.component.button.ButtonState
-import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.button.GomsButton
 import com.goms.design_system.component.dialog.GomsTwoButtonDialog
 import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
@@ -42,9 +37,7 @@ import com.goms.model.enum.Authority
 import com.goms.setting.component.PasswordChangeButton
 import com.goms.setting.component.SelectThemeDropDown
 import com.goms.setting.component.SettingProfileCard
-import com.goms.setting.component.SettingProfileCardComponent
 import com.goms.setting.component.SettingSwitchComponent
-import com.goms.setting.component.ShimmerSettingProfileCardComponent
 import com.goms.setting.data.toData
 import com.goms.setting.viewmodel.GetProfileUiState
 import com.goms.setting.viewmodel.LogoutUiState
@@ -52,9 +45,6 @@ import com.goms.setting.viewmodel.ProfileImageUiState
 import com.goms.setting.viewmodel.SetThemeUiState
 import com.goms.setting.viewmodel.SettingViewModel
 import com.goms.ui.GomsRoleBackButton
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 
 @Composable
@@ -95,9 +85,9 @@ fun SettingRoute(
                 .toData()
 
             if (data.profileUrl.isNullOrEmpty()) {
-                viewModel.uploadProfileImage(context, selectedImageUri!!)
+                viewModel.setProfileImage(context, selectedImageUri!!)
             } else {
-
+                viewModel.updateProfileImage(context, selectedImageUri!!)
             }
         }
     }

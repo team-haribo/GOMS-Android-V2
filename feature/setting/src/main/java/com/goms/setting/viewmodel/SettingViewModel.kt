@@ -10,6 +10,7 @@ import com.goms.data.repository.auth.AuthRepository
 import com.goms.data.repository.setting.SettingRepository
 import com.goms.domain.account.GetProfileUseCase
 import com.goms.domain.account.SetProfileImageUseCase
+import com.goms.domain.account.UpdateProfileImageUseCase
 import com.goms.domain.auth.LogoutUseCase
 import com.goms.domain.setting.SetAlarmUseCase
 import com.goms.domain.setting.SetQrcodeUseCase
@@ -30,6 +31,7 @@ import javax.inject.Inject
 class SettingViewModel @Inject constructor (
     private val getProfileUseCase: GetProfileUseCase,
     private val setProfileImageUseCase: SetProfileImageUseCase,
+    private val updateProfileImageUseCase: UpdateProfileImageUseCase,
     private val logoutUseCase: LogoutUseCase,
     private val settingRepository: SettingRepository,
     private val setThemeUseCase: SetThemeUseCase,
@@ -77,10 +79,25 @@ class SettingViewModel @Inject constructor (
         _getProfileUiState.value = GetProfileUiState.Loading
     }
 
-    fun uploadProfileImage(context: Context, file: Uri) = viewModelScope.launch {
+    fun setProfileImage(context: Context, file: Uri) = viewModelScope.launch {
         val multipartFile = getMultipartFile(context, file)
 
         setProfileImageUseCase(multipartFile!!)
+            .onSuccess {
+                it.catch {remoteError ->
+                    _profileImageUiState.value = ProfileImageUiState.Error(remoteError)
+                }.collect {
+                    _profileImageUiState.value = ProfileImageUiState.Success
+                }
+            }.onFailure {
+                _profileImageUiState.value = ProfileImageUiState.Error(it)
+            }
+    }
+
+    fun updateProfileImage(context: Context, file: Uri) = viewModelScope.launch {
+        val multipartFile = getMultipartFile(context, file)
+
+        updateProfileImageUseCase(multipartFile!!)
             .onSuccess {
                 it.catch {remoteError ->
                     _profileImageUiState.value = ProfileImageUiState.Error(remoteError)
