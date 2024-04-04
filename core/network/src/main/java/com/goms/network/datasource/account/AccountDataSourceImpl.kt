@@ -22,10 +22,26 @@ class AccountDataSourceImpl @Inject constructor(
         )
     }.flowOn(Dispatchers.IO)
 
-    override suspend fun uploadProfileImage(file: MultipartBody.Part): Flow<Unit> = flow {
+    override suspend fun updateProfileImage(file: MultipartBody.Part): Flow<Unit> = flow {
         emit(
             GomsApiHandler<Unit>()
-                .httpRequest { accountAPI.uploadProfileImage(file) }
+                .httpRequest { accountAPI.updateProfileImage(file) }
+                .sendRequest()
+        )
+    }.flowOn(Dispatchers.IO)
+
+    override suspend fun setProfileImage(file: MultipartBody.Part): Flow<Unit> = flow {
+        emit(
+            GomsApiHandler<Unit>()
+                .httpRequest { accountAPI.setProfileImage(file) }
+                .sendRequest()
+        )
+    }.flowOn(Dispatchers.IO)
+
+    override suspend fun deleteProfileImage(): Flow<Unit> = flow {
+        emit(
+            GomsApiHandler<Unit>()
+                .httpRequest { accountAPI.deleteProfileImage() }
                 .sendRequest()
         )
     }.flowOn(Dispatchers.IO)
