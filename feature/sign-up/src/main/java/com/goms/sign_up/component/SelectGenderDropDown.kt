@@ -22,7 +22,7 @@ fun SelectGenderDropDown(
     onClick: () -> Unit
 ) {
     val dropdownList = listOf(Gender.MAN.value, Gender.WOMAN.value)
-    var selectedIndex by rememberSaveable { mutableIntStateOf(0) }
+    var selectedIndex by rememberSaveable { mutableIntStateOf(-1) }
     var useDefaultText by remember { mutableStateOf(true) }
 
     GomsDropdown(

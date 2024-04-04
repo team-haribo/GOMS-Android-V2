@@ -23,7 +23,7 @@ fun SelectMajorDropDown(
 ) {
     val dropdownList =
         listOf(Major.SW_DEVELOP.fullName, Major.SMART_IOT.fullName, Major.AI.fullName)
-    var selectedIndex by rememberSaveable { mutableIntStateOf(0) }
+    var selectedIndex by rememberSaveable { mutableIntStateOf(-1) }
     var useDefaultText by remember { mutableStateOf(true) }
 
     GomsDropdown(
