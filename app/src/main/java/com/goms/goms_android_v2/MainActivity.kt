@@ -44,12 +44,11 @@ class MainActivity : ComponentActivity() {
 
         var uiState: MainActivityUiState by mutableStateOf(MainActivityUiState.Loading)
 
-        viewModel.tokenRefresh()
-
         lifecycleScope.launch {
             viewModel.uiState
                 .collect {
                     uiState = it
+                    if (it is MainActivityUiState.Success) viewModel.saveToken(it.loginResponseModel)
                 }
         }
 
