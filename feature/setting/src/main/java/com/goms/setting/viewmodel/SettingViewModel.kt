@@ -2,12 +2,14 @@ package com.goms.setting.viewmodel
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.goms.common.result.Result
 import com.goms.common.result.asResult
 import com.goms.data.repository.auth.AuthRepository
 import com.goms.data.repository.setting.SettingRepository
+import com.goms.domain.account.DeleteProfileImageUseCase
 import com.goms.domain.account.GetProfileUseCase
 import com.goms.domain.account.SetProfileImageUseCase
 import com.goms.domain.account.UpdateProfileImageUseCase
@@ -32,6 +34,7 @@ class SettingViewModel @Inject constructor (
     private val getProfileUseCase: GetProfileUseCase,
     private val setProfileImageUseCase: SetProfileImageUseCase,
     private val updateProfileImageUseCase: UpdateProfileImageUseCase,
+    private val deleteProfileImageUseCase: DeleteProfileImageUseCase,
     private val logoutUseCase: LogoutUseCase,
     private val settingRepository: SettingRepository,
     private val setThemeUseCase: SetThemeUseCase,
@@ -106,6 +109,22 @@ class SettingViewModel @Inject constructor (
                 }
             }.onFailure {
                 _profileImageUiState.value = ProfileImageUiState.Error(it)
+            }
+    }
+
+    fun deleteProfileImage() = viewModelScope.launch {
+        deleteProfileImageUseCase()
+            .onSuccess {
+                it.catch {remoteError ->
+                    _profileImageUiState.value = ProfileImageUiState.Error(remoteError)
+                    Log.d("testt",remoteError.toString())
+                }.collect {
+                    _profileImageUiState.value = ProfileImageUiState.Success
+                    Log.d("testt","suc")
+                }
+            }.onFailure {
+                _profileImageUiState.value = ProfileImageUiState.Error(it)
+                Log.d("testt",it.toString())
             }
     }
 

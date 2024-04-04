@@ -27,7 +27,7 @@ interface AccountAPI {
         @Part file: MultipartBody.Part
     )
 
-    @DELETE
+    @DELETE("/api/v2/account")
     suspend fun deleteProfileImage()
 
     @PATCH("/api/v2/account/new-password")

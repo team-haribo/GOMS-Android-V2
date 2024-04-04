@@ -108,7 +108,11 @@ fun SettingRoute(
     SettingScreen(
         role = role,
         onProfileClick = { isGallery ->
-            if (isGallery) { galleryLauncher.launch("image/*") }
+            if (isGallery) {
+                galleryLauncher.launch("image/*")
+            } else {
+                viewModel.deleteProfileImage()
+            }
         },
         onBackClick = onBackClick,
         onLogoutClick = { viewModel.logout() },
