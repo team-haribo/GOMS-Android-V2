@@ -79,6 +79,8 @@ fun QrcodeScanScreen(
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
     var openDialog by remember { mutableStateOf(false) }
+    var dialogTitle by remember { mutableStateOf("") }
+    var dialogContent by remember { mutableStateOf("") }
 
     lockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
     QrcodeScanPreview(
@@ -101,15 +103,21 @@ fun QrcodeScanScreen(
 
     when (outingUiState) {
         is OutingUiState.Loading -> Unit
-        is OutingUiState.Success -> openDialog = true
+        is OutingUiState.Success ->  {
+            openDialog = true
+            dialogTitle = "QR코드 스캔 성공"
+            dialogContent = "외출을 시작해요!\n7시 25분까지는 반으로 돌아와야 해요!"
+        }
         is OutingUiState.BadRequest -> {
-            onError()
-            onErrorToast(null, "외출 금지 상태이거나, 유효하지 않은 QR코드입니다")
+            openDialog = true
+            dialogTitle = "QR코드 스캔 실패"
+            dialogContent = "외출에 실패했어요 ㅠ\n외출 금지 상태 이거나 잘못된 QR코드예요."
         }
 
         is OutingUiState.Error -> {
-            onError()
-            onErrorToast(outingUiState.exception, null)
+            openDialog = true
+            dialogTitle = "QR코드 스캔 실패"
+            dialogContent = "예기치 못한 오류가 발생했어요.\n네트워크 상태를 확인후 다시 시도해 주세요."
         }
     }
 
@@ -119,8 +127,8 @@ fun QrcodeScanScreen(
             onStateChange = {
                 openDialog = it
             },
-            title = "외출하기 성공",
-            content = "7시 25분 까지 복귀해 주세요!",
+            title = dialogTitle,
+            content = dialogContent,
             buttonText = "확인",
             onClick = onSuccess
         )
