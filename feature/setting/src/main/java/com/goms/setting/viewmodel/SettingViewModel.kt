@@ -117,14 +117,11 @@ class SettingViewModel @Inject constructor (
             .onSuccess {
                 it.catch {remoteError ->
                     _profileImageUiState.value = ProfileImageUiState.Error(remoteError)
-                    Log.d("testt",remoteError.toString())
                 }.collect {
                     _profileImageUiState.value = ProfileImageUiState.Success
-                    Log.d("testt","suc")
                 }
             }.onFailure {
                 _profileImageUiState.value = ProfileImageUiState.Error(it)
-                Log.d("testt",it.toString())
             }
     }
 
