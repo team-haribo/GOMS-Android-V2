@@ -81,7 +81,10 @@ fun ProfileBottomSheetComponent(
         modifier = modifier
             .height(72.dp)
             .fillMaxWidth()
-            .gomsClickable { onClick() },
+            .gomsClickable (
+                isIndication = true,
+                rippleColor = colors.G7.copy(0.5f)
+            ) { onClick() },
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
