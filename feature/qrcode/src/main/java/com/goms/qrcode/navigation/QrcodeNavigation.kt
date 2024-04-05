@@ -16,18 +16,14 @@ fun NavController.navigateToQrScan(navOptions: NavOptions? = null) {
 
 fun NavGraphBuilder.qrcodeScanScreen(
     onPermissionBlock: () -> Unit,
-    onError: () -> Unit,
     onSuccess: () -> Unit,
     onBackClick: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
     composable(route = qrcodeScanRoute) {
         QrcodeScanRoute(
             onPermissionBlock = onPermissionBlock,
-            onError = onError,
             onSuccess = onSuccess,
             onBackClick = onBackClick,
-            onErrorToast = onErrorToast
         )
     }
 }

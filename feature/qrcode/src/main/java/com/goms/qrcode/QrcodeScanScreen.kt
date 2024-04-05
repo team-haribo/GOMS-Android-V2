@@ -38,10 +38,8 @@ import java.util.UUID
 fun QrcodeScanRoute(
     onPermissionBlock: () -> Unit,
     onBackClick: () -> Unit,
-    onError: () -> Unit,
     onSuccess: () -> Unit,
     viewModel: QrcodeViewModel = hiltViewModel(),
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
     val outingUiState by viewModel.outingState.collectAsState()
     val cameraPermissionState: PermissionState = rememberPermissionState(Manifest.permission.CAMERA)
@@ -58,10 +56,8 @@ fun QrcodeScanRoute(
             onQrcodeScan = { qrcodeData ->
                 viewModel.outing(UUID.fromString(qrcodeData))
             },
-            onError = onError,
             onSuccess = onSuccess,
             onBackClick = onBackClick,
-            onErrorToast = onErrorToast
         )
     } else {
         onPermissionBlock()
@@ -74,9 +70,7 @@ fun QrcodeScanScreen(
     outingUiState: OutingUiState,
     onQrcodeScan: (String?) -> Unit,
     onBackClick: () -> Unit,
-    onError: () -> Unit,
     onSuccess: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
     var openDialog by remember { mutableStateOf(false) }
     var dialogTitle by remember { mutableStateOf("") }
