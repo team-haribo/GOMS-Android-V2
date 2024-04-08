@@ -89,7 +89,8 @@ class MainViewModel @Inject constructor(
 
     var outingSearch = savedStateHandle.getStateFlow(key = OUTING_SEARCH, initialValue = "")
     var studentSearch = savedStateHandle.getStateFlow(key = STUDENT_SEARCH, initialValue = "")
-    var status = savedStateHandle.getStateFlow(key = STATUS, initialValue = "")
+    var outingState = savedStateHandle.getStateFlow(key = OUTING_STATE, initialValue = "")
+    var roleState = savedStateHandle.getStateFlow(key = ROLE_STATE, initialValue = "")
     var filterStatus = savedStateHandle.getStateFlow(key = FILTER_STATUS, initialValue = "")
     var filterGrade = savedStateHandle.getStateFlow(key = FILTER_GRADE, initialValue = "")
     var filterGender = savedStateHandle.getStateFlow(key = FILTER_GENDER, initialValue = "")
@@ -272,6 +273,10 @@ class MainViewModel @Inject constructor(
             }
     }
 
+    fun initDeleteBlackList() {
+        _deleteBlackListUiState.value = Result.Loading
+    }
+
     fun studentSearch(
         grade: Int?,
         gender: String?,
@@ -316,8 +321,12 @@ class MainViewModel @Inject constructor(
         savedStateHandle[STUDENT_SEARCH] = value
     }
 
-    fun onStatusChange(value: String) {
-        savedStateHandle[STATUS] = value
+    fun onOutingStateChange(value: String) {
+        savedStateHandle[OUTING_STATE] = value
+    }
+
+    fun onRoleStateChange(value: String) {
+        savedStateHandle[ROLE_STATE] = value
     }
 
     fun onFilterStatusChange(value: String) {
@@ -338,8 +347,9 @@ class MainViewModel @Inject constructor(
 }
 
 private const val OUTING_SEARCH = "outing search"
-private const val STUDENT_SEARCH = "student Search"
-private const val STATUS = "status"
+private const val STUDENT_SEARCH = "student search"
+private const val OUTING_STATE = "outing state"
+private const val ROLE_STATE = "role state"
 private const val FILTER_STATUS = "filter status"
 private const val FILTER_GRADE = "filter grade"
 private const val FILTER_GENDER = "filter gender"
