@@ -9,8 +9,10 @@ import com.goms.common.result.Result
 import com.goms.common.result.asResult
 import com.goms.data.repository.auth.AuthRepository
 import com.goms.data.repository.setting.SettingRepository
+import com.goms.domain.account.DeleteProfileImageUseCase
 import com.goms.domain.account.GetProfileUseCase
-import com.goms.domain.account.UploadProfileImageUseCase
+import com.goms.domain.account.SetProfileImageUseCase
+import com.goms.domain.account.UpdateProfileImageUseCase
 import com.goms.domain.auth.LogoutUseCase
 import com.goms.domain.setting.SetAlarmUseCase
 import com.goms.domain.setting.SetQrcodeUseCase
@@ -30,7 +32,9 @@ import javax.inject.Inject
 @HiltViewModel
 class SettingViewModel @Inject constructor (
     private val getProfileUseCase: GetProfileUseCase,
-    private val uploadProfileImageUseCase: UploadProfileImageUseCase,
+    private val setProfileImageUseCase: SetProfileImageUseCase,
+    private val updateProfileImageUseCase: UpdateProfileImageUseCase,
+    private val deleteProfileImageUseCase: DeleteProfileImageUseCase,
     private val logoutUseCase: LogoutUseCase,
     private val settingRepository: SettingRepository,
     private val setThemeUseCase: SetThemeUseCase,
@@ -78,10 +82,38 @@ class SettingViewModel @Inject constructor (
         _getProfileUiState.value = GetProfileUiState.Loading
     }
 
-    fun uploadProfileImage(context: Context, file: Uri) = viewModelScope.launch {
+    fun setProfileImage(context: Context, file: Uri) = viewModelScope.launch {
         val multipartFile = getMultipartFile(context, file)
 
-        uploadProfileImageUseCase(multipartFile!!)
+        setProfileImageUseCase(multipartFile!!)
+            .onSuccess {
+                it.catch {remoteError ->
+                    _profileImageUiState.value = ProfileImageUiState.Error(remoteError)
+                }.collect {
+                    _profileImageUiState.value = ProfileImageUiState.Success
+                }
+            }.onFailure {
+                _profileImageUiState.value = ProfileImageUiState.Error(it)
+            }
+    }
+
+    fun updateProfileImage(context: Context, file: Uri) = viewModelScope.launch {
+        val multipartFile = getMultipartFile(context, file)
+
+        updateProfileImageUseCase(multipartFile!!)
+            .onSuccess {
+                it.catch {remoteError ->
+                    _profileImageUiState.value = ProfileImageUiState.Error(remoteError)
+                }.collect {
+                    _profileImageUiState.value = ProfileImageUiState.Success
+                }
+            }.onFailure {
+                _profileImageUiState.value = ProfileImageUiState.Error(it)
+            }
+    }
+
+    fun deleteProfileImage() = viewModelScope.launch {
+        deleteProfileImageUseCase()
             .onSuccess {
                 it.catch {remoteError ->
                     _profileImageUiState.value = ProfileImageUiState.Error(remoteError)

@@ -17,8 +17,16 @@ class AccountRepositoryImpl @Inject constructor(
         return remoteAccountDataSource.getProfile().map { it.toModel() }
     }
 
-    override suspend fun uploadProfileImage(file: MultipartBody.Part): Flow<Unit> {
-        return remoteAccountDataSource.uploadProfileImage(file)
+    override suspend fun updateProfileImage(file: MultipartBody.Part): Flow<Unit> {
+        return remoteAccountDataSource.updateProfileImage(file)
+    }
+
+    override suspend fun setProfileImage(file: MultipartBody.Part): Flow<Unit> {
+        return remoteAccountDataSource.setProfileImage(file)
+    }
+
+    override suspend fun deleteProfileImage(): Flow<Unit> {
+        return remoteAccountDataSource.deleteProfileImage()
     }
 
     override suspend fun rePassword(body: RePasswordRequestModel): Flow<Unit> {
