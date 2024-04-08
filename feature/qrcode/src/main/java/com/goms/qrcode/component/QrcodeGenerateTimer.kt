@@ -10,10 +10,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
 import kotlinx.coroutines.delay
@@ -26,20 +23,14 @@ fun QrcodeGenerateTimer(
     var remainingTime by remember { mutableIntStateOf(5 * 60) }
 
     LaunchedEffect(remainingTime) {
-        while (remainingTime > 0) {
-            delay(1000)
-            remainingTime--
-        }
         if (remainingTime == 0) {
             onTimerFinish()
-            remainingTime--
         }
+        delay(1000)
+        remainingTime--
     }
 
-    Column(
-        modifier = Modifier.size(100.dp, 56.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
             text = "QR코드 만료까지",
             color = colors.G7,

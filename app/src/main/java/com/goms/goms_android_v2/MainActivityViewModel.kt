@@ -7,14 +7,19 @@ import com.goms.common.result.asResult
 import com.goms.data.repository.account.AccountRepository
 import com.goms.data.repository.auth.AuthRepository
 import com.goms.data.repository.setting.SettingRepository
+import com.goms.domain.auth.SaveTokenUseCase
+import com.goms.domain.auth.TokenRefreshUseCase
+import com.goms.domain.notification.DeleteDeviceTokenUseCase
 import com.goms.domain.notification.SaveDeviceTokenUseCase
 import com.goms.model.response.account.ProfileResponseModel
+import com.goms.model.response.auth.LoginResponseModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
@@ -24,8 +29,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
-    private val accountRepository: AccountRepository,
+    private val tokenRefreshUseCase: TokenRefreshUseCase,
+    private val saveTokenUseCase: SaveTokenUseCase,
     private val saveDeviceTokenUseCase: SaveDeviceTokenUseCase,
+    private val deleteDeviceTokenUseCase: DeleteDeviceTokenUseCase,
+    private val accountRepository: AccountRepository,
     private val authRepository: AuthRepository,
     private val settingRepository: SettingRepository
 ) : ViewModel() {
@@ -48,6 +56,23 @@ class MainActivityViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed(5_000),
         )
 
+    fun tokenRefresh() = viewModelScope.launch {
+        tokenRefreshUseCase()
+            .asResult()
+            .collectLatest { result ->
+                when (result) {
+                    is Result.Success -> {
+                        saveToken(result.data)
+                    }
+                    else -> Unit
+                }
+            }
+    }
+
+    fun saveToken(token: LoginResponseModel) = viewModelScope.launch {
+        saveTokenUseCase(token = token)
+    }
+
     private val _saveDeviceTokenUiState = MutableStateFlow<Result<Unit>>(Result.Loading)
     val saveDeviceTokenUiState = _saveDeviceTokenUiState.asStateFlow()
 
@@ -56,6 +81,9 @@ class MainActivityViewModel @Inject constructor(
 
     private val _qrcodeState = MutableStateFlow("")
     val qrcodeState = _qrcodeState.asStateFlow()
+
+    private val _alarmState = MutableStateFlow("")
+    val alarmState = _alarmState.asStateFlow()
 
     fun saveDeviceToken(deviceToken: String) = viewModelScope.launch {
         saveDeviceTokenUseCase(deviceToken = deviceToken)
@@ -70,8 +98,8 @@ class MainActivityViewModel @Inject constructor(
             }
     }
 
-    fun setAuthority(authority: String) = viewModelScope.launch {
-        authRepository.setRole(role = authority)
+    fun deleteDeviceToken() = viewModelScope.launch {
+        deleteDeviceTokenUseCase()
     }
 
     fun deleteToken() = viewModelScope.launch {
@@ -86,8 +114,10 @@ class MainActivityViewModel @Inject constructor(
     fun getSettingInfo() = viewModelScope.launch {
         val themeValue = settingRepository.getThemeValue().first().replace("\"","")
         val qrcodeValue = settingRepository.getQrcodeValue().first().replace("\"","")
+        val alarmValue = settingRepository.getAlarmValue().first().replace("\"","")
         _themeState.value = themeValue
         _qrcodeState.value = qrcodeValue
+        _alarmState.value = alarmValue
     }
 }
 

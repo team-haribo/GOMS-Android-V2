@@ -94,8 +94,9 @@ fun QrcodeScanScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         QrcodeScanTopBar(onClick = onBackClick)
-        Spacer(modifier = Modifier.height(224.dp))
+        Spacer(modifier = Modifier.weight(2f))
         QrcodeScanGuide()
+        Spacer(modifier = Modifier.weight(3f))
     }
 
     when (outingUiState) {

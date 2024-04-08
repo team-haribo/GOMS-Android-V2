@@ -10,4 +10,8 @@ class NotificationRepositoryImpl @Inject constructor(
     override suspend fun saveDeviceToken(deviceToken: String): Flow<Unit> {
         return notificationDataSource.saveDeviceToken(deviceToken = deviceToken)
     }
+
+    override suspend fun deleteDeviceToken(): Flow<Unit> {
+        return notificationDataSource.deleteDeviceToken()
+    }
 }

@@ -24,6 +24,10 @@ class AuthRepositoryImpl @Inject constructor(
         return remoteAuthDataSource.login(body = body.toDto()).map { it.toModel() }
     }
 
+    override suspend fun tokenRefresh(): Flow<LoginResponseModel> {
+        return remoteAuthDataSource.tokenRefresh().map { it.toModel() }
+    }
+
     override suspend fun saveToken(token: LoginResponseModel) {
         token.let {
             localAuthDataSource.setAccessToken(it.accessToken)
