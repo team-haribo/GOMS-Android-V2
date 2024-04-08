@@ -8,7 +8,11 @@ import okhttp3.MultipartBody
 interface AccountRepository {
     suspend fun getProfile(): Flow<ProfileResponseModel>
 
-    suspend fun uploadProfileImage(file: MultipartBody.Part): Flow<Unit>
+    suspend fun updateProfileImage(file: MultipartBody.Part): Flow<Unit>
+
+    suspend fun setProfileImage(file: MultipartBody.Part): Flow<Unit>
+
+    suspend fun deleteProfileImage(): Flow<Unit>
 
     suspend fun rePassword(body: RePasswordRequestModel): Flow<Unit>
 }

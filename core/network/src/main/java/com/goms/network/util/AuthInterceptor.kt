@@ -36,7 +36,7 @@ class AuthInterceptor @Inject constructor(
         val path = request.url.encodedPath
         val method = request.method
 
-        if (ignorePaths.contains(path) && (method == ignoreMethodPOST || method == ignoreMethodGET)) {
+        if (ignorePaths.any { path.contains(it) } && method in listOf(ignoreMethodPOST, ignoreMethodGET)) {
             val response = chain.proceed(request)
             return if (response.code == 204) {
                 response.newBuilder().code(200).build()

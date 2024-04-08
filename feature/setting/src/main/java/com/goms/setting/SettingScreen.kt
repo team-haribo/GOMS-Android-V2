@@ -2,11 +2,9 @@ package com.goms.setting
 
 import android.content.pm.ActivityInfo
 import android.net.Uri
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,8 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -30,8 +26,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.goms.design_system.component.bottomsheet.ProfileBottomSheet
 import com.goms.design_system.component.button.ButtonState
-import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.button.GomsButton
 import com.goms.design_system.component.dialog.GomsTwoButtonDialog
 import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
@@ -42,15 +38,13 @@ import com.goms.setting.component.PasswordChangeButton
 import com.goms.setting.component.SelectThemeDropDown
 import com.goms.setting.component.SettingProfileCard
 import com.goms.setting.component.SettingSwitchComponent
+import com.goms.setting.data.toData
 import com.goms.setting.viewmodel.GetProfileUiState
 import com.goms.setting.viewmodel.LogoutUiState
 import com.goms.setting.viewmodel.ProfileImageUiState
 import com.goms.setting.viewmodel.SetThemeUiState
 import com.goms.setting.viewmodel.SettingViewModel
 import com.goms.ui.GomsRoleBackButton
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 
 @Composable
@@ -85,8 +79,16 @@ fun SettingRoute(
         }
 
     LaunchedEffect(selectedImageUri) {
-        if (selectedImageUri != null) {
-            viewModel.uploadProfileImage(context, selectedImageUri!!)
+        if (selectedImageUri != null && getProfileUiState is GetProfileUiState.Success) {
+            val data = (getProfileUiState as GetProfileUiState.Success)
+                .getProfileResponseModel
+                .toData()
+
+            if (data.profileUrl.isNullOrEmpty()) {
+                viewModel.setProfileImage(context, selectedImageUri!!)
+            } else {
+                viewModel.updateProfileImage(context, selectedImageUri!!)
+            }
         }
     }
 
@@ -105,7 +107,13 @@ fun SettingRoute(
 
     SettingScreen(
         role = role,
-        onProfileClick = { galleryLauncher.launch("image/*") },
+        onProfileClick = { isGallery ->
+            if (isGallery) {
+                galleryLauncher.launch("image/*")
+            } else {
+                viewModel.deleteProfileImage()
+            }
+        },
         onBackClick = onBackClick,
         onLogoutClick = { viewModel.logout() },
         onLogoutSuccess = onLogoutSuccess,
@@ -141,7 +149,7 @@ fun SettingRoute(
 @Composable
 fun SettingScreen(
     role: String,
-    onProfileClick: () -> Unit,
+    onProfileClick: (Boolean) -> Unit,
     onBackClick: () -> Unit,
     onLogoutClick: () -> Unit,
     onLogoutSuccess: () -> Unit,
@@ -163,6 +171,7 @@ fun SettingScreen(
 ) {
     var isLoading by remember { mutableStateOf(false) }
     var openDialog by remember { mutableStateOf(false) }
+    var openBottomSheet by remember { mutableStateOf(false) }
 
     LaunchedEffect("load data") {
         getProfile()
@@ -209,7 +218,7 @@ fun SettingScreen(
             .navigationBarsPadding()
             .statusBarsPadding(),
     ) {
-        GomsRoleBackButton(role = if(role.isNotBlank()) Authority.valueOf(role) else Authority.ROLE_STUDENT) {
+        GomsRoleBackButton(role = if (role.isNotBlank()) Authority.valueOf(role) else Authority.ROLE_STUDENT) {
             onBackClick()
         }
         Column(
@@ -219,7 +228,7 @@ fun SettingScreen(
             Spacer(modifier = Modifier.height(16.dp))
             SettingProfileCard(
                 modifier = Modifier,
-                onProfileClick = onProfileClick,
+                onProfileClick = { openBottomSheet = true },
                 getProfileUiState = getProfileUiState
             )
             Spacer(modifier = Modifier.height(32.dp))
@@ -304,5 +313,19 @@ fun SettingScreen(
         ) {
             onLogoutClick()
         }
+    }
+    if (openBottomSheet) {
+        ProfileBottomSheet(
+            modifier = Modifier.padding(horizontal = 20.dp),
+            closeSheet = { openBottomSheet = false },
+            onGalleryClick = {
+                openBottomSheet = false
+                onProfileClick(true)
+            },
+            onDefaultImageClick = {
+                openBottomSheet = false
+                onProfileClick(false)
+            }
+        )
     }
 }

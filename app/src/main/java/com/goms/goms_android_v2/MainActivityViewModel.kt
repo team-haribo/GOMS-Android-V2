@@ -33,13 +33,12 @@ class MainActivityViewModel @Inject constructor(
     private val saveTokenUseCase: SaveTokenUseCase,
     private val saveDeviceTokenUseCase: SaveDeviceTokenUseCase,
     private val deleteDeviceTokenUseCase: DeleteDeviceTokenUseCase,
-    private val accountRepository: AccountRepository,
     private val authRepository: AuthRepository,
     private val settingRepository: SettingRepository
 ) : ViewModel() {
     val uiState: StateFlow<MainActivityUiState> = flow {
-        accountRepository.getProfile().collect { profileResponse ->
-            emit(profileResponse)
+        tokenRefreshUseCase().collect {
+            emit(it)
         }
     }
         .asResult()
@@ -55,19 +54,6 @@ class MainActivityViewModel @Inject constructor(
             initialValue = MainActivityUiState.Loading,
             started = SharingStarted.WhileSubscribed(5_000),
         )
-
-    fun tokenRefresh() = viewModelScope.launch {
-        tokenRefreshUseCase()
-            .asResult()
-            .collectLatest { result ->
-                when (result) {
-                    is Result.Success -> {
-                        saveToken(result.data)
-                    }
-                    else -> Unit
-                }
-            }
-    }
 
     fun saveToken(token: LoginResponseModel) = viewModelScope.launch {
         saveTokenUseCase(token = token)
@@ -123,6 +109,6 @@ class MainActivityViewModel @Inject constructor(
 
 sealed interface MainActivityUiState {
     object Loading : MainActivityUiState
-    data class Success(val getProfileResponseModel: ProfileResponseModel) : MainActivityUiState
+    data class Success(val loginResponseModel: LoginResponseModel) : MainActivityUiState
     data class Error(val exception: Throwable) : MainActivityUiState
 }
