@@ -64,7 +64,7 @@ jobs:
           serviceAccountJson: service_account.json
           packageName: com.goms.goms_android_v2
           releaseFiles: app/build/outputs/bundle/release/app-release.aab
-          track: beta
+          track: production
 
       - name: Goms Android CD Discord Notification
         uses: sarisia/actions-status-discord@v1
