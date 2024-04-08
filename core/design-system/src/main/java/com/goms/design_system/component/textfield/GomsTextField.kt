@@ -85,7 +85,7 @@ fun GomsTextField(
                     text = placeHolder,
                     style = typography.textMedium,
                     fontWeight = FontWeight.Normal,
-                    color = if (isError) colors.N5 else colors.G4
+                    color = if (isError) colors.N5 else colors.G7
                 )
             },
             modifier = modifier
@@ -108,8 +108,8 @@ fun GomsTextField(
             colors = OutlinedTextFieldDefaults.colors(
                 focusedTextColor = if (isError) colors.N5 else colors.WHITE,
                 unfocusedTextColor = if (isError) colors.N5 else colors.WHITE,
-                focusedPlaceholderColor = if (isError) colors.N5 else colors.G4,
-                unfocusedPlaceholderColor = if (isError) colors.N5 else colors.G4,
+                focusedPlaceholderColor = if (isError) colors.N5 else colors.G7,
+                unfocusedPlaceholderColor = if (isError) colors.N5 else colors.G7,
                 focusedBorderColor = Color.Transparent,
                 unfocusedBorderColor = Color.Transparent,
                 cursorColor = colors.I5
