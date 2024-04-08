@@ -67,11 +67,10 @@ fun GomsSwitchButton(
         }
     }
 
-    DisposableEffect(Unit) {
-        onDispose {
-            if (clickListener) onCheckedChanged(true) else onCheckedChanged(false)
-        }
+    LaunchedEffect(clickListener) {
+        if (clickListener) onCheckedChanged(true) else onCheckedChanged(false)
     }
+
     Box(
         modifier = Modifier.gomsClickable(
             interval = 50L
@@ -115,7 +114,7 @@ fun GomsSwitchButton(
                         vertical = circleVerticalButtonPadding,
                     )
                     .clip(RoundedCornerShape(50))
-                    .background(color = colors.BLACK)
+                    .background(color = Color.White)
                     .size(circleSize)
             )
         }
