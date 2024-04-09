@@ -38,7 +38,7 @@ fun SwitchSelectorBottomSheet(
     title: String,
     outing: String,
     role: String,
-    closeSheet: (String, String) -> Unit
+    closeSheet: (outingState: String, roleState: String) -> Unit
 ) {
     var componentWidth by remember { mutableStateOf(0.dp) }
     val density = LocalDensity.current
