@@ -38,7 +38,7 @@ import com.goms.main.data.toData
 import com.goms.main.viewmodel.GetStudentListUiState
 import com.goms.main.viewmodel.StudentSearchUiState
 import com.goms.model.enum.Authority
-import com.goms.model.enum.Status
+import com.goms.model.enum.BlackList
 import com.goms.ui.toText
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
@@ -51,7 +51,7 @@ fun StudentManagementList(
     studentSearchUiState: StudentSearchUiState,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     onBottomSheetOpenClick: () -> Unit,
-    onClick: (UUID, String) -> Unit
+    onClick: (UUID, String, String) -> Unit
 ) {
     when (studentSearchUiState) {
         StudentSearchUiState.Loading -> {
@@ -120,7 +120,7 @@ fun StudentManagementListComponent(
     modifier: Modifier,
     list: PersistentList<StudentData>,
     onBottomSheetOpenClick: () -> Unit,
-    onClick: (UUID, String) -> Unit
+    onClick: (UUID, String, String) -> Unit
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
         Row(
@@ -155,7 +155,7 @@ fun StudentManagementListComponent(
 fun StudentManagementListItem(
     modifier: Modifier = Modifier,
     data: StudentData,
-    onClick: (UUID, String) -> Unit
+    onClick: (UUID, String, String) -> Unit
 ) {
     Row(
         modifier = modifier.padding(horizontal = 16.dp, vertical = 12.dp),
@@ -213,9 +213,8 @@ fun StudentManagementListItem(
         IconButton(onClick = {
             onClick(
                 UUID.fromString(data.accountIdx),
-                if (data.isBlackList) Status.BLACK_LIST.value
-                else if (data.authority == Authority.ROLE_STUDENT_COUNCIL) Status.ROLE_STUDENT_COUNCIL.value
-                else Status.ROLE_STUDENT.value
+                if (data.isBlackList) BlackList.BLACK_LIST.name else BlackList.NO_BLACK_LIST.name,
+                if (data.authority == Authority.ROLE_STUDENT_COUNCIL) Authority.ROLE_STUDENT_COUNCIL.name else Authority.ROLE_STUDENT.name
             )
         }) {
             WriteIcon()

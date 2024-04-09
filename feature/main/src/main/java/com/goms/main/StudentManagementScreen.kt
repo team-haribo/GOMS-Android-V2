@@ -30,7 +30,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goms.common.result.Result
-import com.goms.design_system.component.bottomsheet.AdminSelectorBottomSheet
 import com.goms.design_system.component.bottomsheet.MultipleSelectorBottomSheet
 import com.goms.design_system.component.textfield.GomsSearchTextField
 import com.goms.design_system.theme.GomsTheme.colors
@@ -41,12 +40,14 @@ import com.goms.main.viewmodel.GetStudentListUiState
 import com.goms.main.viewmodel.MainViewModel
 import com.goms.main.viewmodel.StudentSearchUiState
 import com.goms.model.enum.Authority
+import com.goms.model.enum.BlackList
 import com.goms.model.enum.Gender
 import com.goms.model.enum.Grade
 import com.goms.model.enum.Major
 import com.goms.model.enum.Status
 import com.goms.model.request.council.AuthorityRequestModel
 import com.goms.ui.GomsRoleBackButton
+import com.goms.ui.SwitchSelectorBottomSheet
 import kotlinx.collections.immutable.toPersistentList
 import java.util.UUID
 
@@ -58,7 +59,8 @@ fun StudentManagementRoute(
 ) {
     val role by viewModel.role.collectAsStateWithLifecycle(initialValue = "")
     val studentSearch by viewModel.studentSearch.collectAsStateWithLifecycle()
-    val status by viewModel.status.collectAsStateWithLifecycle()
+    val outingState by viewModel.outingState.collectAsStateWithLifecycle()
+    val roleState by viewModel.roleState.collectAsStateWithLifecycle()
     val filterStatus by viewModel.filterStatus.collectAsStateWithLifecycle()
     val filterGrade by viewModel.filterGrade.collectAsStateWithLifecycle()
     val filterGender by viewModel.filterGender.collectAsStateWithLifecycle()
@@ -72,7 +74,6 @@ fun StudentManagementRoute(
     when (changeAuthorityUiState) {
         is Result.Loading -> Unit
         is Result.Success -> {
-            viewModel.getStudentList()
             viewModel.initChangeAuthority()
         }
 
@@ -89,20 +90,34 @@ fun StudentManagementRoute(
         }
 
         is Result.Error -> {
-            onErrorToast((setBlackListUiState as Result.Error).exception, "권한 변경이 실패했습니다")
+            onErrorToast((setBlackListUiState as Result.Error).exception, "외출 금지가 실패했습니다")
+        }
+    }
+
+    when (deleteBlackListUiState) {
+        is Result.Loading -> Unit
+        is Result.Success -> {
+            viewModel.getStudentList()
+            viewModel.initDeleteBlackList()
+        }
+
+        is Result.Error -> {
+            onErrorToast((setBlackListUiState as Result.Error).exception, "외출 금지 해제가 실패했습니다")
         }
     }
 
     StudentManagementScreen(
         role = if (role.isNotBlank()) Authority.valueOf(role) else Authority.ROLE_STUDENT,
         studentSearch = studentSearch,
-        status = status,
+        outingState = outingState,
+        roleState = roleState,
         filterStatus = filterStatus,
         filterGrade = filterGrade,
         filterGender = filterGender,
         filterMajor = filterMajor,
         onStudentSearchChange = viewModel::onStudentSearchChange,
-        onStatusChange = viewModel::onStatusChange,
+        onOutingStateChange = viewModel::onOutingStateChange,
+        onRoleStateChange = viewModel::onRoleStateChange,
         onFilterStatusChange = viewModel::onFilterStatusChange,
         onFilterGradeChange = viewModel::onFilterGradeChange,
         onFilterGenderChange = viewModel::onFilterGenderChange,
@@ -131,13 +146,15 @@ fun StudentManagementRoute(
             viewModel.changeAuthority(
                 body = AuthorityRequestModel(
                     accountIdx = accountIdx.toString(),
-                    authority = Status.values().find { it.value == authority }!!.name
+                    authority = authority
                 )
             )
-            viewModel.deleteBlackList(accountIdx = accountIdx)
         },
         setBlackListCallBack = { accountIdx ->
             viewModel.setBlackList(accountIdx = accountIdx)
+        },
+        deleteBlackListCallBack = { accountIdx ->
+            viewModel.deleteBlackList(accountIdx = accountIdx)
         }
     )
 }
@@ -146,13 +163,15 @@ fun StudentManagementRoute(
 fun StudentManagementScreen(
     role: Authority,
     studentSearch: String,
-    status: String,
+    outingState: String,
+    roleState: String,
     filterStatus: String,
     filterGrade: String,
     filterGender: String,
     filterMajor: String,
     onStudentSearchChange: (String) -> Unit,
-    onStatusChange: (String) -> Unit,
+    onOutingStateChange: (String) -> Unit,
+    onRoleStateChange: (String) -> Unit,
     onFilterStatusChange: (String) -> Unit,
     onFilterGradeChange: (String) -> Unit,
     onFilterGenderChange: (String) -> Unit,
@@ -164,7 +183,8 @@ fun StudentManagementScreen(
     studentListCallBack: () -> Unit,
     studentSearchCallBack: (String) -> Unit,
     changeAuthorityCallBack: (UUID, String) -> Unit,
-    setBlackListCallBack: (UUID) -> Unit
+    setBlackListCallBack: (UUID) -> Unit,
+    deleteBlackListCallBack: (UUID) -> Unit
 ) {
     LaunchedEffect(true) {
         studentListCallBack()
@@ -221,32 +241,28 @@ fun StudentManagementScreen(
                 studentSearchUiState = studentSearchUiState,
                 onBottomSheetOpenClick = { onFilterBottomSheetOpenClick = true },
                 onErrorToast = onErrorToast,
-                onClick = { accountIdx, authority ->
+                onClick = { accountIdx, outing, role ->
                     onStatusBottomSheetOpenClick = true
                     uuid = accountIdx
-                    onStatusChange(authority)
+                    onOutingStateChange(outing)
+                    onRoleStateChange(role)
                 }
             )
         }
     }
     if (onStatusBottomSheetOpenClick) {
-        AdminSelectorBottomSheet(
+        SwitchSelectorBottomSheet(
             modifier = Modifier.fillMaxWidth(),
             title = "유저 권한 변경",
-            subTitle = "역할",
-            list = listOf(
-                Status.ROLE_STUDENT.value,
-                Status.ROLE_STUDENT_COUNCIL.value,
-                Status.BLACK_LIST.value
-            ).toPersistentList(),
-            selected = status,
-            itemChange = onStatusChange,
-            closeSheet = {
+            outing = outingState,
+            role = roleState,
+            closeSheet = { outingState, roleState ->
                 onStatusBottomSheetOpenClick = false
-                if (status != Status.BLACK_LIST.value) {
-                    changeAuthorityCallBack(uuid, status)
-                } else {
+                changeAuthorityCallBack(uuid, roleState)
+                if (outingState == BlackList.BLACK_LIST.name) {
                     setBlackListCallBack(uuid)
+                } else {
+                    deleteBlackListCallBack(uuid)
                 }
             }
         )
