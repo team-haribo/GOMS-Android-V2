@@ -175,17 +175,21 @@ fun PasswordScreen(
                 text = "회원가입",
                 state = if (password.isNotBlank() && checkPassword.isNotBlank()) ButtonState.Normal else ButtonState.Enable
             ) {
-                if (password != checkPassword) {
-                    isError = true
-                    errorText = "비밀번호가 일치하지 않습니다"
-                    onErrorToast(null, "비밀번호가 일치하지 않습니다")
-                } else if (!isStrongPassword(password)) {
-                    isError = true
-                    errorText = "비밀번호 요구사항을 충족하지 않습니다"
-                    onErrorToast(null, "비밀번호 요구사항을 충족하지 않습니다")
-                } else {
-                    passwordCallback()
-                    isLoading = true
+                when {
+                    password != checkPassword -> {
+                        isError = true
+                        errorText = "비밀번호가 일치하지 않습니다"
+                        onErrorToast(null, "비밀번호가 일치하지 않습니다")
+                    }
+                    !isStrongPassword(password) -> {
+                        isError = true
+                        errorText = "비밀번호 요구사항을 충족하지 않습니다"
+                        onErrorToast(null, "비밀번호 요구사항을 충족하지 않습니다")
+                    }
+                    else -> {
+                        passwordCallback()
+                        isLoading = true
+                    }
                 }
             }
             Spacer(modifier = Modifier.height(animatedSpacerHeight))
