@@ -64,15 +64,12 @@ fun MainProfileCardComponent(
     modifier: Modifier,
     data: ProfileData
 ) {
-    val stateColor = if (data.isBlackList) colors.N5
-    else if (data.isOuting) colors.P5
-    else if (data.authority == Authority.ROLE_STUDENT_COUNCIL) colors.A7
-    else colors.G4
-
-    val stateText = if (data.isBlackList) "외출 금지"
-    else if (data.isOuting) "외출 중"
-    else if (data.authority == Authority.ROLE_STUDENT_COUNCIL) "학생회"
-    else "외출 대기 중"
+    val (stateColor, stateText) = when {
+        data.isBlackList -> Pair(colors.N5, "외출 금지")
+        data.isOuting -> Pair(colors.P5, "외출 중")
+        data.authority == Authority.ROLE_STUDENT_COUNCIL -> Pair(colors.A7, "학생회")
+        else -> Pair(colors.G4, "외출 대기 중")
+    }
 
     Surface(
         modifier = modifier,
