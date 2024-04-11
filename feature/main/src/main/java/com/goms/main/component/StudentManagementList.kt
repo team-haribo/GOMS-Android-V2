@@ -170,9 +170,11 @@ fun StudentManagementListItem(
                     .size(48.dp)
                     .border(
                         width = 4.dp,
-                        color = if (data.isBlackList) colors.N5
-                        else if (data.authority == Authority.ROLE_STUDENT_COUNCIL) colors.A7
-                        else Color.Transparent,
+                        color = when {
+                            data.isBlackList -> colors.N5
+                            data.authority == Authority.ROLE_STUDENT_COUNCIL -> colors.A7
+                            else -> Color.Transparent
+                        },
                         shape = CircleShape
                     )
             )
@@ -184,9 +186,11 @@ fun StudentManagementListItem(
                     .clip(RoundedCornerShape(40.dp))
                     .border(
                         width = 4.dp,
-                        color = if (data.isBlackList) colors.N5
-                        else if (data.authority == Authority.ROLE_STUDENT_COUNCIL) colors.A7
-                        else Color.Transparent,
+                        color = when {
+                            data.isBlackList -> colors.N5
+                            data.authority == Authority.ROLE_STUDENT_COUNCIL -> colors.A7
+                            else -> Color.Transparent
+                        },
                         shape = CircleShape
                     ),
                 contentScale = ContentScale.Crop,
@@ -198,9 +202,11 @@ fun StudentManagementListItem(
                 text = data.name,
                 style = typography.textMedium,
                 fontWeight = FontWeight.SemiBold,
-                color = if (data.isBlackList) colors.N5
-                else if (data.authority == Authority.ROLE_STUDENT_COUNCIL) colors.A7
-                else colors.G7
+                color = when {
+                    data.isBlackList -> colors.N5
+                    data.authority == Authority.ROLE_STUDENT_COUNCIL -> colors.A7
+                    else -> colors.G7
+                },
             )
             Text(
                 text = "${data.grade}기 | ${data.major.toText()}",
