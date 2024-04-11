@@ -310,9 +310,7 @@ fun SettingScreen(
     if (openDialog) {
         GomsTwoButtonDialog(
             openDialog = openDialog,
-            onStateChange = {
-                openDialog = it
-            },
+            onStateChange = { openDialog = it },
             title = "로그아웃",
             content = "로그아웃 하시겠습니까?",
             dismissText = "취소",
@@ -325,9 +323,7 @@ fun SettingScreen(
     if (openBottomSheet) {
         ProfileBottomSheet(
             modifier = Modifier.padding(horizontal = 20.dp),
-            closeSheet = {
-                openBottomSheet = false
-            },
+            closeSheet = { openBottomSheet = false },
             onGalleryClick = {
                 openBottomSheet = false
                 onProfileClick(true)
