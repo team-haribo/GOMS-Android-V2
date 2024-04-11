@@ -134,6 +134,7 @@ fun SettingRoute(
         onUpdateTheme = { onThemeSelect() },
         onUpdateQrcode = { qrcodeData = it },
         onUpdateAlarm = { alarmData = it },
+        setDefaultProfileUiState = { viewModel.initSetProfile() },
         logoutUiState = logoutUiState,
         setThemeUiState = setThemeUiState,
         getProfileUiState = getProfileUiState,
@@ -159,6 +160,7 @@ fun SettingScreen(
     onUpdateTheme: () -> Unit,
     onUpdateQrcode: (String) -> Unit,
     onUpdateAlarm: (String) -> Unit,
+    setDefaultProfileUiState: () -> Unit,
     logoutUiState: LogoutUiState,
     setThemeUiState: SetThemeUiState,
     getProfileUiState: GetProfileUiState,
@@ -207,6 +209,7 @@ fun SettingScreen(
 
         is ProfileImageUiState.Error -> {
             onErrorToast(profileImageUiState.exception, "네트워크 상태를 확인해 주세요")
+            setDefaultProfileUiState()
         }
     }
 
@@ -317,7 +320,9 @@ fun SettingScreen(
     if (openBottomSheet) {
         ProfileBottomSheet(
             modifier = Modifier.padding(horizontal = 20.dp),
-            closeSheet = { openBottomSheet = false },
+            closeSheet = {
+                openBottomSheet = false
+            },
             onGalleryClick = {
                 openBottomSheet = false
                 onProfileClick(true)
