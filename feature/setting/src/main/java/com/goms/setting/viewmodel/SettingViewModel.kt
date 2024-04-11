@@ -97,10 +97,6 @@ class SettingViewModel @Inject constructor (
             }
     }
 
-    fun initSetProfile() {
-        _profileImageUiState.value = ProfileImageUiState.Loading
-    }
-
     fun updateProfileImage(context: Context, file: Uri) = viewModelScope.launch {
         val multipartFile = getMultipartFile(context, file)
 

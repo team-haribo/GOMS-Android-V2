@@ -134,7 +134,7 @@ fun SettingRoute(
         onUpdateTheme = { onThemeSelect() },
         onUpdateQrcode = { qrcodeData = it },
         onUpdateAlarm = { alarmData = it },
-        setDefaultProfileUiState = { viewModel.initSetProfile() },
+        setDefaultProfileUiState = { viewModel.initProfileImage() },
         logoutUiState = logoutUiState,
         setThemeUiState = setThemeUiState,
         getProfileUiState = getProfileUiState,
