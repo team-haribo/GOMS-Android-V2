@@ -5,6 +5,7 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.goms.common.network.errorHandling
 import com.goms.common.result.Result
 import com.goms.common.result.asResult
 import com.goms.data.repository.auth.AuthRepository
@@ -117,6 +118,9 @@ class SettingViewModel @Inject constructor (
             .onSuccess {
                 it.catch {remoteError ->
                     _profileImageUiState.value = ProfileImageUiState.Error(remoteError)
+                    remoteError.errorHandling(
+                        notFoundAction = { _profileImageUiState.value = ProfileImageUiState.EmptyProfileUrl }
+                    )
                 }.collect {
                     _profileImageUiState.value = ProfileImageUiState.Success
                 }
