@@ -41,7 +41,7 @@ import com.goms.design_system.util.lockScreenOrientation
 import com.goms.model.request.auth.SendNumberRequestModel
 import com.goms.sign_up.component.NumberText
 import com.goms.sign_up.viewmodel.SignUpViewModel
-import com.goms.sign_up.viewmodel.VerifyNumberUiState
+import com.goms.sign_up.viewmodel.uistate.VerifyNumberUiState
 
 @Composable
 fun NumberRoute(

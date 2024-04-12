@@ -42,7 +42,7 @@ import com.goms.model.request.auth.SendNumberRequestModel
 import com.goms.sign_up.component.SelectGenderDropDown
 import com.goms.sign_up.component.SelectMajorDropDown
 import com.goms.sign_up.component.SignUpText
-import com.goms.sign_up.viewmodel.SendNumberUiState
+import com.goms.sign_up.viewmodel.uistate.SendNumberUiState
 import com.goms.sign_up.viewmodel.SignUpViewModel
 import com.goms.ui.isStrongEmail
 

@@ -43,7 +43,7 @@ import com.goms.model.enum.Gender
 import com.goms.model.enum.Major
 import com.goms.model.request.auth.SignUpRequestModel
 import com.goms.sign_up.component.PasswordText
-import com.goms.sign_up.viewmodel.SignUpUiState
+import com.goms.sign_up.viewmodel.uistate.SignUpUiState
 import com.goms.sign_up.viewmodel.SignUpViewModel
 import com.goms.ui.isStrongPassword
 
