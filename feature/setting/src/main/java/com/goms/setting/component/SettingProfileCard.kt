@@ -31,7 +31,7 @@ import com.goms.design_system.theme.GomsTheme.typography
 import com.goms.design_system.util.shadow
 import com.goms.setting.data.ProfileData
 import com.goms.setting.data.toData
-import com.goms.setting.viewmodel.GetProfileUiState
+import com.goms.setting.viewmodel.uistate.GetProfileUiState
 import com.goms.ui.toText
 
 @Composable
