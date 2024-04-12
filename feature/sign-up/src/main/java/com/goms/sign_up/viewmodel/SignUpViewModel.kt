@@ -9,6 +9,9 @@ import com.goms.domain.auth.SighUpUseCase
 import com.goms.domain.auth.VerifyNumberUseCase
 import com.goms.model.request.auth.SendNumberRequestModel
 import com.goms.model.request.auth.SignUpRequestModel
+import com.goms.sign_up.viewmodel.uistate.SendNumberUiState
+import com.goms.sign_up.viewmodel.uistate.SignUpUiState
+import com.goms.sign_up.viewmodel.uistate.VerifyNumberUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

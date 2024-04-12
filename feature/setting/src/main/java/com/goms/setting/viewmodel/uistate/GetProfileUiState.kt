@@ -1,4 +1,4 @@
-package com.goms.setting.viewmodel
+package com.goms.setting.viewmodel.uistate
 
 import com.goms.model.response.account.ProfileResponseModel
 

@@ -29,7 +29,7 @@ import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
 import com.goms.main.data.ProfileData
 import com.goms.main.data.toData
-import com.goms.main.viewmodel.GetProfileUiState
+import com.goms.main.viewmodel.uistate.GetProfileUiState
 import com.goms.model.enum.Authority
 import com.goms.ui.toText
 

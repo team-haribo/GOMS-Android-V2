@@ -8,6 +8,8 @@ import com.goms.common.result.Result
 import com.goms.common.result.asResult
 import com.goms.domain.auth.LoginUseCase
 import com.goms.domain.auth.SaveTokenUseCase
+import com.goms.login.viewmodel.uistate.LoginUiState
+import com.goms.login.viewmodel.uistate.SaveTokenUiState
 import com.goms.model.request.auth.LoginRequestModel
 import com.goms.model.response.auth.LoginResponseModel
 import dagger.hilt.android.lifecycle.HiltViewModel

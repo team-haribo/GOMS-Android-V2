@@ -36,9 +36,9 @@ import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.util.keyboardAsState
 import com.goms.main.component.StudentManagementList
 import com.goms.main.component.StudentManagementText
-import com.goms.main.viewmodel.GetStudentListUiState
+import com.goms.main.viewmodel.uistate.GetStudentListUiState
 import com.goms.main.viewmodel.MainViewModel
-import com.goms.main.viewmodel.StudentSearchUiState
+import com.goms.main.viewmodel.uistate.StudentSearchUiState
 import com.goms.model.enum.Authority
 import com.goms.model.enum.BlackList
 import com.goms.model.enum.Gender

@@ -2,7 +2,6 @@ package com.goms.main
 
 import android.Manifest
 import android.os.Build
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -17,11 +16,9 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -32,10 +29,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goms.design_system.icon.SettingIcon
 import com.goms.design_system.theme.GomsTheme.colors
-import com.goms.main.viewmodel.GetLateRankListUiState
-import com.goms.main.viewmodel.GetOutingCountUiState
-import com.goms.main.viewmodel.GetOutingListUiState
-import com.goms.main.viewmodel.GetProfileUiState
+import com.goms.main.viewmodel.uistate.GetLateRankListUiState
+import com.goms.main.viewmodel.uistate.GetOutingCountUiState
+import com.goms.main.viewmodel.uistate.GetOutingListUiState
+import com.goms.main.viewmodel.uistate.GetProfileUiState
 import com.goms.model.enum.Authority
 import com.goms.ui.GomsTopBar
 import com.goms.ui.GomsFloatingButton

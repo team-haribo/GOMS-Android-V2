@@ -39,10 +39,10 @@ import com.goms.setting.component.SelectThemeDropDown
 import com.goms.setting.component.SettingProfileCard
 import com.goms.setting.component.SettingSwitchComponent
 import com.goms.setting.data.toData
-import com.goms.setting.viewmodel.GetProfileUiState
-import com.goms.setting.viewmodel.LogoutUiState
-import com.goms.setting.viewmodel.ProfileImageUiState
-import com.goms.setting.viewmodel.SetThemeUiState
+import com.goms.setting.viewmodel.uistate.GetProfileUiState
+import com.goms.setting.viewmodel.uistate.LogoutUiState
+import com.goms.setting.viewmodel.uistate.ProfileImageUiState
+import com.goms.setting.viewmodel.uistate.SetThemeUiState
 import com.goms.setting.viewmodel.SettingViewModel
 import com.goms.ui.GomsRoleBackButton
 

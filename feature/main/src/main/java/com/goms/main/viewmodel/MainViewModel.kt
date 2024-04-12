@@ -18,6 +18,14 @@ import com.goms.domain.late.GetLateRankListUseCase
 import com.goms.domain.outing.GetOutingCountUseCase
 import com.goms.domain.outing.GetOutingListUseCase
 import com.goms.domain.outing.OutingSearchUseCase
+import com.goms.main.viewmodel.uistate.GetLateListUiState
+import com.goms.main.viewmodel.uistate.GetLateRankListUiState
+import com.goms.main.viewmodel.uistate.GetOutingCountUiState
+import com.goms.main.viewmodel.uistate.GetOutingListUiState
+import com.goms.main.viewmodel.uistate.GetProfileUiState
+import com.goms.main.viewmodel.uistate.GetStudentListUiState
+import com.goms.main.viewmodel.uistate.OutingSearchUiState
+import com.goms.main.viewmodel.uistate.StudentSearchUiState
 import com.goms.model.request.council.AuthorityRequestModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -54,13 +62,15 @@ class MainViewModel @Inject constructor(
     private val _getProfileUiState = MutableStateFlow<GetProfileUiState>(GetProfileUiState.Loading)
     val getProfileUiState = _getProfileUiState.asStateFlow()
 
-    private val _getLateRankListUiState = MutableStateFlow<GetLateRankListUiState>(GetLateRankListUiState.Loading)
+    private val _getLateRankListUiState = MutableStateFlow<GetLateRankListUiState>(
+        GetLateRankListUiState.Loading)
     val getLateRankListUiState = _getLateRankListUiState.asStateFlow()
 
     private val _getOutingListUiState = MutableStateFlow<GetOutingListUiState>(GetOutingListUiState.Loading)
     val getOutingListUiState = _getOutingListUiState.asStateFlow()
 
-    private val _getOutingCountUiState = MutableStateFlow<GetOutingCountUiState>(GetOutingCountUiState.Loading)
+    private val _getOutingCountUiState = MutableStateFlow<GetOutingCountUiState>(
+        GetOutingCountUiState.Loading)
     val getOutingCountUiState = _getOutingCountUiState.asStateFlow()
 
     private val _outingSearchUiState = MutableStateFlow<OutingSearchUiState>(OutingSearchUiState.Loading)
@@ -72,7 +82,8 @@ class MainViewModel @Inject constructor(
     private val _getLateListUiState = MutableStateFlow<GetLateListUiState>(GetLateListUiState.Loading)
     val getLateListUiState = _getLateListUiState.asStateFlow()
 
-    private val _getStudentListUiState = MutableStateFlow<GetStudentListUiState>(GetStudentListUiState.Loading)
+    private val _getStudentListUiState = MutableStateFlow<GetStudentListUiState>(
+        GetStudentListUiState.Loading)
     val getStudentListUiState = _getStudentListUiState.asStateFlow()
 
     private val _changeAuthorityUiState = MutableStateFlow<Result<Unit>>(Result.Loading)

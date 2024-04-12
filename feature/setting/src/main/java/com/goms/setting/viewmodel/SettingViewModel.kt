@@ -2,7 +2,6 @@ package com.goms.setting.viewmodel
 
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.goms.common.network.errorHandling
@@ -19,6 +18,10 @@ import com.goms.domain.setting.SetAlarmUseCase
 import com.goms.domain.setting.SetQrcodeUseCase
 import com.goms.domain.setting.SetThemeUseCase
 import com.goms.setting.util.getMultipartFile
+import com.goms.setting.viewmodel.uistate.GetProfileUiState
+import com.goms.setting.viewmodel.uistate.LogoutUiState
+import com.goms.setting.viewmodel.uistate.ProfileImageUiState
+import com.goms.setting.viewmodel.uistate.SetThemeUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

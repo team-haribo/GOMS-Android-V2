@@ -9,6 +9,9 @@ import com.goms.domain.auth.SendNumberUseCase
 import com.goms.domain.auth.VerifyNumberUseCase
 import com.goms.model.request.account.RePasswordRequestModel
 import com.goms.model.request.auth.SendNumberRequestModel
+import com.goms.re_password.viewmodel.uistate.RePasswordUiState
+import com.goms.re_password.viewmodel.uistate.SendNumberUiState
+import com.goms.re_password.viewmodel.uistate.VerifyNumberUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

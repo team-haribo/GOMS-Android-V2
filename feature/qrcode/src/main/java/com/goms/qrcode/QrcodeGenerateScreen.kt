@@ -18,7 +18,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -29,7 +28,7 @@ import com.goms.model.enum.Authority
 import com.goms.qrcode.component.QrcodeGenerateText
 import com.goms.qrcode.component.QrcodeGenerateTimer
 import com.goms.qrcode.util.QrcodeGenerator
-import com.goms.qrcode.viewmodel.GetOutingUUIDUiState
+import com.goms.qrcode.viewmodel.uistate.GetOutingUUIDUiState
 import com.goms.qrcode.viewmodel.QrcodeViewModel
 import com.goms.ui.GomsRoleBackButton
 

@@ -1,4 +1,4 @@
-package com.goms.re_password.viewmodel
+package com.goms.re_password.viewmodel.uistate
 
 interface RePasswordUiState {
     object Loading : RePasswordUiState
