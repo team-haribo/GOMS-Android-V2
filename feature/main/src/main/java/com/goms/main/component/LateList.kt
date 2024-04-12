@@ -26,12 +26,11 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.goms.design_system.R
 import com.goms.design_system.component.shimmer.shimmerEffect
-import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
 import com.goms.main.data.LateData
 import com.goms.main.data.toData
-import com.goms.main.viewmodel.GetLateListUiState
+import com.goms.main.viewmodel.uistate.GetLateListUiState
 import com.goms.ui.toText
 
 @Composable

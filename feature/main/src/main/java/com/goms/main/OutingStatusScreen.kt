@@ -36,10 +36,10 @@ import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.util.keyboardAsState
 import com.goms.main.component.OutingStatusList
 import com.goms.main.component.OutingStatusText
-import com.goms.main.viewmodel.GetOutingCountUiState
-import com.goms.main.viewmodel.GetOutingListUiState
+import com.goms.main.viewmodel.uistate.GetOutingCountUiState
+import com.goms.main.viewmodel.uistate.GetOutingListUiState
 import com.goms.main.viewmodel.MainViewModel
-import com.goms.main.viewmodel.OutingSearchUiState
+import com.goms.main.viewmodel.uistate.OutingSearchUiState
 import com.goms.model.enum.Authority
 import com.goms.ui.GomsRoleBackButton
 import java.util.UUID
