@@ -1,4 +1,4 @@
-package com.goms.login.viewmodel
+package com.goms.login.viewmodel.uistate
 
 import com.goms.model.enum.Authority
 import com.goms.model.response.auth.LoginResponseModel
