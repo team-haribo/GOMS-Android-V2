@@ -40,7 +40,7 @@ import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.util.keyboardAsState
 import com.goms.model.request.account.RePasswordRequestModel
 import com.goms.re_password.component.RePasswordText
-import com.goms.re_password.viewmodel.RePasswordUiState
+import com.goms.re_password.viewmodel.uistate.RePasswordUiState
 import com.goms.re_password.viewmodel.RePasswordViewmodel
 import com.goms.ui.isStrongPassword
 
