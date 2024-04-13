@@ -41,8 +41,8 @@ import com.goms.design_system.util.keyboardAsState
 import com.goms.design_system.util.lockScreenOrientation
 import com.goms.login.component.InputLoginText
 import com.goms.login.viewmodel.LoginViewModel
-import com.goms.login.viewmodel.LoginUiState
-import com.goms.login.viewmodel.SaveTokenUiState
+import com.goms.login.viewmodel.uistate.LoginUiState
+import com.goms.login.viewmodel.uistate.SaveTokenUiState
 import com.goms.model.request.auth.LoginRequestModel
 import com.goms.ui.isStrongEmail
 

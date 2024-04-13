@@ -39,10 +39,10 @@ import com.goms.setting.component.SelectThemeDropDown
 import com.goms.setting.component.SettingProfileCard
 import com.goms.setting.component.SettingSwitchComponent
 import com.goms.setting.data.toData
-import com.goms.setting.viewmodel.GetProfileUiState
-import com.goms.setting.viewmodel.LogoutUiState
-import com.goms.setting.viewmodel.ProfileImageUiState
-import com.goms.setting.viewmodel.SetThemeUiState
+import com.goms.setting.viewmodel.uistate.GetProfileUiState
+import com.goms.setting.viewmodel.uistate.LogoutUiState
+import com.goms.setting.viewmodel.uistate.ProfileImageUiState
+import com.goms.setting.viewmodel.uistate.SetThemeUiState
 import com.goms.setting.viewmodel.SettingViewModel
 import com.goms.ui.GomsRoleBackButton
 
@@ -134,6 +134,7 @@ fun SettingRoute(
         onUpdateTheme = { onThemeSelect() },
         onUpdateQrcode = { qrcodeData = it },
         onUpdateAlarm = { alarmData = it },
+        setDefaultProfileUiState = { viewModel.initProfileImage() },
         logoutUiState = logoutUiState,
         setThemeUiState = setThemeUiState,
         getProfileUiState = getProfileUiState,
@@ -159,6 +160,7 @@ fun SettingScreen(
     onUpdateTheme: () -> Unit,
     onUpdateQrcode: (String) -> Unit,
     onUpdateAlarm: (String) -> Unit,
+    setDefaultProfileUiState: () -> Unit,
     logoutUiState: LogoutUiState,
     setThemeUiState: SetThemeUiState,
     getProfileUiState: GetProfileUiState,
@@ -205,8 +207,14 @@ fun SettingScreen(
             getProfile()
         }
 
+        is ProfileImageUiState.EmptyProfileUrl -> {
+            onErrorToast(null, "이미 기본 프로필 입니다.")
+            setDefaultProfileUiState()
+        }
+
         is ProfileImageUiState.Error -> {
-            onErrorToast(profileImageUiState.exception, "네트워크 상태를 확인해 주세요")
+            onErrorToast(profileImageUiState.exception, "기본 프로필 변경에 실패했습니다.")
+            setDefaultProfileUiState()
         }
     }
 
@@ -302,9 +310,7 @@ fun SettingScreen(
     if (openDialog) {
         GomsTwoButtonDialog(
             openDialog = openDialog,
-            onStateChange = {
-                openDialog = it
-            },
+            onStateChange = { openDialog = it },
             title = "로그아웃",
             content = "로그아웃 하시겠습니까?",
             dismissText = "취소",

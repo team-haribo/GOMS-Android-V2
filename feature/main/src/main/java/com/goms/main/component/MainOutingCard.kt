@@ -30,8 +30,8 @@ import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
 import com.goms.main.data.OutingData
 import com.goms.main.data.toData
-import com.goms.main.viewmodel.GetOutingCountUiState
-import com.goms.main.viewmodel.GetOutingListUiState
+import com.goms.main.viewmodel.uistate.GetOutingCountUiState
+import com.goms.main.viewmodel.uistate.GetOutingListUiState
 import com.goms.model.enum.Authority
 import com.goms.ui.toText
 
