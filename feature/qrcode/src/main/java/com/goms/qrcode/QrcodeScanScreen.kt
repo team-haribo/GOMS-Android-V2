@@ -19,11 +19,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goms.design_system.component.dialog.GomsOneButtonDialog
 import com.goms.design_system.util.lockScreenOrientation
 import com.goms.qrcode.component.QrcodeScanGuide
 import com.goms.qrcode.component.QrcodeScanPreview
 import com.goms.qrcode.component.QrcodeScanTopBar
+import com.goms.qrcode.viewmodel.GetProfileUiState
 import com.goms.qrcode.viewmodel.OutingUiState
 import com.goms.qrcode.viewmodel.QrcodeViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -43,6 +45,7 @@ fun QrcodeScanRoute(
 ) {
     val outingUiState by viewModel.outingState.collectAsState()
     val cameraPermissionState: PermissionState = rememberPermissionState(Manifest.permission.CAMERA)
+    val getProfileUiState by viewModel.getProfileUiState.collectAsStateWithLifecycle()
 
     LaunchedEffect("getPermission") {
         if (!cameraPermissionState.status.isGranted && !cameraPermissionState.status.shouldShowRationale) run {
@@ -53,11 +56,13 @@ fun QrcodeScanRoute(
     if (cameraPermissionState.status.isGranted) {
         QrcodeScanScreen(
             outingUiState = outingUiState,
+            profileUiState = getProfileUiState,
             onQrcodeScan = { qrcodeData ->
                 viewModel.outing(UUID.fromString(qrcodeData))
             },
             onSuccess = onSuccess,
             onBackClick = onBackClick,
+            getProfile = { viewModel.getProfile() }
         )
     } else {
         onPermissionBlock()
@@ -68,13 +73,18 @@ fun QrcodeScanRoute(
 @Composable
 fun QrcodeScanScreen(
     outingUiState: OutingUiState,
+    profileUiState: GetProfileUiState,
     onQrcodeScan: (String?) -> Unit,
     onBackClick: () -> Unit,
     onSuccess: () -> Unit,
+    getProfile: () -> Unit,
 ) {
     var openDialog by remember { mutableStateOf(false) }
     var dialogTitle by remember { mutableStateOf("") }
     var dialogContent by remember { mutableStateOf("") }
+    var isOuting by remember { mutableStateOf(false) }
+
+    LaunchedEffect("getProfile") { getProfile() }
 
     lockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
     QrcodeScanPreview(
@@ -95,12 +105,20 @@ fun QrcodeScanScreen(
         Spacer(modifier = Modifier.weight(3f))
     }
 
+    if (profileUiState is GetProfileUiState.Success) {
+        if (profileUiState.getProfileResponseModel.isOuting) {
+            isOuting = false
+        } else {
+            isOuting = true
+        }
+    }
+
     when (outingUiState) {
         is OutingUiState.Loading -> Unit
         is OutingUiState.Success ->  {
             openDialog = true
             dialogTitle = "QR코드 스캔 성공"
-            dialogContent = "외출을 시작해요!\n7시 25분까지는 반으로 돌아와야 해요!"
+            dialogContent = if (isOuting) "외출을 시작해요!\n7시 25분까지는 반으로 돌아와야 해요!" else "외출에서 복귀하셨군요!\n다음 주 수요일에 또 봐요!"
         }
         is OutingUiState.BadRequest -> {
             openDialog = true

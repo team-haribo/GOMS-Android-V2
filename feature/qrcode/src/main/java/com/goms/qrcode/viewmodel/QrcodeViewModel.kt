@@ -6,6 +6,7 @@ import com.goms.common.network.errorHandling
 import com.goms.common.result.Result
 import com.goms.common.result.asResult
 import com.goms.data.repository.auth.AuthRepository
+import com.goms.domain.account.GetProfileUseCase
 import com.goms.domain.council.GetOutingUUIDUseCase
 import com.goms.domain.outing.OutingUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,6 +22,7 @@ import javax.inject.Inject
 class QrcodeViewModel @Inject constructor(
     private val outingUseCase: OutingUseCase,
     private val getOutingUUIDUseCase: GetOutingUUIDUseCase,
+    private val getProfileUseCase: GetProfileUseCase,
     private val authRepository: AuthRepository
 ) : ViewModel() {
     val role = authRepository.getRole()
@@ -30,6 +32,9 @@ class QrcodeViewModel @Inject constructor(
 
     private val _getOutingUUIDState = MutableStateFlow<GetOutingUUIDUiState>(GetOutingUUIDUiState.Loading)
     val getOutingUUIDState = _getOutingUUIDState.asStateFlow()
+
+    private val _getProfileUiState = MutableStateFlow<GetProfileUiState>(GetProfileUiState.Loading)
+    val getProfileUiState = _getProfileUiState.asStateFlow()
 
     fun outing(outingUUID: UUID) = viewModelScope.launch {
         outingUseCase(outingUUID = outingUUID)
@@ -58,6 +63,18 @@ class QrcodeViewModel @Inject constructor(
                     is Result.Loading -> _getOutingUUIDState.value = GetOutingUUIDUiState.Loading
                     is Result.Success -> _getOutingUUIDState.value = GetOutingUUIDUiState.Success(result.data)
                     is Result.Error -> _getOutingUUIDState.value = GetOutingUUIDUiState.Error(result.exception)
+                }
+            }
+    }
+
+    fun getProfile() = viewModelScope.launch {
+        getProfileUseCase()
+            .asResult()
+            .collectLatest { result ->
+                when (result) {
+                    is Result.Loading -> _getProfileUiState.value = GetProfileUiState.Loading
+                    is Result.Success -> _getProfileUiState.value = GetProfileUiState.Success(result.data)
+                    is Result.Error -> _getProfileUiState.value = GetProfileUiState.Error(result.exception)
                 }
             }
     }
