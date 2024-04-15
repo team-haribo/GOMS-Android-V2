@@ -41,7 +41,7 @@ fun QrcodeScanRoute(
     onSuccess: () -> Unit,
     viewModel: QrcodeViewModel = hiltViewModel(),
 ) {
-    val outingUiState by viewModel.outingState.collectAsState()
+    val outingUiState by viewModel.outingState.collectAsStateWithLifecycle()
     val cameraPermissionState: PermissionState = rememberPermissionState(Manifest.permission.CAMERA)
     val getProfileUiState by viewModel.getProfileUiState.collectAsStateWithLifecycle()
 
