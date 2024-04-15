@@ -1,7 +1,7 @@
 plugins {
     id("goms.android.application")
     id("goms.android.hilt")
-    id("com.google.gms.google-services")
+    id("goms.android.firebase")
 }
 
 android {
@@ -33,8 +33,6 @@ dependencies {
     implementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext)
     implementation(libs.androidx.core.splashscreen)
-
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.analytics)
     implementation(libs.firebase.messaging)
+    implementation(libs.`in`.app.update)
 }

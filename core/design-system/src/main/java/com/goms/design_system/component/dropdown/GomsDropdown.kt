@@ -43,6 +43,8 @@ import kotlinx.collections.immutable.PersistentList
 fun GomsDropdown(
     dropdownList: PersistentList<String>,
     dropdownListSize: Int,
+    useDefaultText: Boolean = false,
+    defaultText: String? = null,
     selectedIndex: Int,
     modifier: Modifier,
     height: Dp = 64.dp,
@@ -84,7 +86,7 @@ fun GomsDropdown(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = dropdownList[selectedIndex],
+                text = if (useDefaultText) defaultText ?: "Goms" else dropdownList[selectedIndex],
                 style = typography.textMedium,
                 color =  if (showDropdown != null && showDropdown == true) colors.WHITE else colors.G7,
                 fontWeight = FontWeight.Normal
@@ -100,9 +102,8 @@ fun GomsDropdown(
             }
         }
     }
-    Spacer(modifier = Modifier.height(8.dp))
-    Box() {
-        if (showDropdown != null && showDropdown == true) {
+    if (showDropdown != null && showDropdown == true) {
+        Box() {
             Popup(
                 alignment = Alignment.TopCenter,
                 properties = PopupProperties(
@@ -113,6 +114,7 @@ fun GomsDropdown(
                 Column(
                     modifier = modifier
                         .background(Color.Transparent)
+                        .padding(top = 8.dp)
                         .verticalScroll(state = scrollState),
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {

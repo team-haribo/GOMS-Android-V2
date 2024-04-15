@@ -9,6 +9,8 @@ import com.goms.data.repository.auth.AuthRepository
 import com.goms.domain.account.GetProfileUseCase
 import com.goms.domain.council.GetOutingUUIDUseCase
 import com.goms.domain.outing.OutingUseCase
+import com.goms.qrcode.viewmodel.uistate.GetOutingUUIDUiState
+import com.goms.qrcode.viewmodel.uistate.OutingUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

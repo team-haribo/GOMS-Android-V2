@@ -40,7 +40,7 @@ import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.util.keyboardAsState
 import com.goms.model.request.account.RePasswordRequestModel
 import com.goms.re_password.component.RePasswordText
-import com.goms.re_password.viewmodel.RePasswordUiState
+import com.goms.re_password.viewmodel.uistate.RePasswordUiState
 import com.goms.re_password.viewmodel.RePasswordViewmodel
 import com.goms.ui.isStrongPassword
 
@@ -166,17 +166,21 @@ fun RePasswordScreen(
                 state = if (password.isNotBlank() && passwordCheck.isNotBlank()) ButtonState.Normal
                 else ButtonState.Enable
             ) {
-                if (password != passwordCheck) {
-                    isError = true
-                    errorText = "비밀번호가 일치하지 않습니다"
-                    onErrorToast(null, errorText)
-                } else if (!isStrongPassword(password)) {
-                    isError = true
-                    errorText = "비밀번호 요구사항을 충족하지 않습니다"
-                    onErrorToast(null, errorText)
-                } else {
-                    rePasswordCallback()
-                    isLoading = true
+                when {
+                    password != passwordCheck -> {
+                        isError = true
+                        errorText = "비밀번호가 일치하지 않습니다"
+                        onErrorToast(null, "비밀번호가 일치하지 않습니다")
+                    }
+                    !isStrongPassword(password) -> {
+                        isError = true
+                        errorText = "비밀번호 요구사항을 충족하지 않습니다"
+                        onErrorToast(null, "비밀번호 요구사항을 충족하지 않습니다")
+                    }
+                    else -> {
+                        rePasswordCallback()
+                        isLoading = true
+                    }
                 }
             }
             Spacer(modifier = Modifier.height(animatedSpacerHeight))

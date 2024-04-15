@@ -41,7 +41,7 @@ import com.goms.design_system.util.lockScreenOrientation
 import com.goms.model.request.auth.SendNumberRequestModel
 import com.goms.re_password.component.NumberText
 import com.goms.re_password.viewmodel.RePasswordViewmodel
-import com.goms.re_password.viewmodel.VerifyNumberUiState
+import com.goms.re_password.viewmodel.uistate.VerifyNumberUiState
 
 @Composable
 fun PasswordNumberRoute(

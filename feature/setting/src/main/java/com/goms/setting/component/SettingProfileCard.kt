@@ -31,7 +31,7 @@ import com.goms.design_system.theme.GomsTheme.typography
 import com.goms.design_system.util.shadow
 import com.goms.setting.data.ProfileData
 import com.goms.setting.data.toData
-import com.goms.setting.viewmodel.GetProfileUiState
+import com.goms.setting.viewmodel.uistate.GetProfileUiState
 import com.goms.ui.toText
 
 @Composable
@@ -156,7 +156,8 @@ fun ShimmerSettingProfileCardComponent(
     modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Box(
             contentAlignment = Alignment.BottomEnd
@@ -185,7 +186,7 @@ fun ShimmerSettingProfileCardComponent(
         Column {
             Box(
                 modifier = Modifier
-                    .size(50.dp, 28.dp)
+                    .size(50.dp, 24.dp)
                     .shimmerEffect(
                         color = colors.WHITE,
                         shape = RoundedCornerShape(4.dp)
@@ -194,7 +195,7 @@ fun ShimmerSettingProfileCardComponent(
             Spacer(modifier = Modifier.height(8.dp))
             Box(
                 modifier = Modifier
-                    .size(64.dp, 24.dp)
+                    .size(64.dp, 20.dp)
                     .shimmerEffect(
                         color = colors.WHITE,
                         shape = RoundedCornerShape(4.dp)
@@ -211,11 +212,11 @@ fun ShimmerSettingProfileCardComponent(
                 color = colors.G4,
                 fontWeight = FontWeight.Normal
             )
-            Spacer(modifier = Modifier.height(6.dp))
+            Spacer(modifier = Modifier.height(4.dp))
             Row {
                 Box(
                     modifier = Modifier
-                        .size(24.dp, 28.dp)
+                        .size(24.dp)
                         .shimmerEffect(
                             color = colors.WHITE,
                             shape = RoundedCornerShape(4.dp)

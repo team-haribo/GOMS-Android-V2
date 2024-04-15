@@ -1,5 +1,6 @@
 package com.goms.design_system.icon
 
+import android.support.v4.os.IResultReceiver2.Default
 import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -236,6 +237,32 @@ fun CoffeeIcon(
     Image(
         painter = painterResource(id = R.drawable.ic_coffee),
         contentDescription = "Coffee Icon",
+        modifier = modifier,
+        colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
+    )
+}
+
+@Composable
+fun GalleryIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+) {
+    Image(
+        painter = painterResource(id = R.drawable.ic_gallery_add),
+        contentDescription = "Gallery Icon",
+        modifier = modifier,
+        colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
+    )
+}
+
+@Composable
+fun DefaultImageIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+) {
+    Image(
+        painter = painterResource(id = R.drawable.ic_default_image),
+        contentDescription = "Default Image Icon",
         modifier = modifier,
         colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
     )

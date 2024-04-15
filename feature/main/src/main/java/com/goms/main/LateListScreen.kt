@@ -30,7 +30,7 @@ import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.util.getDefaultWednesday
 import com.goms.main.component.LateList
 import com.goms.main.component.LateListText
-import com.goms.main.viewmodel.GetLateListUiState
+import com.goms.main.viewmodel.uistate.GetLateListUiState
 import com.goms.main.viewmodel.MainViewModel
 import com.goms.model.enum.Authority
 import com.goms.ui.GomsRoleBackButton

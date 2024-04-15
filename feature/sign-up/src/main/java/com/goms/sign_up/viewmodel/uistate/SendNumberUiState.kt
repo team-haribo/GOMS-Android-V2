@@ -1,4 +1,4 @@
-package com.goms.sign_up.viewmodel
+package com.goms.sign_up.viewmodel.uistate
 
 sealed interface SendNumberUiState {
     object Loading : SendNumberUiState

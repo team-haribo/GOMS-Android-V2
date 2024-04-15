@@ -1,4 +1,4 @@
-package com.goms.login.viewmodel
+package com.goms.login.viewmodel.uistate
 
 sealed interface SaveTokenUiState {
     object Loading : SaveTokenUiState

@@ -11,6 +11,7 @@ import com.goms.common.exception.NoInternetException
 import com.goms.common.exception.OtherHttpException
 import com.goms.common.exception.ServerException
 import com.goms.common.exception.TimeOutException
+import com.goms.common.exception.UnKnownException
 import com.goms.goms_android_v2.ui.GomsAppState
 import com.goms.login.navigation.inputLoginScreen
 import com.goms.login.navigation.loginRoute
@@ -61,10 +62,11 @@ fun GomsNavHost(
         val errorMessage = throwable?.let {
             when (it) {
                 is ForBiddenException -> "학생회 권한인 학생만 요청 가능해요"
-                is TimeOutException -> "시간이 너무 오래 걸려요"
+                is TimeOutException -> "서버 응답이 지연되고 있습니다, 잠시 후 다시 시도해주세요"
                 is ServerException -> "서버 에러, 관리자에게 문의하세요"
                 is NoInternetException -> "네트워크가 불안정합니다, 데이터나 와이파이 연결 상태를 확인해주세요"
                 is OtherHttpException -> "알 수 없는 오류가 발생했습니다"
+                is UnKnownException -> "예상치 못한 오류가 발생했습니다"
                 else -> message
             }
         } ?: message ?: "오류가 발생했습니다"
