@@ -1,4 +1,4 @@
-package com.goms.qrcode.viewmodel
+package com.goms.qrcode.viewmodel.uistate
 
 import com.goms.model.response.account.ProfileResponseModel
 

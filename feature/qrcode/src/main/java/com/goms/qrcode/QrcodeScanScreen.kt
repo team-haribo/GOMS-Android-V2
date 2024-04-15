@@ -23,8 +23,7 @@ import com.goms.design_system.util.lockScreenOrientation
 import com.goms.qrcode.component.QrcodeScanGuide
 import com.goms.qrcode.component.QrcodeScanPreview
 import com.goms.qrcode.component.QrcodeScanTopBar
-import com.goms.qrcode.viewmodel.GetProfileUiState
-import com.goms.qrcode.viewmodel.OutingUiState
+import com.goms.qrcode.viewmodel.uistate.GetProfileUiState
 import com.goms.qrcode.viewmodel.uistate.OutingUiState
 import com.goms.qrcode.viewmodel.QrcodeViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -75,7 +74,6 @@ fun QrcodeScanScreen(
     profileUiState: GetProfileUiState,
     onQrcodeScan: (String?) -> Unit,
     onBackClick: () -> Unit,
-    onError: () -> Unit,
     onSuccess: () -> Unit,
     getProfile: () -> Unit,
 ) {
