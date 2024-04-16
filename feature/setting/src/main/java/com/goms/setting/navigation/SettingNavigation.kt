@@ -15,7 +15,7 @@ fun NavGraphBuilder.settingScreen(
     onLogoutSuccess: () -> Unit,
     onBackClick: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
-    onEmailCheck: () -> Unit,
+    onPasswordCheck: () -> Unit,
     onUpdateAlarm: (String) -> Unit,
     onThemeSelect: () -> Unit,
 ) {
@@ -24,7 +24,7 @@ fun NavGraphBuilder.settingScreen(
             onLogoutSuccess = onLogoutSuccess,
             onBackClick = onBackClick,
             onErrorToast = onErrorToast,
-            onEmailCheck = onEmailCheck,
+            onPasswordCheck = onPasswordCheck,
             onUpdateAlarm = onUpdateAlarm,
             onThemeSelect = onThemeSelect
         )

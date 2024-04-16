@@ -16,12 +16,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
@@ -34,74 +30,44 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goms.design_system.component.button.ButtonState
 import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.button.GomsButton
-import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
-import com.goms.design_system.component.textfield.GomsTextField
+import com.goms.design_system.component.textfield.GomsPasswordTextField
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.util.keyboardAsState
 import com.goms.design_system.util.lockScreenOrientation
-import com.goms.model.request.auth.SendNumberRequestModel
 import com.goms.re_password.component.RePasswordText
 import com.goms.re_password.viewmodel.RePasswordViewmodel
-import com.goms.re_password.viewmodel.uistate.SendNumberUiState
-import com.goms.ui.isStrongEmail
 
 @Composable
-fun EmailCheckRoute(
+fun PasswordCheckRoute(
     onBackClick: () -> Unit,
-    onNumberClick: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
+    onRePasswordClick: () -> Unit,
     viewModel: RePasswordViewmodel = hiltViewModel(LocalContext.current as ComponentActivity)
 ) {
-    val sendNumberUiState by viewModel.sendNumberUiState.collectAsStateWithLifecycle()
-    val email by viewModel.email.collectAsStateWithLifecycle()
+    val password by viewModel.password.collectAsStateWithLifecycle()
 
-    EmailCheckScreen(
-        email = email,
-        onEmailChange = viewModel::onEmailChange,
+    PasswordCheckScreen(
+        password = password,
+        onPasswordChange = viewModel::onPasswordChange,
         onBackClick = onBackClick,
-        sendNumberUiState = sendNumberUiState,
-        emailCheckCallBack = {
-            viewModel.sendNumber(
-                body = SendNumberRequestModel("${viewModel.email.value}@gsm.hs.kr")
-        ) },
-        onNumberClick = onNumberClick,
-        initCallBack = { viewModel.initSendNumber() },
-        onErrorToast = onErrorToast
+        onRePasswordClick = onRePasswordClick
     )
 }
 
 @Composable
-fun EmailCheckScreen(
-    email: String,
-    onEmailChange: (String) -> Unit,
+fun PasswordCheckScreen(
+    password: String,
+    onPasswordChange: (String) -> Unit,
     onBackClick: () -> Unit,
-    onNumberClick: () -> Unit,
-    emailCheckCallBack: () -> Unit,
-    initCallBack: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
-    sendNumberUiState: SendNumberUiState
+    onRePasswordClick: () -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
     val isKeyboardOpen by keyboardAsState()
-    var isLoading by remember { mutableStateOf(false) }
     val animatedSpacerHeight by animateDpAsState(targetValue = if (!isKeyboardOpen) 100.dp else 16.dp)
 
     LaunchedEffect(isKeyboardOpen) {
         if (!isKeyboardOpen) {
             focusManager.clearFocus()
         }
-    }
-
-    DisposableEffect(sendNumberUiState) {
-        when (sendNumberUiState) {
-            is SendNumberUiState.Loading -> Unit
-            is SendNumberUiState.Success -> onNumberClick()
-            is SendNumberUiState.Error -> {
-                isLoading = false
-                onErrorToast(sendNumberUiState.exception, "인증번호 전송이 실패했습니다.")
-            }
-        }
-        onDispose { initCallBack() }
     }
 
     lockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
@@ -127,33 +93,24 @@ fun EmailCheckScreen(
         ) {
             RePasswordText(modifier = Modifier.align(Alignment.Start))
             Spacer(modifier = Modifier.height(28.dp))
-            GomsTextField(
+            GomsPasswordTextField(
                 modifier = Modifier.fillMaxWidth(),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                placeHolder = "이메일",
-                setText = email,
-                onValueChange = onEmailChange,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                placeHolder = "현재 비밀번호",
+                setText = password,
+                onValueChange = onPasswordChange,
                 singleLine = true
             )
             Spacer(modifier = Modifier.weight(1f))
             GomsButton(
                 modifier = Modifier.fillMaxWidth(),
-                text = "인증번호 받기",
-                state = if (email.isNotBlank()) ButtonState.Normal
+                text = "다음으로",
+                state = if (password.isNotBlank()) ButtonState.Normal
                 else ButtonState.Enable
             ) {
-                if (!isStrongEmail(email)) {
-                    isLoading = false
-                    onErrorToast(null, "이메일 형식이 올바르지 않습니다")
-                } else {
-                    emailCheckCallBack()
-                    isLoading = true
-                }
+                onRePasswordClick()
             }
             Spacer(modifier = Modifier.height(animatedSpacerHeight))
         }
-    }
-    if (isLoading) {
-        GomsCircularProgressIndicator()
     }
 }

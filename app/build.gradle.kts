@@ -29,6 +29,7 @@ dependencies {
     implementation(project(":feature:setting"))
     implementation(project(":feature:qrcode"))
     implementation(project(":feature:re-password"))
+    implementation(project(":feature:find-password"))
 
     implementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext)

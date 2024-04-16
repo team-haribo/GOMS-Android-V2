@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -56,7 +55,11 @@ fun QrcodeScanRoute(
             outingUiState = outingUiState,
             profileUiState = getProfileUiState,
             onQrcodeScan = { qrcodeData ->
-                viewModel.outing(UUID.fromString(qrcodeData))
+                try {
+                    viewModel.outing(UUID.fromString(qrcodeData))
+                } catch (e: IllegalArgumentException) {
+                    viewModel.qrcodeDataError()
+                }
             },
             onSuccess = onSuccess,
             onBackClick = onBackClick,
