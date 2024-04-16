@@ -42,7 +42,7 @@ import com.goms.model.request.account.FindPasswordRequestModel
 import com.goms.find_password.component.RePasswordText
 import com.goms.find_password.viewmodel.uistate.FindPasswordUiState
 import com.goms.find_password.viewmodel.FindPasswordViewmodel
-import com.goms.ui.isStrongPassword
+import com.goms.ui.isValidPassword
 
 @Composable
 fun FindPasswordRoute(
@@ -181,7 +181,7 @@ fun FindPasswordScreen(
                         onErrorToast(null, "비밀번호가 일치하지 않습니다")
                     }
 
-                    !isStrongPassword(password) -> {
+                    !isValidPassword(password) -> {
                         isError = true
                         errorText = "비밀번호 요구사항을 충족하지 않습니다"
                         onErrorToast(null, "비밀번호 요구사항을 충족하지 않습니다")

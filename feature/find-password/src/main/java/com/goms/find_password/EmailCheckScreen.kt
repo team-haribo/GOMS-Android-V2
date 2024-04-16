@@ -43,7 +43,7 @@ import com.goms.find_password.component.FindPasswordText
 import com.goms.model.request.auth.SendNumberRequestModel
 import com.goms.find_password.viewmodel.FindPasswordViewmodel
 import com.goms.find_password.viewmodel.uistate.SendNumberUiState
-import com.goms.ui.isStrongEmail
+import com.goms.ui.isValidEmail
 
 @Composable
 fun EmailCheckRoute(
@@ -142,7 +142,7 @@ fun EmailCheckScreen(
                 state = if (email.isNotBlank()) ButtonState.Normal
                 else ButtonState.Enable
             ) {
-                if (!isStrongEmail(email)) {
+                if (!isValidEmail(email)) {
                     isLoading = false
                     onErrorToast(null, "이메일 형식이 올바르지 않습니다")
                 } else {

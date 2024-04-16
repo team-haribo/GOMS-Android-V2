@@ -44,7 +44,7 @@ import com.goms.login.viewmodel.LoginViewModel
 import com.goms.login.viewmodel.uistate.LoginUiState
 import com.goms.login.viewmodel.uistate.SaveTokenUiState
 import com.goms.model.request.auth.LoginRequestModel
-import com.goms.ui.isStrongEmail
+import com.goms.ui.isValidEmail
 
 @Composable
 fun InputLoginRoute(
@@ -198,7 +198,7 @@ fun InputLoginScreen(
                 state = if (email.isNotBlank() && password.isNotBlank()) ButtonState.Normal
                 else ButtonState.Enable
             ) {
-                if (!isStrongEmail(email)) {
+                if (!isValidEmail(email)) {
                     isLoading = false
                     onErrorToast(null, "이메일 형식이 올바르지 않습니다")
                 } else {

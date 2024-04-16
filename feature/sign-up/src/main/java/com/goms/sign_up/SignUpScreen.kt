@@ -44,7 +44,7 @@ import com.goms.sign_up.component.SelectMajorDropDown
 import com.goms.sign_up.component.SignUpText
 import com.goms.sign_up.viewmodel.uistate.SendNumberUiState
 import com.goms.sign_up.viewmodel.SignUpViewModel
-import com.goms.ui.isStrongEmail
+import com.goms.ui.isValidEmail
 
 @Composable
 fun SignUpRoute(
@@ -176,7 +176,7 @@ fun SignUpScreen(
                 state = if (name.isNotBlank() && email.isNotBlank() && gender.isNotBlank() && major.isNotBlank()) ButtonState.Normal
                 else ButtonState.Enable
             ) {
-                if (!isStrongEmail(email)) {
+                if (!isValidEmail(email)) {
                     isLoading = false
                     onErrorToast(null, "이메일 형식이 올바르지 않습니다")
                 } else {
