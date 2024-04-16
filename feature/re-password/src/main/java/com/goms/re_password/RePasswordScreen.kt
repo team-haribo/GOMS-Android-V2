@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -37,8 +38,11 @@ import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
 import com.goms.design_system.component.textfield.GomsPasswordTextField
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.util.keyboardAsState
+import com.goms.model.request.account.FindPasswordRequestModel
+import com.goms.model.request.account.RePasswordRequestModel
 import com.goms.re_password.component.RePasswordText
 import com.goms.re_password.viewmodel.RePasswordViewmodel
+import com.goms.re_password.viewmodel.uistate.RePasswordUiState
 import com.goms.ui.isStrongPassword
 
 @Composable
@@ -48,6 +52,7 @@ fun RePasswordRoute(
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     viewModel: RePasswordViewmodel = hiltViewModel(LocalContext.current as ComponentActivity),
 ) {
+    val rePasswordUiState by viewModel.rePasswordUiState.collectAsStateWithLifecycle()
     val password by viewModel.newPassword.collectAsStateWithLifecycle()
     val passwordCheck by viewModel.newCheckPassword.collectAsStateWithLifecycle()
 
@@ -59,7 +64,16 @@ fun RePasswordRoute(
         onSuccessClick = onSuccessClick,
         onBackClick = onBackClick,
         onErrorToast = onErrorToast,
-        rePasswordCallback = {}
+        rePasswordUiState = rePasswordUiState,
+        initRePassword = { viewModel.initRePassword() },
+        rePasswordCallback = {
+            viewModel.rePassword(
+                body = RePasswordRequestModel(
+                    password = viewModel.password.value,
+                    newPassword = viewModel.newPassword.value
+                )
+            )
+        }
     )
 }
 
@@ -72,6 +86,8 @@ fun RePasswordScreen(
     onSuccessClick: () -> Unit,
     onBackClick: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
+    rePasswordUiState: RePasswordUiState,
+    initRePassword: () -> Unit,
     rePasswordCallback: () -> Unit
 ) {
     val focusManager = LocalFocusManager.current
@@ -86,6 +102,27 @@ fun RePasswordScreen(
         if (!isKeyboardOpen) {
             focusManager.clearFocus()
         }
+    }
+
+    DisposableEffect(rePasswordUiState) {
+        when (rePasswordUiState) {
+            is RePasswordUiState.Loading -> Unit
+            is RePasswordUiState.Success -> {
+                openDialog = true
+                isLoading = false
+            }
+
+            is RePasswordUiState.BadRequest -> {
+                isLoading = false
+                onErrorToast(null, "현재 비밀번호와 일치하지 않거나, 이미 사용중인 비밀번호입니다")
+            }
+
+            is RePasswordUiState.Error -> {
+                isLoading = false
+                onErrorToast(rePasswordUiState.exception, "비밀번호 재설정이 실패했습니다")
+            }
+        }
+        onDispose { initRePassword() }
     }
 
     Column(

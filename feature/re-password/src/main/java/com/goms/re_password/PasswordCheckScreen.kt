@@ -16,12 +16,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
@@ -34,15 +30,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goms.design_system.component.button.ButtonState
 import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.button.GomsButton
-import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
 import com.goms.design_system.component.textfield.GomsPasswordTextField
-import com.goms.design_system.component.textfield.GomsTextField
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.util.keyboardAsState
 import com.goms.design_system.util.lockScreenOrientation
 import com.goms.re_password.component.RePasswordText
 import com.goms.re_password.viewmodel.RePasswordViewmodel
-import com.goms.re_password.viewmodel.uistate.SendNumberUiState
 
 @Composable
 fun PasswordCheckRoute(
@@ -111,7 +104,7 @@ fun PasswordCheckScreen(
             Spacer(modifier = Modifier.weight(1f))
             GomsButton(
                 modifier = Modifier.fillMaxWidth(),
-                text = "인증번호 받기",
+                text = "다음으로",
                 state = if (password.isNotBlank()) ButtonState.Normal
                 else ButtonState.Enable
             ) {
