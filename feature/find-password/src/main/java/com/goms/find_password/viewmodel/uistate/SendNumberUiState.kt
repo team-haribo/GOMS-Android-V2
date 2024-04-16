@@ -1,4 +1,4 @@
-package com.goms.re_password.viewmodel.uistate
+package com.goms.find_password.viewmodel.uistate
 
 sealed interface SendNumberUiState {
     object Loading : SendNumberUiState

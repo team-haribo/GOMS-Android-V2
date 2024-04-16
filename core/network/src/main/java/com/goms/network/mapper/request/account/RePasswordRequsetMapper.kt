@@ -5,6 +5,6 @@ import com.goms.network.dto.request.account.RePasswordRequest
 
 fun RePasswordRequestModel.toDto(): RePasswordRequest =
     RePasswordRequest(
-        email = this.email,
-        password = this.password
+        password = this.password,
+        newPassword = this.newPassword
     )

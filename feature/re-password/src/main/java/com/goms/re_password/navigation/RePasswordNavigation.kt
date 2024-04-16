@@ -4,46 +4,24 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import com.goms.re_password.EmailCheckRoute
-import com.goms.re_password.PasswordNumberRoute
+import com.goms.re_password.PasswordCheckRoute
 import com.goms.re_password.RePasswordRoute
 
-const val emailCheckRoute = "email_check_route"
-const val passwordNumberRoute = "password_number_route"
+const val passwordCheckRoute = "password_check_route"
 const val rePasswordRoute = "re_password_route"
 
-fun NavController.navigateToEmailCheck(navOptions: NavOptions? = null) {
-    this.navigate(emailCheckRoute, navOptions)
+fun NavController.navigateToPasswordCheck(navOptions: NavOptions? = null) {
+    this.navigate(passwordCheckRoute, navOptions)
 }
 
-fun NavGraphBuilder.emailCheckScreen(
+fun NavGraphBuilder.passwordCheckScreen(
     onBackClick: () -> Unit,
-    onNumberClick: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
+    onRePasswordClick: () -> Unit
 ) {
-    composable(route = emailCheckRoute) {
-        EmailCheckRoute(
-            onBackClick = onBackClick,
-            onNumberClick = onNumberClick,
-            onErrorToast = onErrorToast
-        )
-    }
-}
-
-fun NavController.navigateToPasswordNumber(navOptions: NavOptions? = null) {
-    this.navigate(passwordNumberRoute, navOptions)
-}
-
-fun NavGraphBuilder.passwordNumberScreen(
-    onBackClick: () -> Unit,
-    onRePasswordClick: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
-) {
-    composable(route = passwordNumberRoute) {
-        PasswordNumberRoute(
+    composable(route = passwordCheckRoute) {
+        PasswordCheckRoute(
             onBackClick = onBackClick,
             onRePasswordClick = onRePasswordClick,
-            onErrorToast = onErrorToast
         )
     }
 }

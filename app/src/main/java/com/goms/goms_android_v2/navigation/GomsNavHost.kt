@@ -12,6 +12,12 @@ import com.goms.common.exception.OtherHttpException
 import com.goms.common.exception.ServerException
 import com.goms.common.exception.TimeOutException
 import com.goms.common.exception.UnKnownException
+import com.goms.find_password.navigation.emailCheckScreen
+import com.goms.find_password.navigation.findPasswordScreen
+import com.goms.find_password.navigation.navigateToEmailCheck
+import com.goms.find_password.navigation.navigateToFindPassword
+import com.goms.find_password.navigation.navigateToPasswordNumber
+import com.goms.find_password.navigation.passwordNumberScreen
 import com.goms.goms_android_v2.ui.GomsAppState
 import com.goms.login.navigation.inputLoginScreen
 import com.goms.login.navigation.loginRoute
@@ -29,11 +35,9 @@ import com.goms.qrcode.navigation.navigateToQrGenerate
 import com.goms.qrcode.navigation.navigateToQrScan
 import com.goms.qrcode.navigation.qrcodeGenerateScreen
 import com.goms.qrcode.navigation.qrcodeScanScreen
-import com.goms.re_password.navigation.emailCheckScreen
-import com.goms.re_password.navigation.navigateToEmailCheck
-import com.goms.re_password.navigation.navigateToPasswordNumber
+import com.goms.re_password.navigation.navigateToPasswordCheck
 import com.goms.re_password.navigation.navigateToRePassword
-import com.goms.re_password.navigation.passwordNumberScreen
+import com.goms.re_password.navigation.passwordCheckScreen
 import com.goms.re_password.navigation.rePasswordScreen
 import com.goms.setting.navigation.navigateToSettingScreen
 import com.goms.setting.navigation.settingScreen
@@ -93,6 +97,7 @@ fun GomsNavHost(
             onRePasswordClick = navController::navigateToEmailCheck,
             onErrorToast = onErrorToast
         )
+
         signUpScreen(
             onBackClick = navController::popBackStack,
             onNumberClick = navController::navigateToNumber,
@@ -108,6 +113,7 @@ fun GomsNavHost(
             onLoginClick = { appState.navigateToTopLevelDestination(TopLevelDestination.LOGIN) },
             onErrorToast = onErrorToast
         )
+
         mainScreen(
             qrcodeState = qrcodeState,
             onOutingStatusClick = navController::navigateToOutingStatus,
@@ -123,17 +129,6 @@ fun GomsNavHost(
             onErrorToast = onErrorToast,
             onSettingClick = navController::navigateToSettingScreen
         )
-        qrcodeScanScreen(
-            onPermissionBlock = navController::popBackStack,
-            onSuccess = navController::popBackStack,
-            onBackClick = navController::popBackStack,
-        )
-        qrcodeGenerateScreen(
-            onTimerFinish = navController::popBackStack,
-            onBackClick = navController::popBackStack,
-            onRemoteError = navController::popBackStack,
-            onErrorToast = onErrorToast
-        )
         outingStatusScreen(
             onBackClick = navController::popBackStack,
             onErrorToast = onErrorToast
@@ -146,14 +141,28 @@ fun GomsNavHost(
             onBackClick = navController::popBackStack,
             onErrorToast = onErrorToast
         )
+
+        qrcodeScanScreen(
+            onPermissionBlock = navController::popBackStack,
+            onSuccess = navController::popBackStack,
+            onBackClick = navController::popBackStack,
+        )
+        qrcodeGenerateScreen(
+            onTimerFinish = navController::popBackStack,
+            onBackClick = navController::popBackStack,
+            onRemoteError = navController::popBackStack,
+            onErrorToast = onErrorToast
+        )
+
         settingScreen(
             onBackClick = navController::popBackStack,
             onLogoutSuccess = onLogout,
             onErrorToast = onErrorToast,
-            onEmailCheck = navController::navigateToEmailCheck,
+            onPasswordCheck = navController::navigateToPasswordCheck,
             onUpdateAlarm = onUpdateAlarm,
             onThemeSelect = onThemeSelect
         )
+
         emailCheckScreen(
             onBackClick = navController::popBackStack,
             onNumberClick = navController::navigateToPasswordNumber,
@@ -161,8 +170,19 @@ fun GomsNavHost(
         )
         passwordNumberScreen(
             onBackClick = navController::popBackStack,
-            onRePasswordClick = navController::navigateToRePassword,
+            onFindPasswordClick = navController::navigateToFindPassword,
             onErrorToast = onErrorToast
+        )
+        findPasswordScreen(
+            onBackClick = navController::popBackStack,
+            onSuccessClick = { appState.navigateToTopLevelDestination(TopLevelDestination.LOGIN) },
+            onErrorToast = onErrorToast
+        )
+
+
+        passwordCheckScreen(
+            onBackClick = navController::popBackStack,
+            onRePasswordClick = navController::navigateToRePassword
         )
         rePasswordScreen(
             onBackClick = navController::popBackStack,

@@ -51,7 +51,7 @@ import com.goms.ui.GomsRoleBackButton
 fun SettingRoute(
     onBackClick: () -> Unit,
     onLogoutSuccess: () -> Unit,
-    onEmailCheck: () -> Unit,
+    onPasswordCheck: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     onThemeSelect: () -> Unit,
     onUpdateAlarm: (String) -> Unit,
@@ -143,7 +143,7 @@ fun SettingRoute(
         alarmState = alarmState,
         profileImageUiState = profileImageUiState,
         onErrorToast = onErrorToast,
-        onEmailCheck = onEmailCheck
+        onPasswordCheck = onPasswordCheck
     )
 }
 
@@ -169,7 +169,7 @@ fun SettingScreen(
     alarmState: String,
     profileImageUiState: ProfileImageUiState,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
-    onEmailCheck: () -> Unit
+    onPasswordCheck: () -> Unit
 ) {
     var isLoading by remember { mutableStateOf(false) }
     var openDialog by remember { mutableStateOf(false) }
@@ -241,7 +241,7 @@ fun SettingScreen(
             )
             Spacer(modifier = Modifier.height(32.dp))
             PasswordChangeButton(modifier = Modifier) {
-                onEmailCheck()
+                onPasswordCheck()
             }
             Spacer(modifier = Modifier.height(24.dp))
             SelectThemeDropDown(

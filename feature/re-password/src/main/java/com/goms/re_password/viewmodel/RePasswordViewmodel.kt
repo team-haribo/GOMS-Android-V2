@@ -5,13 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.goms.common.network.errorHandling
 import com.goms.domain.account.RePasswordUseCase
-import com.goms.domain.auth.SendNumberUseCase
-import com.goms.domain.auth.VerifyNumberUseCase
 import com.goms.model.request.account.RePasswordRequestModel
-import com.goms.model.request.auth.SendNumberRequestModel
 import com.goms.re_password.viewmodel.uistate.RePasswordUiState
-import com.goms.re_password.viewmodel.uistate.SendNumberUiState
-import com.goms.re_password.viewmodel.uistate.VerifyNumberUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -22,97 +17,51 @@ import javax.inject.Inject
 @HiltViewModel
 class RePasswordViewmodel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-    private val rePasswordUseCase: RePasswordUseCase,
-    private val sendNumberUseCase: SendNumberUseCase,
-    private val verifyNumberUseCase: VerifyNumberUseCase
+    private val rePasswordUseCase: RePasswordUseCase
 ) : ViewModel() {
     private val _rePasswordUiState = MutableStateFlow<RePasswordUiState>(RePasswordUiState.Loading)
     val rePasswordUiState = _rePasswordUiState.asStateFlow()
 
-    private val _sendNumberUiState = MutableStateFlow<SendNumberUiState>(SendNumberUiState.Loading)
-    val sendNumberUiState = _sendNumberUiState.asStateFlow()
-
-    private val _verifyNumberUiState = MutableStateFlow<VerifyNumberUiState>(VerifyNumberUiState.Loading)
-    val verifyNumberUiState = _verifyNumberUiState.asStateFlow()
-
-    var email = savedStateHandle.getStateFlow(key = EMAIL, initialValue = "")
     var password = savedStateHandle.getStateFlow(key = PASSWORD, initialValue = "")
-    var passwordCheck = savedStateHandle.getStateFlow(key = CHECK_PASSWORD, initialValue = "")
-    var number = savedStateHandle.getStateFlow(key = NUMBER, initialValue = "")
+    var newPassword = savedStateHandle.getStateFlow(key = NEW_PASSWORD, initialValue = "")
+    var newCheckPassword = savedStateHandle.getStateFlow(key = NEW_CHECK_PASSWORD, initialValue = "")
 
     fun rePassword(body: RePasswordRequestModel) = viewModelScope.launch {
         rePasswordUseCase(body = body)
             .onSuccess {
                 it.catch {  remoteError ->
                     _rePasswordUiState.value = RePasswordUiState.Error(remoteError)
+                    remoteError.errorHandling(
+                        badRequestAction = { _rePasswordUiState.value = RePasswordUiState.BadRequest },
+                    )
                 }.collect { result ->
                     _rePasswordUiState.value = RePasswordUiState.Success
                 }
             }.onFailure {
                 _rePasswordUiState.value = RePasswordUiState.Error(it)
-            }
-    }
-
-    fun sendNumber(body: SendNumberRequestModel) = viewModelScope.launch {
-        sendNumberUseCase(body = body)
-            .onSuccess {
-                it.catch {  remoteError ->
-                    _sendNumberUiState.value = SendNumberUiState.Error(remoteError)
-                }.collect { result ->
-                    _sendNumberUiState.value = SendNumberUiState.Success
-                }
-            }.onFailure {
-                _sendNumberUiState.value = SendNumberUiState.Error(it)
-            }
-    }
-
-    fun initSendNumber() {
-        _sendNumberUiState.value = SendNumberUiState.Loading
-    }
-
-    fun verifyNumber(email: String, authCode: String) = viewModelScope.launch {
-        verifyNumberUseCase(email = email, authCode = authCode)
-            .onSuccess {
-                it.catch {  remoteError ->
-                    _verifyNumberUiState.value = VerifyNumberUiState.Error(remoteError)
-                    remoteError.errorHandling(
-                        badRequestAction = { _verifyNumberUiState.value = VerifyNumberUiState.BadRequest },
-                        notFoundAction = { _verifyNumberUiState.value = VerifyNumberUiState.NotFound }
-                    )
-                }.collect { result ->
-                    _verifyNumberUiState.value = VerifyNumberUiState.Success
-                }
-            }.onFailure {
-                _verifyNumberUiState.value = VerifyNumberUiState.Error(it)
                 it.errorHandling(
-                    badRequestAction = { _verifyNumberUiState.value = VerifyNumberUiState.BadRequest },
-                    notFoundAction = { _verifyNumberUiState.value = VerifyNumberUiState.NotFound }
+                    badRequestAction = { _rePasswordUiState.value = RePasswordUiState.BadRequest },
                 )
             }
     }
 
-    fun initVerifyNumber() {
-        _verifyNumberUiState.value = VerifyNumberUiState.Loading
-    }
-
-    fun onEmailChange(value: String) {
-        savedStateHandle[EMAIL] = value
-    }
-
-    fun onNumberChange(value: String) {
-        savedStateHandle[NUMBER] = value
+    fun initRePassword() {
+        _rePasswordUiState.value = RePasswordUiState.Loading
     }
 
     fun onPasswordChange(value: String) {
         savedStateHandle[PASSWORD] = value
     }
 
-    fun onCheckPasswordChange(value: String) {
-        savedStateHandle[CHECK_PASSWORD] = value
+    fun onNewPasswordChange(value: String) {
+        savedStateHandle[NEW_PASSWORD] = value
+    }
+
+    fun onNewCheckPasswordChange(value: String) {
+        savedStateHandle[NEW_CHECK_PASSWORD] = value
     }
 }
 
-private const val EMAIL = "email"
 private const val PASSWORD = "password"
-private const val CHECK_PASSWORD = "check password"
-private const val NUMBER = "number"
+private const val NEW_PASSWORD = "new password"
+private const val NEW_CHECK_PASSWORD = "new check password"

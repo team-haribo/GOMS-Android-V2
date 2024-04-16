@@ -1,4 +1,4 @@
-package com.goms.re_password
+package com.goms.find_password
 
 import androidx.activity.ComponentActivity
 import androidx.compose.animation.core.animateDpAsState
@@ -39,38 +39,37 @@ import com.goms.design_system.component.textfield.GomsPasswordTextField
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.util.keyboardAsState
 import com.goms.model.request.account.FindPasswordRequestModel
-import com.goms.model.request.account.RePasswordRequestModel
-import com.goms.re_password.component.RePasswordText
-import com.goms.re_password.viewmodel.RePasswordViewmodel
-import com.goms.re_password.viewmodel.uistate.RePasswordUiState
+import com.goms.find_password.component.RePasswordText
+import com.goms.find_password.viewmodel.uistate.FindPasswordUiState
+import com.goms.find_password.viewmodel.FindPasswordViewmodel
 import com.goms.ui.isStrongPassword
 
 @Composable
-fun RePasswordRoute(
+fun FindPasswordRoute(
     onBackClick: () -> Unit,
     onSuccessClick: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
-    viewModel: RePasswordViewmodel = hiltViewModel(LocalContext.current as ComponentActivity),
+    viewModel: FindPasswordViewmodel = hiltViewModel(LocalContext.current as ComponentActivity),
 ) {
-    val rePasswordUiState by viewModel.rePasswordUiState.collectAsStateWithLifecycle()
-    val password by viewModel.newPassword.collectAsStateWithLifecycle()
-    val passwordCheck by viewModel.newCheckPassword.collectAsStateWithLifecycle()
+    val findPasswordUiState by viewModel.findPasswordUiState.collectAsStateWithLifecycle()
+    val password by viewModel.password.collectAsStateWithLifecycle()
+    val passwordCheck by viewModel.passwordCheck.collectAsStateWithLifecycle()
 
-    RePasswordScreen(
+    FindPasswordScreen(
         password = password,
         passwordCheck = passwordCheck,
-        onPasswordChange = viewModel::onNewPasswordChange,
-        onPasswordCheckChange = viewModel::onNewCheckPasswordChange,
+        onPasswordChange = viewModel::onPasswordChange,
+        onPasswordCheckChange = viewModel::onCheckPasswordChange,
         onSuccessClick = onSuccessClick,
         onBackClick = onBackClick,
         onErrorToast = onErrorToast,
-        rePasswordUiState = rePasswordUiState,
-        initRePassword = { viewModel.initRePassword() },
-        rePasswordCallback = {
-            viewModel.rePassword(
-                body = RePasswordRequestModel(
-                    password = viewModel.password.value,
-                    newPassword = viewModel.newPassword.value
+        findPasswordUiState = findPasswordUiState,
+        initFindPassword = { viewModel.initFindPassword() },
+        findPasswordCallback = {
+            viewModel.findPassword(
+                body = FindPasswordRequestModel(
+                    email = "${viewModel.email.value}@gsm.hs.kr",
+                    password = viewModel.password.value
                 )
             )
         }
@@ -78,7 +77,7 @@ fun RePasswordRoute(
 }
 
 @Composable
-fun RePasswordScreen(
+fun FindPasswordScreen(
     password: String,
     passwordCheck: String,
     onPasswordChange: (String) -> Unit,
@@ -86,9 +85,9 @@ fun RePasswordScreen(
     onSuccessClick: () -> Unit,
     onBackClick: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
-    rePasswordUiState: RePasswordUiState,
-    initRePassword: () -> Unit,
-    rePasswordCallback: () -> Unit
+    findPasswordUiState: FindPasswordUiState,
+    initFindPassword: () -> Unit,
+    findPasswordCallback: () -> Unit
 ) {
     val focusManager = LocalFocusManager.current
     val isKeyboardOpen by keyboardAsState()
@@ -104,25 +103,25 @@ fun RePasswordScreen(
         }
     }
 
-    DisposableEffect(rePasswordUiState) {
-        when (rePasswordUiState) {
-            is RePasswordUiState.Loading -> Unit
-            is RePasswordUiState.Success -> {
+    DisposableEffect(findPasswordUiState) {
+        when (findPasswordUiState) {
+            is FindPasswordUiState.Loading -> Unit
+            is FindPasswordUiState.Success -> {
                 openDialog = true
                 isLoading = false
             }
 
-            is RePasswordUiState.BadRequest -> {
+            is FindPasswordUiState.BadRequest -> {
                 isLoading = false
-                onErrorToast(null, "현재 비밀번호와 일치하지 않거나, 이미 사용중인 비밀번호입니다")
+                onErrorToast(null, "이미 사용중인 비밀번호입니다")
             }
 
-            is RePasswordUiState.Error -> {
+            is FindPasswordUiState.Error -> {
                 isLoading = false
-                onErrorToast(rePasswordUiState.exception, "비밀번호 재설정이 실패했습니다")
+                onErrorToast(findPasswordUiState.exception, "비밀번호 찾기가 실패했습니다")
             }
         }
-        onDispose { initRePassword() }
+        onDispose { initFindPassword() }
     }
 
     Column(
@@ -181,13 +180,15 @@ fun RePasswordScreen(
                         errorText = "비밀번호가 일치하지 않습니다"
                         onErrorToast(null, "비밀번호가 일치하지 않습니다")
                     }
+
                     !isStrongPassword(password) -> {
                         isError = true
                         errorText = "비밀번호 요구사항을 충족하지 않습니다"
                         onErrorToast(null, "비밀번호 요구사항을 충족하지 않습니다")
                     }
+
                     else -> {
-                        rePasswordCallback()
+                        findPasswordCallback()
                         isLoading = true
                     }
                 }
