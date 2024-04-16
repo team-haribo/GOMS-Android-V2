@@ -1,6 +1,7 @@
 package com.goms.network.api
 
 import com.goms.network.dto.request.account.FindPasswordRequest
+import com.goms.network.dto.request.account.RePasswordRequest
 import com.goms.network.dto.response.account.ProfileResponse
 import okhttp3.MultipartBody
 import retrofit2.http.Body
@@ -31,7 +32,12 @@ interface AccountAPI {
     suspend fun deleteProfileImage()
 
     @PATCH("/api/v2/account/new-password")
-    suspend fun rePassword(
+    suspend fun findPassword(
         @Body body: FindPasswordRequest
+    )
+
+    @PATCH("/api/v2/account/change-password")
+    suspend fun rePassword(
+        @Body body: RePasswordRequest
     )
 }
