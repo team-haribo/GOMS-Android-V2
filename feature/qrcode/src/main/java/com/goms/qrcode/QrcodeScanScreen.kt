@@ -56,8 +56,7 @@ fun QrcodeScanRoute(
             profileUiState = getProfileUiState,
             onQrcodeScan = { qrcodeData ->
                 try {
-                    val outingUUID = UUID.fromString(qrcodeData)
-                    viewModel.outing(outingUUID)
+                    viewModel.outing(UUID.fromString(qrcodeData))
                 } catch (e: IllegalArgumentException) {
                     viewModel.qrcodeDataError()
                 }
