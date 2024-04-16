@@ -1,4 +1,4 @@
-package com.goms.re_password
+package com.goms.find_password
 
 import android.content.pm.ActivityInfo
 import androidx.activity.ComponentActivity
@@ -39,16 +39,16 @@ import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.util.keyboardAsState
 import com.goms.design_system.util.lockScreenOrientation
 import com.goms.model.request.auth.SendNumberRequestModel
-import com.goms.re_password.component.NumberText
-import com.goms.re_password.viewmodel.RePasswordViewmodel
-import com.goms.re_password.viewmodel.uistate.VerifyNumberUiState
+import com.goms.find_password.component.NumberText
+import com.goms.find_password.viewmodel.FindPasswordViewmodel
+import com.goms.find_password.viewmodel.uistate.VerifyNumberUiState
 
 @Composable
 fun PasswordNumberRoute(
     onBackClick: () -> Unit,
-    onRePasswordClick: () -> Unit,
+    onFindPasswordClick: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
-    viewModel: RePasswordViewmodel = hiltViewModel(LocalContext.current as ComponentActivity)
+    viewModel: FindPasswordViewmodel = hiltViewModel(LocalContext.current as ComponentActivity)
 ) {
     val verifyNumberUiState by viewModel.verifyNumberUiState.collectAsState()
     val number by viewModel.number.collectAsStateWithLifecycle()
@@ -58,7 +58,7 @@ fun PasswordNumberRoute(
         onNumberChange = viewModel::onNumberChange,
         verifyNumberUiState = verifyNumberUiState,
         onBackClick = onBackClick,
-        onRePasswordClick = onRePasswordClick,
+        onFindPasswordClick = onFindPasswordClick,
         onErrorToast = onErrorToast,
         numberCallback = {
             viewModel.verifyNumber(
@@ -77,7 +77,7 @@ fun PasswordNumberScreen(
     onNumberChange: (String) -> Unit,
     verifyNumberUiState: VerifyNumberUiState,
     onBackClick: () -> Unit,
-    onRePasswordClick: () -> Unit,
+    onFindPasswordClick: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     numberCallback: () -> Unit,
     resentCallBack: () -> Unit,
@@ -99,7 +99,7 @@ fun PasswordNumberScreen(
     DisposableEffect(verifyNumberUiState) {
         when (verifyNumberUiState) {
             is VerifyNumberUiState.Loading -> Unit
-            is VerifyNumberUiState.Success -> onRePasswordClick()
+            is VerifyNumberUiState.Success -> onFindPasswordClick()
             is VerifyNumberUiState.BadRequest -> {
                 isLoading = false
                 isError = true

@@ -1,4 +1,4 @@
-package com.goms.re_password
+package com.goms.find_password
 
 import android.content.pm.ActivityInfo
 import androidx.activity.ComponentActivity
@@ -39,10 +39,10 @@ import com.goms.design_system.component.textfield.GomsTextField
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.util.keyboardAsState
 import com.goms.design_system.util.lockScreenOrientation
+import com.goms.find_password.component.FindPasswordText
 import com.goms.model.request.auth.SendNumberRequestModel
-import com.goms.re_password.component.RePasswordText
-import com.goms.re_password.viewmodel.RePasswordViewmodel
-import com.goms.re_password.viewmodel.uistate.SendNumberUiState
+import com.goms.find_password.viewmodel.FindPasswordViewmodel
+import com.goms.find_password.viewmodel.uistate.SendNumberUiState
 import com.goms.ui.isStrongEmail
 
 @Composable
@@ -50,7 +50,7 @@ fun EmailCheckRoute(
     onBackClick: () -> Unit,
     onNumberClick: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
-    viewModel: RePasswordViewmodel = hiltViewModel(LocalContext.current as ComponentActivity)
+    viewModel: FindPasswordViewmodel = hiltViewModel(LocalContext.current as ComponentActivity)
 ) {
     val sendNumberUiState by viewModel.sendNumberUiState.collectAsStateWithLifecycle()
     val email by viewModel.email.collectAsStateWithLifecycle()
@@ -125,7 +125,7 @@ fun EmailCheckScreen(
             modifier = Modifier.padding(horizontal = 20.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            RePasswordText(modifier = Modifier.align(Alignment.Start))
+            FindPasswordText(modifier = Modifier.align(Alignment.Start))
             Spacer(modifier = Modifier.height(28.dp))
             GomsTextField(
                 modifier = Modifier.fillMaxWidth(),

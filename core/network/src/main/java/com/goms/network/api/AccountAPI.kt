@@ -1,6 +1,6 @@
 package com.goms.network.api
 
-import com.goms.network.dto.request.account.RePasswordRequest
+import com.goms.network.dto.request.account.FindPasswordRequest
 import com.goms.network.dto.response.account.ProfileResponse
 import okhttp3.MultipartBody
 import retrofit2.http.Body
@@ -32,6 +32,6 @@ interface AccountAPI {
 
     @PATCH("/api/v2/account/new-password")
     suspend fun rePassword(
-        @Body body: RePasswordRequest
+        @Body body: FindPasswordRequest
     )
 }

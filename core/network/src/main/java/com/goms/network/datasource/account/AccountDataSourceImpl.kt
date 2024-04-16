@@ -1,6 +1,6 @@
 package com.goms.network.datasource.account
 
-import com.goms.network.dto.request.account.RePasswordRequest
+import com.goms.network.dto.request.account.FindPasswordRequest
 import com.goms.network.dto.response.account.ProfileResponse
 import com.goms.network.api.AccountAPI
 import com.goms.network.util.GomsApiHandler
@@ -46,7 +46,7 @@ class AccountDataSourceImpl @Inject constructor(
         )
     }.flowOn(Dispatchers.IO)
 
-    override suspend fun rePassword(body: RePasswordRequest): Flow<Unit> = flow {
+    override suspend fun findPassword(body: FindPasswordRequest): Flow<Unit> = flow {
         emit(
             GomsApiHandler<Unit>()
                 .httpRequest { accountAPI.rePassword(body = body) }
