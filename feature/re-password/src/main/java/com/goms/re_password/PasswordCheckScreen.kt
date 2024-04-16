@@ -1,5 +1,6 @@
 package com.goms.re_password
 
+import android.content.pm.ActivityInfo
 import androidx.activity.ComponentActivity
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,55 +34,42 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goms.design_system.component.button.ButtonState
 import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.button.GomsButton
-import com.goms.design_system.component.dialog.GomsOneButtonDialog
 import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
 import com.goms.design_system.component.textfield.GomsPasswordTextField
+import com.goms.design_system.component.textfield.GomsTextField
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.util.keyboardAsState
+import com.goms.design_system.util.lockScreenOrientation
 import com.goms.re_password.component.RePasswordText
 import com.goms.re_password.viewmodel.RePasswordViewmodel
-import com.goms.ui.isStrongPassword
+import com.goms.re_password.viewmodel.uistate.SendNumberUiState
 
 @Composable
-fun RePasswordRoute(
+fun PasswordCheckRoute(
     onBackClick: () -> Unit,
-    onSuccessClick: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
-    viewModel: RePasswordViewmodel = hiltViewModel(LocalContext.current as ComponentActivity),
+    onRePasswordClick: () -> Unit,
+    viewModel: RePasswordViewmodel = hiltViewModel(LocalContext.current as ComponentActivity)
 ) {
-    val password by viewModel.newPassword.collectAsStateWithLifecycle()
-    val passwordCheck by viewModel.newCheckPassword.collectAsStateWithLifecycle()
+    val password by viewModel.password.collectAsStateWithLifecycle()
 
-    RePasswordScreen(
+    PasswordCheckScreen(
         password = password,
-        passwordCheck = passwordCheck,
-        onPasswordChange = viewModel::onNewPasswordChange,
-        onPasswordCheckChange = viewModel::onNewCheckPasswordChange,
-        onSuccessClick = onSuccessClick,
+        onPasswordChange = viewModel::onPasswordChange,
         onBackClick = onBackClick,
-        onErrorToast = onErrorToast,
-        rePasswordCallback = {}
+        onRePasswordClick = onRePasswordClick
     )
 }
 
 @Composable
-fun RePasswordScreen(
+fun PasswordCheckScreen(
     password: String,
-    passwordCheck: String,
     onPasswordChange: (String) -> Unit,
-    onPasswordCheckChange: (String) -> Unit,
-    onSuccessClick: () -> Unit,
     onBackClick: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
-    rePasswordCallback: () -> Unit
+    onRePasswordClick: () -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
     val isKeyboardOpen by keyboardAsState()
     val animatedSpacerHeight by animateDpAsState(targetValue = if (!isKeyboardOpen) 100.dp else 16.dp)
-    var isLoading by remember { mutableStateOf(false) }
-    var isError by remember { mutableStateOf(false) }
-    var errorText by remember { mutableStateOf("") }
-    var openDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(isKeyboardOpen) {
         if (!isKeyboardOpen) {
@@ -88,6 +77,7 @@ fun RePasswordScreen(
         }
     }
 
+    lockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -112,66 +102,22 @@ fun RePasswordScreen(
             Spacer(modifier = Modifier.height(28.dp))
             GomsPasswordTextField(
                 modifier = Modifier.fillMaxWidth(),
-                isError = isError,
-                isDescription = false,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                placeHolder = "비밀번호",
+                placeHolder = "현재 비밀번호",
                 setText = password,
                 onValueChange = onPasswordChange,
-                singleLine = true
-            )
-            GomsPasswordTextField(
-                modifier = Modifier.fillMaxWidth(),
-                isDescription = true,
-                isError = isError,
-                errorText = errorText,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                placeHolder = "비밀번호 확인",
-                setText = passwordCheck,
-                onValueChange = onPasswordCheckChange,
                 singleLine = true
             )
             Spacer(modifier = Modifier.weight(1f))
             GomsButton(
                 modifier = Modifier.fillMaxWidth(),
-                text = "완료",
-                state = if (password.isNotBlank() && passwordCheck.isNotBlank()) ButtonState.Normal
+                text = "인증번호 받기",
+                state = if (password.isNotBlank()) ButtonState.Normal
                 else ButtonState.Enable
             ) {
-                when {
-                    password != passwordCheck -> {
-                        isError = true
-                        errorText = "비밀번호가 일치하지 않습니다"
-                        onErrorToast(null, "비밀번호가 일치하지 않습니다")
-                    }
-                    !isStrongPassword(password) -> {
-                        isError = true
-                        errorText = "비밀번호 요구사항을 충족하지 않습니다"
-                        onErrorToast(null, "비밀번호 요구사항을 충족하지 않습니다")
-                    }
-                    else -> {
-                        rePasswordCallback()
-                        isLoading = true
-                    }
-                }
+                onRePasswordClick()
             }
             Spacer(modifier = Modifier.height(animatedSpacerHeight))
         }
-    }
-    if (isLoading) {
-        GomsCircularProgressIndicator()
-    }
-    if (openDialog) {
-        GomsOneButtonDialog(
-            openDialog = openDialog,
-            onStateChange = {
-                openDialog = it
-            },
-            title = "재설정 완료",
-            content = "비밀번호를 재설정했어요.\n" +
-                    "홈으로 돌아갈게요!",
-            buttonText = "확인",
-            onClick = onSuccessClick
-        )
     }
 }
