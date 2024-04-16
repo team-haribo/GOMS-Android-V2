@@ -1,6 +1,7 @@
 package com.goms.data.repository.account
 
 import com.goms.model.request.account.FindPasswordRequestModel
+import com.goms.model.request.account.RePasswordRequestModel
 import com.goms.model.response.account.ProfileResponseModel
 import com.goms.network.datasource.account.AccountDataSource
 import com.goms.network.mapper.request.account.toDto
@@ -31,5 +32,9 @@ class AccountRepositoryImpl @Inject constructor(
 
     override suspend fun findPassword(body: FindPasswordRequestModel): Flow<Unit> {
         return remoteAccountDataSource.findPassword(body = body.toDto())
+    }
+
+    override suspend fun rePassword(body: RePasswordRequestModel): Flow<Unit> {
+        return remoteAccountDataSource.rePassword(body = body.toDto())
     }
 }
