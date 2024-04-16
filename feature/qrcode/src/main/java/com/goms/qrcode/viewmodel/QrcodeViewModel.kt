@@ -58,6 +58,10 @@ class QrcodeViewModel @Inject constructor(
             }
     }
 
+    fun qrcodeDataError() = viewModelScope.launch {
+        _outingState.value = OutingUiState.BadRequest
+    }
+
     fun getOutingUUID() = viewModelScope.launch {
         getOutingUUIDUseCase()
             .asResult()
