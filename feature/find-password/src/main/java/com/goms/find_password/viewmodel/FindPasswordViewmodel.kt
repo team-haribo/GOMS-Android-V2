@@ -59,6 +59,10 @@ class FindPasswordViewmodel @Inject constructor(
             }
     }
 
+    fun initFindPassword() {
+        _findPasswordUiState.value = FindPasswordUiState.Loading
+    }
+
     fun sendNumber(body: SendNumberRequestModel) = viewModelScope.launch {
         sendNumberUseCase(body = body)
             .onSuccess {

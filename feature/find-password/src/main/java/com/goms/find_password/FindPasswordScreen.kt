@@ -64,6 +64,7 @@ fun FindPasswordRoute(
         onBackClick = onBackClick,
         onErrorToast = onErrorToast,
         findPasswordUiState = findPasswordUiState,
+        initFindPassword = { viewModel.initFindPassword() },
         findPasswordCallback = {
             viewModel.findPassword(
                 body = FindPasswordRequestModel(
@@ -85,6 +86,7 @@ fun FindPasswordScreen(
     onBackClick: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     findPasswordUiState: FindPasswordUiState,
+    initFindPassword: () -> Unit,
     findPasswordCallback: () -> Unit
 ) {
     val focusManager = LocalFocusManager.current
@@ -116,10 +118,10 @@ fun FindPasswordScreen(
 
             is FindPasswordUiState.Error -> {
                 isLoading = false
-                onErrorToast(findPasswordUiState.exception, "비밀번호 재설정이 실패했습니다")
+                onErrorToast(findPasswordUiState.exception, "비밀번호 찾기가 실패했습니다")
             }
         }
-        onDispose { }
+        onDispose { initFindPassword() }
     }
 
     Column(
