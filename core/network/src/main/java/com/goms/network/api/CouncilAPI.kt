@@ -1,5 +1,6 @@
 package com.goms.network.api
 
+import com.goms.network.di.RequestUrls
 import com.goms.network.dto.request.council.AuthorityRequest
 import com.goms.network.dto.response.council.LateResponse
 import com.goms.network.dto.response.council.OutingUUIDResponse
@@ -15,25 +16,25 @@ import retrofit2.http.Query
 import java.util.UUID
 
 interface CouncilAPI {
-    @GET("/api/v2/student-council/accounts")
+    @GET(RequestUrls.COUNCIL.accounts)
     suspend fun getStudentList(): List<StudentResponse>
 
-    @PATCH("/api/v2/student-council/authority")
+    @PATCH(RequestUrls.COUNCIL.authority)
     suspend fun changeAuthority(
         @Body body: AuthorityRequest
     )
 
-    @POST("/api/v2/student-council/black-list/{accountIdx}")
+    @POST(RequestUrls.COUNCIL.blackList)
     suspend fun setBlackList(
         @Path("accountIdx") accountIdx: UUID
     )
 
-    @DELETE("/api/v2/student-council/black-list/{accountIdx}")
+    @DELETE(RequestUrls.COUNCIL.blackList)
     suspend fun deleteBlackList(
         @Path("accountIdx") accountIdx: UUID
     )
 
-    @GET("/api/v2/student-council/search")
+    @GET(RequestUrls.COUNCIL.search)
     suspend fun studentSearch(
         @Query("grade") grade: Int?,
         @Query("gender") gender: String?,
@@ -43,15 +44,15 @@ interface CouncilAPI {
         @Query("authority") authority: String?
     ): List<StudentResponse>
 
-    @POST("/api/v2/student-council/outing")
+    @POST(RequestUrls.COUNCIL.outing)
     suspend fun getOutingUUID(): OutingUUIDResponse
 
-    @DELETE("/api/v2/student-council/outing/{accountIdx}")
+    @DELETE(RequestUrls.COUNCIL.deleteOuting)
     suspend fun deleteOuting(
         @Path("accountIdx") accountIdx: UUID
     )
 
-    @GET("/api/v2/student-council/late")
+    @GET(RequestUrls.COUNCIL.late)
     suspend fun getLateList(
         @Query("date") date: LocalDate
     ): List<LateResponse>
