@@ -110,6 +110,11 @@ fun SignUpScreen(
         when (sendNumberUiState) {
             is SendNumberUiState.Loading -> Unit
             is SendNumberUiState.Success -> onNumberClick()
+            is SendNumberUiState.EmailNotValid -> {
+                isLoading = false
+                onErrorToast(null, "이메일 형식이 올바르지 않습니다")
+            }
+
             is SendNumberUiState.Error -> {
                 isLoading = false
                 onErrorToast(sendNumberUiState.exception, "인증번호 전송이 실패했습니다.")
@@ -177,13 +182,8 @@ fun SignUpScreen(
                 state = if (name.isNotBlank() && email.isNotBlank() && gender.isNotBlank() && major.isNotBlank()) ButtonState.Normal
                 else ButtonState.Enable
             ) {
-                if (!isValidEmail(email)) {
-                    isLoading = false
-                    onErrorToast(null, "이메일 형식이 올바르지 않습니다")
-                } else {
-                    signUpCallBack()
-                    isLoading = true
-                }
+                signUpCallBack()
+                isLoading = true
             }
             Spacer(modifier = Modifier.height(100.dp))
         }

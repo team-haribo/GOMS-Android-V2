@@ -12,6 +12,7 @@ import com.goms.model.request.auth.SignUpRequestModel
 import com.goms.sign_up.viewmodel.uistate.SendNumberUiState
 import com.goms.sign_up.viewmodel.uistate.SignUpUiState
 import com.goms.sign_up.viewmodel.uistate.VerifyNumberUiState
+import com.goms.ui.isValidEmail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -64,16 +65,20 @@ class SignUpViewModel @Inject constructor(
     }
 
     fun sendNumber(body: SendNumberRequestModel) = viewModelScope.launch {
-        sendNumberUseCase(body = body)
-            .onSuccess {
-                it.catch {  remoteError ->
-                    _sendNumberUiState.value = SendNumberUiState.Error(remoteError)
-                }.collect { result ->
-                    _sendNumberUiState.value = SendNumberUiState.Success
+        if (!isValidEmail(body.email)) {
+            _sendNumberUiState.value = SendNumberUiState.EmailNotValid
+        } else {
+            sendNumberUseCase(body = body)
+                .onSuccess {
+                    it.catch {  remoteError ->
+                        _sendNumberUiState.value = SendNumberUiState.Error(remoteError)
+                    }.collect { result ->
+                        _sendNumberUiState.value = SendNumberUiState.Success
+                    }
+                }.onFailure {
+                    _sendNumberUiState.value = SendNumberUiState.Error(it)
                 }
-            }.onFailure {
-                _sendNumberUiState.value = SendNumberUiState.Error(it)
-            }
+        }
     }
 
     fun initSendNumber() {
