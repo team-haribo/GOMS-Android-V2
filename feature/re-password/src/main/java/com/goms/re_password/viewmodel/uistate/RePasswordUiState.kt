@@ -6,5 +6,5 @@ interface RePasswordUiState {
     object BadRequest : RePasswordUiState
     object PasswordMismatch : RePasswordUiState
     object PasswordNotValid : RePasswordUiState
-    data class Error(val exception: Throwable): RePasswordUiState
+    data class Error(val exception: Throwable) : RePasswordUiState
 }
