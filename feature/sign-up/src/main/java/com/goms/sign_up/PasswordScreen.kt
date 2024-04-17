@@ -99,7 +99,6 @@ fun PasswordScreen(
     val animatedSpacerHeight by animateDpAsState(targetValue = if (!isKeyboardOpen) 100.dp else 16.dp)
     var isLoading by remember { mutableStateOf(false) }
     var isError by remember { mutableStateOf(false) }
-    var errorText by remember { mutableStateOf("") }
 
     LaunchedEffect(isKeyboardOpen) {
         if (!isKeyboardOpen) {
@@ -115,6 +114,18 @@ fun PasswordScreen(
                 isLoading = false
                 isError = true
                 onErrorToast(null, "이미 존재하는 계정입니다")
+            }
+
+            is SignUpUiState.PasswordMismatch -> {
+                isLoading = false
+                isError = true
+                onErrorToast(null, "비밀번호가 일치하지 않습니다")
+            }
+
+            is SignUpUiState.PasswordNotValid -> {
+                isLoading = false
+                isError = true
+                onErrorToast(null, "비밀번호 요구사항을 충족하지 않습니다")
             }
 
             is SignUpUiState.Error -> {
@@ -163,7 +174,6 @@ fun PasswordScreen(
                 modifier = Modifier.fillMaxWidth(),
                 isDescription = true,
                 isError = isError,
-                errorText = errorText,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 placeHolder = "비밀번호 확인",
                 setText = checkPassword,
@@ -176,22 +186,8 @@ fun PasswordScreen(
                 text = "회원가입",
                 state = if (password.isNotBlank() && checkPassword.isNotBlank()) ButtonState.Normal else ButtonState.Enable
             ) {
-                when {
-                    password != checkPassword -> {
-                        isError = true
-                        errorText = "비밀번호가 일치하지 않습니다"
-                        onErrorToast(null, "비밀번호가 일치하지 않습니다")
-                    }
-                    !isValidPassword(password) -> {
-                        isError = true
-                        errorText = "비밀번호 요구사항을 충족하지 않습니다"
-                        onErrorToast(null, "비밀번호 요구사항을 충족하지 않습니다")
-                    }
-                    else -> {
-                        passwordCallback()
-                        isLoading = true
-                    }
-                }
+                passwordCallback()
+                isLoading = true
             }
             Spacer(modifier = Modifier.height(animatedSpacerHeight))
         }

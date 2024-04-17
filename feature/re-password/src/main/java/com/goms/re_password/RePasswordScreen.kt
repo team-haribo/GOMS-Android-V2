@@ -42,7 +42,6 @@ import com.goms.model.request.account.RePasswordRequestModel
 import com.goms.re_password.component.RePasswordText
 import com.goms.re_password.viewmodel.RePasswordViewmodel
 import com.goms.re_password.viewmodel.uistate.RePasswordUiState
-import com.goms.ui.isValidPassword
 
 @Composable
 fun RePasswordRoute(
@@ -94,7 +93,6 @@ fun RePasswordScreen(
     val animatedSpacerHeight by animateDpAsState(targetValue = if (!isKeyboardOpen) 100.dp else 16.dp)
     var isLoading by remember { mutableStateOf(false) }
     var isError by remember { mutableStateOf(false) }
-    var errorText by remember { mutableStateOf("") }
     var openDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(isKeyboardOpen) {
@@ -114,6 +112,18 @@ fun RePasswordScreen(
             is RePasswordUiState.BadRequest -> {
                 isLoading = false
                 onErrorToast(null, "현재 비밀번호와 일치하지 않거나, 이미 사용중인 비밀번호입니다")
+            }
+
+            is RePasswordUiState.PasswordMismatch -> {
+                isLoading = false
+                isError = true
+                onErrorToast(null, "비밀번호가 일치하지 않습니다")
+            }
+
+            is RePasswordUiState.PasswordNotValid -> {
+                isLoading = false
+                isError = true
+                onErrorToast(null, "비밀번호 요구사항을 충족하지 않습니다")
             }
 
             is RePasswordUiState.Error -> {
@@ -160,7 +170,6 @@ fun RePasswordScreen(
                 modifier = Modifier.fillMaxWidth(),
                 isDescription = true,
                 isError = isError,
-                errorText = errorText,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                 placeHolder = "비밀번호 확인",
                 setText = passwordCheck,
@@ -174,22 +183,8 @@ fun RePasswordScreen(
                 state = if (password.isNotBlank() && passwordCheck.isNotBlank()) ButtonState.Normal
                 else ButtonState.Enable
             ) {
-                when {
-                    password != passwordCheck -> {
-                        isError = true
-                        errorText = "비밀번호가 일치하지 않습니다"
-                        onErrorToast(null, "비밀번호가 일치하지 않습니다")
-                    }
-                    !isValidPassword(password) -> {
-                        isError = true
-                        errorText = "비밀번호 요구사항을 충족하지 않습니다"
-                        onErrorToast(null, "비밀번호 요구사항을 충족하지 않습니다")
-                    }
-                    else -> {
-                        rePasswordCallback()
-                        isLoading = true
-                    }
-                }
+                rePasswordCallback()
+                isLoading = true
             }
             Spacer(modifier = Modifier.height(animatedSpacerHeight))
         }

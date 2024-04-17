@@ -4,5 +4,7 @@ sealed interface SignUpUiState {
     object Loading : SignUpUiState
     object Success : SignUpUiState
     object Conflict : SignUpUiState
-    data class Error(val exception: Throwable): SignUpUiState
+    object PasswordMismatch : SignUpUiState
+    object PasswordNotValid : SignUpUiState
+    data class Error(val exception: Throwable) : SignUpUiState
 }

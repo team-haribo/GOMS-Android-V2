@@ -1,5 +1,6 @@
 package com.goms.sign_up.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,6 +14,7 @@ import com.goms.sign_up.viewmodel.uistate.SendNumberUiState
 import com.goms.sign_up.viewmodel.uistate.SignUpUiState
 import com.goms.sign_up.viewmodel.uistate.VerifyNumberUiState
 import com.goms.ui.isValidEmail
+import com.goms.ui.isValidPassword
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -46,22 +48,34 @@ class SignUpViewModel @Inject constructor(
 
     fun signUp(body: SignUpRequestModel) = viewModelScope.launch {
         _signUpUiState.value = SignUpUiState.Loading
-        signUpUseCase(body = body)
-            .onSuccess {
-                it.catch {  remoteError ->
-                    _signUpUiState.value = SignUpUiState.Error(remoteError)
-                    remoteError.errorHandling(
-                        conflictAction = { _signUpUiState.value = SignUpUiState.Conflict }
-                    )
-                }.collect { result ->
-                    _signUpUiState.value = SignUpUiState.Success
-                }
-            }.onFailure {
-                _signUpUiState.value = SignUpUiState.Error(it)
-                it.errorHandling(
-                    conflictAction = { _signUpUiState.value = SignUpUiState.Conflict }
-                )
+        when {
+            password.value != checkPassword.value -> {
+                _signUpUiState.value = SignUpUiState.PasswordMismatch
             }
+
+            !isValidPassword(body.password) -> {
+                _signUpUiState.value = SignUpUiState.PasswordNotValid
+            }
+
+            else -> {
+                signUpUseCase(body = body)
+                    .onSuccess {
+                        it.catch {  remoteError ->
+                            _signUpUiState.value = SignUpUiState.Error(remoteError)
+                            remoteError.errorHandling(
+                                conflictAction = { _signUpUiState.value = SignUpUiState.Conflict }
+                            )
+                        }.collect { result ->
+                            _signUpUiState.value = SignUpUiState.Success
+                        }
+                    }.onFailure {
+                        _signUpUiState.value = SignUpUiState.Error(it)
+                        it.errorHandling(
+                            conflictAction = { _signUpUiState.value = SignUpUiState.Conflict }
+                        )
+                    }
+            }
+        }
     }
 
     fun sendNumber(body: SendNumberRequestModel) = viewModelScope.launch {
