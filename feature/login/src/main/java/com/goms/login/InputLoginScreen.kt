@@ -44,6 +44,7 @@ import com.goms.login.viewmodel.LoginViewModel
 import com.goms.login.viewmodel.uistate.LoginUiState
 import com.goms.login.viewmodel.uistate.SaveTokenUiState
 import com.goms.model.request.auth.LoginRequestModel
+import com.goms.model.util.ResourceKeys
 import com.goms.ui.isValidEmail
 
 @Composable
@@ -73,7 +74,7 @@ fun InputLoginRoute(
         loginCallBack = {
             viewModel.login(
                 body = LoginRequestModel(
-                    "${viewModel.email.value}@gsm.hs.kr",
+                    "${viewModel.email.value}${ResourceKeys.EMAIL_DOMAIN}",
                     viewModel.password.value
                 )
             )

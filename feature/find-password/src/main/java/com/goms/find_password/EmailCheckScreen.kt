@@ -43,6 +43,7 @@ import com.goms.find_password.component.FindPasswordText
 import com.goms.model.request.auth.SendNumberRequestModel
 import com.goms.find_password.viewmodel.FindPasswordViewmodel
 import com.goms.find_password.viewmodel.uistate.SendNumberUiState
+import com.goms.model.util.ResourceKeys
 import com.goms.ui.isValidEmail
 
 @Composable
@@ -62,7 +63,7 @@ fun EmailCheckRoute(
         sendNumberUiState = sendNumberUiState,
         emailCheckCallBack = {
             viewModel.sendNumber(
-                body = SendNumberRequestModel("${viewModel.email.value}@gsm.hs.kr")
+                body = SendNumberRequestModel("${viewModel.email.value}${ResourceKeys.EMAIL_DOMAIN}")
         ) },
         onNumberClick = onNumberClick,
         initCallBack = { viewModel.initSendNumber() },

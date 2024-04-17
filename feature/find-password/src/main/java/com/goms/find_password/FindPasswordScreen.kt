@@ -42,6 +42,7 @@ import com.goms.model.request.account.FindPasswordRequestModel
 import com.goms.find_password.component.RePasswordText
 import com.goms.find_password.viewmodel.uistate.FindPasswordUiState
 import com.goms.find_password.viewmodel.FindPasswordViewmodel
+import com.goms.model.util.ResourceKeys
 import com.goms.ui.isValidPassword
 
 @Composable
@@ -68,7 +69,7 @@ fun FindPasswordRoute(
         findPasswordCallback = {
             viewModel.findPassword(
                 body = FindPasswordRequestModel(
-                    email = "${viewModel.email.value}@gsm.hs.kr",
+                    email = "${viewModel.email.value}${ResourceKeys.EMAIL_DOMAIN}",
                     password = viewModel.password.value
                 )
             )

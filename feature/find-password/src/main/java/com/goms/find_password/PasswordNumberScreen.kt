@@ -42,6 +42,7 @@ import com.goms.model.request.auth.SendNumberRequestModel
 import com.goms.find_password.component.NumberText
 import com.goms.find_password.viewmodel.FindPasswordViewmodel
 import com.goms.find_password.viewmodel.uistate.VerifyNumberUiState
+import com.goms.model.util.ResourceKeys
 
 @Composable
 fun PasswordNumberRoute(
@@ -62,11 +63,11 @@ fun PasswordNumberRoute(
         onErrorToast = onErrorToast,
         numberCallback = {
             viewModel.verifyNumber(
-                email = "${viewModel.email.value}@gsm.hs.kr",
+                email = "${viewModel.email.value}${ResourceKeys.EMAIL_DOMAIN}",
                 authCode = viewModel.number.value
             )
         },
-        resentCallBack = { viewModel.sendNumber(body = SendNumberRequestModel("${viewModel.email.value}@gsm.hs.kr")) },
+        resentCallBack = { viewModel.sendNumber(body = SendNumberRequestModel("${viewModel.email.value}${ResourceKeys.EMAIL_DOMAIN}")) },
         initCallBack = { viewModel.initVerifyNumber() }
     )
 }

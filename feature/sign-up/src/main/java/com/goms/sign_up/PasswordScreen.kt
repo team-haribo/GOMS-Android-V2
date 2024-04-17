@@ -42,6 +42,7 @@ import com.goms.design_system.util.lockScreenOrientation
 import com.goms.model.enum.Gender
 import com.goms.model.enum.Major
 import com.goms.model.request.auth.SignUpRequestModel
+import com.goms.model.util.ResourceKeys
 import com.goms.sign_up.component.PasswordText
 import com.goms.sign_up.viewmodel.uistate.SignUpUiState
 import com.goms.sign_up.viewmodel.SignUpViewModel
@@ -70,7 +71,7 @@ fun PasswordRoute(
         passwordCallback = {
             viewModel.signUp(
                 body = SignUpRequestModel(
-                    email = "${viewModel.email.value}@gsm.hs.kr",
+                    email = "${viewModel.email.value}${ResourceKeys.EMAIL_DOMAIN}",
                     password = viewModel.password.value,
                     name = viewModel.name.value,
                     gender = Gender.values().find { it.value == viewModel.gender.value }!!.name,

@@ -39,6 +39,7 @@ import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.util.keyboardAsState
 import com.goms.design_system.util.lockScreenOrientation
 import com.goms.model.request.auth.SendNumberRequestModel
+import com.goms.model.util.ResourceKeys
 import com.goms.sign_up.component.SelectGenderDropDown
 import com.goms.sign_up.component.SelectMajorDropDown
 import com.goms.sign_up.component.SignUpText
@@ -72,7 +73,7 @@ fun SignUpRoute(
         onBackClick = onBackClick,
         onNumberClick = onNumberClick,
         onErrorToast = onErrorToast,
-        signUpCallBack = { viewModel.sendNumber(body = SendNumberRequestModel("${viewModel.email.value}@gsm.hs.kr")) },
+        signUpCallBack = { viewModel.sendNumber(body = SendNumberRequestModel("${viewModel.email.value}${ResourceKeys.EMAIL_DOMAIN}")) },
         initCallBack = { viewModel.initSendNumber() }
     )
 }

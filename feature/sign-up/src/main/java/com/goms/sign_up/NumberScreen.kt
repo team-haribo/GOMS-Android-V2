@@ -39,6 +39,7 @@ import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.util.keyboardAsState
 import com.goms.design_system.util.lockScreenOrientation
 import com.goms.model.request.auth.SendNumberRequestModel
+import com.goms.model.util.ResourceKeys
 import com.goms.sign_up.component.NumberText
 import com.goms.sign_up.viewmodel.SignUpViewModel
 import com.goms.sign_up.viewmodel.uistate.VerifyNumberUiState
@@ -61,12 +62,12 @@ fun NumberRoute(
         onPasswordClick = onPasswordClick,
         numberCallback = {
             viewModel.verifyNumber(
-                email = "${viewModel.email.value}@gsm.hs.kr",
+                email = "${viewModel.email.value}${ResourceKeys.EMAIL_DOMAIN}",
                 authCode = viewModel.number.value
             )
         },
         onErrorToast = onErrorToast,
-        resentCallBack = { viewModel.sendNumber(body = SendNumberRequestModel("${viewModel.email.value}@gsm.hs.kr")) },
+        resentCallBack = { viewModel.sendNumber(body = SendNumberRequestModel("${viewModel.email.value}${ResourceKeys.EMAIL_DOMAIN}")) },
         initCallBack = { viewModel.initVerifyNumber() }
     )
 }
