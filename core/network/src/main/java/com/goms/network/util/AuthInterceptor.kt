@@ -2,8 +2,10 @@ package com.goms.network.util
 
 import com.goms.common.exception.TokenExpirationException
 import com.goms.datastore.AuthTokenDataSource
+import com.goms.model.util.ResourceKeys
 import com.goms.network.dto.response.auth.LoginResponse
 import com.goms.network.BuildConfig
+import com.goms.network.di.RequestUrls
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import kotlinx.coroutines.flow.first
@@ -61,7 +63,7 @@ class AuthInterceptor @Inject constructor(
             if (currentTime.after(accessTime.toDate())) {
                 val client = OkHttpClient()
                 val refreshToken = dataSource.getRefreshToken().first().replace("\"", "")
-                val refreshTokenWithBearer = "Bearer $refreshToken"
+                val refreshTokenWithBearer = "${ResourceKeys.BEARER} $refreshToken"
 
                 val moshi = Moshi.Builder().build()
 
@@ -69,7 +71,7 @@ class AuthInterceptor @Inject constructor(
                     moshi.adapter(LoginResponse::class.java)
 
                 val refreshRequest = Request.Builder()
-                    .url(BuildConfig.BASE_URL + "api/v2/auth")
+                    .url(BuildConfig.BASE_URL + RequestUrls.AUTH.auth)
                     .patch(chain.request().body ?: RequestBody.create(null, byteArrayOf()))
                     .addHeader("refreshToken", refreshTokenWithBearer)
                     .build()
@@ -86,13 +88,13 @@ class AuthInterceptor @Inject constructor(
                 } else throw TokenExpirationException()
             }
             val accessToken = dataSource.getAccessToken().first().replace("\"", "")
-            builder.addHeader("Authorization", "Bearer $accessToken")
+            builder.addHeader("Authorization", "${ResourceKeys.BEARER} $accessToken")
 
             val isAuthEndpoint = path.endsWith("/auth")
 
             if (isAuthEndpoint && method == ignoreMethodDELETE || method == ignoreMethodPATCH) {
                 val refreshToken = dataSource.getRefreshToken().first().replace("\"", "")
-                val refreshTokenWithBearer = "Bearer $refreshToken"
+                val refreshTokenWithBearer = "${ResourceKeys.BEARER} $refreshToken"
                 builder.addHeader("refreshToken", refreshTokenWithBearer)
             }
         }

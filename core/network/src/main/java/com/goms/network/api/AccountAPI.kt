@@ -1,5 +1,6 @@
 package com.goms.network.api
 
+import com.goms.network.di.RequestUrls
 import com.goms.network.dto.request.account.FindPasswordRequest
 import com.goms.network.dto.request.account.RePasswordRequest
 import com.goms.network.dto.response.account.ProfileResponse
@@ -13,30 +14,30 @@ import retrofit2.http.POST
 import retrofit2.http.Part
 
 interface AccountAPI {
-    @GET("/api/v2/account/profile")
+    @GET(RequestUrls.ACCOUNT.profile)
     suspend fun getProfile(): ProfileResponse
 
     @Multipart
-    @PATCH("/api/v2/account/image")
+    @PATCH(RequestUrls.ACCOUNT.image)
     suspend fun updateProfileImage(
         @Part file: MultipartBody.Part
     )
 
     @Multipart
-    @POST("/api/v2/account/image")
+    @POST(RequestUrls.ACCOUNT.image)
     suspend fun setProfileImage(
         @Part file: MultipartBody.Part
     )
 
-    @DELETE("/api/v2/account")
+    @DELETE(RequestUrls.ACCOUNT.account)
     suspend fun deleteProfileImage()
 
-    @PATCH("/api/v2/account/new-password")
+    @PATCH(RequestUrls.ACCOUNT.newPassword)
     suspend fun findPassword(
         @Body body: FindPasswordRequest
     )
 
-    @PATCH("/api/v2/account/change-password")
+    @PATCH(RequestUrls.ACCOUNT.changePassword)
     suspend fun rePassword(
         @Body body: RePasswordRequest
     )

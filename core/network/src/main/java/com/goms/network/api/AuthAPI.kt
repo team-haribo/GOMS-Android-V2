@@ -1,5 +1,6 @@
 package com.goms.network.api
 
+import com.goms.network.di.RequestUrls
 import com.goms.network.dto.request.auth.LoginRequest
 import com.goms.network.dto.request.auth.SendNumberRequest
 import com.goms.network.dto.request.auth.SignUpRequest
@@ -12,30 +13,30 @@ import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface AuthAPI {
-    @POST("/api/v2/auth/signup")
+    @POST(RequestUrls.AUTH.signUp)
     suspend fun signUp(
         @Body body: SignUpRequest
     )
 
-    @POST("/api/v2/auth/signin")
+    @POST(RequestUrls.AUTH.signIn)
     suspend fun login(
         @Body body: LoginRequest
     ): LoginResponse
 
-    @PATCH("/api/v2/auth/")
+    @PATCH(RequestUrls.AUTH.auth)
     suspend fun tokenRefresh(): LoginResponse
 
-    @POST("/api/v2/auth/email/send")
+    @POST(RequestUrls.AUTH.send)
     suspend fun sendNumber(
         @Body body: SendNumberRequest
     )
 
-    @GET("/api/v2/auth/email/verify")
+    @GET(RequestUrls.AUTH.verify)
     suspend fun verifyNumber(
         @Query("email") email: String,
         @Query("authCode") authCode: String
     )
 
-    @DELETE("/api/v2/auth")
+    @DELETE(RequestUrls.AUTH.auth)
     suspend fun logout()
 }

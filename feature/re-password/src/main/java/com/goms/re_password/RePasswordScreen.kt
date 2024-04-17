@@ -38,12 +38,11 @@ import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
 import com.goms.design_system.component.textfield.GomsPasswordTextField
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.util.keyboardAsState
-import com.goms.model.request.account.FindPasswordRequestModel
 import com.goms.model.request.account.RePasswordRequestModel
 import com.goms.re_password.component.RePasswordText
 import com.goms.re_password.viewmodel.RePasswordViewmodel
 import com.goms.re_password.viewmodel.uistate.RePasswordUiState
-import com.goms.ui.isStrongPassword
+import com.goms.ui.isValidPassword
 
 @Composable
 fun RePasswordRoute(
@@ -181,7 +180,7 @@ fun RePasswordScreen(
                         errorText = "비밀번호가 일치하지 않습니다"
                         onErrorToast(null, "비밀번호가 일치하지 않습니다")
                     }
-                    !isStrongPassword(password) -> {
+                    !isValidPassword(password) -> {
                         isError = true
                         errorText = "비밀번호 요구사항을 충족하지 않습니다"
                         onErrorToast(null, "비밀번호 요구사항을 충족하지 않습니다")

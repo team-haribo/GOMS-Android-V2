@@ -39,12 +39,13 @@ import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.util.keyboardAsState
 import com.goms.design_system.util.lockScreenOrientation
 import com.goms.model.request.auth.SendNumberRequestModel
+import com.goms.model.util.ResourceKeys
 import com.goms.sign_up.component.SelectGenderDropDown
 import com.goms.sign_up.component.SelectMajorDropDown
 import com.goms.sign_up.component.SignUpText
 import com.goms.sign_up.viewmodel.uistate.SendNumberUiState
 import com.goms.sign_up.viewmodel.SignUpViewModel
-import com.goms.ui.isStrongEmail
+import com.goms.ui.isValidEmail
 
 @Composable
 fun SignUpRoute(
@@ -72,7 +73,7 @@ fun SignUpRoute(
         onBackClick = onBackClick,
         onNumberClick = onNumberClick,
         onErrorToast = onErrorToast,
-        signUpCallBack = { viewModel.sendNumber(body = SendNumberRequestModel("${viewModel.email.value}@gsm.hs.kr")) },
+        signUpCallBack = { viewModel.sendNumber(body = SendNumberRequestModel("${viewModel.email.value}${ResourceKeys.EMAIL_DOMAIN}")) },
         initCallBack = { viewModel.initSendNumber() }
     )
 }
@@ -176,7 +177,7 @@ fun SignUpScreen(
                 state = if (name.isNotBlank() && email.isNotBlank() && gender.isNotBlank() && major.isNotBlank()) ButtonState.Normal
                 else ButtonState.Enable
             ) {
-                if (!isStrongEmail(email)) {
+                if (!isValidEmail(email)) {
                     isLoading = false
                     onErrorToast(null, "이메일 형식이 올바르지 않습니다")
                 } else {

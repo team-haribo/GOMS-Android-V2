@@ -42,10 +42,11 @@ import com.goms.design_system.util.lockScreenOrientation
 import com.goms.model.enum.Gender
 import com.goms.model.enum.Major
 import com.goms.model.request.auth.SignUpRequestModel
+import com.goms.model.util.ResourceKeys
 import com.goms.sign_up.component.PasswordText
 import com.goms.sign_up.viewmodel.uistate.SignUpUiState
 import com.goms.sign_up.viewmodel.SignUpViewModel
-import com.goms.ui.isStrongPassword
+import com.goms.ui.isValidPassword
 
 @Composable
 fun PasswordRoute(
@@ -70,7 +71,7 @@ fun PasswordRoute(
         passwordCallback = {
             viewModel.signUp(
                 body = SignUpRequestModel(
-                    email = "${viewModel.email.value}@gsm.hs.kr",
+                    email = "${viewModel.email.value}${ResourceKeys.EMAIL_DOMAIN}",
                     password = viewModel.password.value,
                     name = viewModel.name.value,
                     gender = Gender.values().find { it.value == viewModel.gender.value }!!.name,
@@ -181,7 +182,7 @@ fun PasswordScreen(
                         errorText = "비밀번호가 일치하지 않습니다"
                         onErrorToast(null, "비밀번호가 일치하지 않습니다")
                     }
-                    !isStrongPassword(password) -> {
+                    !isValidPassword(password) -> {
                         isError = true
                         errorText = "비밀번호 요구사항을 충족하지 않습니다"
                         onErrorToast(null, "비밀번호 요구사항을 충족하지 않습니다")

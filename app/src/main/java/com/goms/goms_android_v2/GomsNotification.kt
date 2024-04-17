@@ -9,6 +9,7 @@ import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.goms.design_system.R
+import com.goms.model.util.ResourceKeys
 
 class GomsNotification : FirebaseMessagingService() {
     companion object {
@@ -65,7 +66,7 @@ class GomsNotification : FirebaseMessagingService() {
     }
 
     private fun saveDeviceToken(token: String) {
-        val deviceTokenSF = getSharedPreferences("deviceToken", MODE_PRIVATE)
-        deviceTokenSF.edit().putString("device", token).apply()
+        val deviceTokenSF = getSharedPreferences(ResourceKeys.DEVICE_TOKEN, MODE_PRIVATE)
+        deviceTokenSF.edit().putString(ResourceKeys.DEVICE, token).apply()
     }
 }
