@@ -236,6 +236,7 @@ fun SettingScreen(
             Spacer(modifier = Modifier.height(16.dp))
             SettingProfileCard(
                 modifier = Modifier,
+                role = role,
                 onProfileClick = { openBottomSheet = true },
                 getProfileUiState = getProfileUiState
             )
