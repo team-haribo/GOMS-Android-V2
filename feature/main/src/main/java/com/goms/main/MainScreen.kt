@@ -67,8 +67,8 @@ fun MainRoute(
     var isQrcodeLaunch by rememberSaveable { mutableStateOf(true) }
 
     LaunchedEffect(role) {
-        if(qrcodeState == "On" && isQrcodeLaunch && role.isNotBlank()) {
-            onQrcodeClick( Authority.valueOf(role) )
+        if (qrcodeState == "On" && isQrcodeLaunch && role.isNotBlank()) {
+            onQrcodeClick(Authority.valueOf(role))
             isQrcodeLaunch = false
         }
     }
@@ -163,8 +163,14 @@ fun MainScreen(
         ) {
             Column {
                 GomsTopBar(
-                    icon = { if (role == Authority.ROLE_STUDENT_COUNCIL) MenuIcon(tint = colors.G4) else SettingIcon(tint = colors.G4) },
-                    onSettingClick = { if (role == Authority.ROLE_STUDENT_COUNCIL) onAdminMenuClick() else  onStudentManagementClick() }
+                    icon = {
+                        if (role == Authority.ROLE_STUDENT_COUNCIL) MenuIcon(tint = colors.G4)
+                        else SettingIcon(tint = colors.G4)
+                    },
+                    onSettingClick = {
+                        if (role == Authority.ROLE_STUDENT_COUNCIL) onAdminMenuClick()
+                        else onSettingClick()
+                    }
                 )
                 Column(
                     modifier = Modifier
