@@ -5,5 +5,5 @@ sealed interface VerifyNumberUiState {
     object Success : VerifyNumberUiState
     object BadRequest : VerifyNumberUiState
     object NotFound : VerifyNumberUiState
-    data class Error(val exception: Throwable): VerifyNumberUiState
+    data class Error(val exception: Throwable) : VerifyNumberUiState
 }

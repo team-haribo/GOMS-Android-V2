@@ -8,7 +8,8 @@ sealed interface LoginUiState {
     data class Success(val loginResponseModel: LoginResponseModel) : LoginUiState {
         fun isUser(): Boolean = loginResponseModel.authority.name == Authority.ROLE_STUDENT.name
     }
-    data class Error(val exception: Throwable): LoginUiState
     object BadRequest : LoginUiState
     object NotFound : LoginUiState
+    object EmailNotValid : LoginUiState
+    data class Error(val exception: Throwable) : LoginUiState
 }
