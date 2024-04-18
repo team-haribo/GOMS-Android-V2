@@ -107,11 +107,7 @@ fun QrcodeScanScreen(
     }
 
     if (profileUiState is GetProfileUiState.Success) {
-        if (profileUiState.getProfileResponseModel.isOuting) {
-            isOuting = false
-        } else {
-            isOuting = true
-        }
+        isOuting = !profileUiState.getProfileResponseModel.isOuting
     }
 
     when (outingUiState) {
@@ -119,7 +115,7 @@ fun QrcodeScanScreen(
         is OutingUiState.Success ->  {
             openDialog = true
             dialogTitle = "QR코드 스캔 성공"
-            dialogContent = if (isOuting) "외출을 시작해요!\n7시 25분까지는 반으로 돌아와야 해요!" else "외출에서 복귀하셨군요!\n다음 주 수요일에 또 봐요!"
+            dialogContent = if (isOuting) "외출을 시작해요!\n7시 25분까지는 반으로 돌아와야 해요!" else "제 시간에 복귀에 성공했어요!\n다음 외출제에 또 만나요!"
         }
         is OutingUiState.BadRequest -> {
             openDialog = true
@@ -130,7 +126,7 @@ fun QrcodeScanScreen(
         is OutingUiState.Error -> {
             openDialog = true
             dialogTitle = "QR코드 스캔 실패"
-            dialogContent = "예기치 못한 오류가 발생했어요.\n네트워크 상태를 확인후 다시 시도해 주세요."
+            dialogContent = "예기치 못한 오류가 발생했어요.\n네트워크 상태를 확인 후 다시 시도해 주세요."
         }
     }
 
