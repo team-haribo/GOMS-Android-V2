@@ -23,8 +23,10 @@ import com.goms.login.navigation.inputLoginScreen
 import com.goms.login.navigation.loginRoute
 import com.goms.login.navigation.loginScreen
 import com.goms.login.navigation.navigateToInputLogin
+import com.goms.main.navigation.adminMenuScreen
 import com.goms.main.navigation.lateListScreen
 import com.goms.main.navigation.mainScreen
+import com.goms.main.navigation.navigateToAdminMenu
 import com.goms.main.navigation.navigateToLateList
 import com.goms.main.navigation.navigateToOutingStatus
 import com.goms.main.navigation.navigateToStudentManagement
@@ -126,8 +128,9 @@ fun GomsNavHost(
                     navController.navigateToQrGenerate()
                 }
             },
-            onErrorToast = onErrorToast,
-            onSettingClick = navController::navigateToSettingScreen
+            onSettingClick = navController::navigateToSettingScreen,
+            onAdminMenuClick = navController::navigateToAdminMenu,
+            onErrorToast = onErrorToast
         )
         outingStatusScreen(
             onBackClick = navController::popBackStack,
@@ -140,6 +143,14 @@ fun GomsNavHost(
         studentManagementScreen(
             onBackClick = navController::popBackStack,
             onErrorToast = onErrorToast
+        )
+        adminMenuScreen(
+            onBackClick = navController::popBackStack,
+            onQrCreateClick = navController::navigateToQrGenerate,
+            onStudentManagementClick = navController::navigateToStudentManagement,
+            onOutingStatusClick = navController::navigateToOutingStatus,
+            onLateListClick = navController::navigateToLateList,
+            onSettingClick = navController::navigateToSettingScreen
         )
 
         qrcodeScanScreen(

@@ -27,6 +27,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.goms.design_system.icon.MenuIcon
 import com.goms.design_system.icon.SettingIcon
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.main.viewmodel.uistate.GetLateRankListUiState
@@ -52,6 +53,7 @@ fun MainRoute(
     onStudentManagementClick: () -> Unit,
     onQrcodeClick: (role: Authority) -> Unit,
     onSettingClick: () -> Unit,
+    onAdminMenuClick: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     viewModel: MainViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
 ) {
@@ -83,6 +85,7 @@ fun MainRoute(
         onStudentManagementClick = onStudentManagementClick,
         onQrcodeClick = onQrcodeClick,
         onSettingClick = onSettingClick,
+        onAdminMenuClick = onAdminMenuClick,
         onErrorToast = onErrorToast,
         mainCallBack = {
             viewModel.getProfile()
@@ -105,6 +108,7 @@ fun MainScreen(
     onStudentManagementClick: () -> Unit,
     onQrcodeClick: (role: Authority) -> Unit,
     onSettingClick: () -> Unit,
+    onAdminMenuClick: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     mainCallBack: () -> Unit
 ) {
@@ -159,10 +163,8 @@ fun MainScreen(
         ) {
             Column {
                 GomsTopBar(
-                    role = role,
-                    icon = { SettingIcon(tint = colors.G4) },
-                    onSettingClick = onSettingClick,
-                    onAdminClick = { onStudentManagementClick() }
+                    icon = { if (role == Authority.ROLE_STUDENT_COUNCIL) MenuIcon(tint = colors.G4) else SettingIcon(tint = colors.G4) },
+                    onSettingClick = { if (role == Authority.ROLE_STUDENT_COUNCIL) onAdminMenuClick() else  onStudentManagementClick() }
                 )
                 Column(
                     modifier = Modifier
