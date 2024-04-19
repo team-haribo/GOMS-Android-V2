@@ -121,7 +121,7 @@ fun MainProfileCardComponent(
             Text(
                 text = stateText,
                 style = typography.textSmall,
-                fontWeight = FontWeight.SemiBold,
+                fontWeight = FontWeight.Bold,
                 color = stateColor
             )
         }
