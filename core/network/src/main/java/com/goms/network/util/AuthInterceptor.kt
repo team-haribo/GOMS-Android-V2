@@ -6,7 +6,6 @@ import com.goms.model.util.ResourceKeys
 import com.goms.network.dto.response.auth.LoginResponse
 import com.goms.network.BuildConfig
 import com.goms.network.di.RequestUrls
-import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -22,23 +21,26 @@ class AuthInterceptor @Inject constructor(
 ): Interceptor {
     private val ignorePaths by lazy {
         listOf(
-            "/auth",
-            "/new-password"
+            RequestUrls.AUTH.auth,
+            RequestUrls.ACCOUNT.newPassword
         )
+    }
+
+    private companion object {
+        const val POST = "POST"
+        const val GET = "GET"
+        const val DELETE = "DELETE"
+        const val PATCH = "PATCH"
     }
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
         val builder = request.newBuilder()
         val currentTime = System.currentTimeMillis().toGomsTimeDate()
-        val ignoreMethodPOST = "POST"
-        val ignoreMethodGET = "GET"
-        val ignoreMethodDELETE = "DELETE"
-        val ignoreMethodPATCH = "PATCH"
         val path = request.url.encodedPath
         val method = request.method
 
-        if (ignorePaths.any { path.contains(it) } && method in listOf(ignoreMethodPOST, ignoreMethodGET)) {
+        if (ignorePaths.any { path.contains(it) } && method in listOf(POST, GET)) {
             val response = chain.proceed(request)
             return if (response.code == 204) {
                 response.newBuilder().code(200).build()
@@ -48,6 +50,8 @@ class AuthInterceptor @Inject constructor(
         }
 
         runBlocking {
+            val accessToken = dataSource.getAccessToken().first().replace("\"", "")
+            val refreshToken = dataSource.getRefreshToken().first().replace("\"", "")
             val refreshTime = dataSource.getRefreshTokenExp().first().replace("\"", "")
             val accessTime = dataSource.getAccessTokenExp().first().replace("\"", "")
 
@@ -61,41 +65,33 @@ class AuthInterceptor @Inject constructor(
 
             // access token 재발급
             if (currentTime.after(accessTime.toDate())) {
-                val client = OkHttpClient()
-                val refreshToken = dataSource.getRefreshToken().first().replace("\"", "")
-                val refreshTokenWithBearer = "${ResourceKeys.BEARER} $refreshToken"
-
                 val moshi = Moshi.Builder().build()
-
-                val refreshTokenAdapter: JsonAdapter<LoginResponse> =
-                    moshi.adapter(LoginResponse::class.java)
-
                 val refreshRequest = Request.Builder()
                     .url(BuildConfig.BASE_URL + RequestUrls.AUTH.auth)
                     .patch(chain.request().body ?: RequestBody.create(null, byteArrayOf()))
-                    .addHeader("refreshToken", refreshTokenWithBearer)
+                    .addHeader("refreshToken", "${ResourceKeys.BEARER} $refreshToken")
                     .build()
+                val response = OkHttpClient().newCall(refreshRequest).execute()
 
-                val response = client.newCall(refreshRequest).execute()
                 if (response.isSuccessful) {
-                    val token = refreshTokenAdapter.fromJson(response.body!!.string())
+                    val token = moshi.adapter(LoginResponse::class.java).fromJson(response.body!!.string())
                         ?: throw TokenExpirationException()
-                    dataSource.setAccessToken(token.accessToken)
-                    dataSource.setRefreshToken(token.refreshToken)
-                    dataSource.setAccessTokenExp(token.accessTokenExp)
-                    dataSource.setRefreshTokenExp(token.refreshTokenExp)
-                    dataSource.setAuthority(token.authority.name)
+                    with(dataSource) {
+                        setAccessToken(token.accessToken)
+                        setRefreshToken(token.refreshToken)
+                        setAccessTokenExp(token.accessTokenExp)
+                        setRefreshTokenExp(token.refreshTokenExp)
+                        setAuthority(token.authority.name)
+                    }
                 } else throw TokenExpirationException()
             }
-            val accessToken = dataSource.getAccessToken().first().replace("\"", "")
-            builder.addHeader("Authorization", "${ResourceKeys.BEARER} $accessToken")
 
-            val isAuthEndpoint = path.endsWith("/auth")
+            val isAuthEndpoint = path.endsWith(RequestUrls.AUTH.auth)
 
-            if (isAuthEndpoint && method == ignoreMethodDELETE || method == ignoreMethodPATCH) {
-                val refreshToken = dataSource.getRefreshToken().first().replace("\"", "")
-                val refreshTokenWithBearer = "${ResourceKeys.BEARER} $refreshToken"
-                builder.addHeader("refreshToken", refreshTokenWithBearer)
+            if (isAuthEndpoint && method in listOf(DELETE, PATCH)) {
+                builder.addHeader("refreshToken", "${ResourceKeys.BEARER} $refreshToken")
+            } else {
+                builder.addHeader("Authorization", "${ResourceKeys.BEARER} $accessToken")
             }
         }
         val response = chain.proceed(builder.build())
