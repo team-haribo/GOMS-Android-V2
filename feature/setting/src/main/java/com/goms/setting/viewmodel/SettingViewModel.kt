@@ -17,6 +17,7 @@ import com.goms.domain.auth.LogoutUseCase
 import com.goms.domain.setting.SetAlarmUseCase
 import com.goms.domain.setting.SetQrcodeUseCase
 import com.goms.domain.setting.SetThemeUseCase
+import com.goms.domain.setting.SetTimeUseCase
 import com.goms.setting.util.getMultipartFile
 import com.goms.setting.viewmodel.uistate.GetProfileUiState
 import com.goms.setting.viewmodel.uistate.LogoutUiState
@@ -44,6 +45,7 @@ class SettingViewModel @Inject constructor (
     private val setThemeUseCase: SetThemeUseCase,
     private val setQrcodeUseCase: SetQrcodeUseCase,
     private val setAlarmUseCase: SetAlarmUseCase,
+    private val setTimeUseCase: SetTimeUseCase,
     private val authRepository: AuthRepository
 ) : ViewModel() {
     val role = authRepository.getRole()
@@ -56,6 +58,9 @@ class SettingViewModel @Inject constructor (
 
     private val _alarmState = MutableStateFlow("")
     val alarmState = _alarmState.asStateFlow()
+
+    private val _timeState = MutableStateFlow("")
+    val timeState = _timeState.asStateFlow()
 
     private val _setThemeState = MutableStateFlow<SetThemeUiState>(SetThemeUiState.Loading)
     val setThemeState = _setThemeState.asStateFlow()
@@ -162,6 +167,12 @@ class SettingViewModel @Inject constructor (
         }
     }
 
+    fun setTime(time: String) = viewModelScope.launch {
+        withContext(Dispatchers.IO) {
+            setTimeUseCase(time = time)
+        }
+    }
+
     fun getThemeValue() = viewModelScope.launch {
         val themeValue = settingRepository.getThemeValue().first().replace("\"","")
         _themeState.value = themeValue
@@ -175,6 +186,11 @@ class SettingViewModel @Inject constructor (
     fun getAlarmValue() = viewModelScope.launch {
         val alarmValue = settingRepository.getAlarmValue().first().replace("\"","")
         _alarmState.value = alarmValue
+    }
+
+    fun getTimeValue() = viewModelScope.launch {
+        val timeValue = settingRepository.getTimeValue().first().replace("\"","")
+        _timeState.value = timeValue
     }
 
     fun logout() = viewModelScope.launch {
