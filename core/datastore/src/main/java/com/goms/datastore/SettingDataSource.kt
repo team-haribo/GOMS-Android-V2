@@ -43,4 +43,16 @@ class SettingDataSource @Inject constructor(
                 .build()
         }
     }
+
+    fun getTimeValue(): Flow<String> = settingInfo.data.map {
+        if (it.time.isNullOrEmpty()) "Off" else it.time
+    }
+
+    suspend fun setTimeValue(timeValue: String) {
+        settingInfo.updateData {
+            it.toBuilder()
+                .setTime(timeValue)
+                .build()
+        }
+    }
 }

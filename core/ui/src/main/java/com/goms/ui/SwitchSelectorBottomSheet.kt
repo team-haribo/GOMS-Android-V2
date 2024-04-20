@@ -98,7 +98,7 @@ fun SwitchSelectorBottomSheet(
                 GomsSwitchButton(
                     stateOn = 1,
                     stateOff = 0,
-                    switchOnBackground = colors.P5,
+                    switchOnBackground = colors.A7,
                     switchOffBackground = colors.G4,
                     initialValue = if (outing == BlackList.BLACK_LIST.name) 1 else 0,
                     onCheckedChanged = {
@@ -130,7 +130,7 @@ fun SwitchSelectorBottomSheet(
                 GomsSwitchButton(
                     stateOn = 1,
                     stateOff = 0,
-                    switchOnBackground = colors.P5,
+                    switchOnBackground = colors.A7,
                     switchOffBackground = colors.G4,
                     initialValue = if (role == Authority.ROLE_STUDENT_COUNCIL.name) 1 else 0,
                     onCheckedChanged = {
