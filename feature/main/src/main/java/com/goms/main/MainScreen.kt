@@ -40,10 +40,13 @@ import com.goms.ui.GomsFloatingButton
 import com.goms.main.component.MainLateCard
 import com.goms.main.component.MainOutingCard
 import com.goms.main.component.MainProfileCard
+import com.goms.main.component.MainTimeProfileCard
 import com.goms.main.viewmodel.MainViewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import kotlinx.coroutines.delay
+import java.util.Date
 
 @Composable
 fun MainRoute(
@@ -58,6 +61,7 @@ fun MainRoute(
     viewModel: MainViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
 ) {
     val role by viewModel.role.collectAsStateWithLifecycle(initialValue = "")
+    val timeValue by viewModel.timeValue.collectAsStateWithLifecycle(initialValue = "Off")
     val isRefreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
     val getProfileUiState by viewModel.getProfileUiState.collectAsStateWithLifecycle()
     val getLateRankListUiState by viewModel.getLateRankListUiState.collectAsStateWithLifecycle()
@@ -65,17 +69,21 @@ fun MainRoute(
     val getOutingCountUiState by viewModel.getOutingCountUiState.collectAsStateWithLifecycle()
 
     var isQrcodeLaunch by rememberSaveable { mutableStateOf(true) }
+    var isTimeLaunch by rememberSaveable { mutableStateOf(false) }
 
     LaunchedEffect(role) {
         if (qrcodeState == "On" && isQrcodeLaunch && role.isNotBlank()) {
             onQrcodeClick(Authority.valueOf(role))
             isQrcodeLaunch = false
         }
+
+        isTimeLaunch = timeValue == "On" && role == Authority.ROLE_STUDENT_COUNCIL.name
     }
 
     MainScreen(
         role = if (role.isNotBlank()) Authority.valueOf(role) else Authority.ROLE_STUDENT,
         isRefreshing = isRefreshing,
+        isTimeLaunch = isTimeLaunch,
         getProfileUiState = getProfileUiState,
         getLateRankListUiState = getLateRankListUiState,
         getOutingListUiState = getOutingListUiState,
@@ -91,6 +99,7 @@ fun MainRoute(
             viewModel.getProfile()
             viewModel.getLateRankList()
             viewModel.getOutingCount()
+            viewModel.getTimeValue()
         }
     )
 }
@@ -99,6 +108,7 @@ fun MainRoute(
 fun MainScreen(
     role: Authority,
     isRefreshing: Boolean,
+    isTimeLaunch: Boolean,
     getProfileUiState: GetProfileUiState,
     getLateRankListUiState: GetLateRankListUiState,
     getOutingListUiState: GetOutingListUiState,
@@ -141,6 +151,13 @@ fun MainScreen(
 
     val scrollState = rememberScrollState()
     val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = isRefreshing)
+    var currentTime by rememberSaveable { mutableStateOf(Date()) }
+    LaunchedEffect("Time") {
+        while (true) {
+            delay(1_000)
+            currentTime = Date()
+        }
+    }
 
     SwipeRefresh(
         state = swipeRefreshState,
@@ -179,10 +196,18 @@ fun MainScreen(
                         .padding(horizontal = 16.dp),
                     verticalArrangement = Arrangement.spacedBy(32.dp)
                 ) {
-                    MainProfileCard(
-                        getProfileUiState = getProfileUiState,
-                        onErrorToast = onErrorToast
-                    )
+                    if (isTimeLaunch) {
+                        MainTimeProfileCard(
+                            time = currentTime,
+                            getProfileUiState = getProfileUiState,
+                            onErrorToast = onErrorToast
+                        )
+                    } else {
+                        MainProfileCard(
+                            getProfileUiState = getProfileUiState,
+                            onErrorToast = onErrorToast
+                        )
+                    }
                     MainLateCard(
                         role = role,
                         getLateRankListUiState = getLateRankListUiState,
