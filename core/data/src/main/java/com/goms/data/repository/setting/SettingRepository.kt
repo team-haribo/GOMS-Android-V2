@@ -16,4 +16,8 @@ interface SettingRepository {
     fun getQrcodeValue(): Flow<String>
 
     suspend fun setQrcodeValue(qrcodeValue: String)
+
+    fun getTimeValue(): Flow<String>
+
+    suspend fun setTimeValue(timeValue: String)
 }

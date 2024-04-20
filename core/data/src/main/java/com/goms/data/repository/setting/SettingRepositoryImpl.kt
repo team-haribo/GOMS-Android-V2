@@ -31,4 +31,11 @@ class SettingRepositoryImpl @Inject constructor(
         settingDataSource.setQrcodeValue(qrcodeValue)
     }
 
+    override fun getTimeValue(): Flow<String> {
+        return settingDataSource.getTimeValue()
+    }
+
+    override suspend fun setTimeValue(timeValue: String) {
+        settingDataSource.setTimeValue(timeValue)
+    }
 }
