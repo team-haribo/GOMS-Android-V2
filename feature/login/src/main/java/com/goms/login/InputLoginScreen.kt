@@ -44,7 +44,7 @@ import com.goms.login.viewmodel.LoginViewModel
 import com.goms.login.viewmodel.uistate.LoginUiState
 import com.goms.login.viewmodel.uistate.SaveTokenUiState
 import com.goms.model.request.auth.LoginRequestModel
-import com.goms.ui.isStrongEmail
+import com.goms.model.util.ResourceKeys
 
 @Composable
 fun InputLoginRoute(
@@ -73,7 +73,7 @@ fun InputLoginRoute(
         loginCallBack = {
             viewModel.login(
                 body = LoginRequestModel(
-                    "${viewModel.email.value}@gsm.hs.kr",
+                    "${viewModel.email.value}${ResourceKeys.EMAIL_DOMAIN}",
                     viewModel.password.value
                 )
             )
@@ -132,6 +132,12 @@ fun InputLoginScreen(
                 isLoading = false
                 isError = true
                 onErrorToast(null, "해당 유저가 존재하지 않습니다")
+            }
+
+            is LoginUiState.EmailNotValid -> {
+                isLoading = false
+                isError = true
+                onErrorToast(null, "이메일 형식이 올바르지 않습니다")
             }
 
             is LoginUiState.Error -> {
@@ -198,13 +204,8 @@ fun InputLoginScreen(
                 state = if (email.isNotBlank() && password.isNotBlank()) ButtonState.Normal
                 else ButtonState.Enable
             ) {
-                if (!isStrongEmail(email)) {
-                    isLoading = false
-                    onErrorToast(null, "이메일 형식이 올바르지 않습니다")
-                } else {
-                    loginCallBack()
-                    isLoading = true
-                }
+                loginCallBack()
+                isLoading = true
             }
             Spacer(modifier = Modifier.height(animatedSpacerHeight))
         }

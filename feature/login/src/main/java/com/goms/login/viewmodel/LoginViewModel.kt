@@ -12,6 +12,7 @@ import com.goms.login.viewmodel.uistate.LoginUiState
 import com.goms.login.viewmodel.uistate.SaveTokenUiState
 import com.goms.model.request.auth.LoginRequestModel
 import com.goms.model.response.auth.LoginResponseModel
+import com.goms.ui.isValidEmail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -35,24 +36,28 @@ class LoginViewModel @Inject constructor(
     var password = savedStateHandle.getStateFlow(key = PASSWORD, initialValue = "")
 
     fun login(body: LoginRequestModel) = viewModelScope.launch {
-        loginUseCase(body = body)
-            .asResult()
-            .collectLatest { result ->
-                when (result) {
-                    is Result.Loading -> _loginUiState.value = LoginUiState.Loading
-                    is Result.Success -> {
-                        _loginUiState.value = LoginUiState.Success(result.data)
-                        saveToken(result.data)
-                    }
-                    is Result.Error -> {
-                        _loginUiState.value = LoginUiState.Error(result.exception)
-                        result.exception.errorHandling(
-                            badRequestAction = { _loginUiState.value = LoginUiState.BadRequest },
-                            notFoundAction = { _loginUiState.value = LoginUiState.NotFound }
-                        )
+        if (!isValidEmail(body.email)) {
+            _loginUiState.value = LoginUiState.EmailNotValid
+        } else {
+            loginUseCase(body = body)
+                .asResult()
+                .collectLatest { result ->
+                    when (result) {
+                        is Result.Loading -> _loginUiState.value = LoginUiState.Loading
+                        is Result.Success -> {
+                            _loginUiState.value = LoginUiState.Success(result.data)
+                            saveToken(result.data)
+                        }
+                        is Result.Error -> {
+                            _loginUiState.value = LoginUiState.Error(result.exception)
+                            result.exception.errorHandling(
+                                badRequestAction = { _loginUiState.value = LoginUiState.BadRequest },
+                                notFoundAction = { _loginUiState.value = LoginUiState.NotFound }
+                            )
+                        }
                     }
                 }
-            }
+        }
     }
 
     fun saveToken(token: LoginResponseModel) = viewModelScope.launch {

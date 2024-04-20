@@ -1,6 +1,5 @@
 package com.goms.design_system.icon
 
-import android.support.v4.os.IResultReceiver2.Default
 import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -159,12 +158,14 @@ fun QrScanGuideIcon(
 
 @Composable
 fun QrCreateIcon(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
 ) {
     Image(
         painter = painterResource(id = R.drawable.ic_qr_create),
         contentDescription = "Qr Create Icon",
-        modifier = modifier
+        modifier = modifier,
+        colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
     )
 }
 
@@ -263,6 +264,45 @@ fun DefaultImageIcon(
     Image(
         painter = painterResource(id = R.drawable.ic_default_image),
         contentDescription = "Default Image Icon",
+        modifier = modifier,
+        colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
+    )
+}
+
+@Composable
+fun OutingIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+) {
+    Image(
+        painter = painterResource(id = R.drawable.ic_outing),
+        contentDescription = "Outing Icon",
+        modifier = modifier,
+        colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
+    )
+}
+
+@Composable
+fun ClockIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+) {
+    Image(
+        painter = painterResource(id = R.drawable.ic_clock),
+        contentDescription = "Clock Icon",
+        modifier = modifier,
+        colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
+    )
+}
+
+@Composable
+fun MenuIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+) {
+    Image(
+        painter = painterResource(id = R.drawable.ic_menu),
+        contentDescription = "Menu Icon",
         modifier = modifier,
         colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
     )

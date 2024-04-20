@@ -43,7 +43,7 @@ import com.goms.find_password.component.FindPasswordText
 import com.goms.model.request.auth.SendNumberRequestModel
 import com.goms.find_password.viewmodel.FindPasswordViewmodel
 import com.goms.find_password.viewmodel.uistate.SendNumberUiState
-import com.goms.ui.isStrongEmail
+import com.goms.model.util.ResourceKeys
 
 @Composable
 fun EmailCheckRoute(
@@ -62,8 +62,9 @@ fun EmailCheckRoute(
         sendNumberUiState = sendNumberUiState,
         emailCheckCallBack = {
             viewModel.sendNumber(
-                body = SendNumberRequestModel("${viewModel.email.value}@gsm.hs.kr")
-        ) },
+                body = SendNumberRequestModel("${viewModel.email.value}${ResourceKeys.EMAIL_DOMAIN}")
+            )
+        },
         onNumberClick = onNumberClick,
         initCallBack = { viewModel.initSendNumber() },
         onErrorToast = onErrorToast
@@ -96,6 +97,11 @@ fun EmailCheckScreen(
         when (sendNumberUiState) {
             is SendNumberUiState.Loading -> Unit
             is SendNumberUiState.Success -> onNumberClick()
+            is SendNumberUiState.EmailNotValid -> {
+                isLoading = false
+                onErrorToast(null, "이메일 형식이 올바르지 않습니다")
+            }
+
             is SendNumberUiState.Error -> {
                 isLoading = false
                 onErrorToast(sendNumberUiState.exception, "인증번호 전송이 실패했습니다.")
@@ -142,13 +148,8 @@ fun EmailCheckScreen(
                 state = if (email.isNotBlank()) ButtonState.Normal
                 else ButtonState.Enable
             ) {
-                if (!isStrongEmail(email)) {
-                    isLoading = false
-                    onErrorToast(null, "이메일 형식이 올바르지 않습니다")
-                } else {
-                    emailCheckCallBack()
-                    isLoading = true
-                }
+                emailCheckCallBack()
+                isLoading = true
             }
             Spacer(modifier = Modifier.height(animatedSpacerHeight))
         }

@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.goms.common.result.Result
 import com.goms.common.result.asResult
 import com.goms.data.repository.auth.AuthRepository
+import com.goms.data.repository.setting.SettingRepository
 import com.goms.domain.account.GetProfileUseCase
 import com.goms.domain.council.ChangeAuthorityUseCase
 import com.goms.domain.council.DeleteBlackListUseCase
@@ -32,6 +33,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 import java.util.UUID
@@ -52,25 +54,27 @@ class MainViewModel @Inject constructor(
     private val setBlackListUseCase: SetBlackListUseCase,
     private val deleteBlackListUseCase: DeleteBlackListUseCase,
     private val studentSearchUseCase: StudentSearchUseCase,
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val settingRepository: SettingRepository
 ) : ViewModel() {
     val role = authRepository.getRole()
 
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing = _isRefreshing.asStateFlow()
 
+    private val _timeValue = MutableStateFlow("")
+    val timeValue = _timeValue.asStateFlow()
+
     private val _getProfileUiState = MutableStateFlow<GetProfileUiState>(GetProfileUiState.Loading)
     val getProfileUiState = _getProfileUiState.asStateFlow()
 
-    private val _getLateRankListUiState = MutableStateFlow<GetLateRankListUiState>(
-        GetLateRankListUiState.Loading)
+    private val _getLateRankListUiState = MutableStateFlow<GetLateRankListUiState>(GetLateRankListUiState.Loading)
     val getLateRankListUiState = _getLateRankListUiState.asStateFlow()
 
     private val _getOutingListUiState = MutableStateFlow<GetOutingListUiState>(GetOutingListUiState.Loading)
     val getOutingListUiState = _getOutingListUiState.asStateFlow()
 
-    private val _getOutingCountUiState = MutableStateFlow<GetOutingCountUiState>(
-        GetOutingCountUiState.Loading)
+    private val _getOutingCountUiState = MutableStateFlow<GetOutingCountUiState>(GetOutingCountUiState.Loading)
     val getOutingCountUiState = _getOutingCountUiState.asStateFlow()
 
     private val _outingSearchUiState = MutableStateFlow<OutingSearchUiState>(OutingSearchUiState.Loading)
@@ -82,8 +86,7 @@ class MainViewModel @Inject constructor(
     private val _getLateListUiState = MutableStateFlow<GetLateListUiState>(GetLateListUiState.Loading)
     val getLateListUiState = _getLateListUiState.asStateFlow()
 
-    private val _getStudentListUiState = MutableStateFlow<GetStudentListUiState>(
-        GetStudentListUiState.Loading)
+    private val _getStudentListUiState = MutableStateFlow<GetStudentListUiState>(GetStudentListUiState.Loading)
     val getStudentListUiState = _getStudentListUiState.asStateFlow()
 
     private val _changeAuthorityUiState = MutableStateFlow<Result<Unit>>(Result.Loading)
@@ -106,6 +109,10 @@ class MainViewModel @Inject constructor(
     var filterGrade = savedStateHandle.getStateFlow(key = FILTER_GRADE, initialValue = "")
     var filterGender = savedStateHandle.getStateFlow(key = FILTER_GENDER, initialValue = "")
     var filterMajor = savedStateHandle.getStateFlow(key = FILTER_MAJOR, initialValue = "")
+
+    fun getTimeValue() = viewModelScope.launch {
+        _timeValue.value = settingRepository.getTimeValue().first().replace("\"","")
+    }
 
     fun getProfile() = viewModelScope.launch {
         getProfileUseCase()

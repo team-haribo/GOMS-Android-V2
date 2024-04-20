@@ -1,6 +1,5 @@
 package com.goms.main.component
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,13 +16,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
-import com.goms.design_system.R
 import com.goms.design_system.component.shimmer.shimmerEffect
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
@@ -32,24 +26,29 @@ import com.goms.main.data.toData
 import com.goms.main.viewmodel.uistate.GetProfileUiState
 import com.goms.model.enum.Authority
 import com.goms.ui.toText
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 @Composable
-fun MainProfileCard(
+fun MainTimeProfileCard(
     modifier: Modifier = Modifier,
+    time: Date,
     getProfileUiState: GetProfileUiState,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit
 ) {
     when (getProfileUiState) {
         GetProfileUiState.Loading -> {
-            ShimmerMainProfileCardComponent(modifier = modifier)
+            ShimmerMainTimeProfileCardComponent(modifier = modifier)
         }
 
         is GetProfileUiState.Success -> {
             val data = getProfileUiState.getProfileResponseModel
 
-            MainProfileCardComponent(
+            MainTimeProfileCardComponent(
                 modifier = modifier,
-                data = data.toData()
+                data = data.toData(),
+                time = time
             )
         }
 
@@ -60,15 +59,16 @@ fun MainProfileCard(
 }
 
 @Composable
-fun MainProfileCardComponent(
+fun MainTimeProfileCardComponent(
     modifier: Modifier,
-    data: ProfileData
+    data: ProfileData,
+    time: Date
 ) {
     val (stateColor, stateText) = when {
         data.isBlackList -> Pair(colors.N5, "외출 금지")
         data.isOuting -> Pair(colors.P5, "외출 중")
         data.authority == Authority.ROLE_STUDENT_COUNCIL -> Pair(colors.A7, "학생회")
-        else -> Pair(colors.G4, "외출 대기 중")
+        else -> Pair(colors.G7, "외출 대기 중")
     }
 
     Surface(
@@ -80,26 +80,9 @@ fun MainProfileCardComponent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            if (data.profileUrl.isNullOrEmpty()) {
-                Image(
-                    painter = painterResource(R.drawable.ic_profile),
-                    contentDescription = "Default Profile Image",
-                    modifier = Modifier
-                        .size(64.dp)
-                )
-            } else {
-                AsyncImage(
-                    model = data.profileUrl,
-                    modifier = Modifier
-                        .size(64.dp)
-                        .clip(RoundedCornerShape(40.dp)),
-                    contentScale = ContentScale.Crop,
-                    contentDescription = "Profile Image",
-                )
-            }
-            Spacer(modifier = Modifier.width(16.dp))
             Column(
                 modifier = Modifier.height(56.dp),
                 verticalArrangement = Arrangement.SpaceBetween
@@ -117,19 +100,43 @@ fun MainProfileCardComponent(
                     color = colors.G4
                 )
             }
-            Spacer(modifier = Modifier.weight(1f))
-            Text(
-                text = stateText,
-                style = typography.textSmall,
-                fontWeight = FontWeight.Bold,
-                color = stateColor
-            )
+            Column(
+                modifier = Modifier
+                    .height(64.dp)
+                    .padding(vertical = 4.dp),
+                horizontalAlignment = Alignment.End,
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = stateText,
+                    style = typography.textMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = stateColor
+                )
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = SimpleDateFormat("aa", Locale.ENGLISH).format(time).toString(),
+                        style = typography.textLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = colors.G4
+                    )
+                    Text(
+                        text = SimpleDateFormat("HH : mm : ss").format(time).toString(),
+                        style = typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = colors.G4
+                    )
+                }
+            }
         }
     }
 }
 
 @Composable
-fun ShimmerMainProfileCardComponent(modifier: Modifier) {
+fun ShimmerMainTimeProfileCardComponent(modifier: Modifier) {
     Surface(
         modifier = modifier,
         color = colors.G1,
@@ -141,12 +148,6 @@ fun ShimmerMainProfileCardComponent(modifier: Modifier) {
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Box(
-                modifier = Modifier
-                    .size(64.dp)
-                    .shimmerEffect(color = colors.WHITE)
-            )
-            Spacer(modifier = Modifier.width(16.dp))
             Column(
                 modifier = Modifier.height(56.dp),
                 verticalArrangement = Arrangement.SpaceBetween
@@ -163,11 +164,24 @@ fun ShimmerMainProfileCardComponent(modifier: Modifier) {
                 )
             }
             Spacer(modifier = Modifier.weight(1f))
-            Box(
+            Column(
                 modifier = Modifier
-                    .size(92.dp, 28.dp)
-                    .shimmerEffect(color = colors.WHITE)
-            )
+                    .height(64.dp)
+                    .padding(vertical = 4.dp),
+                horizontalAlignment = Alignment.End,
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(88.dp, 23.dp)
+                        .shimmerEffect(color = colors.WHITE)
+                )
+                Box(
+                    modifier = Modifier
+                        .size(150.dp, 28.dp)
+                        .shimmerEffect(color = colors.WHITE)
+                )
+            }
         }
     }
 }

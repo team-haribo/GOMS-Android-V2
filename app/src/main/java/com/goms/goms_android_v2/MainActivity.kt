@@ -15,6 +15,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import com.goms.common.result.Result
 import com.goms.goms_android_v2.ui.GomsApp
+import com.goms.model.util.ResourceKeys
 import com.goms.ui.createToast
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.model.AppUpdateType
@@ -106,9 +107,9 @@ class MainActivity : ComponentActivity() {
     private fun getNotification() {
         FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                val deviceTokenSF = getSharedPreferences("deviceToken", MODE_PRIVATE)
+                val deviceTokenSF = getSharedPreferences(ResourceKeys.DEVICE_TOKEN, MODE_PRIVATE)
                 val deviceToken = task.result
-                if (deviceTokenSF.getString("device", "") == deviceToken) {
+                if (deviceTokenSF.getString(ResourceKeys.DEVICE, "") == deviceToken) {
                     viewModel.saveDeviceToken(deviceToken = deviceToken)
                     setNotification(deviceToken = deviceToken)
                 }
@@ -121,8 +122,8 @@ class MainActivity : ComponentActivity() {
             viewModel.saveDeviceTokenUiState.collect {
                 when (it) {
                     is Result.Success -> {
-                        val deviceTokenSF = getSharedPreferences("deviceToken", MODE_PRIVATE)
-                        deviceTokenSF.edit().putString("device", deviceToken).apply()
+                        val deviceTokenSF = getSharedPreferences(ResourceKeys.DEVICE_TOKEN, MODE_PRIVATE)
+                        deviceTokenSF.edit().putString(ResourceKeys.DEVICE, deviceToken).apply()
                     }
 
                     is Result.Error, Result.Loading -> Unit

@@ -29,6 +29,7 @@ import com.goms.design_system.component.shimmer.shimmerEffect
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
 import com.goms.design_system.util.shadow
+import com.goms.model.enum.Authority
 import com.goms.setting.data.ProfileData
 import com.goms.setting.data.toData
 import com.goms.setting.viewmodel.uistate.GetProfileUiState
@@ -37,6 +38,7 @@ import com.goms.ui.toText
 @Composable
 fun SettingProfileCard(
     modifier: Modifier = Modifier,
+    role: String,
     onProfileClick: () -> Unit,
     getProfileUiState: GetProfileUiState,
 ) {
@@ -50,6 +52,7 @@ fun SettingProfileCard(
 
             SettingProfileCardComponent(
                 modifier = modifier,
+                role = role,
                 onProfileClick = onProfileClick,
                 data = data.toData()
             )
@@ -62,6 +65,7 @@ fun SettingProfileCard(
 @Composable
 fun SettingProfileCardComponent(
     modifier: Modifier,
+    role: String,
     onProfileClick: () -> Unit,
     data: ProfileData
 ) {
@@ -102,7 +106,10 @@ fun SettingProfileCardComponent(
                         offsetY = 4.dp,
                         blurRadius = 8.dp
                     ),
-                painter = painterResource(id = R.drawable.ic_change_profile),
+                painter = painterResource(
+                    id = if (role == Authority.ROLE_STUDENT_COUNCIL.name) R.drawable.ic_change_profile_admin
+                    else R.drawable.ic_change_profile
+                ),
                 contentDescription = "profile change button"
             )
         }

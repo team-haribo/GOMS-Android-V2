@@ -12,6 +12,8 @@ import com.goms.model.request.auth.SendNumberRequestModel
 import com.goms.find_password.viewmodel.uistate.FindPasswordUiState
 import com.goms.find_password.viewmodel.uistate.SendNumberUiState
 import com.goms.find_password.viewmodel.uistate.VerifyNumberUiState
+import com.goms.ui.isValidEmail
+import com.goms.ui.isValidPassword
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -41,22 +43,38 @@ class FindPasswordViewmodel @Inject constructor(
     var number = savedStateHandle.getStateFlow(key = NUMBER, initialValue = "")
 
     fun findPassword(body: FindPasswordRequestModel) = viewModelScope.launch {
-        findPasswordUseCase(body = body)
-            .onSuccess {
-                it.catch {  remoteError ->
-                    _findPasswordUiState.value = FindPasswordUiState.Error(remoteError)
-                    remoteError.errorHandling(
-                        badRequestAction = { _findPasswordUiState.value = FindPasswordUiState.BadRequest },
-                    )
-                }.collect { result ->
-                    _findPasswordUiState.value = FindPasswordUiState.Success
-                }
-            }.onFailure {
-                _findPasswordUiState.value = FindPasswordUiState.Error(it)
-                it.errorHandling(
-                    badRequestAction = { _findPasswordUiState.value = FindPasswordUiState.BadRequest },
-                )
+        when {
+            password.value != passwordCheck.value -> {
+                _findPasswordUiState.value = FindPasswordUiState.PasswordMismatch
             }
+
+            !isValidPassword(body.password) -> {
+                _findPasswordUiState.value = FindPasswordUiState.PasswordNotValid
+            }
+
+            else -> {
+                findPasswordUseCase(body = body)
+                    .onSuccess {
+                        it.catch { remoteError ->
+                            _findPasswordUiState.value = FindPasswordUiState.Error(remoteError)
+                            remoteError.errorHandling(
+                                badRequestAction = {
+                                    _findPasswordUiState.value = FindPasswordUiState.BadRequest
+                                },
+                            )
+                        }.collect { result ->
+                            _findPasswordUiState.value = FindPasswordUiState.Success
+                        }
+                    }.onFailure {
+                        _findPasswordUiState.value = FindPasswordUiState.Error(it)
+                        it.errorHandling(
+                            badRequestAction = {
+                                _findPasswordUiState.value = FindPasswordUiState.BadRequest
+                            },
+                        )
+                    }
+            }
+        }
     }
 
     fun initFindPassword() {
@@ -64,16 +82,20 @@ class FindPasswordViewmodel @Inject constructor(
     }
 
     fun sendNumber(body: SendNumberRequestModel) = viewModelScope.launch {
-        sendNumberUseCase(body = body)
-            .onSuccess {
-                it.catch {  remoteError ->
-                    _sendNumberUiState.value = SendNumberUiState.Error(remoteError)
-                }.collect { result ->
-                    _sendNumberUiState.value = SendNumberUiState.Success
+        if (!isValidEmail(body.email)) {
+            _sendNumberUiState.value = SendNumberUiState.EmailNotValid
+        } else {
+            sendNumberUseCase(body = body)
+                .onSuccess {
+                    it.catch { remoteError ->
+                        _sendNumberUiState.value = SendNumberUiState.Error(remoteError)
+                    }.collect { result ->
+                        _sendNumberUiState.value = SendNumberUiState.Success
+                    }
+                }.onFailure {
+                    _sendNumberUiState.value = SendNumberUiState.Error(it)
                 }
-            }.onFailure {
-                _sendNumberUiState.value = SendNumberUiState.Error(it)
-            }
+        }
     }
 
     fun initSendNumber() {
@@ -83,11 +105,15 @@ class FindPasswordViewmodel @Inject constructor(
     fun verifyNumber(email: String, authCode: String) = viewModelScope.launch {
         verifyNumberUseCase(email = email, authCode = authCode)
             .onSuccess {
-                it.catch {  remoteError ->
+                it.catch { remoteError ->
                     _verifyNumberUiState.value = VerifyNumberUiState.Error(remoteError)
                     remoteError.errorHandling(
-                        badRequestAction = { _verifyNumberUiState.value = VerifyNumberUiState.BadRequest },
-                        notFoundAction = { _verifyNumberUiState.value = VerifyNumberUiState.NotFound }
+                        badRequestAction = {
+                            _verifyNumberUiState.value = VerifyNumberUiState.BadRequest
+                        },
+                        notFoundAction = {
+                            _verifyNumberUiState.value = VerifyNumberUiState.NotFound
+                        }
                     )
                 }.collect { result ->
                     _verifyNumberUiState.value = VerifyNumberUiState.Success
@@ -95,7 +121,9 @@ class FindPasswordViewmodel @Inject constructor(
             }.onFailure {
                 _verifyNumberUiState.value = VerifyNumberUiState.Error(it)
                 it.errorHandling(
-                    badRequestAction = { _verifyNumberUiState.value = VerifyNumberUiState.BadRequest },
+                    badRequestAction = {
+                        _verifyNumberUiState.value = VerifyNumberUiState.BadRequest
+                    },
                     notFoundAction = { _verifyNumberUiState.value = VerifyNumberUiState.NotFound }
                 )
             }

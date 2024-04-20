@@ -42,7 +42,7 @@ import com.goms.model.request.account.FindPasswordRequestModel
 import com.goms.find_password.component.RePasswordText
 import com.goms.find_password.viewmodel.uistate.FindPasswordUiState
 import com.goms.find_password.viewmodel.FindPasswordViewmodel
-import com.goms.ui.isStrongPassword
+import com.goms.model.util.ResourceKeys
 
 @Composable
 fun FindPasswordRoute(
@@ -68,7 +68,7 @@ fun FindPasswordRoute(
         findPasswordCallback = {
             viewModel.findPassword(
                 body = FindPasswordRequestModel(
-                    email = "${viewModel.email.value}@gsm.hs.kr",
+                    email = "${viewModel.email.value}${ResourceKeys.EMAIL_DOMAIN}",
                     password = viewModel.password.value
                 )
             )
@@ -94,7 +94,6 @@ fun FindPasswordScreen(
     val animatedSpacerHeight by animateDpAsState(targetValue = if (!isKeyboardOpen) 100.dp else 16.dp)
     var isLoading by remember { mutableStateOf(false) }
     var isError by remember { mutableStateOf(false) }
-    var errorText by remember { mutableStateOf("") }
     var openDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(isKeyboardOpen) {
@@ -114,6 +113,18 @@ fun FindPasswordScreen(
             is FindPasswordUiState.BadRequest -> {
                 isLoading = false
                 onErrorToast(null, "이미 사용중인 비밀번호입니다")
+            }
+
+            is FindPasswordUiState.PasswordMismatch -> {
+                isLoading = false
+                isError = true
+                onErrorToast(null, "비밀번호가 일치하지 않습니다")
+            }
+
+            is FindPasswordUiState.PasswordNotValid -> {
+                isLoading = false
+                isError = true
+                onErrorToast(null, "비밀번호 요구사항을 충족하지 않습니다")
             }
 
             is FindPasswordUiState.Error -> {
@@ -160,7 +171,6 @@ fun FindPasswordScreen(
                 modifier = Modifier.fillMaxWidth(),
                 isDescription = true,
                 isError = isError,
-                errorText = errorText,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                 placeHolder = "비밀번호 확인",
                 setText = passwordCheck,
@@ -174,24 +184,8 @@ fun FindPasswordScreen(
                 state = if (password.isNotBlank() && passwordCheck.isNotBlank()) ButtonState.Normal
                 else ButtonState.Enable
             ) {
-                when {
-                    password != passwordCheck -> {
-                        isError = true
-                        errorText = "비밀번호가 일치하지 않습니다"
-                        onErrorToast(null, "비밀번호가 일치하지 않습니다")
-                    }
-
-                    !isStrongPassword(password) -> {
-                        isError = true
-                        errorText = "비밀번호 요구사항을 충족하지 않습니다"
-                        onErrorToast(null, "비밀번호 요구사항을 충족하지 않습니다")
-                    }
-
-                    else -> {
-                        findPasswordCallback()
-                        isLoading = true
-                    }
-                }
+                findPasswordCallback()
+                isLoading = true
             }
             Spacer(modifier = Modifier.height(animatedSpacerHeight))
         }

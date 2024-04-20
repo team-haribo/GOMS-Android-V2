@@ -7,6 +7,7 @@ import com.goms.common.network.errorHandling
 import com.goms.domain.account.RePasswordUseCase
 import com.goms.model.request.account.RePasswordRequestModel
 import com.goms.re_password.viewmodel.uistate.RePasswordUiState
+import com.goms.ui.isValidPassword
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -27,22 +28,34 @@ class RePasswordViewmodel @Inject constructor(
     var newCheckPassword = savedStateHandle.getStateFlow(key = NEW_CHECK_PASSWORD, initialValue = "")
 
     fun rePassword(body: RePasswordRequestModel) = viewModelScope.launch {
-        rePasswordUseCase(body = body)
-            .onSuccess {
-                it.catch {  remoteError ->
-                    _rePasswordUiState.value = RePasswordUiState.Error(remoteError)
-                    remoteError.errorHandling(
-                        badRequestAction = { _rePasswordUiState.value = RePasswordUiState.BadRequest },
-                    )
-                }.collect { result ->
-                    _rePasswordUiState.value = RePasswordUiState.Success
-                }
-            }.onFailure {
-                _rePasswordUiState.value = RePasswordUiState.Error(it)
-                it.errorHandling(
-                    badRequestAction = { _rePasswordUiState.value = RePasswordUiState.BadRequest },
-                )
+        when {
+            newPassword.value != newCheckPassword.value -> {
+                _rePasswordUiState.value = RePasswordUiState.PasswordMismatch
             }
+
+            !isValidPassword(body.newPassword) -> {
+                _rePasswordUiState.value = RePasswordUiState.PasswordNotValid
+            }
+
+            else -> {
+                rePasswordUseCase(body = body)
+                    .onSuccess {
+                        it.catch {  remoteError ->
+                            _rePasswordUiState.value = RePasswordUiState.Error(remoteError)
+                            remoteError.errorHandling(
+                                badRequestAction = { _rePasswordUiState.value = RePasswordUiState.BadRequest },
+                            )
+                        }.collect { result ->
+                            _rePasswordUiState.value = RePasswordUiState.Success
+                        }
+                    }.onFailure {
+                        _rePasswordUiState.value = RePasswordUiState.Error(it)
+                        it.errorHandling(
+                            badRequestAction = { _rePasswordUiState.value = RePasswordUiState.BadRequest },
+                        )
+                    }
+            }
+        }
     }
 
     fun initRePassword() {

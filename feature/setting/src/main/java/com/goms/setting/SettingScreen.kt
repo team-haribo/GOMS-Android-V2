@@ -64,12 +64,14 @@ fun SettingRoute(
     val themeState by viewModel.themeState.collectAsStateWithLifecycle()
     val qrcodeState by viewModel.qrcodeState.collectAsStateWithLifecycle()
     val alarmState by viewModel.alarmState.collectAsStateWithLifecycle()
+    val timeState by viewModel.timeState.collectAsStateWithLifecycle()
     val logoutUiState by viewModel.logoutState.collectAsStateWithLifecycle()
     val setThemeUiState by viewModel.setThemeState.collectAsStateWithLifecycle()
 
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
     var qrcodeData by remember { mutableStateOf("") }
     var alarmData by remember { mutableStateOf("") }
+    var timeData by remember { mutableStateOf("") }
 
     val galleryLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
@@ -102,6 +104,10 @@ fun SettingRoute(
                 viewModel.setAlarm(alarmData)
                 onUpdateAlarm(alarmData)
             }
+
+            if (!timeState.isNullOrEmpty()) {
+                viewModel.setTime(timeData)
+            }
         }
     }
 
@@ -126,6 +132,7 @@ fun SettingRoute(
             viewModel.getThemeValue()
             viewModel.getQrcodeValue()
             viewModel.getAlarmValue()
+            viewModel.getTimeValue()
         },
         onThemeSelect = { selectedTheme ->
             viewModel.initSetTheme()
@@ -134,6 +141,7 @@ fun SettingRoute(
         onUpdateTheme = { onThemeSelect() },
         onUpdateQrcode = { qrcodeData = it },
         onUpdateAlarm = { alarmData = it },
+        onUpdateTime = { timeData = it },
         setDefaultProfileUiState = { viewModel.initProfileImage() },
         logoutUiState = logoutUiState,
         setThemeUiState = setThemeUiState,
@@ -141,6 +149,7 @@ fun SettingRoute(
         themeState = themeState,
         qrcodeState = qrcodeState,
         alarmState = alarmState,
+        timeState = timeState,
         profileImageUiState = profileImageUiState,
         onErrorToast = onErrorToast,
         onPasswordCheck = onPasswordCheck
@@ -160,6 +169,7 @@ fun SettingScreen(
     onUpdateTheme: () -> Unit,
     onUpdateQrcode: (String) -> Unit,
     onUpdateAlarm: (String) -> Unit,
+    onUpdateTime: (String) -> Unit,
     setDefaultProfileUiState: () -> Unit,
     logoutUiState: LogoutUiState,
     setThemeUiState: SetThemeUiState,
@@ -167,6 +177,7 @@ fun SettingScreen(
     themeState: String,
     qrcodeState: String,
     alarmState: String,
+    timeState: String,
     profileImageUiState: ProfileImageUiState,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     onPasswordCheck: () -> Unit
@@ -236,6 +247,7 @@ fun SettingScreen(
             Spacer(modifier = Modifier.height(16.dp))
             SettingProfileCard(
                 modifier = Modifier,
+                role = role,
                 onProfileClick = { openBottomSheet = true },
                 getProfileUiState = getProfileUiState
             )
@@ -282,6 +294,17 @@ fun SettingScreen(
                 )
             }
             if (role == Authority.ROLE_STUDENT_COUNCIL.name) {
+                SettingSwitchComponent(
+                    modifier = Modifier.padding(horizontal = 8.dp),
+                    title = "시계 나타내기",
+                    detail = "프로필 카드에 초 단위의 시간을 나타내요",
+                    switchOnBackground = colors.A7,
+                    switchOffBackground = colors.G4,
+                    isSwitchOn = timeState == "On",
+                    onFunctionOff = { if (timeState == "On") onUpdateTime("Off") },
+                    onFunctionOn = { if (timeState == "Off") onUpdateTime("On") }
+                )
+                Spacer(modifier = Modifier.height(32.dp))
                 SettingSwitchComponent(
                     modifier = Modifier.padding(horizontal = 8.dp),
                     title = "Qr 생성 바로 켜기",
