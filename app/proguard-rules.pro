@@ -19,3 +19,13 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# Keep all classes and class members in the specified packages from being removed or renamed
+-keep,allowshrinking class com.goms.** { *; }
+-keep,allowshrinking class okhttp3.** { *; }
+-keep,allowshrinking class kotlin.** { *; }
+-keep,allowshrinking class java.** { *; }
+-keep,allowshrinking class retrofit2.** { *; }
+-keep,allowshrinking class org.** { *; }
+-keep,allowshrinking class javax.** { *; }
+-keep,allowshrinking class _COROUTINE.** { *; }
