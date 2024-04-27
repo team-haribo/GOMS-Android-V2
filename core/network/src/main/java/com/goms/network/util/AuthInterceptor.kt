@@ -26,18 +26,13 @@ class AuthInterceptor @Inject constructor(
         const val PATCH = "PATCH"
     }
 
-    private lateinit var accessToken: String
-    private lateinit var refreshToken: String
-
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
         val path = request.url.encodedPath
         val method = request.method
 
-        runBlocking {
-            accessToken = dataSource.getAccessToken().first().replace("\"", "")
-            refreshToken = dataSource.getRefreshToken().first().replace("\"", "")
-        }
+        val accessToken = runBlocking { dataSource.getAccessToken().first() }
+        val refreshToken = runBlocking { dataSource.getRefreshToken().first() }
 
         val newRequest = when {
             ignorePaths.any { path.contains(it) } && method in listOf(POST, GET) -> {
