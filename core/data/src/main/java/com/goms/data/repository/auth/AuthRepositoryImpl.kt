@@ -24,8 +24,8 @@ class AuthRepositoryImpl @Inject constructor(
         return remoteAuthDataSource.login(body = body.toDto()).map { it.toModel() }
     }
 
-    override suspend fun tokenRefresh(): Flow<LoginResponseModel> {
-        return remoteAuthDataSource.tokenRefresh().map { it.toModel() }
+    override suspend fun tokenRefresh(refreshToken: String): Flow<LoginResponseModel> {
+        return remoteAuthDataSource.tokenRefresh(refreshToken = refreshToken).map { it.toModel() }
     }
 
     override suspend fun saveToken(token: LoginResponseModel) {
@@ -36,6 +36,10 @@ class AuthRepositoryImpl @Inject constructor(
             localAuthDataSource.setRefreshTokenExp(it.refreshTokenExp)
             localAuthDataSource.setAuthority(it.authority.name)
         }
+    }
+
+    override fun getRefreshToken(): Flow<String> {
+        return localAuthDataSource.getRefreshToken()
     }
 
     override fun getRole(): Flow<String> {
