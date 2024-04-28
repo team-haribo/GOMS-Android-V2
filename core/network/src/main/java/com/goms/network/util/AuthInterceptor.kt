@@ -35,10 +35,10 @@ class AuthInterceptor @Inject constructor(
         val refreshToken = runBlocking { dataSource.getRefreshToken().first() }
 
         val newRequest = when {
-            ignorePaths.any { path.contains(it) } && method in listOf(POST, GET) -> {
+            ignorePaths.any { path.contains(it) } && method in listOf(POST, GET, PATCH) -> {
                 request
             }
-            path.endsWith(RequestUrls.AUTH.auth) && method in listOf(DELETE, PATCH) -> {
+            path.endsWith(RequestUrls.AUTH.auth) && method in listOf(DELETE) -> {
                 request.newBuilder().addHeader("refreshToken", "${ResourceKeys.BEARER} $refreshToken").build()
             }
             else -> {
