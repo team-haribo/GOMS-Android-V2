@@ -11,7 +11,7 @@ interface AuthDataSource {
 
     suspend fun login(body: LoginRequest): Flow<LoginResponse>
 
-    suspend fun tokenRefresh(): Flow<LoginResponse>
+    suspend fun tokenRefresh(refreshToken: String): Flow<LoginResponse>
 
     suspend fun sendNumber(body: SendNumberRequest): Flow<Unit>
 

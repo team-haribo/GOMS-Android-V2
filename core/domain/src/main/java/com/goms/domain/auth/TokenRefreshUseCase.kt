@@ -8,6 +8,6 @@ import javax.inject.Inject
 class TokenRefreshUseCase @Inject constructor(
     private val authRepository: AuthRepository
 ) {
-    suspend operator fun invoke() : Flow<LoginResponseModel> =
-        authRepository.tokenRefresh()
+    suspend operator fun invoke(refreshToken: String) : Flow<LoginResponseModel> =
+        authRepository.tokenRefresh(refreshToken = refreshToken)
 }

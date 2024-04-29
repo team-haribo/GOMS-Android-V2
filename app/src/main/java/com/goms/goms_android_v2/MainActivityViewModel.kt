@@ -13,6 +13,7 @@ import com.goms.domain.notification.DeleteDeviceTokenUseCase
 import com.goms.domain.notification.SaveDeviceTokenUseCase
 import com.goms.model.response.account.ProfileResponseModel
 import com.goms.model.response.auth.LoginResponseModel
+import com.goms.model.util.ResourceKeys
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -25,6 +26,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
@@ -36,8 +38,10 @@ class MainActivityViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val settingRepository: SettingRepository
 ) : ViewModel() {
+    private val refreshToken = runBlocking { authRepository.getRefreshToken().first()  }
+
     val uiState: StateFlow<MainActivityUiState> = flow {
-        tokenRefreshUseCase().collect {
+        tokenRefreshUseCase(refreshToken = "${ResourceKeys.BEARER} $refreshToken").collect {
             emit(it)
         }
     }

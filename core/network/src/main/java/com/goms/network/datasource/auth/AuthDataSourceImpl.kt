@@ -31,10 +31,10 @@ class AuthDataSourceImpl @Inject constructor(
         )
     }.flowOn(Dispatchers.IO)
 
-    override suspend fun tokenRefresh(): Flow<LoginResponse> = flow {
+    override suspend fun tokenRefresh(refreshToken: String): Flow<LoginResponse> = flow {
         emit(
             GomsApiHandler<LoginResponse>()
-                .httpRequest { authAPI.tokenRefresh() }
+                .httpRequest { authAPI.tokenRefresh(refreshToken = refreshToken) }
                 .sendRequest()
         )
     }.flowOn(Dispatchers.IO)
