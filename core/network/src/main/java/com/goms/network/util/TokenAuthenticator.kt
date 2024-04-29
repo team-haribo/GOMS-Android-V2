@@ -17,47 +17,43 @@ import javax.inject.Inject
 class TokenAuthenticator @Inject constructor(
     private val dataSource: AuthTokenDataSource
 ) : Authenticator {
-    private var isException: Boolean = false
-    private lateinit var accessToken: String
-    private lateinit var refreshToken: String
-
     override fun authenticate(route: Route?, response: Response): Request? {
-        val retrofit = Retrofit.Builder()
-            .baseUrl(BuildConfig.BASE_URL)
-            .addConverterFactory(MoshiConverterFactory.create())
-            .build()
-        val authApi = retrofit.create(AuthAPI::class.java)
+        val refreshToken = runBlocking { dataSource.getRefreshToken().first() }
 
-        runBlocking {
-            accessToken = dataSource.getAccessToken().first()
-            refreshToken = dataSource.getRefreshToken().first()
+        val newAccessToken = refreshAccessToken(refreshToken)
 
-            runCatching {
-                authApi.tokenRefresh("${ResourceKeys.BEARER} $refreshToken")
-            }.onSuccess {
-                with(dataSource) {
-                    setAccessToken(it.accessToken)
-                    setRefreshToken(it.refreshToken)
-                    setAccessTokenExp(it.accessTokenExp)
-                    setRefreshTokenExp(it.refreshTokenExp)
-                    setAuthority(it.authority.name)
-                }
-                accessToken = it.accessToken
-            }.onFailure {
-                isException = true
-            }
+        return if (newAccessToken.isNullOrEmpty()) {
+            null
+        } else {
+            response.request.newBuilder()
+                .header("Authorization", "${ResourceKeys.BEARER} $newAccessToken")
+                .build()
         }
-
-        return buildRequest(
-            accessToken = accessToken,
-            response = response
-        )
     }
 
-    private fun buildRequest(accessToken: String, response: Response): Request? {
-        return if (isException) null
-        else response.request.newBuilder()
-            .addHeader("Authorization", "${ResourceKeys.BEARER} $accessToken")
-            .build()
+    private fun refreshAccessToken(refreshToken: String): String? {
+        return try {
+            val retrofit = Retrofit.Builder()
+                .baseUrl(BuildConfig.BASE_URL)
+                .addConverterFactory(MoshiConverterFactory.create())
+                .build()
+
+            val authApi = retrofit.create(AuthAPI::class.java)
+            val response = runBlocking { authApi.tokenRefresh("${ResourceKeys.BEARER} $refreshToken") }
+
+            runBlocking {
+                with(dataSource) {
+                    setAccessToken(response.accessToken)
+                    setRefreshToken(response.refreshToken)
+                    setAccessTokenExp(response.accessTokenExp)
+                    setRefreshTokenExp(response.refreshTokenExp)
+                    setAuthority(response.authority.name)
+                }
+            }
+
+            response.accessToken
+        } catch (e: Exception) {
+            null
+        }
     }
 }
