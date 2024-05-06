@@ -8,6 +8,7 @@ import com.goms.common.result.asResult
 import com.goms.data.repository.auth.AuthRepository
 import com.goms.data.repository.setting.SettingRepository
 import com.goms.domain.account.GetProfileUseCase
+import com.goms.domain.auth.TokenRefreshUseCase
 import com.goms.domain.council.ChangeAuthorityUseCase
 import com.goms.domain.council.DeleteBlackListUseCase
 import com.goms.domain.council.DeleteOutingUseCase
@@ -42,6 +43,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
+    private val tokenRefreshUseCase: TokenRefreshUseCase,
     private val getProfileUseCase: GetProfileUseCase,
     private val getLateRankListUseCase: GetLateRankListUseCase,
     private val getOutingListUseCase: GetOutingListUseCase,
