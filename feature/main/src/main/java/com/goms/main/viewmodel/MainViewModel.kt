@@ -8,6 +8,7 @@ import com.goms.common.result.asResult
 import com.goms.data.repository.auth.AuthRepository
 import com.goms.data.repository.setting.SettingRepository
 import com.goms.domain.account.GetProfileUseCase
+import com.goms.domain.auth.SaveTokenUseCase
 import com.goms.domain.auth.TokenRefreshUseCase
 import com.goms.domain.council.ChangeAuthorityUseCase
 import com.goms.domain.council.DeleteBlackListUseCase
@@ -29,6 +30,7 @@ import com.goms.main.viewmodel.uistate.GetStudentListUiState
 import com.goms.main.viewmodel.uistate.OutingSearchUiState
 import com.goms.main.viewmodel.uistate.StudentSearchUiState
 import com.goms.model.request.council.AuthorityRequestModel
+import com.goms.model.response.auth.LoginResponseModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -36,6 +38,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.LocalDate
 import java.util.UUID
 import javax.inject.Inject
@@ -44,6 +47,7 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val tokenRefreshUseCase: TokenRefreshUseCase,
+    private val saveTokenUseCase: SaveTokenUseCase,
     private val getProfileUseCase: GetProfileUseCase,
     private val getLateRankListUseCase: GetLateRankListUseCase,
     private val getOutingListUseCase: GetOutingListUseCase,
@@ -60,6 +64,7 @@ class MainViewModel @Inject constructor(
     private val settingRepository: SettingRepository
 ) : ViewModel() {
     val role = authRepository.getRole()
+    private val refreshToken = runBlocking { authRepository.getRefreshToken().first()  }
 
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing = _isRefreshing.asStateFlow()
@@ -114,6 +119,10 @@ class MainViewModel @Inject constructor(
 
     fun getTimeValue() = viewModelScope.launch {
         _timeValue.value = settingRepository.getTimeValue().first().replace("\"","")
+    }
+
+    fun saveToken(token: LoginResponseModel) = viewModelScope.launch {
+        saveTokenUseCase(token = token)
     }
 
     fun getProfile() = viewModelScope.launch {
