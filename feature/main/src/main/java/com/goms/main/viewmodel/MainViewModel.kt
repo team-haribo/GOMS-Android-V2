@@ -8,6 +8,8 @@ import com.goms.common.result.asResult
 import com.goms.data.repository.auth.AuthRepository
 import com.goms.data.repository.setting.SettingRepository
 import com.goms.domain.account.GetProfileUseCase
+import com.goms.domain.auth.SaveTokenUseCase
+import com.goms.domain.auth.TokenRefreshUseCase
 import com.goms.domain.council.ChangeAuthorityUseCase
 import com.goms.domain.council.DeleteBlackListUseCase
 import com.goms.domain.council.DeleteOutingUseCase
@@ -26,8 +28,12 @@ import com.goms.main.viewmodel.uistate.GetOutingListUiState
 import com.goms.main.viewmodel.uistate.GetProfileUiState
 import com.goms.main.viewmodel.uistate.GetStudentListUiState
 import com.goms.main.viewmodel.uistate.OutingSearchUiState
+import com.goms.main.viewmodel.uistate.SaveTokenUiState
 import com.goms.main.viewmodel.uistate.StudentSearchUiState
+import com.goms.main.viewmodel.uistate.TokenRefreshUiState
 import com.goms.model.request.council.AuthorityRequestModel
+import com.goms.model.response.auth.LoginResponseModel
+import com.goms.model.util.ResourceKeys
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -35,6 +41,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.LocalDate
 import java.util.UUID
 import javax.inject.Inject
@@ -42,6 +49,8 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
+    private val tokenRefreshUseCase: TokenRefreshUseCase,
+    private val saveTokenUseCase: SaveTokenUseCase,
     private val getProfileUseCase: GetProfileUseCase,
     private val getLateRankListUseCase: GetLateRankListUseCase,
     private val getOutingListUseCase: GetOutingListUseCase,
@@ -57,13 +66,20 @@ class MainViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val settingRepository: SettingRepository
 ) : ViewModel() {
-    val role = authRepository.getRole()
+    var role = authRepository.getRole()
+    private var refreshToken = runBlocking { authRepository.getRefreshToken().first() }
 
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing = _isRefreshing.asStateFlow()
 
     private val _timeValue = MutableStateFlow("")
     val timeValue = _timeValue.asStateFlow()
+
+    private val _tokenRefreshUiState = MutableStateFlow<TokenRefreshUiState>(TokenRefreshUiState.Loading)
+    val tokenRefreshUiState = _tokenRefreshUiState.asStateFlow()
+
+    private val _saveTokenUiState = MutableStateFlow<SaveTokenUiState>(SaveTokenUiState.Loading)
+    val saveTokenUiState = _saveTokenUiState.asStateFlow()
 
     private val _getProfileUiState = MutableStateFlow<GetProfileUiState>(GetProfileUiState.Loading)
     val getProfileUiState = _getProfileUiState.asStateFlow()
@@ -112,6 +128,38 @@ class MainViewModel @Inject constructor(
 
     fun getTimeValue() = viewModelScope.launch {
         _timeValue.value = settingRepository.getTimeValue().first().replace("\"","")
+    }
+
+    fun tokenRefresh() = viewModelScope.launch {
+        refreshToken = runBlocking { authRepository.getRefreshToken().first() }
+        tokenRefreshUseCase(refreshToken = "${ResourceKeys.BEARER} $refreshToken")
+            .asResult()
+            .collectLatest { result ->
+                when (result) {
+                    is Result.Loading -> _tokenRefreshUiState.value = TokenRefreshUiState.Loading
+                    is Result.Success -> {
+                        _tokenRefreshUiState.value = TokenRefreshUiState.Success(result.data)
+                        saveToken(token = result.data)
+                    }
+                    is Result.Error -> _tokenRefreshUiState.value = TokenRefreshUiState.Error(result.exception)
+                }
+            }
+    }
+
+    fun saveToken(token: LoginResponseModel) = viewModelScope.launch {
+        _saveTokenUiState.value = SaveTokenUiState.Loading
+        saveTokenUseCase(token = token)
+            .onSuccess {
+                _saveTokenUiState.value = SaveTokenUiState.Success
+                role = authRepository.getRole()
+                refreshToken = runBlocking { authRepository.getRefreshToken().first() }
+                getProfile()
+                getLateRankList()
+                getOutingCount()
+                getTimeValue()
+            }.onFailure {
+                _saveTokenUiState.value = SaveTokenUiState.Error(it)
+            }
     }
 
     fun getProfile() = viewModelScope.launch {
