@@ -131,6 +131,7 @@ class MainViewModel @Inject constructor(
     }
 
     fun tokenRefresh() = viewModelScope.launch {
+        refreshToken = runBlocking { authRepository.getRefreshToken().first() }
         tokenRefreshUseCase(refreshToken = "${ResourceKeys.BEARER} $refreshToken")
             .asResult()
             .collectLatest { result ->

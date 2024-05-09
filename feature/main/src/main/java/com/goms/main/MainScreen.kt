@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -42,6 +43,7 @@ import com.goms.main.component.MainOutingCard
 import com.goms.main.component.MainProfileCard
 import com.goms.main.component.MainTimeProfileCard
 import com.goms.main.viewmodel.MainViewModel
+import com.goms.main.viewmodel.uistate.TokenRefreshUiState
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -85,6 +87,7 @@ fun MainRoute(
         role = if (role.isNotBlank()) Authority.valueOf(role) else Authority.ROLE_STUDENT,
         isRefreshing = isRefreshing,
         isTimeLaunch = isTimeLaunch,
+        tokenRefreshUiState = tokenRefreshUiState,
         getProfileUiState = getProfileUiState,
         getLateRankListUiState = getLateRankListUiState,
         getOutingListUiState = getOutingListUiState,
@@ -113,6 +116,7 @@ fun MainScreen(
     role: Authority,
     isRefreshing: Boolean,
     isTimeLaunch: Boolean,
+    tokenRefreshUiState: TokenRefreshUiState,
     getProfileUiState: GetProfileUiState,
     getLateRankListUiState: GetLateRankListUiState,
     getOutingListUiState: GetOutingListUiState,
@@ -152,6 +156,13 @@ fun MainScreen(
 
     LaunchedEffect(true) {
         mainCallBack()
+    }
+
+    DisposableEffect(tokenRefreshUiState) {
+        if (tokenRefreshUiState is TokenRefreshUiState.Error) {
+            onErrorToast(null, "새로고침이 실패했습니다")
+        }
+        onDispose {}
     }
 
     val scrollState = rememberScrollState()
