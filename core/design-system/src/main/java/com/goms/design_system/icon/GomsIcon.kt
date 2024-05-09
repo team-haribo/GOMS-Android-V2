@@ -307,3 +307,29 @@ fun MenuIcon(
         colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
     )
 }
+
+@Composable
+fun InvisibleIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+) {
+    Image(
+        painter = painterResource(id = R.drawable.ic_invisible),
+        contentDescription = "Invisible Icon",
+        modifier = modifier,
+        colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
+    )
+}
+
+@Composable
+fun VisibleIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+) {
+    Image(
+        painter = painterResource(id = R.drawable.ic_visible),
+        contentDescription = "Visible Icon",
+        modifier = modifier,
+        colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
+    )
+}
