@@ -63,6 +63,7 @@ fun MainRoute(
     val role by viewModel.role.collectAsStateWithLifecycle(initialValue = "")
     val timeValue by viewModel.timeValue.collectAsStateWithLifecycle(initialValue = "Off")
     val isRefreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
+    val tokenRefreshUiState by viewModel.tokenRefreshUiState.collectAsStateWithLifecycle()
     val getProfileUiState by viewModel.getProfileUiState.collectAsStateWithLifecycle()
     val getLateRankListUiState by viewModel.getLateRankListUiState.collectAsStateWithLifecycle()
     val getOutingListUiState by viewModel.getOutingListUiState.collectAsStateWithLifecycle()
@@ -100,6 +101,9 @@ fun MainRoute(
             viewModel.getLateRankList()
             viewModel.getOutingCount()
             viewModel.getTimeValue()
+        },
+        tokenRefreshCallBack = {
+            viewModel.tokenRefresh()
         }
     )
 }
@@ -120,7 +124,8 @@ fun MainScreen(
     onSettingClick: () -> Unit,
     onAdminMenuClick: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
-    mainCallBack: () -> Unit
+    mainCallBack: () -> Unit,
+    tokenRefreshCallBack: () -> Unit
 ) {
     var isPermissionRequest by rememberSaveable { mutableStateOf(false) }
 
@@ -161,7 +166,9 @@ fun MainScreen(
 
     SwipeRefresh(
         state = swipeRefreshState,
-        onRefresh = { mainCallBack() },
+        onRefresh = {
+            tokenRefreshCallBack()
+        },
         indicator = { state, refreshTrigger ->
             SwipeRefreshIndicator(
                 state = state,
