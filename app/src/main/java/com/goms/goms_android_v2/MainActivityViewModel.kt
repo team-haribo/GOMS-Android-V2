@@ -60,7 +60,7 @@ class MainActivityViewModel @Inject constructor(
         )
 
     fun saveToken(token: LoginResponseModel) = viewModelScope.launch {
-        runBlocking { saveTokenUseCase(token = token) }
+        saveTokenUseCase(token = token)
     }
 
     private val _saveDeviceTokenUiState = MutableStateFlow<Result<Unit>>(Result.Loading)
