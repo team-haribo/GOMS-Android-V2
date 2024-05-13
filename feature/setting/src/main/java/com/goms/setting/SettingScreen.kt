@@ -105,7 +105,7 @@ fun SettingRoute(
                 onUpdateAlarm(alarmData)
             }
 
-            if (!timeState.isNullOrEmpty()) {
+            if (!timeData.isNullOrEmpty()) {
                 viewModel.setTime(timeData)
             }
         }
