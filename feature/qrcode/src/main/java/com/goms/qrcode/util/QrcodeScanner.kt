@@ -25,9 +25,12 @@ class QrcodeScanner(
 
             scanner.process(image)
                 .addOnSuccessListener { barcodes ->
-                    if (barcodes.isNotEmpty()) {
-                        val qrCodeValue = barcodes[0].displayValue
-                        qrcodeData(qrCodeValue)
+                    val qrCodeValues = mutableListOf<String>()
+                    for (barcode in barcodes) {
+                        barcode.displayValue?.let { qrCodeValues.add(it) }
+                    }
+                    if (qrCodeValues.isNotEmpty()) {
+                        qrcodeData(qrCodeValues.joinToString(", "))
                     }
                 }
                 .addOnFailureListener {
