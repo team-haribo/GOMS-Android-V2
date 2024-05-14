@@ -118,7 +118,7 @@ fun MainLateCard(
                 }
 
                 GetLateRankListUiState.Empty -> {
-                    LateListEmptyText()
+                    RankEmptyText()
                 }
 
                 is GetLateRankListUiState.Success -> {
