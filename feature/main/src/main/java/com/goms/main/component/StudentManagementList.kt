@@ -88,7 +88,7 @@ fun StudentManagementList(
         StudentSearchUiState.Empty -> {
             Column(
                 modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                verticalArrangement = Arrangement.spacedBy(200.dp)
             ) {
                 Row(
                     modifier = modifier.fillMaxWidth(),

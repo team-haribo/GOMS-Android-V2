@@ -63,8 +63,8 @@ fun OutingStatusList(
         }
 
         GetOutingCountUiState.Empty -> {
-            Column {
-                Spacer(modifier = Modifier.height(16.dp))
+            Column(modifier = Modifier.fillMaxWidth()) {
+                Spacer(modifier = Modifier.height(240.dp))
                 OutingListEmptyText()
             }
         }
@@ -105,13 +105,9 @@ fun OutingStatusList(
                 OutingSearchUiState.Empty -> {
                     Column(
                         modifier = Modifier.fillMaxWidth(),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                        verticalArrangement = Arrangement.spacedBy(215.dp)
                     ) {
-                        SearchResultText(
-                            modifier = Modifier
-                                .align(Alignment.Start)
-                                .height(40.dp)
-                        )
+                        SearchResultText(modifier = Modifier)
                         SearchEmptyText()
                     }
                 }
@@ -139,11 +135,7 @@ fun OutingStatusListComponent(
     onClick: (UUID) -> Unit
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
-        SearchResultText(
-            modifier = Modifier
-                .align(Alignment.Start)
-                .height(40.dp)
-        )
+        SearchResultText(modifier = Modifier)
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
@@ -236,11 +228,7 @@ fun OutingStatusListItem(
 @Composable
 fun ShimmerOutingStatusListComponent(modifier: Modifier) {
     Column(modifier = modifier.fillMaxWidth()) {
-        SearchResultText(
-            modifier = Modifier
-                .align(Alignment.Start)
-                .height(40.dp)
-        )
+        SearchResultText(modifier = Modifier)
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
