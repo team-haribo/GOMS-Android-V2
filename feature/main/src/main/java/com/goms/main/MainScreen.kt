@@ -235,8 +235,7 @@ fun MainScreen(
                         onLateListClick()
                     }
                 }
-                Spacer(modifier = Modifier.height(32.dp))
-                Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+                Column(modifier = Modifier.padding(top = 32.dp,start = 16.dp, end = 16.dp)) {
                     MainOutingCard(
                         role = role,
                         getOutingListUiState = getOutingListUiState,
