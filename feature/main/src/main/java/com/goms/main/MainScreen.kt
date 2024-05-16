@@ -9,7 +9,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -209,7 +211,6 @@ fun MainScreen(
                 )
                 Column(
                     modifier = Modifier
-                        .fillMaxSize()
                         .verticalScroll(scrollState)
                         .padding(horizontal = 16.dp),
                     verticalArrangement = Arrangement.spacedBy(32.dp)
@@ -233,6 +234,9 @@ fun MainScreen(
                     ) {
                         onLateListClick()
                     }
+                }
+                Spacer(modifier = Modifier.height(32.dp))
+                Column(modifier = Modifier.padding(horizontal = 16.dp)) {
                     MainOutingCard(
                         role = role,
                         getOutingListUiState = getOutingListUiState,
