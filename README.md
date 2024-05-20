@@ -12,3 +12,10 @@
 <span>4. QR 코드 스캔, QR 코드 생성 기능 </span><br>
 <span>5. 학생 전체 리스트 검색, 학생 권한 변경 기능 </span><br>
 <span>6. 유효하지 않은 QR 코드 스캔 불가능 </span><br>
+
+## 📱 Screen
+<p>
+<img src = https://github.com/team-haribo/GOMS-Android-V2/assets/103114398/d12b4280-76c9-4f1f-a55e-5b06c58cdaef.png width=190 /> &nbsp; &nbsp;
+<img src = https://github.com/team-haribo/GOMS-Android-V2/assets/103114398/70db21c3-139f-4ae0-ab7c-3fa800e0f078.png width=190 /> &nbsp; &nbsp;
+<img src = https://github.com/team-haribo/GOMS-Android-V2/assets/103114398/755cb123-8e96-4447-8ed8-bf3759e47bff.png width=190 />
+</p>
