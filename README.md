@@ -92,3 +92,6 @@ GOMS Android
 | Jetpack      | Proto DataStore, ViewModel                    |
 | CI           | Github Actions                                |
 | ETC          | Firebase Crashlytics, Firebase Analytics, FCM |
+
+## :tada: Play Store
+<a href="https://play.google.com/store/apps/details?id=com.goms.goms_android_v2"><img width="40%" src="https://play.google.com/intl/ko/badges/static/images/badges/ko_badge_web_generic.png"/></a>
