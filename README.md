@@ -19,3 +19,62 @@
 <img src = https://github.com/team-haribo/GOMS-Android-V2/assets/103114398/70db21c3-139f-4ae0-ab7c-3fa800e0f078.png width=190 /> &nbsp; &nbsp;
 <img src = https://github.com/team-haribo/GOMS-Android-V2/assets/103114398/755cb123-8e96-4447-8ed8-bf3759e47bff.png width=190 />
 </p>
+
+## 🗂️ Packages
+```
+GOMS Android
+ ┣ 📂app
+ ┃ ┣ 📂navigation
+ ┃ ┣ 📂ui
+ ┃ ┗ 📂activity
+ ┣ 📂build-logic
+ ┣ 📂core
+ ┃ ┣ 📂common
+ ┃ ┣ 📂data
+ ┃ ┃ ┣ 📂di
+ ┃ ┃ ┗ 📂repository
+ ┃ ┣ 📂datastore
+ ┃ ┃ ┣ 📂di
+ ┃ ┃ ┗ 📂proto
+ ┃ ┣ 📂design-system
+ ┃ ┃ ┣ 📂component
+ ┃ ┃ ┣ 📂icon
+ ┃ ┃ ┣ 📂theme
+ ┃ ┃ ┗ 📂util
+ ┃ ┣ 📂domain
+ ┃ ┃ ┣ 📂account
+ ┃ ┃ ┣ 📂auth
+ ┃ ┃ ┣ 📂council
+ ┃ ┃ ┣ 📂late
+ ┃ ┃ ┣ 📂notification
+ ┃ ┃ ┣ 📂outing
+ ┃ ┃ ┗ 📂setting
+ ┃ ┣ 📂model
+ ┃ ┃ ┣ 📂enum
+ ┃ ┃ ┣ 📂request
+ ┃ ┃ ┣ 📂response
+ ┃ ┃ ┗ 📂util
+ ┃ ┣ 📂network
+ ┃ ┃ ┣ 📂api
+ ┃ ┃ ┣ 📂datasource
+ ┃ ┃ ┣ 📂di
+ ┃ ┃ ┣ 📂dto
+ ┃ ┃ ┣ 📂mapper
+ ┃ ┃ ┗ 📂util
+ ┃ ┗ 📂ui
+ ┗ 📂feature
+ ┃ ┣ 📂find-password
+ ┃ ┣ 📂login
+ ┃ ┣ 📂main
+ ┃ ┃ ┣ 📂adminmenu
+ ┃ ┃ ┣ 📂latelist
+ ┃ ┃ ┣ 📂main
+ ┃ ┃ ┣ 📂outing
+ ┃ ┃ ┗ 📂studentmanagement
+ ┃ ┣ 📂qrcode
+ ┃ ┃ ┣ 📂qrgenerate
+ ┃ ┃ ┗ 📂qrscan
+ ┃ ┣ 📂re-password
+ ┃ ┣ 📂setting
+ ┃ ┗ 📂sign-up
+```
