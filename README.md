@@ -78,3 +78,17 @@ GOMS Android
  ┃ ┣ 📂setting
  ┃ ┗ 📂sign-up
 ```
+
+## :rocket: Tech Skills
+| Tech Stack   |                                               |
+|:-------------|:----------------------------------------------|
+| Language     | Kotlin                                        |
+| Architecture | MVVM, Android App Architecture                |
+| Async        | Coroutine                                     |
+| Compose      | Navigation, Kotlinx.Immutable                 |
+| DI           | Hilt                                          |
+| Network      | Retrofit2, OkHttp3                            |
+| Asynchronous | Coroutine, Flow                               |
+| Jetpack      | Proto DataStore, ViewModel                    |
+| CI           | Github Actions                                |
+| ETC          | Firebase Crashlytics, Firebase Analytics, FCM |
