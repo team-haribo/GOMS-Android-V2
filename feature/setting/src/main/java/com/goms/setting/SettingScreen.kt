@@ -48,7 +48,7 @@ import com.goms.ui.GomsRoleBackButton
 
 
 @Composable
-fun SettingRoute(
+internal fun SettingRoute(
     onBackClick: () -> Unit,
     onLogoutSuccess: () -> Unit,
     onPasswordCheck: () -> Unit,
@@ -157,7 +157,7 @@ fun SettingRoute(
 }
 
 @Composable
-fun SettingScreen(
+private fun SettingScreen(
     role: String,
     onProfileClick: (Boolean) -> Unit,
     onBackClick: () -> Unit,

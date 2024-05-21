@@ -21,7 +21,7 @@ import com.goms.design_system.theme.GomsTheme.typography
 import kotlinx.collections.immutable.toPersistentList
 
 @Composable
-fun SelectThemeDropDown(
+internal fun SelectThemeDropDown(
     modifier: Modifier,
     onThemeSelect: (Int) -> Unit,
     themeState: String

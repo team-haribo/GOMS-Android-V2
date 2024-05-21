@@ -48,32 +48,33 @@ class SettingViewModel @Inject constructor (
     private val setTimeUseCase: SetTimeUseCase,
     private val authRepository: AuthRepository
 ) : ViewModel() {
-    val role = authRepository.getRole()
+    internal val role = authRepository.getRole()
 
     private val _themeState = MutableStateFlow("")
-    val themeState = _themeState.asStateFlow()
+    internal val themeState = _themeState.asStateFlow()
 
     private val _qrcodeState = MutableStateFlow("")
-    val qrcodeState = _qrcodeState.asStateFlow()
+    internal val qrcodeState = _qrcodeState.asStateFlow()
 
     private val _alarmState = MutableStateFlow("")
-    val alarmState = _alarmState.asStateFlow()
+    internal val alarmState = _alarmState.asStateFlow()
 
     private val _timeState = MutableStateFlow("")
-    val timeState = _timeState.asStateFlow()
+    internal val timeState = _timeState.asStateFlow()
 
     private val _setThemeState = MutableStateFlow<SetThemeUiState>(SetThemeUiState.Loading)
-    val setThemeState = _setThemeState.asStateFlow()
+    internal val setThemeState = _setThemeState.asStateFlow()
 
     private val _logoutState = MutableStateFlow<LogoutUiState>(LogoutUiState.Loading)
-    val logoutState = _logoutState.asStateFlow()
+    internal val logoutState = _logoutState.asStateFlow()
 
     private val _profileImageUiState = MutableStateFlow<ProfileImageUiState>(ProfileImageUiState.Loading)
-    val profileImageUiState = _profileImageUiState.asStateFlow()
+    internal val profileImageUiState = _profileImageUiState.asStateFlow()
 
     private val _getProfileUiState = MutableStateFlow<GetProfileUiState>(GetProfileUiState.Loading)
-    val getProfileUiState = _getProfileUiState.asStateFlow()
-    fun getProfile() = viewModelScope.launch {
+    internal val getProfileUiState = _getProfileUiState.asStateFlow()
+
+    internal fun getProfile() = viewModelScope.launch {
         getProfileUseCase()
             .asResult()
             .collectLatest { result ->
@@ -87,11 +88,11 @@ class SettingViewModel @Inject constructor (
             }
     }
 
-    fun initGetProfile() {
+    internal fun initGetProfile() {
         _getProfileUiState.value = GetProfileUiState.Loading
     }
 
-    fun setProfileImage(context: Context, file: Uri) = viewModelScope.launch {
+    internal fun setProfileImage(context: Context, file: Uri) = viewModelScope.launch {
         val multipartFile = getMultipartFile(context, file)
 
         setProfileImageUseCase(multipartFile!!)
@@ -106,7 +107,7 @@ class SettingViewModel @Inject constructor (
             }
     }
 
-    fun updateProfileImage(context: Context, file: Uri) = viewModelScope.launch {
+    internal fun updateProfileImage(context: Context, file: Uri) = viewModelScope.launch {
         val multipartFile = getMultipartFile(context, file)
 
         updateProfileImageUseCase(multipartFile!!)
@@ -121,7 +122,7 @@ class SettingViewModel @Inject constructor (
             }
     }
 
-    fun deleteProfileImage() = viewModelScope.launch {
+    internal fun deleteProfileImage() = viewModelScope.launch {
         deleteProfileImageUseCase()
             .onSuccess {
                 it.catch {remoteError ->
@@ -137,15 +138,11 @@ class SettingViewModel @Inject constructor (
             }
     }
 
-    fun initProfileImage() {
+    internal fun initProfileImage() {
         _profileImageUiState.value = ProfileImageUiState.Loading
     }
 
-    fun initSetTheme() {
-        _setThemeState.value = SetThemeUiState.Loading
-    }
-
-    fun setTheme(theme: String) = viewModelScope.launch {
+    internal fun setTheme(theme: String) = viewModelScope.launch {
        setThemeUseCase(theme = theme)
            .onSuccess {
                getThemeValue()
@@ -155,45 +152,49 @@ class SettingViewModel @Inject constructor (
            }
     }
 
-    fun setQrcode(qrcode: String) = viewModelScope.launch {
+    internal fun initSetTheme() {
+        _setThemeState.value = SetThemeUiState.Loading
+    }
+
+    internal fun setQrcode(qrcode: String) = viewModelScope.launch {
         withContext(Dispatchers.IO) {
             setQrcodeUseCase(qrcode = qrcode)
         }
     }
 
-    fun setAlarm(alarm: String) = viewModelScope.launch {
+    internal fun setAlarm(alarm: String) = viewModelScope.launch {
         withContext(Dispatchers.IO) {
             setAlarmUseCase(alarm = alarm)
         }
     }
 
-    fun setTime(time: String) = viewModelScope.launch {
+    internal fun setTime(time: String) = viewModelScope.launch {
         withContext(Dispatchers.IO) {
             setTimeUseCase(time = time)
         }
     }
 
-    fun getThemeValue() = viewModelScope.launch {
+    internal fun getThemeValue() = viewModelScope.launch {
         val themeValue = settingRepository.getThemeValue().first().replace("\"","")
         _themeState.value = themeValue
     }
 
-    fun getQrcodeValue() = viewModelScope.launch {
+    internal fun getQrcodeValue() = viewModelScope.launch {
         val qrcodeValue = settingRepository.getQrcodeValue().first().replace("\"","")
         _qrcodeState.value = qrcodeValue
     }
 
-    fun getAlarmValue() = viewModelScope.launch {
+    internal fun getAlarmValue() = viewModelScope.launch {
         val alarmValue = settingRepository.getAlarmValue().first().replace("\"","")
         _alarmState.value = alarmValue
     }
 
-    fun getTimeValue() = viewModelScope.launch {
+    internal fun getTimeValue() = viewModelScope.launch {
         val timeValue = settingRepository.getTimeValue().first().replace("\"","")
         _timeState.value = timeValue
     }
 
-    fun logout() = viewModelScope.launch {
+    internal fun logout() = viewModelScope.launch {
         logoutUseCase()
             .onSuccess {
                 it.catch {  remoteError ->
