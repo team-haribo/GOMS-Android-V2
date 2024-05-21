@@ -46,7 +46,7 @@ import com.goms.find_password.viewmodel.uistate.SendNumberUiState
 import com.goms.model.util.ResourceKeys
 
 @Composable
-fun EmailCheckRoute(
+internal fun EmailCheckRoute(
     onBackClick: () -> Unit,
     onNumberClick: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
@@ -72,7 +72,7 @@ fun EmailCheckRoute(
 }
 
 @Composable
-fun EmailCheckScreen(
+private fun EmailCheckScreen(
     email: String,
     onEmailChange: (String) -> Unit,
     onBackClick: () -> Unit,
