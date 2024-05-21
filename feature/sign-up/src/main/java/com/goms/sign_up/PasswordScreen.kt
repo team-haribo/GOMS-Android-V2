@@ -49,7 +49,7 @@ import com.goms.sign_up.viewmodel.SignUpViewModel
 import com.goms.ui.isValidPassword
 
 @Composable
-fun PasswordRoute(
+internal fun PasswordRoute(
     onBackClick: () -> Unit,
     onLoginClick: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
@@ -83,7 +83,7 @@ fun PasswordRoute(
 }
 
 @Composable
-fun PasswordScreen(
+private fun PasswordScreen(
     password: String,
     checkPassword: String,
     onPasswordChange: (String) -> Unit,

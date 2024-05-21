@@ -17,7 +17,7 @@ import com.goms.model.enum.Major
 import kotlinx.collections.immutable.toPersistentList
 
 @Composable
-fun SelectMajorDropDown(
+internal fun SelectMajorDropDown(
     onSelectMajor: (String) -> Unit,
     onClick: () -> Unit
 ) {

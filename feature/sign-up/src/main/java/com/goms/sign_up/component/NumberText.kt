@@ -9,7 +9,7 @@ import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
 
 @Composable
-fun NumberText(modifier: Modifier) {
+internal fun NumberText(modifier: Modifier) {
     Text(
         modifier = modifier,
         text = "인증번호 입력",

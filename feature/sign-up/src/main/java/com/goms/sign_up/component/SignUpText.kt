@@ -9,7 +9,7 @@ import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
 
 @Composable
-fun SignUpText(modifier: Modifier) {
+internal fun SignUpText(modifier: Modifier) {
     Text(
         modifier = modifier,
         text = "회원가입",

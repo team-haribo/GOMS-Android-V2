@@ -45,7 +45,7 @@ import com.goms.sign_up.viewmodel.SignUpViewModel
 import com.goms.sign_up.viewmodel.uistate.VerifyNumberUiState
 
 @Composable
-fun NumberRoute(
+internal fun NumberRoute(
     onBackClick: () -> Unit,
     onPasswordClick: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
@@ -73,7 +73,7 @@ fun NumberRoute(
 }
 
 @Composable
-fun NumberScreen(
+private fun NumberScreen(
     number: String,
     onNumberChange: (String) -> Unit,
     verifyNumberUiState: VerifyNumberUiState,
