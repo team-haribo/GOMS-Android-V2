@@ -13,7 +13,7 @@ import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
 
 @Composable
-fun FilterText(onFilterTextClick: () -> Unit) {
+internal fun FilterText(onFilterTextClick: () -> Unit) {
     Box(
         modifier = Modifier
             .height(40.dp)

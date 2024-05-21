@@ -36,7 +36,7 @@ import com.goms.model.enum.Authority
 import com.goms.ui.toText
 
 @Composable
-fun MainOutingCard(
+internal fun MainOutingCard(
     modifier: Modifier = Modifier,
     role: Authority,
     getOutingListUiState: GetOutingListUiState,
@@ -183,7 +183,7 @@ fun MainOutingCard(
 }
 
 @Composable
-fun MainOutingItem(
+private fun MainOutingItem(
     modifier: Modifier = Modifier,
     data: OutingData
 ) {
@@ -225,7 +225,7 @@ fun MainOutingItem(
 }
 
 @Composable
-fun ShimmerMainOutingItem(
+private fun ShimmerMainOutingItem(
     modifier: Modifier = Modifier,
 ) {
     Row(

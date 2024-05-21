@@ -17,7 +17,7 @@ import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
 
 @Composable
-fun OutingListEmptyText() {
+internal fun OutingListEmptyText() {
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,

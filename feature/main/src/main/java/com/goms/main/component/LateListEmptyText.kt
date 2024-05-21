@@ -17,7 +17,7 @@ import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
 
 @Composable
-fun LateListEmptyText() {
+internal fun LateListEmptyText() {
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,

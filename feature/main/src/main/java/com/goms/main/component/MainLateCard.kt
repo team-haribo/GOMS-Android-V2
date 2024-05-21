@@ -43,7 +43,7 @@ import com.goms.model.enum.Authority
 import com.goms.ui.toText
 
 @Composable
-fun MainLateCard(
+internal fun MainLateCard(
     modifier: Modifier = Modifier,
     role: Authority,
     getLateRankListUiState: GetLateRankListUiState,
@@ -146,7 +146,7 @@ fun MainLateCard(
 }
 
 @Composable
-fun MainLateItem(
+private fun MainLateItem(
     modifier: Modifier = Modifier,
     data: RankData
 ) {
@@ -190,7 +190,7 @@ fun MainLateItem(
 }
 
 @Composable
-fun ShimmerMainLateItem(modifier: Modifier) {
+private fun ShimmerMainLateItem(modifier: Modifier) {
     Box(
         modifier = modifier
             .shimmerEffect(

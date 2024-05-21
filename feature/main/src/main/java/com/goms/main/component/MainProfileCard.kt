@@ -34,7 +34,7 @@ import com.goms.model.enum.Authority
 import com.goms.ui.toText
 
 @Composable
-fun MainProfileCard(
+internal fun MainProfileCard(
     modifier: Modifier = Modifier,
     getProfileUiState: GetProfileUiState,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit
@@ -60,7 +60,7 @@ fun MainProfileCard(
 }
 
 @Composable
-fun MainProfileCardComponent(
+private fun MainProfileCardComponent(
     modifier: Modifier,
     data: ProfileData
 ) {
@@ -129,7 +129,7 @@ fun MainProfileCardComponent(
 }
 
 @Composable
-fun ShimmerMainProfileCardComponent(modifier: Modifier) {
+private fun ShimmerMainProfileCardComponent(modifier: Modifier) {
     Surface(
         modifier = modifier,
         color = colors.G1,
