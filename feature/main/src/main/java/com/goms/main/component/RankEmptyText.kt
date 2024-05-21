@@ -17,7 +17,7 @@ import com.goms.design_system.icon.FireIcon
 import com.goms.design_system.theme.GomsTheme
 
 @Composable
-fun RankEmptyText() {
+internal fun RankEmptyText() {
     Row(
         modifier = Modifier
             .fillMaxWidth()

@@ -33,7 +33,7 @@ import com.goms.qrcode.viewmodel.QrcodeViewModel
 import com.goms.ui.GomsRoleBackButton
 
 @Composable
-fun QrcodeGenerateRoute(
+internal fun QrcodeGenerateRoute(
     onRemoteError: () -> Unit,
     viewModel: QrcodeViewModel = hiltViewModel(),
     onBackClick: () -> Unit,
@@ -57,7 +57,7 @@ fun QrcodeGenerateRoute(
 }
 
 @Composable
-fun QrcodeGenerateScreen(
+private fun QrcodeGenerateScreen(
     role: Authority,
     getOutingUUIDUiState: GetOutingUUIDUiState,
     onBackClick: () -> Unit,

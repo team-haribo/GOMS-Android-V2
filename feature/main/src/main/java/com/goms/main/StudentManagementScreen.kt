@@ -52,7 +52,7 @@ import kotlinx.collections.immutable.toPersistentList
 import java.util.UUID
 
 @Composable
-fun StudentManagementRoute(
+internal fun StudentManagementRoute(
     onBackClick: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     viewModel: MainViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
@@ -160,7 +160,7 @@ fun StudentManagementRoute(
 }
 
 @Composable
-fun StudentManagementScreen(
+private fun StudentManagementScreen(
     role: Authority,
     studentSearch: String,
     outingState: String,

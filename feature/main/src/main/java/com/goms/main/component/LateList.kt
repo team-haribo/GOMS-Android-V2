@@ -35,7 +35,7 @@ import com.goms.main.viewmodel.uistate.GetLateListUiState
 import com.goms.ui.toText
 
 @Composable
-fun LateList(
+internal fun LateList(
     modifier: Modifier = Modifier,
     getLateListUiState: GetLateListUiState,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
@@ -107,7 +107,7 @@ fun LateList(
 
 
 @Composable
-fun LateListItem(
+private fun LateListItem(
     modifier: Modifier = Modifier,
     data: LateData
 ) {
@@ -150,7 +150,7 @@ fun LateListItem(
 }
 
 @Composable
-fun ShimmerLateListItem(modifier: Modifier) {
+private fun ShimmerLateListItem(modifier: Modifier) {
     Row(
         modifier = modifier
             .fillMaxWidth()

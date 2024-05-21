@@ -53,7 +53,7 @@ import kotlinx.coroutines.delay
 import java.util.Date
 
 @Composable
-fun MainRoute(
+internal fun MainRoute(
     qrcodeState: String,
     onOutingStatusClick: () -> Unit,
     onLateListClick: () -> Unit,
@@ -114,7 +114,7 @@ fun MainRoute(
 }
 
 @Composable
-fun MainScreen(
+private fun MainScreen(
     role: Authority,
     isRefreshing: Boolean,
     isTimeLaunch: Boolean,

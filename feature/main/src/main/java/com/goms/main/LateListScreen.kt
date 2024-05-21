@@ -40,7 +40,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
 @Composable
-fun LateListRoute(
+internal fun LateListRoute(
     onBackClick: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     viewModel: MainViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
@@ -59,7 +59,7 @@ fun LateListRoute(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LateListScreen(
+private fun LateListScreen(
     role: Authority,
     getLateListUiState: GetLateListUiState,
     onBackClick: () -> Unit,

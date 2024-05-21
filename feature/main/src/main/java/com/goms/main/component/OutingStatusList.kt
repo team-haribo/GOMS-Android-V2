@@ -44,7 +44,7 @@ import kotlinx.collections.immutable.toPersistentList
 import java.util.UUID
 
 @Composable
-fun OutingStatusList(
+internal fun OutingStatusList(
     modifier: Modifier = Modifier,
     role: Authority,
     getOutingListUiState: GetOutingListUiState,
@@ -128,7 +128,7 @@ fun OutingStatusList(
 }
 
 @Composable
-fun OutingStatusListComponent(
+private fun OutingStatusListComponent(
     modifier: Modifier,
     role: Authority,
     list: PersistentList<OutingData>,
@@ -159,7 +159,7 @@ fun OutingStatusListComponent(
 
 
 @Composable
-fun OutingStatusListItem(
+private fun OutingStatusListItem(
     modifier: Modifier = Modifier,
     role: Authority,
     data: OutingData,
@@ -226,7 +226,7 @@ fun OutingStatusListItem(
 
 
 @Composable
-fun ShimmerOutingStatusListComponent(modifier: Modifier) {
+private fun ShimmerOutingStatusListComponent(modifier: Modifier) {
     Column(modifier = modifier.fillMaxWidth()) {
         SearchResultText(modifier = Modifier)
         LazyColumn(
@@ -247,7 +247,7 @@ fun ShimmerOutingStatusListComponent(modifier: Modifier) {
 
 
 @Composable
-fun ShimmerOutingStatusListItem(modifier: Modifier) {
+private fun ShimmerOutingStatusListItem(modifier: Modifier) {
     Row(
         modifier = modifier
             .fillMaxWidth()

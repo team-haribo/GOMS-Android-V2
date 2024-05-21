@@ -24,7 +24,7 @@ import com.goms.design_system.util.lockScreenOrientation
 import com.goms.login.component.LoginText
 
 @Composable
-fun LoginRoute(
+internal fun LoginRoute(
     onSignUpClick: () -> Unit,
     onInputLoginClick: () -> Unit
 ) {
@@ -35,7 +35,7 @@ fun LoginRoute(
 }
 
 @Composable
-fun LoginScreen(
+private fun LoginScreen(
     onSignUpClick: () -> Unit,
     onInputLoginClick: () -> Unit
 ) {

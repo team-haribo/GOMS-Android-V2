@@ -66,71 +66,71 @@ class MainViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val settingRepository: SettingRepository
 ) : ViewModel() {
-    var role = authRepository.getRole()
+    internal var role = authRepository.getRole()
     private var refreshToken = runBlocking { authRepository.getRefreshToken().first() }
 
     private val _isRefreshing = MutableStateFlow(false)
-    val isRefreshing = _isRefreshing.asStateFlow()
+    internal val isRefreshing = _isRefreshing.asStateFlow()
 
     private val _timeValue = MutableStateFlow("")
-    val timeValue = _timeValue.asStateFlow()
+    internal val timeValue = _timeValue.asStateFlow()
 
     private val _tokenRefreshUiState = MutableStateFlow<TokenRefreshUiState>(TokenRefreshUiState.Loading)
-    val tokenRefreshUiState = _tokenRefreshUiState.asStateFlow()
+    internal val tokenRefreshUiState = _tokenRefreshUiState.asStateFlow()
 
     private val _saveTokenUiState = MutableStateFlow<SaveTokenUiState>(SaveTokenUiState.Loading)
-    val saveTokenUiState = _saveTokenUiState.asStateFlow()
+    internal val saveTokenUiState = _saveTokenUiState.asStateFlow()
 
     private val _getProfileUiState = MutableStateFlow<GetProfileUiState>(GetProfileUiState.Loading)
-    val getProfileUiState = _getProfileUiState.asStateFlow()
+    internal val getProfileUiState = _getProfileUiState.asStateFlow()
 
     private val _getLateRankListUiState = MutableStateFlow<GetLateRankListUiState>(GetLateRankListUiState.Loading)
-    val getLateRankListUiState = _getLateRankListUiState.asStateFlow()
+    internal val getLateRankListUiState = _getLateRankListUiState.asStateFlow()
 
     private val _getOutingListUiState = MutableStateFlow<GetOutingListUiState>(GetOutingListUiState.Loading)
-    val getOutingListUiState = _getOutingListUiState.asStateFlow()
+    internal val getOutingListUiState = _getOutingListUiState.asStateFlow()
 
     private val _getOutingCountUiState = MutableStateFlow<GetOutingCountUiState>(GetOutingCountUiState.Loading)
-    val getOutingCountUiState = _getOutingCountUiState.asStateFlow()
+    internal val getOutingCountUiState = _getOutingCountUiState.asStateFlow()
 
     private val _outingSearchUiState = MutableStateFlow<OutingSearchUiState>(OutingSearchUiState.Loading)
-    val outingSearchUiState = _outingSearchUiState.asStateFlow()
+    internal val outingSearchUiState = _outingSearchUiState.asStateFlow()
 
     private val _deleteOutingUiState = MutableStateFlow<Result<Unit>>(Result.Loading)
-    val deleteOutingUiState = _deleteOutingUiState.asStateFlow()
+    internal val deleteOutingUiState = _deleteOutingUiState.asStateFlow()
 
     private val _getLateListUiState = MutableStateFlow<GetLateListUiState>(GetLateListUiState.Loading)
-    val getLateListUiState = _getLateListUiState.asStateFlow()
+    internal val getLateListUiState = _getLateListUiState.asStateFlow()
 
     private val _getStudentListUiState = MutableStateFlow<GetStudentListUiState>(GetStudentListUiState.Loading)
-    val getStudentListUiState = _getStudentListUiState.asStateFlow()
+    internal val getStudentListUiState = _getStudentListUiState.asStateFlow()
 
     private val _changeAuthorityUiState = MutableStateFlow<Result<Unit>>(Result.Loading)
-    val changeAuthorityUiState = _changeAuthorityUiState.asStateFlow()
+    internal val changeAuthorityUiState = _changeAuthorityUiState.asStateFlow()
 
     private val _setBlackListUiState = MutableStateFlow<Result<Unit>>(Result.Loading)
-    val setBlackListUiState = _setBlackListUiState.asStateFlow()
+    internal val setBlackListUiState = _setBlackListUiState.asStateFlow()
 
     private val _deleteBlackListUiState = MutableStateFlow<Result<Unit>>(Result.Loading)
-    val deleteBlackListUiState = _deleteBlackListUiState.asStateFlow()
+    internal val deleteBlackListUiState = _deleteBlackListUiState.asStateFlow()
 
     private val _studentSearchUiState = MutableStateFlow<StudentSearchUiState>(StudentSearchUiState.Loading)
-    val studentSearchUiState = _studentSearchUiState.asStateFlow()
+    internal val studentSearchUiState = _studentSearchUiState.asStateFlow()
 
-    var outingSearch = savedStateHandle.getStateFlow(key = OUTING_SEARCH, initialValue = "")
-    var studentSearch = savedStateHandle.getStateFlow(key = STUDENT_SEARCH, initialValue = "")
-    var outingState = savedStateHandle.getStateFlow(key = OUTING_STATE, initialValue = "")
-    var roleState = savedStateHandle.getStateFlow(key = ROLE_STATE, initialValue = "")
-    var filterStatus = savedStateHandle.getStateFlow(key = FILTER_STATUS, initialValue = "")
-    var filterGrade = savedStateHandle.getStateFlow(key = FILTER_GRADE, initialValue = "")
-    var filterGender = savedStateHandle.getStateFlow(key = FILTER_GENDER, initialValue = "")
-    var filterMajor = savedStateHandle.getStateFlow(key = FILTER_MAJOR, initialValue = "")
+    internal var outingSearch = savedStateHandle.getStateFlow(key = OUTING_SEARCH, initialValue = "")
+    internal var studentSearch = savedStateHandle.getStateFlow(key = STUDENT_SEARCH, initialValue = "")
+    internal var outingState = savedStateHandle.getStateFlow(key = OUTING_STATE, initialValue = "")
+    internal var roleState = savedStateHandle.getStateFlow(key = ROLE_STATE, initialValue = "")
+    internal var filterStatus = savedStateHandle.getStateFlow(key = FILTER_STATUS, initialValue = "")
+    internal var filterGrade = savedStateHandle.getStateFlow(key = FILTER_GRADE, initialValue = "")
+    internal var filterGender = savedStateHandle.getStateFlow(key = FILTER_GENDER, initialValue = "")
+    internal var filterMajor = savedStateHandle.getStateFlow(key = FILTER_MAJOR, initialValue = "")
 
-    fun getTimeValue() = viewModelScope.launch {
+    internal fun getTimeValue() = viewModelScope.launch {
         _timeValue.value = settingRepository.getTimeValue().first().replace("\"","")
     }
 
-    fun tokenRefresh() = viewModelScope.launch {
+    internal fun tokenRefresh() = viewModelScope.launch {
         refreshToken = runBlocking { authRepository.getRefreshToken().first() }
         tokenRefreshUseCase(refreshToken = "${ResourceKeys.BEARER} $refreshToken")
             .asResult()
@@ -146,7 +146,7 @@ class MainViewModel @Inject constructor(
             }
     }
 
-    fun saveToken(token: LoginResponseModel) = viewModelScope.launch {
+    private fun saveToken(token: LoginResponseModel) = viewModelScope.launch {
         _saveTokenUiState.value = SaveTokenUiState.Loading
         saveTokenUseCase(token = token)
             .onSuccess {
@@ -162,7 +162,7 @@ class MainViewModel @Inject constructor(
             }
     }
 
-    fun getProfile() = viewModelScope.launch {
+    internal fun getProfile() = viewModelScope.launch {
         getProfileUseCase()
             .asResult()
             .collectLatest { result ->
@@ -174,7 +174,7 @@ class MainViewModel @Inject constructor(
             }
     }
 
-    fun getLateRankList() = viewModelScope.launch {
+    internal fun getLateRankList() = viewModelScope.launch {
         getLateRankListUseCase()
             .asResult()
             .collectLatest { result ->
@@ -192,7 +192,7 @@ class MainViewModel @Inject constructor(
             }
     }
 
-    fun getOutingList() = viewModelScope.launch {
+    private fun getOutingList() = viewModelScope.launch {
         getOutingListUseCase()
             .asResult()
             .collectLatest { result ->
@@ -204,7 +204,7 @@ class MainViewModel @Inject constructor(
             }
     }
 
-    fun getOutingCount() = viewModelScope.launch {
+    internal fun getOutingCount() = viewModelScope.launch {
         getOutingCountUseCase()
             .asResult()
             .collectLatest { result ->
@@ -223,7 +223,7 @@ class MainViewModel @Inject constructor(
             }
     }
 
-    fun outingSearch(name: String) = viewModelScope.launch {
+    internal fun outingSearch(name: String) = viewModelScope.launch {
             if (name.isEmpty()) {
                 _outingSearchUiState.value = OutingSearchUiState.QueryEmpty
             } else {
@@ -245,7 +245,7 @@ class MainViewModel @Inject constructor(
             }
     }
 
-    fun deleteOuting(accountIdx: UUID) = viewModelScope.launch {
+    internal fun deleteOuting(accountIdx: UUID) = viewModelScope.launch {
         deleteOutingUseCase(accountIdx = accountIdx)
             .onSuccess {
                 it.catch {  remoteError ->
@@ -258,11 +258,11 @@ class MainViewModel @Inject constructor(
             }
     }
 
-    fun initDeleteOuting() {
+    internal fun initDeleteOuting() {
         _deleteOutingUiState.value = Result.Loading
     }
 
-    fun getLateList(date: LocalDate) = viewModelScope.launch {
+    internal fun getLateList(date: LocalDate) = viewModelScope.launch {
         getLateListUseCase(date = date)
             .asResult()
             .collectLatest { result ->
@@ -280,7 +280,7 @@ class MainViewModel @Inject constructor(
             }
     }
 
-    fun getStudentList() = viewModelScope.launch {
+    internal fun getStudentList() = viewModelScope.launch {
         getStudentListUseCase()
             .asResult()
             .collectLatest { result ->
@@ -292,7 +292,7 @@ class MainViewModel @Inject constructor(
             }
     }
 
-    fun changeAuthority(body: AuthorityRequestModel) = viewModelScope.launch {
+    internal fun changeAuthority(body: AuthorityRequestModel) = viewModelScope.launch {
         changeAuthorityUseCase(body = body)
             .onSuccess {
                 it.catch {  remoteError ->
@@ -305,11 +305,11 @@ class MainViewModel @Inject constructor(
             }
     }
 
-    fun initChangeAuthority() {
+    internal fun initChangeAuthority() {
         _changeAuthorityUiState.value = Result.Loading
     }
 
-    fun setBlackList(accountIdx: UUID) = viewModelScope.launch {
+    internal fun setBlackList(accountIdx: UUID) = viewModelScope.launch {
         setBlackListUseCase(accountIdx = accountIdx)
             .onSuccess {
                 it.catch {  remoteError ->
@@ -322,11 +322,11 @@ class MainViewModel @Inject constructor(
             }
     }
 
-    fun initSetBlackList() {
+    internal fun initSetBlackList() {
         _setBlackListUiState.value = Result.Loading
     }
 
-    fun deleteBlackList(accountIdx: UUID) = viewModelScope.launch {
+    internal fun deleteBlackList(accountIdx: UUID) = viewModelScope.launch {
         deleteBlackListUseCase(accountIdx = accountIdx)
             .onSuccess {
                 it.catch {  remoteError ->
@@ -339,11 +339,11 @@ class MainViewModel @Inject constructor(
             }
     }
 
-    fun initDeleteBlackList() {
+    internal fun initDeleteBlackList() {
         _deleteBlackListUiState.value = Result.Loading
     }
 
-    fun studentSearch(
+    internal fun studentSearch(
         grade: Int?,
         gender: String?,
         major: String?,
@@ -379,35 +379,35 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun onOutingSearchChange(value: String) {
+    internal fun onOutingSearchChange(value: String) {
         savedStateHandle[OUTING_SEARCH] = value
     }
 
-    fun onStudentSearchChange(value: String) {
+    internal fun onStudentSearchChange(value: String) {
         savedStateHandle[STUDENT_SEARCH] = value
     }
 
-    fun onOutingStateChange(value: String) {
+    internal fun onOutingStateChange(value: String) {
         savedStateHandle[OUTING_STATE] = value
     }
 
-    fun onRoleStateChange(value: String) {
+    internal fun onRoleStateChange(value: String) {
         savedStateHandle[ROLE_STATE] = value
     }
 
-    fun onFilterStatusChange(value: String) {
+    internal fun onFilterStatusChange(value: String) {
         savedStateHandle[FILTER_STATUS] = value
     }
 
-    fun onFilterGradeChange(value: String) {
+    internal fun onFilterGradeChange(value: String) {
         savedStateHandle[FILTER_GRADE] = value
     }
 
-    fun onFilterGenderChange(value: String) {
+    internal fun onFilterGenderChange(value: String) {
         savedStateHandle[FILTER_GENDER] = value
     }
 
-    fun onFilterMajorChange(value: String) {
+    internal fun onFilterMajorChange(value: String) {
         savedStateHandle[FILTER_MAJOR] = value
     }
 }

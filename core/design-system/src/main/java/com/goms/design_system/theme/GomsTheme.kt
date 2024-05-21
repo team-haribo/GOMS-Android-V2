@@ -15,8 +15,8 @@ enum class ThemeType(val value: String) {
     System("System")
 }
 
-val LocalColorTheme = compositionLocalOf<ColorTheme> { error("No ColorTheme provided") }
-val LocalTypography = compositionLocalOf<GomsTypography> { error("No GomsTypography provided") }
+internal val LocalColorTheme = compositionLocalOf<ColorTheme> { error("No ColorTheme provided") }
+internal val LocalTypography = compositionLocalOf<GomsTypography> { error("No GomsTypography provided") }
 
 @Composable
 fun GomsTheme(

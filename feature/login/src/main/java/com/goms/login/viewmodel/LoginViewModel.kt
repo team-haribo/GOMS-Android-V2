@@ -27,15 +27,15 @@ class LoginViewModel @Inject constructor(
     private val saveTokenUseCase: SaveTokenUseCase
 ) : ViewModel() {
     private val _loginUiState = MutableStateFlow<LoginUiState>(LoginUiState.Loading)
-    val loginUiState = _loginUiState.asStateFlow()
+    internal val loginUiState = _loginUiState.asStateFlow()
 
     private val _saveTokenUiState = MutableStateFlow<SaveTokenUiState>(SaveTokenUiState.Loading)
-    val saveTokenUiState = _saveTokenUiState.asStateFlow()
+    internal val saveTokenUiState = _saveTokenUiState.asStateFlow()
 
-    var email = savedStateHandle.getStateFlow(key = EMAIL, initialValue = "")
-    var password = savedStateHandle.getStateFlow(key = PASSWORD, initialValue = "")
+    internal var email = savedStateHandle.getStateFlow(key = EMAIL, initialValue = "")
+    internal var password = savedStateHandle.getStateFlow(key = PASSWORD, initialValue = "")
 
-    fun login(body: LoginRequestModel) = viewModelScope.launch {
+    internal fun login(body: LoginRequestModel) = viewModelScope.launch {
         if (!isValidEmail(body.email)) {
             _loginUiState.value = LoginUiState.EmailNotValid
         } else {
@@ -60,7 +60,7 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    fun saveToken(token: LoginResponseModel) = viewModelScope.launch {
+    private fun saveToken(token: LoginResponseModel) = viewModelScope.launch {
         _saveTokenUiState.value = SaveTokenUiState.Loading
         saveTokenUseCase(token = token)
             .onSuccess {
@@ -70,11 +70,11 @@ class LoginViewModel @Inject constructor(
             }
     }
 
-    fun onEmailChange(value: String) {
+    internal fun onEmailChange(value: String) {
         savedStateHandle[EMAIL] = value
     }
 
-    fun onPasswordChange(value: String) {
+    internal fun onPasswordChange(value: String) {
         savedStateHandle[PASSWORD] = value
     }
 }

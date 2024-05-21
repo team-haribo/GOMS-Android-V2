@@ -8,7 +8,7 @@ import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
 
 @Composable
-fun StudentManagementText(modifier: Modifier) {
+internal fun StudentManagementText(modifier: Modifier) {
     Text(
         modifier = modifier,
         text = "학생 관리",

@@ -47,7 +47,7 @@ import com.goms.model.request.auth.LoginRequestModel
 import com.goms.model.util.ResourceKeys
 
 @Composable
-fun InputLoginRoute(
+internal fun InputLoginRoute(
     onBackClick: () -> Unit,
     onMainClick: () -> Unit,
     onRePasswordClick: () -> Unit,
@@ -82,7 +82,7 @@ fun InputLoginRoute(
 }
 
 @Composable
-fun InputLoginScreen(
+private fun InputLoginScreen(
     email: String,
     password: String,
     onEmailChange: (String) -> Unit,

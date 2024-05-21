@@ -34,7 +34,7 @@ import java.util.UUID
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun QrcodeScanRoute(
+internal fun QrcodeScanRoute(
     onPermissionBlock: () -> Unit,
     onBackClick: () -> Unit,
     onSuccess: () -> Unit,
@@ -72,7 +72,7 @@ fun QrcodeScanRoute(
 
 @androidx.annotation.OptIn(androidx.camera.core.ExperimentalGetImage::class)
 @Composable
-fun QrcodeScanScreen(
+private fun QrcodeScanScreen(
     outingUiState: OutingUiState,
     profileUiState: GetProfileUiState,
     onQrcodeScan: (String?) -> Unit,

@@ -27,7 +27,7 @@ import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
 
 @Composable
-fun AdminMenuList(
+internal fun AdminMenuList(
     modifier: Modifier = Modifier,
     onQrCreateClick: () -> Unit,
     onStudentManagementClick: () -> Unit,
@@ -94,7 +94,7 @@ fun AdminMenuList(
 }
 
 @Composable
-fun AdminMenuListItem(
+private fun AdminMenuListItem(
     modifier: Modifier = Modifier,
     icon: @Composable () -> Unit,
     text: String,

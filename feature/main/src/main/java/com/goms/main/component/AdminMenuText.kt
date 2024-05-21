@@ -7,7 +7,7 @@ import androidx.compose.ui.text.font.FontWeight
 import com.goms.design_system.theme.GomsTheme
 
 @Composable
-fun AdminMenuText(modifier: Modifier) {
+internal fun AdminMenuText(modifier: Modifier) {
     Text(
         modifier = modifier,
         text = "관리자 메뉴",

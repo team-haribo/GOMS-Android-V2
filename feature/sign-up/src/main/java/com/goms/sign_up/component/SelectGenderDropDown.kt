@@ -17,7 +17,7 @@ import com.goms.model.enum.Gender
 import kotlinx.collections.immutable.toPersistentList
 
 @Composable
-fun SelectGenderDropDown(
+internal fun SelectGenderDropDown(
     onSelectGender: (String) -> Unit,
     onClick: () -> Unit
 ) {

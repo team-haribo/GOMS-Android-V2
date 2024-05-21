@@ -36,7 +36,7 @@ import com.goms.setting.viewmodel.uistate.GetProfileUiState
 import com.goms.ui.toText
 
 @Composable
-fun SettingProfileCard(
+internal fun SettingProfileCard(
     modifier: Modifier = Modifier,
     role: String,
     onProfileClick: () -> Unit,
@@ -63,7 +63,7 @@ fun SettingProfileCard(
 }
 
 @Composable
-fun SettingProfileCardComponent(
+private fun SettingProfileCardComponent(
     modifier: Modifier,
     role: String,
     onProfileClick: () -> Unit,
@@ -159,7 +159,7 @@ fun SettingProfileCardComponent(
 }
 
 @Composable
-fun ShimmerSettingProfileCardComponent(
+private fun ShimmerSettingProfileCardComponent(
     modifier: Modifier = Modifier
 ) {
     Row(

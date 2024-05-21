@@ -29,20 +29,20 @@ class FindPasswordViewmodel @Inject constructor(
     private val verifyNumberUseCase: VerifyNumberUseCase
 ) : ViewModel() {
     private val _findPasswordUiState = MutableStateFlow<FindPasswordUiState>(FindPasswordUiState.Loading)
-    val findPasswordUiState = _findPasswordUiState.asStateFlow()
+    internal val findPasswordUiState = _findPasswordUiState.asStateFlow()
 
     private val _sendNumberUiState = MutableStateFlow<SendNumberUiState>(SendNumberUiState.Loading)
-    val sendNumberUiState = _sendNumberUiState.asStateFlow()
+    internal val sendNumberUiState = _sendNumberUiState.asStateFlow()
 
     private val _verifyNumberUiState = MutableStateFlow<VerifyNumberUiState>(VerifyNumberUiState.Loading)
-    val verifyNumberUiState = _verifyNumberUiState.asStateFlow()
+    internal val verifyNumberUiState = _verifyNumberUiState.asStateFlow()
 
-    var email = savedStateHandle.getStateFlow(key = EMAIL, initialValue = "")
-    var password = savedStateHandle.getStateFlow(key = PASSWORD, initialValue = "")
-    var passwordCheck = savedStateHandle.getStateFlow(key = CHECK_PASSWORD, initialValue = "")
-    var number = savedStateHandle.getStateFlow(key = NUMBER, initialValue = "")
+    internal var email = savedStateHandle.getStateFlow(key = EMAIL, initialValue = "")
+    internal var password = savedStateHandle.getStateFlow(key = PASSWORD, initialValue = "")
+    internal var passwordCheck = savedStateHandle.getStateFlow(key = CHECK_PASSWORD, initialValue = "")
+    internal var number = savedStateHandle.getStateFlow(key = NUMBER, initialValue = "")
 
-    fun findPassword(body: FindPasswordRequestModel) = viewModelScope.launch {
+    internal fun findPassword(body: FindPasswordRequestModel) = viewModelScope.launch {
         when {
             password.value != passwordCheck.value -> {
                 _findPasswordUiState.value = FindPasswordUiState.PasswordMismatch
@@ -77,11 +77,11 @@ class FindPasswordViewmodel @Inject constructor(
         }
     }
 
-    fun initFindPassword() {
+    internal fun initFindPassword() {
         _findPasswordUiState.value = FindPasswordUiState.Loading
     }
 
-    fun sendNumber(body: SendNumberRequestModel) = viewModelScope.launch {
+    internal fun sendNumber(body: SendNumberRequestModel) = viewModelScope.launch {
         if (!isValidEmail(body.email)) {
             _sendNumberUiState.value = SendNumberUiState.EmailNotValid
         } else {
@@ -98,11 +98,11 @@ class FindPasswordViewmodel @Inject constructor(
         }
     }
 
-    fun initSendNumber() {
+    internal fun initSendNumber() {
         _sendNumberUiState.value = SendNumberUiState.Loading
     }
 
-    fun verifyNumber(email: String, authCode: String) = viewModelScope.launch {
+    internal fun verifyNumber(email: String, authCode: String) = viewModelScope.launch {
         verifyNumberUseCase(email = email, authCode = authCode)
             .onSuccess {
                 it.catch { remoteError ->
@@ -129,23 +129,23 @@ class FindPasswordViewmodel @Inject constructor(
             }
     }
 
-    fun initVerifyNumber() {
+    internal fun initVerifyNumber() {
         _verifyNumberUiState.value = VerifyNumberUiState.Loading
     }
 
-    fun onEmailChange(value: String) {
+    internal fun onEmailChange(value: String) {
         savedStateHandle[EMAIL] = value
     }
 
-    fun onNumberChange(value: String) {
+    internal fun onNumberChange(value: String) {
         savedStateHandle[NUMBER] = value
     }
 
-    fun onPasswordChange(value: String) {
+    internal fun onPasswordChange(value: String) {
         savedStateHandle[PASSWORD] = value
     }
 
-    fun onCheckPasswordChange(value: String) {
+    internal fun onCheckPasswordChange(value: String) {
         savedStateHandle[CHECK_PASSWORD] = value
     }
 }

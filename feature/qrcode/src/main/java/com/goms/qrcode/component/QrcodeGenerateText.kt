@@ -12,7 +12,7 @@ import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
 
 @Composable
-fun QrcodeGenerateText(
+internal fun QrcodeGenerateText(
     modifier: Modifier
 ) {
     Box(

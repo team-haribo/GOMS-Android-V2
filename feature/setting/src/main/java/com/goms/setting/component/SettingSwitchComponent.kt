@@ -19,7 +19,7 @@ import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
 
 @Composable
-fun SettingSwitchComponent(
+internal fun SettingSwitchComponent(
     modifier: Modifier,
     title: String,
     detail: String,
@@ -64,14 +64,12 @@ fun SettingSwitchComponent(
 
 @Composable
 @Preview(showBackground = true)
-fun preasasdview() {
+private fun SettingSwitchComponentPreview() {
     SettingSwitchComponent(
         modifier = Modifier.padding(20.dp),
         title = "외출제 푸시 알림",
         detail = "외출할 시간이 될 때마다 알려드려요",
         onFunctionOff = {},
         isSwitchOn = false
-    ) {
-
-    }
+    ) {}
 }
