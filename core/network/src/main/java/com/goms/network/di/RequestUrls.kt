@@ -1,6 +1,6 @@
 package com.goms.network.di
 
-object RequestUrls {
+internal object RequestUrls {
     object PATH {
         const val accountIdx = "accountIdx"
         const val deviceToken = "deviceToken"
