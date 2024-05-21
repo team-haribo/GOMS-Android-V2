@@ -23,7 +23,7 @@ import java.util.concurrent.Executors
 
 @androidx.camera.core.ExperimentalGetImage
 @Composable
-fun QrcodeScanPreview(
+internal fun QrcodeScanPreview(
     onQrcodeScan: (String?) -> Unit
 ) {
     Scaffold(
