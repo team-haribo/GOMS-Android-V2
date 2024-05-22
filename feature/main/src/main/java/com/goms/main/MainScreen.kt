@@ -46,6 +46,7 @@ import com.goms.main.component.MainProfileCard
 import com.goms.main.component.MainTimeProfileCard
 import com.goms.main.viewmodel.MainViewModel
 import com.goms.main.viewmodel.uistate.TokenRefreshUiState
+import com.goms.model.enum.Switch
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -65,7 +66,7 @@ internal fun MainRoute(
     viewModel: MainViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
 ) {
     val role by viewModel.role.collectAsStateWithLifecycle(initialValue = "")
-    val timeValue by viewModel.timeValue.collectAsStateWithLifecycle(initialValue = "Off")
+    val timeValue by viewModel.timeValue.collectAsStateWithLifecycle(initialValue = Switch.OFF.value)
     val isRefreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
     val tokenRefreshUiState by viewModel.tokenRefreshUiState.collectAsStateWithLifecycle()
     val getProfileUiState by viewModel.getProfileUiState.collectAsStateWithLifecycle()
@@ -77,12 +78,12 @@ internal fun MainRoute(
     var isTimeLaunch by rememberSaveable { mutableStateOf(false) }
 
     LaunchedEffect(role) {
-        if (qrcodeState == "On" && isQrcodeLaunch && role.isNotBlank()) {
+        if (qrcodeState == Switch.ON.value && isQrcodeLaunch && role.isNotBlank()) {
             onQrcodeClick(Authority.valueOf(role))
             isQrcodeLaunch = false
         }
 
-        isTimeLaunch = timeValue == "On" && role == Authority.ROLE_STUDENT_COUNCIL.name
+        isTimeLaunch = timeValue == Switch.ON.value && role == Authority.ROLE_STUDENT_COUNCIL.name
     }
 
     MainScreen(

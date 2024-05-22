@@ -34,6 +34,7 @@ import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.util.lockScreenOrientation
 import com.goms.model.enum.Authority
+import com.goms.model.enum.Switch
 import com.goms.setting.component.PasswordChangeButton
 import com.goms.setting.component.SelectThemeDropDown
 import com.goms.setting.component.SettingProfileCard
@@ -277,9 +278,9 @@ private fun SettingScreen(
                     detail = "외출할 시간이 될 때마다 알려드려요",
                     switchOnBackground = colors.P5,
                     switchOffBackground = colors.G4,
-                    isSwitchOn = alarmState == "On",
-                    onFunctionOff = { if (alarmState == "On") onUpdateAlarm("Off") },
-                    onFunctionOn = { if (alarmState == "Off") onUpdateAlarm("On") }
+                    isSwitchOn = alarmState == Switch.ON.value,
+                    onFunctionOff = { if (alarmState == Switch.ON.value) onUpdateAlarm(Switch.OFF.value) },
+                    onFunctionOn = { if (alarmState == Switch.OFF.value) onUpdateAlarm(Switch.ON.value) }
                 )
                 Spacer(modifier = Modifier.height(32.dp))
                 SettingSwitchComponent(
@@ -288,9 +289,9 @@ private fun SettingScreen(
                     detail = "앱을 실행하면 즉시 카메라가 켜져요",
                     switchOnBackground = colors.P5,
                     switchOffBackground = colors.G4,
-                    isSwitchOn = qrcodeState == "On",
-                    onFunctionOff = { if (qrcodeState == "On") onUpdateQrcode("Off") },
-                    onFunctionOn = { if (qrcodeState == "Off") onUpdateQrcode("On") }
+                    isSwitchOn = qrcodeState == Switch.ON.value,
+                    onFunctionOff = { if (qrcodeState == Switch.ON.value) onUpdateQrcode(Switch.OFF.value) },
+                    onFunctionOn = { if (qrcodeState == Switch.OFF.value) onUpdateQrcode(Switch.ON.value) }
                 )
             }
             if (role == Authority.ROLE_STUDENT_COUNCIL.name) {
@@ -300,9 +301,9 @@ private fun SettingScreen(
                     detail = "프로필 카드에 초 단위의 시간을 나타내요",
                     switchOnBackground = colors.A7,
                     switchOffBackground = colors.G4,
-                    isSwitchOn = timeState == "On",
-                    onFunctionOff = { if (timeState == "On") onUpdateTime("Off") },
-                    onFunctionOn = { if (timeState == "Off") onUpdateTime("On") }
+                    isSwitchOn = timeState == Switch.ON.value,
+                    onFunctionOff = { if (timeState == Switch.ON.value) onUpdateTime(Switch.OFF.value) },
+                    onFunctionOn = { if (timeState == Switch.OFF.value) onUpdateTime(Switch.ON.value) }
                 )
                 Spacer(modifier = Modifier.height(32.dp))
                 SettingSwitchComponent(
@@ -311,9 +312,9 @@ private fun SettingScreen(
                     detail = "앱을 실행하면 즉시 Qr코드를 생성해요",
                     switchOnBackground = colors.A7,
                     switchOffBackground = colors.G4,
-                    isSwitchOn = qrcodeState == "On",
-                    onFunctionOff = { if (qrcodeState == "On") onUpdateQrcode("Off") },
-                    onFunctionOn = { if (qrcodeState == "Off") onUpdateQrcode("On") }
+                    isSwitchOn = qrcodeState == Switch.ON.value,
+                    onFunctionOff = { if (qrcodeState == Switch.ON.value) onUpdateQrcode(Switch.OFF.value) },
+                    onFunctionOn = { if (qrcodeState == Switch.OFF.value) onUpdateQrcode(Switch.ON.value) }
                 )
             }
             Spacer(modifier = Modifier.weight(1f))

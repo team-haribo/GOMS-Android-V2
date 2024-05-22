@@ -13,6 +13,7 @@ import com.goms.goms_android_v2.MainActivityViewModel
 import com.goms.goms_android_v2.navigation.GomsNavHost
 import com.goms.login.navigation.loginRoute
 import com.goms.main.navigation.mainRoute
+import com.goms.model.enum.Switch
 
 @Composable
 fun GomsApp(
@@ -30,7 +31,7 @@ fun GomsApp(
     val qrcodeState by viewModel.qrcodeState.collectAsState()
     val alarmState by viewModel.alarmState.collectAsState()
 
-    if (alarmState == "On") onAlarmOn()
+    if (alarmState == Switch.ON.value) onAlarmOn()
 
     GomsTheme(themeMode = themeState) { _, _ ->
         CompositionLocalProvider {
@@ -40,7 +41,7 @@ fun GomsApp(
                 onLogout = onLogout,
                 onThemeSelect = { viewModel.getTheme() },
                 onUpdateAlarm = { alarm ->
-                    if (alarm == "Off") {
+                    if (alarm == Switch.OFF.value) {
                         onAlarmOff()
                     } else {
                         onAlarmOn()

@@ -1,6 +1,7 @@
 package com.goms.datastore
 
 import androidx.datastore.core.DataStore
+import com.goms.model.enum.Switch
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -21,7 +22,7 @@ class SettingDataSource @Inject constructor(
     }
 
     fun getAlarmValue(): Flow<String> = settingInfo.data.map {
-        if (it.alarm.isNullOrEmpty()) "On" else it.alarm
+        if (it.alarm.isNullOrEmpty()) Switch.ON.value else it.alarm
     }
 
     suspend fun setAlarmValue(alarmValue: String) {
@@ -33,7 +34,7 @@ class SettingDataSource @Inject constructor(
     }
 
     fun getQrcodeValue(): Flow<String> = settingInfo.data.map {
-        if (it.qrcode.isNullOrEmpty()) "Off" else it.qrcode
+        if (it.qrcode.isNullOrEmpty()) Switch.OFF.value else it.qrcode
     }
 
     suspend fun setQrcodeValue(qrcodeValue: String) {
@@ -45,7 +46,7 @@ class SettingDataSource @Inject constructor(
     }
 
     fun getTimeValue(): Flow<String> = settingInfo.data.map {
-        if (it.time.isNullOrEmpty()) "Off" else it.time
+        if (it.time.isNullOrEmpty()) Switch.OFF.value else it.time
     }
 
     suspend fun setTimeValue(timeValue: String) {
