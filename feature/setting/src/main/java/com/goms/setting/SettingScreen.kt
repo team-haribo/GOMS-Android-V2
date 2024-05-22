@@ -32,6 +32,7 @@ import com.goms.design_system.component.button.GomsButton
 import com.goms.design_system.component.dialog.GomsTwoButtonDialog
 import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
 import com.goms.design_system.theme.GomsTheme.colors
+import com.goms.design_system.theme.ThemeType
 import com.goms.design_system.util.lockScreenOrientation
 import com.goms.model.enum.Authority
 import com.goms.model.enum.Switch
@@ -261,10 +262,10 @@ private fun SettingScreen(
                 modifier = Modifier,
                 onThemeSelect = {
                     val selectedTheme = when (it) {
-                        0 -> "Dark"
-                        1 -> "Light"
-                        2 -> "System"
-                        else -> "Dark"
+                        0 -> ThemeType.DARK.value
+                        1 -> ThemeType.LIGHT.value
+                        2 -> ThemeType.SYSTEM.value
+                        else -> ThemeType.DARK.value
                     }
                     onThemeSelect(selectedTheme)
                 },
