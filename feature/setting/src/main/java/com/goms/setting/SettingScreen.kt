@@ -280,8 +280,8 @@ private fun SettingScreen(
                     switchOnBackground = colors.P5,
                     switchOffBackground = colors.G4,
                     isSwitchOn = alarmState == Switch.ON.value,
-                    onFunctionOff = { if (alarmState == Switch.ON.value) onUpdateAlarm(Switch.OFF.value) },
-                    onFunctionOn = { if (alarmState == Switch.OFF.value) onUpdateAlarm(Switch.ON.value) }
+                    onFunctionOff = { onUpdateAlarm(Switch.OFF.value) },
+                    onFunctionOn = { onUpdateAlarm(Switch.ON.value) }
                 )
                 Spacer(modifier = Modifier.height(32.dp))
                 SettingSwitchComponent(
@@ -291,8 +291,8 @@ private fun SettingScreen(
                     switchOnBackground = colors.P5,
                     switchOffBackground = colors.G4,
                     isSwitchOn = qrcodeState == Switch.ON.value,
-                    onFunctionOff = { if (qrcodeState == Switch.ON.value) onUpdateQrcode(Switch.OFF.value) },
-                    onFunctionOn = { if (qrcodeState == Switch.OFF.value) onUpdateQrcode(Switch.ON.value) }
+                    onFunctionOff = { onUpdateQrcode(Switch.OFF.value) },
+                    onFunctionOn = { onUpdateQrcode(Switch.ON.value) }
                 )
             }
             if (role == Authority.ROLE_STUDENT_COUNCIL.name) {
@@ -303,8 +303,8 @@ private fun SettingScreen(
                     switchOnBackground = colors.A7,
                     switchOffBackground = colors.G4,
                     isSwitchOn = timeState == Switch.ON.value,
-                    onFunctionOff = { if (timeState == Switch.ON.value) onUpdateTime(Switch.OFF.value) },
-                    onFunctionOn = { if (timeState == Switch.OFF.value) onUpdateTime(Switch.ON.value) }
+                    onFunctionOff = { onUpdateTime(Switch.OFF.value) },
+                    onFunctionOn = { onUpdateTime(Switch.ON.value) }
                 )
                 Spacer(modifier = Modifier.height(32.dp))
                 SettingSwitchComponent(
@@ -314,8 +314,8 @@ private fun SettingScreen(
                     switchOnBackground = colors.A7,
                     switchOffBackground = colors.G4,
                     isSwitchOn = qrcodeState == Switch.ON.value,
-                    onFunctionOff = { if (qrcodeState == Switch.ON.value) onUpdateQrcode(Switch.OFF.value) },
-                    onFunctionOn = { if (qrcodeState == Switch.OFF.value) onUpdateQrcode(Switch.ON.value) }
+                    onFunctionOff = { onUpdateQrcode(Switch.OFF.value) },
+                    onFunctionOn = { onUpdateQrcode(Switch.ON.value) }
                 )
             }
             Spacer(modifier = Modifier.weight(1f))
