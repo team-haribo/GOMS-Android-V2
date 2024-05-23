@@ -96,7 +96,7 @@ internal fun SettingRoute(
         }
     }
 
-    DisposableEffect("qrcode set") {
+    DisposableEffect("setting data set") {
         onDispose {
             if (!qrcodeData.isNullOrEmpty()) {
                 viewModel.setQrcode(qrcodeData)
