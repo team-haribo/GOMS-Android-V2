@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.goms.design_system.component.dropdown.GomsDropdown
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
+import com.goms.design_system.theme.ThemeType
 import kotlinx.collections.immutable.toPersistentList
 
 @Composable
@@ -30,9 +31,9 @@ internal fun SelectThemeDropDown(
     var selectedIndex by remember { mutableIntStateOf(0) }
 
     selectedIndex = when(themeState) {
-        "Dark" -> 0
-        "Light" -> 1
-        "System" -> 2
+        ThemeType.DARK.value -> 0
+        ThemeType.LIGHT.value -> 1
+        ThemeType.SYSTEM.value -> 2
         else -> 0
     }
 

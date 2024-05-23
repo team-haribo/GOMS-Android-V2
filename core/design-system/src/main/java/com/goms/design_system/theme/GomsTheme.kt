@@ -1,7 +1,6 @@
 package com.goms.design_system.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.ColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
@@ -10,9 +9,9 @@ import com.goms.design_system.theme.color.LightColor
 import com.goms.design_system.util.ApplySystemUi
 
 enum class ThemeType(val value: String) {
-    Dark("Dark"),
-    Light("Light"),
-    System("System")
+    DARK("Dark"),
+    LIGHT("Light"),
+    SYSTEM("System")
 }
 
 internal val LocalColorTheme = compositionLocalOf<ColorTheme> { error("No ColorTheme provided") }
@@ -20,13 +19,13 @@ internal val LocalTypography = compositionLocalOf<GomsTypography> { error("No Go
 
 @Composable
 fun GomsTheme(
-    themeMode: String = ThemeType.Dark.name,
+    themeMode: String = ThemeType.DARK.value,
     content: @Composable (colors: ColorTheme, typography: GomsTypography) -> Unit
 ) {
     val theme = when (themeMode) {
-        ThemeType.Dark.name -> true
-        ThemeType.Light.name -> false
-        ThemeType.System.name -> isSystemInDarkTheme()
+        ThemeType.DARK.value -> true
+        ThemeType.LIGHT.value -> false
+        ThemeType.SYSTEM.value -> isSystemInDarkTheme()
         else -> true
     }
 
