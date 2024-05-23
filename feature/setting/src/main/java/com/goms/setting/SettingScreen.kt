@@ -71,9 +71,9 @@ internal fun SettingRoute(
     val setThemeUiState by viewModel.setThemeState.collectAsStateWithLifecycle()
 
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
-    var qrcodeData by remember { mutableStateOf("") }
-    var alarmData by remember { mutableStateOf("") }
-    var timeData by remember { mutableStateOf("") }
+    var qrcodeData by remember { mutableStateOf(qrcodeState) }
+    var alarmData by remember { mutableStateOf(alarmState) }
+    var timeData by remember { mutableStateOf(timeState) }
 
     val galleryLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
