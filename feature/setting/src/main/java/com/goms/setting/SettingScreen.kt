@@ -275,6 +275,17 @@ private fun SettingScreen(
             if (role == Authority.ROLE_STUDENT.name) {
                 SettingSwitchComponent(
                     modifier = Modifier.padding(horizontal = 8.dp),
+                    title = "시계 나타내기",
+                    detail = "프로필 카드에 초 단위의 시간을 나타내요",
+                    switchOnBackground = colors.P5,
+                    switchOffBackground = colors.G4,
+                    isSwitchOn = timeState == Switch.ON.value,
+                    onFunctionOff = { onUpdateTime(Switch.OFF.value) },
+                    onFunctionOn = { onUpdateTime(Switch.ON.value) }
+                )
+                Spacer(modifier = Modifier.height(32.dp))
+                SettingSwitchComponent(
+                    modifier = Modifier.padding(horizontal = 8.dp),
                     title = "외출제 푸시 알림",
                     detail = "외출할 시간이 될 때마다 알려드려요",
                     switchOnBackground = colors.P5,

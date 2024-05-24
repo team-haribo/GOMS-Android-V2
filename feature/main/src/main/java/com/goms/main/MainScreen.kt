@@ -77,13 +77,13 @@ internal fun MainRoute(
     var isQrcodeLaunch by rememberSaveable { mutableStateOf(true) }
     var isTimeLaunch by rememberSaveable { mutableStateOf(false) }
 
-    LaunchedEffect(role) {
+    LaunchedEffect(role, timeValue) {
         if (qrcodeState == Switch.ON.value && isQrcodeLaunch && role.isNotBlank()) {
             onQrcodeClick(Authority.valueOf(role))
             isQrcodeLaunch = false
         }
 
-        isTimeLaunch = timeValue == Switch.ON.value && role == Authority.ROLE_STUDENT_COUNCIL.name
+        isTimeLaunch = timeValue == Switch.ON.value
     }
 
     MainScreen(
