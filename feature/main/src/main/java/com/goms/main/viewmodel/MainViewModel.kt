@@ -39,6 +39,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -127,7 +128,9 @@ class MainViewModel @Inject constructor(
     internal var filterMajor = savedStateHandle.getStateFlow(key = FILTER_MAJOR, initialValue = "")
 
     internal fun getTimeValue() = viewModelScope.launch {
-        _timeValue.value = settingRepository.getTimeValue().first().replace("\"","")
+        settingRepository.getTimeValue().distinctUntilChanged().collect {
+            _timeValue.value = it
+        }
     }
 
     internal fun tokenRefresh() = viewModelScope.launch {
