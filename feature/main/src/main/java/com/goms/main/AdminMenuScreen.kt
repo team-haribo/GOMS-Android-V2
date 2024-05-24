@@ -19,7 +19,7 @@ import com.goms.model.enum.Authority
 import com.goms.ui.GomsRoleBackButton
 
 @Composable
-fun AdminMenuRoute(
+internal fun AdminMenuRoute(
     onBackClick: () -> Unit,
     onQrCreateClick: () -> Unit,
     onStudentManagementClick: () -> Unit,
@@ -38,7 +38,7 @@ fun AdminMenuRoute(
 }
 
 @Composable
-fun AdminMenuScreen(
+private fun AdminMenuScreen(
     role: Authority = Authority.ROLE_STUDENT_COUNCIL,
     onBackClick: () -> Unit,
     onQrCreateClick: () -> Unit,

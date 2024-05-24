@@ -48,7 +48,7 @@ import com.goms.sign_up.viewmodel.SignUpViewModel
 import com.goms.ui.isValidEmail
 
 @Composable
-fun SignUpRoute(
+internal fun SignUpRoute(
     onBackClick: () -> Unit,
     onNumberClick: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
@@ -80,7 +80,7 @@ fun SignUpRoute(
 
 
 @Composable
-fun SignUpScreen(
+private fun SignUpScreen(
     name: String,
     email: String,
     gender: String,

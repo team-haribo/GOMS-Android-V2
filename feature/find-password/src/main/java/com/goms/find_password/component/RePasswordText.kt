@@ -8,7 +8,7 @@ import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
 
 @Composable
-fun RePasswordText(modifier: Modifier) {
+internal fun RePasswordText(modifier: Modifier) {
     Text(
         modifier = modifier,
         text = "비밀번호 재설정",

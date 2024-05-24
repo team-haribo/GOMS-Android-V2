@@ -49,7 +49,7 @@ class MainActivity : ComponentActivity() {
             viewModel.uiState
                 .collect {
                     uiState = it
-                    if (it is MainActivityUiState.Success) viewModel.saveToken(it.loginResponseModel)
+                    if (it is MainActivityUiState.Success) runBlocking { viewModel.saveToken(it.loginResponseModel) }
                 }
         }
 
@@ -93,7 +93,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    fun controlTheStackWhenBackPressed() {
+    private fun controlTheStackWhenBackPressed() {
         val currentTime = System.currentTimeMillis()
         if (doubleBackToExitPressedOnce && currentTime - backPressedTimestamp <= 2000) {
             finishAffinity()

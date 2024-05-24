@@ -9,7 +9,7 @@ import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
 
 @Composable
-fun PasswordText(modifier: Modifier) {
+internal fun PasswordText(modifier: Modifier) {
     Text(
         modifier = modifier,
         text = "비밀번호 설정",

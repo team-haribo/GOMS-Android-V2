@@ -38,7 +38,7 @@ import com.goms.re_password.component.RePasswordText
 import com.goms.re_password.viewmodel.RePasswordViewmodel
 
 @Composable
-fun PasswordCheckRoute(
+internal fun PasswordCheckRoute(
     onBackClick: () -> Unit,
     onRePasswordClick: () -> Unit,
     viewModel: RePasswordViewmodel = hiltViewModel(LocalContext.current as ComponentActivity)
@@ -54,7 +54,7 @@ fun PasswordCheckRoute(
 }
 
 @Composable
-fun PasswordCheckScreen(
+private fun PasswordCheckScreen(
     password: String,
     onPasswordChange: (String) -> Unit,
     onBackClick: () -> Unit,

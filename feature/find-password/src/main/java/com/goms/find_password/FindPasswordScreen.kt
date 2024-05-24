@@ -45,7 +45,7 @@ import com.goms.find_password.viewmodel.FindPasswordViewmodel
 import com.goms.model.util.ResourceKeys
 
 @Composable
-fun FindPasswordRoute(
+internal fun FindPasswordRoute(
     onBackClick: () -> Unit,
     onSuccessClick: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
@@ -77,7 +77,7 @@ fun FindPasswordRoute(
 }
 
 @Composable
-fun FindPasswordScreen(
+private fun FindPasswordScreen(
     password: String,
     passwordCheck: String,
     onPasswordChange: (String) -> Unit,

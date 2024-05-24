@@ -30,23 +30,23 @@ class SignUpViewModel @Inject constructor(
     private val verifyNumberUseCase: VerifyNumberUseCase
 ) : ViewModel() {
     private val _signUpUiState = MutableStateFlow<SignUpUiState>(SignUpUiState.Loading)
-    val signUpUiState = _signUpUiState.asStateFlow()
+    internal val signUpUiState = _signUpUiState.asStateFlow()
 
     private val _sendNumberUiState = MutableStateFlow<SendNumberUiState>(SendNumberUiState.Loading)
-    val sendNumberUiState = _sendNumberUiState.asStateFlow()
+    internal val sendNumberUiState = _sendNumberUiState.asStateFlow()
 
     private val _verifyNumberUiState = MutableStateFlow<VerifyNumberUiState>(VerifyNumberUiState.Loading)
-    val verifyNumberUiState = _verifyNumberUiState.asStateFlow()
+    internal val verifyNumberUiState = _verifyNumberUiState.asStateFlow()
 
-    var name = savedStateHandle.getStateFlow(key = NAME, initialValue = "")
-    var email = savedStateHandle.getStateFlow(key = EMAIL, initialValue = "")
-    var gender = savedStateHandle.getStateFlow(key = GENDER, initialValue = "")
-    var major = savedStateHandle.getStateFlow(key = MAJOR, initialValue = "")
-    var number = savedStateHandle.getStateFlow(key = NUMBER, initialValue = "")
-    var password = savedStateHandle.getStateFlow(key = PASSWORD, initialValue = "")
-    var checkPassword = savedStateHandle.getStateFlow(key = CHECK_PASSWORD, initialValue = "")
+    internal var name = savedStateHandle.getStateFlow(key = NAME, initialValue = "")
+    internal var email = savedStateHandle.getStateFlow(key = EMAIL, initialValue = "")
+    internal var gender = savedStateHandle.getStateFlow(key = GENDER, initialValue = "")
+    internal var major = savedStateHandle.getStateFlow(key = MAJOR, initialValue = "")
+    internal var number = savedStateHandle.getStateFlow(key = NUMBER, initialValue = "")
+    internal var password = savedStateHandle.getStateFlow(key = PASSWORD, initialValue = "")
+    internal var checkPassword = savedStateHandle.getStateFlow(key = CHECK_PASSWORD, initialValue = "")
 
-    fun signUp(body: SignUpRequestModel) = viewModelScope.launch {
+    internal fun signUp(body: SignUpRequestModel) = viewModelScope.launch {
         _signUpUiState.value = SignUpUiState.Loading
         when {
             password.value != checkPassword.value -> {
@@ -78,7 +78,7 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
-    fun sendNumber(body: SendNumberRequestModel) = viewModelScope.launch {
+    internal fun sendNumber(body: SendNumberRequestModel) = viewModelScope.launch {
         if (!isValidEmail(body.email)) {
             _sendNumberUiState.value = SendNumberUiState.EmailNotValid
         } else {
@@ -95,11 +95,11 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
-    fun initSendNumber() {
+    internal fun initSendNumber() {
         _sendNumberUiState.value = SendNumberUiState.Loading
     }
 
-    fun verifyNumber(email: String, authCode: String) = viewModelScope.launch {
+    internal fun verifyNumber(email: String, authCode: String) = viewModelScope.launch {
         verifyNumberUseCase(email = email, authCode = authCode)
             .onSuccess {
                 it.catch {  remoteError ->
@@ -120,35 +120,35 @@ class SignUpViewModel @Inject constructor(
             }
     }
 
-    fun initVerifyNumber() {
+    internal fun initVerifyNumber() {
         _verifyNumberUiState.value = VerifyNumberUiState.Loading
     }
 
-    fun onNameChange(value: String) {
+    internal fun onNameChange(value: String) {
         savedStateHandle[NAME] = value
     }
 
-    fun onEmailChange(value: String) {
+    internal fun onEmailChange(value: String) {
         savedStateHandle[EMAIL] = value
     }
 
-    fun onGenderChange(value: String) {
+    internal fun onGenderChange(value: String) {
         savedStateHandle[GENDER] = value
     }
 
-    fun onMajorChange(value: String) {
+    internal fun onMajorChange(value: String) {
         savedStateHandle[MAJOR] = value
     }
 
-    fun onNumberChange(value: String) {
+    internal fun onNumberChange(value: String) {
         savedStateHandle[NUMBER] = value
     }
 
-    fun onPasswordChange(value: String) {
+    internal fun onPasswordChange(value: String) {
         savedStateHandle[PASSWORD] = value
     }
 
-    fun onCheckPasswordChange(value: String) {
+    internal fun onCheckPasswordChange(value: String) {
         savedStateHandle[CHECK_PASSWORD] = value
     }
 }

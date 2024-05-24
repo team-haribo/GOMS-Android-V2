@@ -31,7 +31,7 @@ import java.util.Date
 import java.util.Locale
 
 @Composable
-fun MainTimeProfileCard(
+internal fun MainTimeProfileCard(
     modifier: Modifier = Modifier,
     time: Date,
     getProfileUiState: GetProfileUiState,
@@ -59,7 +59,7 @@ fun MainTimeProfileCard(
 }
 
 @Composable
-fun MainTimeProfileCardComponent(
+private fun MainTimeProfileCardComponent(
     modifier: Modifier,
     data: ProfileData,
     time: Date
@@ -136,7 +136,7 @@ fun MainTimeProfileCardComponent(
 }
 
 @Composable
-fun ShimmerMainTimeProfileCardComponent(modifier: Modifier) {
+private fun ShimmerMainTimeProfileCardComponent(modifier: Modifier) {
     Surface(
         modifier = modifier,
         color = colors.G1,

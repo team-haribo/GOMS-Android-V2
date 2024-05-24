@@ -11,9 +11,11 @@ interface AuthRepository {
 
     suspend fun login(body: LoginRequestModel): Flow<LoginResponseModel>
 
-    suspend fun tokenRefresh(): Flow<LoginResponseModel>
+    suspend fun tokenRefresh(refreshToken: String): Flow<LoginResponseModel>
 
     suspend fun saveToken(token: LoginResponseModel)
+
+    fun getRefreshToken(): Flow<String>
 
     fun getRole(): Flow<String>
 

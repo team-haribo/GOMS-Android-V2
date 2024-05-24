@@ -45,7 +45,7 @@ import com.goms.ui.GomsRoleBackButton
 import java.util.UUID
 
 @Composable
-fun OutingStatusRoute(
+internal fun OutingStatusRoute(
     onBackClick: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
     viewModel: MainViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
@@ -80,7 +80,7 @@ fun OutingStatusRoute(
 }
 
 @Composable
-fun OutingStatusScreen(
+private fun OutingStatusScreen(
     role: Authority,
     outingSearch: String,
     onOutingSearchChange: (String) -> Unit,

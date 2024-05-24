@@ -45,7 +45,7 @@ import kotlinx.collections.immutable.toPersistentList
 import java.util.UUID
 
 @Composable
-fun StudentManagementList(
+internal fun StudentManagementList(
     modifier: Modifier = Modifier,
     getStudentListUiState: GetStudentListUiState,
     studentSearchUiState: StudentSearchUiState,
@@ -88,7 +88,7 @@ fun StudentManagementList(
         StudentSearchUiState.Empty -> {
             Column(
                 modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                verticalArrangement = Arrangement.spacedBy(200.dp)
             ) {
                 Row(
                     modifier = modifier.fillMaxWidth(),
@@ -116,7 +116,7 @@ fun StudentManagementList(
 }
 
 @Composable
-fun StudentManagementListComponent(
+private fun StudentManagementListComponent(
     modifier: Modifier,
     list: PersistentList<StudentData>,
     onBottomSheetOpenClick: () -> Unit,
@@ -152,7 +152,7 @@ fun StudentManagementListComponent(
 }
 
 @Composable
-fun StudentManagementListItem(
+private fun StudentManagementListItem(
     modifier: Modifier = Modifier,
     data: StudentData,
     onClick: (UUID, String, String) -> Unit
@@ -229,7 +229,7 @@ fun StudentManagementListItem(
 }
 
 @Composable
-fun ShimmerStudentManagementListComponent(modifier: Modifier) {
+private fun ShimmerStudentManagementListComponent(modifier: Modifier) {
     Column(modifier = modifier.fillMaxWidth()) {
         Row(
             modifier = modifier.fillMaxWidth(),
@@ -256,7 +256,7 @@ fun ShimmerStudentManagementListComponent(modifier: Modifier) {
 }
 
 @Composable
-fun ShimmerStudentManagementListItem(modifier: Modifier) {
+private fun ShimmerStudentManagementListItem(modifier: Modifier) {
     Row(
         modifier = modifier
             .fillMaxWidth()

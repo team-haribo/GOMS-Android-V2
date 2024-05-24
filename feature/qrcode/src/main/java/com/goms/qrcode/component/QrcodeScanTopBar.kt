@@ -20,7 +20,7 @@ import com.goms.design_system.icon.GomsTextIcon
 import com.goms.design_system.theme.GomsTheme
 
 @Composable
-fun QrcodeScanTopBar(
+internal fun QrcodeScanTopBar(
     onClick: () -> Unit
 ) {
     Row(
@@ -47,6 +47,6 @@ fun QrcodeScanTopBar(
 
 @Composable
 @Preview(showBackground = true)
-fun QrcodeScanTopBarPreview() {
+private fun QrcodeScanTopBarPreview() {
     QrcodeScanTopBar(onClick = {})
 }

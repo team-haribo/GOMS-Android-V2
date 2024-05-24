@@ -21,13 +21,13 @@ class RePasswordViewmodel @Inject constructor(
     private val rePasswordUseCase: RePasswordUseCase
 ) : ViewModel() {
     private val _rePasswordUiState = MutableStateFlow<RePasswordUiState>(RePasswordUiState.Loading)
-    val rePasswordUiState = _rePasswordUiState.asStateFlow()
+    internal val rePasswordUiState = _rePasswordUiState.asStateFlow()
 
-    var password = savedStateHandle.getStateFlow(key = PASSWORD, initialValue = "")
-    var newPassword = savedStateHandle.getStateFlow(key = NEW_PASSWORD, initialValue = "")
-    var newCheckPassword = savedStateHandle.getStateFlow(key = NEW_CHECK_PASSWORD, initialValue = "")
+    internal var password = savedStateHandle.getStateFlow(key = PASSWORD, initialValue = "")
+    internal var newPassword = savedStateHandle.getStateFlow(key = NEW_PASSWORD, initialValue = "")
+    internal var newCheckPassword = savedStateHandle.getStateFlow(key = NEW_CHECK_PASSWORD, initialValue = "")
 
-    fun rePassword(body: RePasswordRequestModel) = viewModelScope.launch {
+    internal fun rePassword(body: RePasswordRequestModel) = viewModelScope.launch {
         when {
             newPassword.value != newCheckPassword.value -> {
                 _rePasswordUiState.value = RePasswordUiState.PasswordMismatch
@@ -58,19 +58,19 @@ class RePasswordViewmodel @Inject constructor(
         }
     }
 
-    fun initRePassword() {
+    internal fun initRePassword() {
         _rePasswordUiState.value = RePasswordUiState.Loading
     }
 
-    fun onPasswordChange(value: String) {
+    internal fun onPasswordChange(value: String) {
         savedStateHandle[PASSWORD] = value
     }
 
-    fun onNewPasswordChange(value: String) {
+    internal fun onNewPasswordChange(value: String) {
         savedStateHandle[NEW_PASSWORD] = value
     }
 
-    fun onNewCheckPasswordChange(value: String) {
+    internal fun onNewCheckPasswordChange(value: String) {
         savedStateHandle[NEW_CHECK_PASSWORD] = value
     }
 }

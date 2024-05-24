@@ -1,6 +1,6 @@
 package com.goms.network.di
 
-object RequestUrls {
+internal object RequestUrls {
     object PATH {
         const val accountIdx = "accountIdx"
         const val deviceToken = "deviceToken"
@@ -20,7 +20,7 @@ object RequestUrls {
     object AUTH {
         private const val path = "api/v2/auth"
 
-        const val auth = path
+        const val auth = "$path/"
         const val signUp = "$path/signup"
         const val signIn = "$path/signin"
         const val send = "$path/email/send"

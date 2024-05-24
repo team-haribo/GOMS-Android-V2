@@ -17,7 +17,7 @@ import kotlinx.coroutines.delay
 import java.util.concurrent.TimeUnit
 
 @Composable
-fun QrcodeGenerateTimer(
+internal fun QrcodeGenerateTimer(
     onTimerFinish: () -> Unit,
 ) {
     var remainingTime by remember { mutableIntStateOf(5 * 60) }
@@ -47,7 +47,7 @@ fun QrcodeGenerateTimer(
 }
 
 @Composable
-fun formatTime(seconds: Long): String {
+private fun formatTime(seconds: Long): String {
     val minutes = TimeUnit.SECONDS.toMinutes(seconds)
     val remainingSeconds = seconds - TimeUnit.MINUTES.toSeconds(minutes)
     return String.format("%01d분 %02d초", minutes, remainingSeconds)

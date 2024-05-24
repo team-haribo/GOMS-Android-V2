@@ -28,18 +28,18 @@ class QrcodeViewModel @Inject constructor(
     private val getProfileUseCase: GetProfileUseCase,
     private val authRepository: AuthRepository
 ) : ViewModel() {
-    val role = authRepository.getRole()
+    internal val role = authRepository.getRole()
 
     private val _outingState = MutableStateFlow<OutingUiState>(OutingUiState.Loading)
-    val outingState = _outingState.asStateFlow()
+    internal val outingState = _outingState.asStateFlow()
 
     private val _getOutingUUIDState = MutableStateFlow<GetOutingUUIDUiState>(GetOutingUUIDUiState.Loading)
-    val getOutingUUIDState = _getOutingUUIDState.asStateFlow()
+    internal val getOutingUUIDState = _getOutingUUIDState.asStateFlow()
 
     private val _getProfileUiState = MutableStateFlow<GetProfileUiState>(GetProfileUiState.Loading)
-    val getProfileUiState = _getProfileUiState.asStateFlow()
+    internal val getProfileUiState = _getProfileUiState.asStateFlow()
 
-    fun outing(outingUUID: UUID) = viewModelScope.launch {
+    internal fun outing(outingUUID: UUID) = viewModelScope.launch {
         outingUseCase(outingUUID = outingUUID)
             .onSuccess {
                 it.catch {  remoteError ->
@@ -58,11 +58,11 @@ class QrcodeViewModel @Inject constructor(
             }
     }
 
-    fun qrcodeDataError() = viewModelScope.launch {
+    internal fun qrcodeDataError() = viewModelScope.launch {
         _outingState.value = OutingUiState.BadRequest
     }
 
-    fun getOutingUUID() = viewModelScope.launch {
+    internal fun getOutingUUID() = viewModelScope.launch {
         getOutingUUIDUseCase()
             .asResult()
             .collectLatest { result ->
@@ -74,7 +74,7 @@ class QrcodeViewModel @Inject constructor(
             }
     }
 
-    fun getProfile() = viewModelScope.launch {
+    internal fun getProfile() = viewModelScope.launch {
         getProfileUseCase()
             .asResult()
             .collectLatest { result ->

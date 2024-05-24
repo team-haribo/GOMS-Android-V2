@@ -44,7 +44,7 @@ import com.goms.re_password.viewmodel.RePasswordViewmodel
 import com.goms.re_password.viewmodel.uistate.RePasswordUiState
 
 @Composable
-fun RePasswordRoute(
+internal fun RePasswordRoute(
     onBackClick: () -> Unit,
     onSuccessClick: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
@@ -76,7 +76,7 @@ fun RePasswordRoute(
 }
 
 @Composable
-fun RePasswordScreen(
+private fun RePasswordScreen(
     password: String,
     passwordCheck: String,
     onPasswordChange: (String) -> Unit,

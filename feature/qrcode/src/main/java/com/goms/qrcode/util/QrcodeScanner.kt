@@ -11,22 +11,26 @@ import com.google.mlkit.vision.common.InputImage
 class QrcodeScanner(
     val qrcodeData: (String?) -> Unit
 ) : ImageAnalysis.Analyzer {
-    @androidx.annotation.OptIn(androidx.camera.core.ExperimentalGetImage::class)
-    override fun analyze(imageProxy: ImageProxy) {
-        val options = BarcodeScannerOptions.Builder()
+
+    private val scanner = BarcodeScanning.getClient(
+        BarcodeScannerOptions.Builder()
             .setBarcodeFormats(Barcode.FORMAT_QR_CODE)
             .build()
-
-        val scanner = BarcodeScanning.getClient(options)
+    )
+    @androidx.annotation.OptIn(androidx.camera.core.ExperimentalGetImage::class)
+    override fun analyze(imageProxy: ImageProxy) {
         val mediaImage = imageProxy.image
         mediaImage?.let {
             val image = InputImage.fromMediaImage(mediaImage, imageProxy.imageInfo.rotationDegrees)
 
             scanner.process(image)
                 .addOnSuccessListener { barcodes ->
-                    if (barcodes.isNotEmpty()) {
-                        val qrCodeValue = barcodes[0].displayValue
-                        qrcodeData(qrCodeValue)
+                    val qrCodeValues = mutableListOf<String>()
+                    for (barcode in barcodes) {
+                        barcode.displayValue?.let { qrCodeValues.add(it) }
+                    }
+                    if (qrCodeValues.isNotEmpty()) {
+                        qrcodeData(qrCodeValues.joinToString(", "))
                     }
                 }
                 .addOnFailureListener {

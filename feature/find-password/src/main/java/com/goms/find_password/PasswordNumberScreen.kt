@@ -45,7 +45,7 @@ import com.goms.find_password.viewmodel.uistate.VerifyNumberUiState
 import com.goms.model.util.ResourceKeys
 
 @Composable
-fun PasswordNumberRoute(
+internal fun PasswordNumberRoute(
     onBackClick: () -> Unit,
     onFindPasswordClick: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
@@ -73,7 +73,7 @@ fun PasswordNumberRoute(
 }
 
 @Composable
-fun PasswordNumberScreen(
+private fun PasswordNumberScreen(
     number: String,
     onNumberChange: (String) -> Unit,
     verifyNumberUiState: VerifyNumberUiState,

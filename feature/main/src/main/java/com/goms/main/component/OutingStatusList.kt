@@ -44,7 +44,7 @@ import kotlinx.collections.immutable.toPersistentList
 import java.util.UUID
 
 @Composable
-fun OutingStatusList(
+internal fun OutingStatusList(
     modifier: Modifier = Modifier,
     role: Authority,
     getOutingListUiState: GetOutingListUiState,
@@ -63,8 +63,8 @@ fun OutingStatusList(
         }
 
         GetOutingCountUiState.Empty -> {
-            Column {
-                Spacer(modifier = Modifier.height(16.dp))
+            Column(modifier = Modifier.fillMaxWidth()) {
+                Spacer(modifier = Modifier.height(240.dp))
                 OutingListEmptyText()
             }
         }
@@ -105,13 +105,9 @@ fun OutingStatusList(
                 OutingSearchUiState.Empty -> {
                     Column(
                         modifier = Modifier.fillMaxWidth(),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                        verticalArrangement = Arrangement.spacedBy(215.dp)
                     ) {
-                        SearchResultText(
-                            modifier = Modifier
-                                .align(Alignment.Start)
-                                .height(40.dp)
-                        )
+                        SearchResultText(modifier = Modifier)
                         SearchEmptyText()
                     }
                 }
@@ -132,18 +128,14 @@ fun OutingStatusList(
 }
 
 @Composable
-fun OutingStatusListComponent(
+private fun OutingStatusListComponent(
     modifier: Modifier,
     role: Authority,
     list: PersistentList<OutingData>,
     onClick: (UUID) -> Unit
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
-        SearchResultText(
-            modifier = Modifier
-                .align(Alignment.Start)
-                .height(40.dp)
-        )
+        SearchResultText(modifier = Modifier)
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
@@ -167,7 +159,7 @@ fun OutingStatusListComponent(
 
 
 @Composable
-fun OutingStatusListItem(
+private fun OutingStatusListItem(
     modifier: Modifier = Modifier,
     role: Authority,
     data: OutingData,
@@ -234,13 +226,9 @@ fun OutingStatusListItem(
 
 
 @Composable
-fun ShimmerOutingStatusListComponent(modifier: Modifier) {
+private fun ShimmerOutingStatusListComponent(modifier: Modifier) {
     Column(modifier = modifier.fillMaxWidth()) {
-        SearchResultText(
-            modifier = Modifier
-                .align(Alignment.Start)
-                .height(40.dp)
-        )
+        SearchResultText(modifier = Modifier)
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
@@ -259,7 +247,7 @@ fun ShimmerOutingStatusListComponent(modifier: Modifier) {
 
 
 @Composable
-fun ShimmerOutingStatusListItem(modifier: Modifier) {
+private fun ShimmerOutingStatusListItem(modifier: Modifier) {
     Row(
         modifier = modifier
             .fillMaxWidth()

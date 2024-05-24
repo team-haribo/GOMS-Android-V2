@@ -32,8 +32,10 @@ import com.goms.design_system.component.button.GomsButton
 import com.goms.design_system.component.dialog.GomsTwoButtonDialog
 import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
 import com.goms.design_system.theme.GomsTheme.colors
+import com.goms.design_system.theme.ThemeType
 import com.goms.design_system.util.lockScreenOrientation
 import com.goms.model.enum.Authority
+import com.goms.model.enum.Switch
 import com.goms.setting.component.PasswordChangeButton
 import com.goms.setting.component.SelectThemeDropDown
 import com.goms.setting.component.SettingProfileCard
@@ -48,7 +50,7 @@ import com.goms.ui.GomsRoleBackButton
 
 
 @Composable
-fun SettingRoute(
+internal fun SettingRoute(
     onBackClick: () -> Unit,
     onLogoutSuccess: () -> Unit,
     onPasswordCheck: () -> Unit,
@@ -69,9 +71,9 @@ fun SettingRoute(
     val setThemeUiState by viewModel.setThemeState.collectAsStateWithLifecycle()
 
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
-    var qrcodeData by remember { mutableStateOf("") }
-    var alarmData by remember { mutableStateOf("") }
-    var timeData by remember { mutableStateOf("") }
+    var qrcodeData by remember { mutableStateOf(qrcodeState) }
+    var alarmData by remember { mutableStateOf(alarmState) }
+    var timeData by remember { mutableStateOf(timeState) }
 
     val galleryLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
@@ -94,7 +96,7 @@ fun SettingRoute(
         }
     }
 
-    DisposableEffect("qrcode set") {
+    DisposableEffect("setting data set") {
         onDispose {
             if (!qrcodeData.isNullOrEmpty()) {
                 viewModel.setQrcode(qrcodeData)
@@ -105,7 +107,7 @@ fun SettingRoute(
                 onUpdateAlarm(alarmData)
             }
 
-            if (!timeState.isNullOrEmpty()) {
+            if (!timeData.isNullOrEmpty()) {
                 viewModel.setTime(timeData)
             }
         }
@@ -157,7 +159,7 @@ fun SettingRoute(
 }
 
 @Composable
-fun SettingScreen(
+private fun SettingScreen(
     role: String,
     onProfileClick: (Boolean) -> Unit,
     onBackClick: () -> Unit,
@@ -260,10 +262,10 @@ fun SettingScreen(
                 modifier = Modifier,
                 onThemeSelect = {
                     val selectedTheme = when (it) {
-                        0 -> "Dark"
-                        1 -> "Light"
-                        2 -> "System"
-                        else -> "Dark"
+                        0 -> ThemeType.DARK.value
+                        1 -> ThemeType.LIGHT.value
+                        2 -> ThemeType.SYSTEM.value
+                        else -> ThemeType.DARK.value
                     }
                     onThemeSelect(selectedTheme)
                 },
@@ -273,13 +275,24 @@ fun SettingScreen(
             if (role == Authority.ROLE_STUDENT.name) {
                 SettingSwitchComponent(
                     modifier = Modifier.padding(horizontal = 8.dp),
+                    title = "시계 나타내기",
+                    detail = "프로필 카드에 초 단위의 시간을 나타내요",
+                    switchOnBackground = colors.P5,
+                    switchOffBackground = colors.G4,
+                    isSwitchOn = timeState == Switch.ON.value,
+                    onFunctionOff = { onUpdateTime(Switch.OFF.value) },
+                    onFunctionOn = { onUpdateTime(Switch.ON.value) }
+                )
+                Spacer(modifier = Modifier.height(32.dp))
+                SettingSwitchComponent(
+                    modifier = Modifier.padding(horizontal = 8.dp),
                     title = "외출제 푸시 알림",
                     detail = "외출할 시간이 될 때마다 알려드려요",
                     switchOnBackground = colors.P5,
                     switchOffBackground = colors.G4,
-                    isSwitchOn = alarmState == "On",
-                    onFunctionOff = { if (alarmState == "On") onUpdateAlarm("Off") },
-                    onFunctionOn = { if (alarmState == "Off") onUpdateAlarm("On") }
+                    isSwitchOn = alarmState == Switch.ON.value,
+                    onFunctionOff = { onUpdateAlarm(Switch.OFF.value) },
+                    onFunctionOn = { onUpdateAlarm(Switch.ON.value) }
                 )
                 Spacer(modifier = Modifier.height(32.dp))
                 SettingSwitchComponent(
@@ -288,9 +301,9 @@ fun SettingScreen(
                     detail = "앱을 실행하면 즉시 카메라가 켜져요",
                     switchOnBackground = colors.P5,
                     switchOffBackground = colors.G4,
-                    isSwitchOn = qrcodeState == "On",
-                    onFunctionOff = { if (qrcodeState == "On") onUpdateQrcode("Off") },
-                    onFunctionOn = { if (qrcodeState == "Off") onUpdateQrcode("On") }
+                    isSwitchOn = qrcodeState == Switch.ON.value,
+                    onFunctionOff = { onUpdateQrcode(Switch.OFF.value) },
+                    onFunctionOn = { onUpdateQrcode(Switch.ON.value) }
                 )
             }
             if (role == Authority.ROLE_STUDENT_COUNCIL.name) {
@@ -300,9 +313,9 @@ fun SettingScreen(
                     detail = "프로필 카드에 초 단위의 시간을 나타내요",
                     switchOnBackground = colors.A7,
                     switchOffBackground = colors.G4,
-                    isSwitchOn = timeState == "On",
-                    onFunctionOff = { if (timeState == "On") onUpdateTime("Off") },
-                    onFunctionOn = { if (timeState == "Off") onUpdateTime("On") }
+                    isSwitchOn = timeState == Switch.ON.value,
+                    onFunctionOff = { onUpdateTime(Switch.OFF.value) },
+                    onFunctionOn = { onUpdateTime(Switch.ON.value) }
                 )
                 Spacer(modifier = Modifier.height(32.dp))
                 SettingSwitchComponent(
@@ -311,9 +324,9 @@ fun SettingScreen(
                     detail = "앱을 실행하면 즉시 Qr코드를 생성해요",
                     switchOnBackground = colors.A7,
                     switchOffBackground = colors.G4,
-                    isSwitchOn = qrcodeState == "On",
-                    onFunctionOff = { if (qrcodeState == "On") onUpdateQrcode("Off") },
-                    onFunctionOn = { if (qrcodeState == "Off") onUpdateQrcode("On") }
+                    isSwitchOn = qrcodeState == Switch.ON.value,
+                    onFunctionOff = { onUpdateQrcode(Switch.OFF.value) },
+                    onFunctionOn = { onUpdateQrcode(Switch.ON.value) }
                 )
             }
             Spacer(modifier = Modifier.weight(1f))

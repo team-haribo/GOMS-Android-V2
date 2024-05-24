@@ -26,7 +26,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -35,6 +34,7 @@ import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.button.GomsButton
 import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
 import com.goms.design_system.component.text.RowLinkText
+import com.goms.design_system.component.textfield.GomsPasswordTextField
 import com.goms.design_system.component.textfield.GomsTextField
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.util.keyboardAsState
@@ -47,7 +47,7 @@ import com.goms.model.request.auth.LoginRequestModel
 import com.goms.model.util.ResourceKeys
 
 @Composable
-fun InputLoginRoute(
+internal fun InputLoginRoute(
     onBackClick: () -> Unit,
     onMainClick: () -> Unit,
     onRePasswordClick: () -> Unit,
@@ -82,7 +82,7 @@ fun InputLoginRoute(
 }
 
 @Composable
-fun InputLoginScreen(
+private fun InputLoginScreen(
     email: String,
     password: String,
     onEmailChange: (String) -> Unit,
@@ -182,16 +182,15 @@ fun InputLoginScreen(
                 singleLine = true
             )
             Spacer(modifier = Modifier.height(24.dp))
-            GomsTextField(
+            GomsPasswordTextField(
                 modifier = Modifier.fillMaxWidth(),
-                isEmail = false,
+                isError = isError,
+                isDescription = false,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                 placeHolder = "비밀번호",
                 setText = password,
                 onValueChange = onPasswordChange,
-                isError = isError,
-                singleLine = true,
-                visualTransformation = PasswordVisualTransformation()
+                singleLine = true
             )
             Spacer(modifier = Modifier.height(8.dp))
             RowLinkText {

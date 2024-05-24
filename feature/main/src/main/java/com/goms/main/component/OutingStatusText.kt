@@ -8,7 +8,7 @@ import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
 
 @Composable
-fun OutingStatusText(modifier: Modifier) {
+internal fun OutingStatusText(modifier: Modifier) {
     Text(
         modifier = modifier,
         text = "외출 현황",

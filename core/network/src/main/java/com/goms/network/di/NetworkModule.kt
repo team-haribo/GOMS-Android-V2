@@ -9,6 +9,7 @@ import com.goms.network.api.LateAPI
 import com.goms.network.api.NotificationAPI
 import com.goms.network.api.OutingAPI
 import com.goms.network.util.AuthInterceptor
+import com.goms.network.util.TokenAuthenticator
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
@@ -34,7 +35,8 @@ object NetworkModule {
     @Singleton
     fun provideOkhttpClient(
         httpLoggingInterceptor: HttpLoggingInterceptor,
-        authInterceptor: AuthInterceptor
+        authInterceptor: AuthInterceptor,
+        tokenAuthenticator: TokenAuthenticator
     ): OkHttpClient {
         return OkHttpClient.Builder()
             .cookieJar(CookieJar.NO_COOKIES)
@@ -43,6 +45,7 @@ object NetworkModule {
             .writeTimeout(30, TimeUnit.SECONDS)
             .addInterceptor(httpLoggingInterceptor)
             .addInterceptor(authInterceptor)
+            .authenticator(tokenAuthenticator)
             .build()
     }
 

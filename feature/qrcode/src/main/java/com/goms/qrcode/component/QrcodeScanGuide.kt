@@ -6,12 +6,12 @@ import com.goms.design_system.icon.QrScanGuideIcon
 import com.goms.design_system.theme.GomsTheme
 
 @Composable
-fun QrcodeScanGuide() {
+internal fun QrcodeScanGuide() {
     QrScanGuideIcon()
 }
 
 @Composable
 @Preview(showBackground = true)
-fun QrcodeScanGuidePreview() {
+private fun QrcodeScanGuidePreview() {
     QrcodeScanGuide()
 }
