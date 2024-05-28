@@ -14,8 +14,9 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.goms.design_system.theme.GomsTheme
+import com.goms.design_system.R
 import com.goms.design_system.theme.GomsTheme.colors
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -36,7 +37,7 @@ fun DatePickerBottomSheet(
         Column(modifier = Modifier.fillMaxWidth()) {
             BottomSheetHeader(
                 modifier = Modifier.padding(horizontal = 20.dp),
-                title = "날짜 선택",
+                title = stringResource(id = R.string.select_date),
                 closeSheet = closeSheet
             )
             DatePicker(

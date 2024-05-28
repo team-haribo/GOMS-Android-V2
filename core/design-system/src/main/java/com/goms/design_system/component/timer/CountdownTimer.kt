@@ -14,9 +14,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.goms.design_system.R
 import com.goms.design_system.component.clickable.gomsClickable
-import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
 import kotlinx.coroutines.delay
@@ -65,7 +66,7 @@ fun CountdownTimer(
                 remainingTime = 5 * 60
                 onTimerReset()
             },
-            text = "재발송",
+            text = stringResource(id = R.string.resending),
             color = colors.P5,
             style = typography.buttonLarge
         )
