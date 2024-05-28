@@ -1,7 +1,7 @@
 <resources>
     <string name="find_password">비밀번호 찾기</string>
     <string name="input_number">인증번호 입력</string>
-    <string name="set_password">비밀번호 설정</string>
+    <string name="reset_password">비밀번호 재설정</string>
 
     <string name="error_email_not_valid">이메일 형식이 올바르지 않습니다</string>
     <string name="error_send_number">인증번호 전송이 실패했습니다</string>

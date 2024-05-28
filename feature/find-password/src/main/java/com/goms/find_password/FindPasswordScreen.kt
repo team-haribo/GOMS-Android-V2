@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -48,7 +49,7 @@ import com.goms.model.util.ResourceKeys
 internal fun FindPasswordRoute(
     onBackClick: () -> Unit,
     onSuccessClick: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
+    onErrorToast: (throwable: Throwable?, message: Int?) -> Unit,
     viewModel: FindPasswordViewmodel = hiltViewModel(LocalContext.current as ComponentActivity),
 ) {
     val findPasswordUiState by viewModel.findPasswordUiState.collectAsStateWithLifecycle()
@@ -84,7 +85,7 @@ private fun FindPasswordScreen(
     onPasswordCheckChange: (String) -> Unit,
     onSuccessClick: () -> Unit,
     onBackClick: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
+    onErrorToast: (throwable: Throwable?, message: Int?) -> Unit,
     findPasswordUiState: FindPasswordUiState,
     initFindPassword: () -> Unit,
     findPasswordCallback: () -> Unit
@@ -112,24 +113,24 @@ private fun FindPasswordScreen(
 
             is FindPasswordUiState.BadRequest -> {
                 isLoading = false
-                onErrorToast(null, "이미 사용중인 비밀번호입니다")
+                onErrorToast(null, R.string.error_password_already_use)
             }
 
             is FindPasswordUiState.PasswordMismatch -> {
                 isLoading = false
                 isError = true
-                onErrorToast(null, "비밀번호가 일치하지 않습니다")
+                onErrorToast(null, R.string.error_password_mismatch)
             }
 
             is FindPasswordUiState.PasswordNotValid -> {
                 isLoading = false
                 isError = true
-                onErrorToast(null, "비밀번호 요구사항을 충족하지 않습니다")
+                onErrorToast(null, R.string.error_password_not_valid)
             }
 
             is FindPasswordUiState.Error -> {
                 isLoading = false
-                onErrorToast(findPasswordUiState.exception, "비밀번호 찾기가 실패했습니다")
+                onErrorToast(findPasswordUiState.exception, R.string.error_find_password)
             }
         }
         onDispose { initFindPassword() }
@@ -162,17 +163,18 @@ private fun FindPasswordScreen(
                 isError = isError,
                 isDescription = false,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                placeHolder = "비밀번호",
+                placeHolder = stringResource(id = R.string.password),
                 setText = password,
                 onValueChange = onPasswordChange,
                 singleLine = true
             )
+            Spacer(modifier = Modifier.height(24.dp))
             GomsPasswordTextField(
                 modifier = Modifier.fillMaxWidth(),
                 isDescription = true,
                 isError = isError,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                placeHolder = "비밀번호 확인",
+                placeHolder = stringResource(id = R.string.check_password),
                 setText = passwordCheck,
                 onValueChange = onPasswordCheckChange,
                 singleLine = true
@@ -180,7 +182,7 @@ private fun FindPasswordScreen(
             Spacer(modifier = Modifier.weight(1f))
             GomsButton(
                 modifier = Modifier.fillMaxWidth(),
-                text = "완료",
+                text = stringResource(id = R.string.completion),
                 state = if (password.isNotBlank() && passwordCheck.isNotBlank()) ButtonState.Normal
                 else ButtonState.Enable
             ) {
@@ -199,10 +201,9 @@ private fun FindPasswordScreen(
             onStateChange = {
                 openDialog = it
             },
-            title = "재설정 완료",
-            content = "비밀번호를 재설정했어요.\n" +
-                    "홈으로 돌아갈게요!",
-            buttonText = "확인",
+            title = stringResource(id = R.string.reset_password_completion),
+            content = stringResource(id = R.string.go_back_home),
+            buttonText = stringResource(id = R.string.check),
             onClick = onSuccessClick
         )
     }

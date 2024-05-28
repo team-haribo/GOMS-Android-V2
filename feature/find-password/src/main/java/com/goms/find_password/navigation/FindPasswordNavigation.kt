@@ -19,7 +19,7 @@ fun NavController.navigateToEmailCheck(navOptions: NavOptions? = null) {
 fun NavGraphBuilder.emailCheckScreen(
     onBackClick: () -> Unit,
     onNumberClick: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
+    onErrorToast: (throwable: Throwable?, message: Int?) -> Unit
 ) {
     composable(route = emailCheckRoute) {
         EmailCheckRoute(
@@ -37,7 +37,7 @@ fun NavController.navigateToPasswordNumber(navOptions: NavOptions? = null) {
 fun NavGraphBuilder.passwordNumberScreen(
     onBackClick: () -> Unit,
     onFindPasswordClick: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
+    onErrorToast: (throwable: Throwable?, message: Int?) -> Unit
 ) {
     composable(route = passwordNumberRoute) {
         PasswordNumberRoute(
@@ -55,7 +55,7 @@ fun NavController.navigateToFindPassword(navOptions: NavOptions? = null) {
 fun NavGraphBuilder.findPasswordScreen(
     onBackClick: () -> Unit,
     onSuccessClick: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
+    onErrorToast: (throwable: Throwable?, message: Int?) -> Unit
 ) {
     composable(route = findPasswordRoute) {
         FindPasswordRoute(
