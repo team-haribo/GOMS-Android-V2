@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -51,7 +52,7 @@ internal fun InputLoginRoute(
     onBackClick: () -> Unit,
     onMainClick: () -> Unit,
     onRePasswordClick: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
+    onErrorToast: (throwable: Throwable?, message: Int?) -> Unit,
     viewModel: LoginViewModel = hiltViewModel(),
 ) {
     val loginUiState by viewModel.loginUiState.collectAsStateWithLifecycle()
@@ -92,7 +93,7 @@ private fun InputLoginScreen(
     onBackClick: () -> Unit,
     onMainClick: () -> Unit,
     onRePasswordClick: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
+    onErrorToast: (throwable: Throwable?, message: Int?) -> Unit,
     loginCallBack: () -> Unit
 ) {
     val focusManager = LocalFocusManager.current
@@ -117,7 +118,7 @@ private fun InputLoginScreen(
                     is SaveTokenUiState.Error -> {
                         isLoading = false
                         isError = true
-                        onErrorToast(saveTokenUiState.exception, null)
+                        onErrorToast(saveTokenUiState.exception, R.string.error_save_info)
                     }
                 }
             }
@@ -125,25 +126,25 @@ private fun InputLoginScreen(
             is LoginUiState.BadRequest -> {
                 isLoading = false
                 isError = true
-                onErrorToast(null, "비밀번호가 일치하지 않습니다")
+                onErrorToast(null, R.string.error_password_mismatch)
             }
 
             is LoginUiState.NotFound -> {
                 isLoading = false
                 isError = true
-                onErrorToast(null, "해당 유저가 존재하지 않습니다")
+                onErrorToast(null, R.string.error_user_missing)
             }
 
             is LoginUiState.EmailNotValid -> {
                 isLoading = false
                 isError = true
-                onErrorToast(null, "이메일 형식이 올바르지 않습니다")
+                onErrorToast(null, R.string.error_email_not_valid)
             }
 
             is LoginUiState.Error -> {
                 isLoading = false
                 isError = true
-                onErrorToast(loginUiState.exception, null)
+                onErrorToast(loginUiState.exception, R.string.error_login)
             }
         }
         onDispose {}
@@ -175,7 +176,7 @@ private fun InputLoginScreen(
             GomsTextField(
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                placeHolder = "이메일",
+                placeHolder = stringResource(id = R.string.email),
                 setText = email,
                 onValueChange = onEmailChange,
                 isError = isError,
@@ -187,7 +188,7 @@ private fun InputLoginScreen(
                 isError = isError,
                 isDescription = false,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                placeHolder = "비밀번호",
+                placeHolder = stringResource(id = R.string.password),
                 setText = password,
                 onValueChange = onPasswordChange,
                 singleLine = true
@@ -199,7 +200,7 @@ private fun InputLoginScreen(
             Spacer(modifier = Modifier.weight(1f))
             GomsButton(
                 modifier = Modifier.fillMaxWidth(),
-                text = "로그인",
+                text = stringResource(id = R.string.login),
                 state = if (email.isNotBlank() && password.isNotBlank()) ButtonState.Normal
                 else ButtonState.Enable
             ) {
