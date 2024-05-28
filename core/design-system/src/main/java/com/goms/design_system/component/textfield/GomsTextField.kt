@@ -231,7 +231,6 @@ fun GomsPasswordTextField(
     focusManager: FocusManager = LocalFocusManager.current,
     focusRequester: FocusRequester = FocusRequester(),
     setText: String,
-    errorText: String = "",
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     maxLines: Int = Int.MAX_VALUE,
@@ -298,22 +297,13 @@ fun GomsPasswordTextField(
             visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation()
         )
         Column(
-            modifier = Modifier
-                .heightIn(min = 24.dp)
-                .padding(start = 8.dp, top = 4.dp),
+            modifier = Modifier.padding(start = 8.dp, top = 4.dp),
             verticalArrangement = Arrangement.Center
         ) {
             if (isDescription) {
                 Text(
                     text = stringResource(id = R.string.password_conditions),
                     color = colors.G4,
-                    style = typography.buttonLarge
-                )
-            }
-            if (isError) {
-                Text(
-                    text = errorText,
-                    color = colors.N5,
                     style = typography.buttonLarge
                 )
             }
