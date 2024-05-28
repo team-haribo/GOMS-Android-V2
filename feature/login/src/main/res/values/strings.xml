@@ -2,7 +2,7 @@
     <string name="login">로그인</string>
     <string name="wednesday_out_system">수요 외출제</string>
     <string name="management_service">관리 서비스</string>
-    <string name="wednesday_out_easy_try">앱으로 간편하게 GSM의\n 수요 외출제를 이용해 보세요!</string>
+    <string name="wednesday_out_easy_try">앱으로 간편하게 GSM의\n수요 외출제를 이용해 보세요!</string>
 
     <string name="error_save_info">정보 저장에 실패했습니다</string>
     <string name="error_password_mismatch">비밀번호가 일치하지 않습니다</string>

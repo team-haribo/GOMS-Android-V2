@@ -16,7 +16,7 @@
     <string name="check_password">비밀번호 확인</string>
     <string name="completion">완료</string>
     <string name="reset_password_completion">재설정 완료</string>
-    <string name="go_back_home">비밀번호를 재설정했어요.\n 홈으로 돌아갈게요!</string>
+    <string name="go_back_home">비밀번호를 재설정했어요.\n홈으로 돌아갈게요!</string>
     <string name="check">확인</string>
 
     <string name="error_number_mismatch">인증번호가 일치하지 않습니다</string>
