@@ -1,0 +1,63 @@
+<resources>
+    <string name="qr_create">QR 생성</string>
+    <string name="student_management">학생 관리</string>
+    <string name="outing_status">외출 현황</string>
+    <string name="late_list">지각자 명단</string>
+    <string name="setting">개인 설정</string>
+
+    <string name="admin_menu">관리자 메뉴</string>
+
+    <string name="filter">필터</string>
+
+    <string name="error_get_late_list">지각자 리스트 정보를 가져오지 못했습니다</string>
+    <string name="default_profile_image">기본 프로필 이미지</string>
+    <string name="profile_image">프로필 이미지</string>
+
+    <string name="no_late">지각자가 없네요! 축하해요!</string>
+
+    <string name="get_number">인증번호 받기</string>
+
+    <string name="late_top_3">지각자 TOP 3"</string>
+    <string name="see_more_detail">더보기</string>
+    <string name="error_get_late_rank_list">지각자 랭킹 정보를 가져오지 못했습니다</string>
+
+    <string name="error_get_outing_count">외출학생 인원을 가져오지 못했습니다</string>
+    <string name="zero">0</string>
+    <string name="people_outing">명이 외출중</string>
+    <string name="management_people">인원 관리하기</string>
+    <string name="error_get_outing_list">외출자 정보를 가져오지 못했습니다</string>
+
+    <string name="error_get_profile">사용자 정보를 가져오지 못했습니다</string>
+    <string name="blacklist">외출 금지</string>
+    <string name="outing">외출 중</string>
+    <string name="student_council">학생회</string>
+    <string name="waiting_out">외출 대기중</string>
+
+    <string name="everyone_is_busy">텅 비어있네요... 다들 바쁜가 봐요!</string>
+
+    <string name="error_outing_search">외출자 검색이 실패했습니다</string>
+
+    <string name="no_search_result">검색 결과가 없습니다...</string>
+
+    <string name="search_result">검색 결과</string>
+
+    <string name="error_student_search">학생 검색이 실패했습니다</string>
+    <string name="error_get_student_list">학생 리스트를 가져오지 못했습니다</string>
+
+    <string name="error_refresh">새로고침이 실패했습니다</string>
+
+    <string name="forced_return_outing">외출 강제 복귀</string>
+    <string name="want_forced_return_outing">외출자를 강제로 복귀시키시겠습니까?</string>
+    <string name="cancel">취소</string>
+    <string name="return_outing">복귀</string>
+    <string name="student_search">학생 검색...</string>
+
+    <string name="error_change_authority">권한 변경이 실패했습니다</string>
+    <string name="error_set_blacklist">외출 금지 상태로 변경이 실패했습니다</string>
+    <string name="error_delete_blacklist">외출 금지 상태 해제가 실패했습니다</string>
+    <string name="change_user_authority">유저 권한 변경</string>
+    <string name="role">역할</string>
+    <string name="grade">학년</string>
+    <string name="gender">성별</string>
+    <string name="major">학과</string>
+</resources>
