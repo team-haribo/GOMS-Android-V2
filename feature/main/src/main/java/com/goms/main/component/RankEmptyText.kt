@@ -11,10 +11,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.goms.design_system.icon.FireIcon
 import com.goms.design_system.theme.GomsTheme
+import com.goms.main.R
 
 @Composable
 internal fun RankEmptyText() {
@@ -29,7 +31,7 @@ internal fun RankEmptyText() {
     ) {
         FireIcon(tint = GomsTheme.colors.WHITE)
         Text(
-            text = "지각자가 없네요! 축하해요!",
+            text = stringResource(id = R.string.no_late),
             style = GomsTheme.typography.textSmall,
             fontWeight = FontWeight.SemiBold,
             color = GomsTheme.colors.WHITE

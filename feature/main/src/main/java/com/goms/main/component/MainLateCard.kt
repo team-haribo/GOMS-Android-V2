@@ -28,14 +28,15 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.goms.design_system.R
 import com.goms.design_system.component.clickable.gomsClickable
 import com.goms.design_system.component.shimmer.shimmerEffect
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
+import com.goms.main.R
 import com.goms.main.data.RankData
 import com.goms.main.data.toData
 import com.goms.main.viewmodel.uistate.GetLateRankListUiState
@@ -47,7 +48,7 @@ internal fun MainLateCard(
     modifier: Modifier = Modifier,
     role: Authority,
     getLateRankListUiState: GetLateRankListUiState,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
+    onErrorToast: (throwable: Throwable?, message: Int?) -> Unit,
     onClick: () -> Unit
 ) {
     var componentWidth by remember { mutableStateOf(0.dp) }
@@ -72,7 +73,7 @@ internal fun MainLateCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "지각자 TOP 3",
+                    text = stringResource(id = R.string.late_top_3),
                     style = typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = colors.WHITE
@@ -92,7 +93,7 @@ internal fun MainLateCard(
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = "더보기",
+                            text = stringResource(id = R.string.see_more_detail),
                             style = typography.buttonSmall,
                             fontWeight = FontWeight.Normal,
                             color = colors.G7
@@ -102,7 +103,7 @@ internal fun MainLateCard(
             }
             Spacer(modifier = Modifier.height(16.dp))
             when (getLateRankListUiState) {
-                GetLateRankListUiState.Loading -> {
+                is GetLateRankListUiState.Loading -> {
                     LazyRow(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -117,7 +118,7 @@ internal fun MainLateCard(
                     }
                 }
 
-                GetLateRankListUiState.Empty -> {
+                is GetLateRankListUiState.Empty -> {
                     RankEmptyText()
                 }
 
@@ -138,7 +139,7 @@ internal fun MainLateCard(
                 }
 
                 is GetLateRankListUiState.Error -> {
-                    onErrorToast(getLateRankListUiState.exception, "지각자 랭킹 정보를 가져오지 못했습니다")
+                    onErrorToast(getLateRankListUiState.exception, R.string.error_get_late_rank_list)
                 }
             }
         }
@@ -160,8 +161,8 @@ private fun MainLateItem(
     ) {
         if (data.profileUrl.isNullOrEmpty()) {
             Image(
-                painter = painterResource(R.drawable.ic_profile),
-                contentDescription = "Default Profile Image",
+                painter = painterResource(com.goms.design_system.R.drawable.ic_profile),
+                contentDescription = stringResource(id = R.string.default_profile_image),
                 modifier = Modifier.size(56.dp)
             )
         } else {
@@ -171,7 +172,7 @@ private fun MainLateItem(
                     .size(56.dp)
                     .clip(RoundedCornerShape(40.dp)),
                 contentScale = ContentScale.Crop,
-                contentDescription = "Profile Image",
+                contentDescription = stringResource(id = R.string.profile_image),
             )
         }
         Text(

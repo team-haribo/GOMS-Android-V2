@@ -29,7 +29,7 @@ fun NavGraphBuilder.mainScreen(
     onQrcodeClick: (role: Authority) -> Unit,
     onSettingClick: () -> Unit,
     onAdminMenuClick: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
+    onErrorToast: (throwable: Throwable?, message: Int?) -> Unit
 ) {
     composable(route = mainRoute) {
         MainRoute(
@@ -51,7 +51,7 @@ fun NavController.navigateToOutingStatus(navOptions: NavOptions? = null) {
 
 fun NavGraphBuilder.outingStatusScreen(
     onBackClick: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
+    onErrorToast: (throwable: Throwable?, message: Int?) -> Unit
 ) {
     composable(route = outingStatusRoute) {
         OutingStatusRoute(
@@ -67,7 +67,7 @@ fun NavController.navigateToLateList(navOptions: NavOptions? = null) {
 
 fun NavGraphBuilder.lateListScreen(
     onBackClick: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
+    onErrorToast: (throwable: Throwable?, message: Int?) -> Unit
 ) {
     composable(route = lateListRoute) {
         LateListRoute(
@@ -83,7 +83,7 @@ fun NavController.navigateToStudentManagement(navOptions: NavOptions? = null) {
 
 fun NavGraphBuilder.studentManagementScreen(
     onBackClick: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
+    onErrorToast: (throwable: Throwable?, message: Int?) -> Unit
 ) {
     composable(route = studentManagementRoute) {
         StudentManagementRoute(

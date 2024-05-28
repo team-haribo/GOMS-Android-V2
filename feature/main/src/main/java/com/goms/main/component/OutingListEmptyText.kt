@@ -10,11 +10,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.goms.design_system.icon.CoffeeIcon
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
+import com.goms.main.R
 
 @Composable
 internal fun OutingListEmptyText() {
@@ -29,7 +31,7 @@ internal fun OutingListEmptyText() {
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = "텅 비어있네요... 다들 바쁜가 봐요!",
+            text = stringResource(id = R.string.everyone_is_busy),
             style = typography.textSmall,
             fontWeight = FontWeight.SemiBold,
             color = colors.G4

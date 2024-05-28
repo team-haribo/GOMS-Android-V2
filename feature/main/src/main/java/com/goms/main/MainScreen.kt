@@ -9,9 +9,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -62,7 +60,7 @@ internal fun MainRoute(
     onQrcodeClick: (role: Authority) -> Unit,
     onSettingClick: () -> Unit,
     onAdminMenuClick: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
+    onErrorToast: (throwable: Throwable?, message: Int?) -> Unit,
     viewModel: MainViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
 ) {
     val role by viewModel.role.collectAsStateWithLifecycle(initialValue = "")
@@ -130,7 +128,7 @@ private fun MainScreen(
     onQrcodeClick: (role: Authority) -> Unit,
     onSettingClick: () -> Unit,
     onAdminMenuClick: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
+    onErrorToast: (throwable: Throwable?, message: Int?) -> Unit,
     mainCallBack: () -> Unit,
     tokenRefreshCallBack: () -> Unit
 ) {
@@ -163,7 +161,7 @@ private fun MainScreen(
 
     DisposableEffect(tokenRefreshUiState) {
         if (tokenRefreshUiState is TokenRefreshUiState.Error) {
-            onErrorToast(null, "새로고침이 실패했습니다")
+            onErrorToast(null, R.string.error_refresh)
         }
         onDispose {}
     }
