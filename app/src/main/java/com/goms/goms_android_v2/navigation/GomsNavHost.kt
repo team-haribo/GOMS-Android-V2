@@ -18,6 +18,7 @@ import com.goms.find_password.navigation.navigateToEmailCheck
 import com.goms.find_password.navigation.navigateToFindPassword
 import com.goms.find_password.navigation.navigateToPasswordNumber
 import com.goms.find_password.navigation.passwordNumberScreen
+import com.goms.goms_android_v2.R
 import com.goms.goms_android_v2.ui.GomsAppState
 import com.goms.login.navigation.inputLoginScreen
 import com.goms.login.navigation.loginRoute
@@ -67,15 +68,15 @@ fun GomsNavHost(
     val onErrorToast: (throwable: Throwable?, message: String?) -> Unit = { throwable, message ->
         val errorMessage = throwable?.let {
             when (it) {
-                is ForBiddenException -> "학생회 권한인 학생만 요청 가능해요"
-                is TimeOutException -> "서버 응답이 지연되고 있습니다, 잠시 후 다시 시도해주세요"
-                is ServerException -> "서버 에러, 관리자에게 문의하세요"
-                is NoInternetException -> "네트워크가 불안정합니다, 데이터나 와이파이 연결 상태를 확인해주세요"
-                is OtherHttpException -> "알 수 없는 오류가 발생했습니다"
-                is UnKnownException -> "예상치 못한 오류가 발생했습니다"
+                is ForBiddenException -> context.getString(R.string.error_for_bidden)
+                is TimeOutException -> context.getString(R.string.error_time_out)
+                is ServerException -> context.getString(R.string.error_server)
+                is NoInternetException -> context.getString(R.string.error_no_internet)
+                is OtherHttpException -> context.getString(R.string.error_other_http)
+                is UnKnownException -> context.getString(R.string.error_un_known)
                 else -> message
             }
-        } ?: message ?: "오류가 발생했습니다"
+        } ?: message ?: context.getString(R.string.error_default)
 
         createToast(context, errorMessage)
     }
