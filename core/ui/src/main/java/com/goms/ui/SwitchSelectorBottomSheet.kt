@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.goms.design_system.component.bottomsheet.BottomSheetHeader
@@ -83,13 +84,13 @@ fun SwitchSelectorBottomSheet(
                     horizontalAlignment = Alignment.Start
                 ) {
                     Text(
-                        text = "외출금지",
+                        text = stringResource(id = R.string.no_going_out),
                         style = typography.textMedium,
                         color = colors.WHITE,
                         fontWeight = FontWeight.SemiBold
                     )
                     Text(
-                        text = "이 학생은 외출을 할 수 없어요",
+                        text = stringResource(id = R.string.student_can_not_go_out),
                         style = typography.caption,
                         color = colors.G4,
                         fontWeight = FontWeight.Normal
@@ -115,13 +116,13 @@ fun SwitchSelectorBottomSheet(
                     horizontalAlignment = Alignment.Start
                 ) {
                     Text(
-                        text = "학생회 권한 부여",
+                        text = stringResource(id = R.string.student_council_give_authority),
                         style = typography.textMedium,
                         color = colors.WHITE,
                         fontWeight = FontWeight.SemiBold
                     )
                     Text(
-                        text = "이 학생은 학생회에요",
+                        text = stringResource(id = R.string.student_is_a_student_council),
                         style = typography.caption,
                         color = colors.G4,
                         fontWeight = FontWeight.Normal
