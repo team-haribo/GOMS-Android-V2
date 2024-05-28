@@ -1,0 +1,46 @@
+<resources>
+    <string name="select_date">날짜 선택</string>
+    <string name="initialize_filter">필터 초기화</string>
+    <string name="change_profile_image">프로필 사진 변경</string>
+    <string name="select_gallery">갤러리에서 선택</string>
+    <string name="use_default_profile">기본 프로필 사용</string>
+
+    <string name="go_back">돌아가기</string>
+    <string name="gauth_login">Sign in with GAuth</string>
+
+    <string name="first_time">처음이라면?</string>
+    <string name="forget_password">비밀번호를 잊으셨나요?</string>
+    <string name="find_password">비밀번호 찾기</string>
+
+    <string name="time_expired">시간이 만료되었습니다</string>
+    <string name="password_conditions">·  대/소문자, 특수문자 6~15자</string>
+
+    <string name="resending">재발송</string>
+
+    <string name="goms_icon_description">곰스 로고 아이콘</string>
+    <string name="goms_text_icon_description">곰스 텍스트 아이콘</string>
+    <string name="gauth_icon_description">GAuth 아이콘</string>
+    <string name="back_icon_description">뒤로가기 아이콘</string>
+    <string name="chevron_right_icon_description">오른쪽 화살표 아이콘</string>
+    <string name="chevron_down_icon_description">아래쪽 화살표 아이콘</string>
+    <string name="chevron_up_icon_description">위쪽 화살표 아이콘</string>
+    <string name="check_icon_description">체크 아이콘</string>
+    <string name="close_icon_description">취소 아이콘</string>
+    <string name="setting_icon_description">설정 아이콘</string>
+    <string name="qr_scan_icon_description">Qr 스캔 아이콘</string>
+    <string name="qr_scan_guide_icon_description">Qr 스캔 가이드 아이콘</string>
+    <string name="qr_create_icon_description">Qr 생성 아이콘</string>
+    <string name="person_icon_description">사람 아이콘</string>
+    <string name="search_icon_description">검색 아이콘</string>
+    <string name="delete_icon_description">삭제 아이콘</string>
+    <string name="write_icon_description">작성 아이콘</string>
+    <string name="fire_icon_description">불 아이콘</string>
+    <string name="coffee_icon_description">커피 아이콘</string>
+    <string name="gallery_icon_description">갤러리 아이콘</string>
+    <string name="default_image_icon_description">기본 이미지 아이콘</string>
+    <string name="outing_icon_description">외출 아이콘</string>
+    <string name="clock_icon_description">시계 아이콘</string>
+    <string name="menu_icon_description">메뉴 아이콘</string>
+    <string name="invisible_icon_description">안보이는 아이콘</string>
+    <string name="visible_icon_description">보이는 아이콘</string>
+</resources>
