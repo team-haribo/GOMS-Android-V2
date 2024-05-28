@@ -36,7 +36,7 @@ fun NavGraphBuilder.qrcodeGenerateScreen(
     onRemoteError: () -> Unit,
     onBackClick: () -> Unit,
     onTimerFinish: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
+    onErrorToast: (throwable: Throwable?, message: Int?) -> Unit
 ) {
     composable(route = qrcodeGenerateRoute) {
         QrcodeGenerateRoute(
