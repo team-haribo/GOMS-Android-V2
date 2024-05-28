@@ -5,10 +5,9 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.dataStoreFile
 import com.goms.datastore.AuthToken
-import com.goms.datastore.AuthTokenSerializer
-import com.goms.datastore.SettingDataSource
+import com.goms.datastore.serializer.AuthTokenSerializer
 import com.goms.datastore.SettingInfo
-import com.goms.datastore.SettingSerializer
+import com.goms.datastore.serializer.SettingSerializer
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,7 +17,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object DataSourceModule {
+object DataStoreModule {
     @Provides
     @Singleton
     fun provideAuthTokenDataStore(
