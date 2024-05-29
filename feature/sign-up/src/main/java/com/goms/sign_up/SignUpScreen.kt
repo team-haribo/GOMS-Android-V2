@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -45,13 +46,12 @@ import com.goms.sign_up.component.SelectMajorDropDown
 import com.goms.sign_up.component.SignUpText
 import com.goms.sign_up.viewmodel.uistate.SendNumberUiState
 import com.goms.sign_up.viewmodel.SignUpViewModel
-import com.goms.ui.isValidEmail
 
 @Composable
 internal fun SignUpRoute(
     onBackClick: () -> Unit,
     onNumberClick: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
+    onErrorToast: (throwable: Throwable?, message: Int?) -> Unit,
     viewModel: SignUpViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
 ) {
     val sendNumberUiState by viewModel.sendNumberUiState.collectAsState()
@@ -92,7 +92,7 @@ private fun SignUpScreen(
     sendNumberUiState: SendNumberUiState,
     onBackClick: () -> Unit,
     onNumberClick: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
+    onErrorToast: (throwable: Throwable?, message: Int?) -> Unit,
     signUpCallBack: () -> Unit,
     initCallBack: () -> Unit
 ) {
@@ -112,12 +112,12 @@ private fun SignUpScreen(
             is SendNumberUiState.Success -> onNumberClick()
             is SendNumberUiState.EmailNotValid -> {
                 isLoading = false
-                onErrorToast(null, "이메일 형식이 올바르지 않습니다")
+                onErrorToast(null, R.string.error_email_not_valid)
             }
 
             is SendNumberUiState.Error -> {
                 isLoading = false
-                onErrorToast(sendNumberUiState.exception, "인증번호 전송이 실패했습니다.")
+                onErrorToast(sendNumberUiState.exception, R.string.error_send_number)
             }
         }
         onDispose { initCallBack() }
@@ -148,7 +148,7 @@ private fun SignUpScreen(
             GomsTextField(
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                placeHolder = "이름",
+                placeHolder = stringResource(id = R.string.name),
                 setText = name,
                 onValueChange = onNameChange,
                 isEmail = false,
@@ -158,7 +158,7 @@ private fun SignUpScreen(
             GomsTextField(
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                placeHolder = "이메일",
+                placeHolder = stringResource(id = R.string.email),
                 setText = email,
                 onValueChange = onEmailChange,
                 singleLine = true
@@ -178,7 +178,7 @@ private fun SignUpScreen(
             Spacer(modifier = Modifier.weight(1f))
             GomsButton(
                 modifier = Modifier.fillMaxWidth(),
-                text = "인증번호 받기",
+                text = stringResource(id = R.string.get_number),
                 state = if (name.isNotBlank() && email.isNotBlank() && gender.isNotBlank() && major.isNotBlank()) ButtonState.Normal
                 else ButtonState.Enable
             ) {

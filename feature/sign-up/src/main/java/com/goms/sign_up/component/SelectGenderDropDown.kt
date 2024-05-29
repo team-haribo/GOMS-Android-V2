@@ -9,11 +9,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.goms.design_system.component.dropdown.GomsDropdown
-import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.model.enum.Gender
+import com.goms.sign_up.R
 import kotlinx.collections.immutable.toPersistentList
 
 @Composable
@@ -29,7 +30,7 @@ internal fun SelectGenderDropDown(
         dropdownList = dropdownList.toPersistentList(),
         dropdownListSize = dropdownList.size,
         useDefaultText = useDefaultText,
-        defaultText = "성별",
+        defaultText = stringResource(id = R.string.gender),
         selectedIndex = selectedIndex,
         modifier = Modifier.padding(horizontal = 20.dp),
         backgroundColor = colors.G1,

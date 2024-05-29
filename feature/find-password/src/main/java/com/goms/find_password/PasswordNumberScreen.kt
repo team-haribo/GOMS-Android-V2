@@ -120,8 +120,8 @@ private fun PasswordNumberScreen(
             is VerifyNumberUiState.Error -> {
                 isLoading = false
                 isError = true
-                errorText = context.getString(R.string.error_number_verify_number)
-                onErrorToast(verifyNumberUiState.exception, R.string.error_number_verify_number)
+                errorText = context.getString(R.string.error_verify_number)
+                onErrorToast(verifyNumberUiState.exception, R.string.error_verify_number)
             }
         }
         onDispose { initCallBack() }
