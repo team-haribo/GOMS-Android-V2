@@ -14,7 +14,7 @@ fun NavController.navigateToSettingScreen(navOptions: NavOptions? = null) {
 fun NavGraphBuilder.settingScreen(
     onLogoutSuccess: () -> Unit,
     onBackClick: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
+    onErrorToast: (throwable: Throwable?, message: Int?) -> Unit,
     onPasswordCheck: () -> Unit,
     onUpdateAlarm: (String) -> Unit,
     onThemeSelect: () -> Unit,

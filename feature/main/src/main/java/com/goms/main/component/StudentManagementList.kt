@@ -25,14 +25,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.goms.design_system.R
 import com.goms.design_system.component.shimmer.shimmerEffect
 import com.goms.design_system.icon.WriteIcon
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
+import com.goms.main.R
 import com.goms.main.data.StudentData
 import com.goms.main.data.toData
 import com.goms.main.viewmodel.uistate.GetStudentListUiState
@@ -49,7 +50,7 @@ internal fun StudentManagementList(
     modifier: Modifier = Modifier,
     getStudentListUiState: GetStudentListUiState,
     studentSearchUiState: StudentSearchUiState,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
+    onErrorToast: (throwable: Throwable?, message: Int?) -> Unit,
     onBottomSheetOpenClick: () -> Unit,
     onClick: (UUID, String, String) -> Unit
 ) {
@@ -59,7 +60,7 @@ internal fun StudentManagementList(
         }
 
         is StudentSearchUiState.Error -> {
-            onErrorToast(studentSearchUiState.exception, "학생 검색이 실패했습니다")
+            onErrorToast(studentSearchUiState.exception, R.string.error_student_search)
         }
 
         StudentSearchUiState.QueryEmpty -> {
@@ -69,7 +70,7 @@ internal fun StudentManagementList(
                 }
 
                 is GetStudentListUiState.Error -> {
-                    onErrorToast(getStudentListUiState.exception, "학생 리스트를 가져오지 못했습니다")
+                    onErrorToast(getStudentListUiState.exception, R.string.error_get_student_list)
                 }
 
                 is GetStudentListUiState.Success -> {
@@ -164,8 +165,8 @@ private fun StudentManagementListItem(
     ) {
         if (data.profileUrl.isNullOrEmpty()) {
             Image(
-                painter = painterResource(R.drawable.ic_profile),
-                contentDescription = "Default Profile Image",
+                painter = painterResource(com.goms.design_system.R.drawable.ic_profile),
+                contentDescription = stringResource(id = R.string.default_profile_image),
                 modifier = Modifier
                     .size(48.dp)
                     .border(
@@ -194,7 +195,7 @@ private fun StudentManagementListItem(
                         shape = CircleShape
                     ),
                 contentScale = ContentScale.Crop,
-                contentDescription = "Profile Image",
+                contentDescription = stringResource(id = R.string.profile_image),
             )
         }
         Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {

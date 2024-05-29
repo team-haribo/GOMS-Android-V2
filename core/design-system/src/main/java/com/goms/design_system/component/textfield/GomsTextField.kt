@@ -30,13 +30,16 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.goms.design_system.R
 import com.goms.design_system.component.timer.CountdownTimer
 import com.goms.design_system.icon.InvisibleIcon
 import com.goms.design_system.icon.SearchIcon
@@ -141,6 +144,7 @@ fun NumberTextField(
     onValueChange: (String) -> Unit,
     onResendClick: () -> Unit,
 ) {
+    val context = LocalContext.current
     val isFocused = remember { mutableStateOf(false) }
     val isErrorTextField = remember { mutableStateOf(isError) }
     val errorTextTextField = remember { mutableStateOf(errorText) }
@@ -207,7 +211,7 @@ fun NumberTextField(
         errorText = errorTextTextField.value,
         onTimerFinish = {
             isErrorTextField.value = true
-            errorTextTextField.value = "시간이 만료되었습니다"
+            errorTextTextField.value = context.getString(R.string.time_expired)
         },
         onTimerReset = {
             isErrorTextField.value = false
@@ -227,7 +231,6 @@ fun GomsPasswordTextField(
     focusManager: FocusManager = LocalFocusManager.current,
     focusRequester: FocusRequester = FocusRequester(),
     setText: String,
-    errorText: String = "",
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     maxLines: Int = Int.MAX_VALUE,
@@ -294,22 +297,13 @@ fun GomsPasswordTextField(
             visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation()
         )
         Column(
-            modifier = Modifier
-                .heightIn(min = 24.dp)
-                .padding(start = 8.dp, top = 4.dp),
+            modifier = Modifier.padding(start = 8.dp, top = 4.dp),
             verticalArrangement = Arrangement.Center
         ) {
             if (isDescription) {
                 Text(
-                    text = "·  대/소문자, 특수문자 6~15자",
+                    text = stringResource(id = R.string.password_conditions),
                     color = colors.G4,
-                    style = typography.buttonLarge
-                )
-            }
-            if (isError) {
-                Text(
-                    text = errorText,
-                    color = colors.N5,
                     style = typography.buttonLarge
                 )
             }

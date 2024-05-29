@@ -33,7 +33,7 @@ fun NavController.navigateToRePassword(navOptions: NavOptions? = null) {
 fun NavGraphBuilder.rePasswordScreen(
     onBackClick: () -> Unit,
     onSuccessClick: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
+    onErrorToast: (throwable: Throwable?, message: Int?) -> Unit
 ) {
     composable(route = rePasswordRoute) {
         RePasswordRoute(

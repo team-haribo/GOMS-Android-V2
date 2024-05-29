@@ -1,0 +1,16 @@
+<resources>
+    <string name="login">로그인</string>
+    <string name="wednesday_out_system">수요 외출제</string>
+    <string name="management_service">관리 서비스</string>
+    <string name="wednesday_out_easy_try">앱으로 간편하게 GSM의\n수요 외출제를 이용해 보세요!</string>
+
+    <string name="error_save_info">정보 저장에 실패했습니다</string>
+    <string name="error_password_mismatch">비밀번호가 일치하지 않습니다</string>
+    <string name="error_user_missing">해당 유저가 존재하지 않습니다</string>
+    <string name="error_email_not_valid">이메일 형식이 올바르지 않습니다</string>
+    <string name="error_login">로그인에 실패했습니다</string>
+    <string name="email">이메일</string>
+    <string name="password">비밀번호</string>
+
+    <string name="sign_up">회원가입</string>
+</resources>

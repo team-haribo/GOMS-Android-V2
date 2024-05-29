@@ -16,12 +16,13 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.goms.design_system.R
 import com.goms.design_system.component.clickable.gomsClickable
 import com.goms.design_system.icon.DefaultImageIcon
 import com.goms.design_system.icon.GalleryIcon
-import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
 
@@ -47,12 +48,12 @@ fun ProfileBottomSheet(
             BottomSheetHeader(
                 modifier = Modifier,
                 closeSheet = closeSheet,
-                title = "프로필 사진 변경",
+                title = stringResource(id = R.string.change_profile_image),
             )
             ProfileBottomSheetComponent(
                 modifier = Modifier.padding(8.dp),
                 onClick = { onGalleryClick() },
-                content = "갤러리에서 선택",
+                content = stringResource(id = R.string.select_gallery),
                 icon = { GalleryIcon(tint = colors.WHITE) }
             )
             Divider(
@@ -62,7 +63,7 @@ fun ProfileBottomSheet(
             ProfileBottomSheetComponent(
                 modifier = Modifier.padding(8.dp),
                 onClick = { onDefaultImageClick() },
-                content = "기본 프로필 사용",
+                content = stringResource(id = R.string.use_default_profile),
                 icon = { DefaultImageIcon(tint = colors.WHITE) }
             )
             Spacer(modifier = Modifier.height(24.dp))

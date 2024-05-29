@@ -1,18 +1,19 @@
-package com.goms.datastore
+package com.goms.datastore.datasource.auth
 
 import androidx.datastore.core.DataStore
+import com.goms.datastore.AuthToken
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class AuthTokenDataSource @Inject constructor(
+class AuthTokenDataSourceImpl @Inject constructor(
     private val authToken: DataStore<AuthToken>
-) {
-    fun getAccessToken(): Flow<String> = authToken.data.map {
+) : AuthTokenDataSource {
+    override fun getAccessToken(): Flow<String> = authToken.data.map {
         it.accessToken ?: ""
     }
 
-    suspend fun setAccessToken(accessToken: String) {
+    override suspend fun setAccessToken(accessToken: String) {
         authToken.updateData {
             it.toBuilder()
                 .setAccessToken(accessToken)
@@ -20,7 +21,7 @@ class AuthTokenDataSource @Inject constructor(
         }
     }
 
-    suspend fun removeAccessToken() {
+    override suspend fun removeAccessToken() {
         authToken.updateData {
             it.toBuilder()
                 .clearAccessToken()
@@ -28,11 +29,11 @@ class AuthTokenDataSource @Inject constructor(
         }
     }
 
-    fun getAccessTokenExp(): Flow<String> = authToken.data.map {
+    override fun getAccessTokenExp(): Flow<String> = authToken.data.map {
         it.accessExp ?: ""
     }
 
-    suspend fun setAccessTokenExp(accessTokenExp: String) {
+    override suspend fun setAccessTokenExp(accessTokenExp: String) {
         authToken.updateData {
             it.toBuilder()
                 .setAccessExp(accessTokenExp)
@@ -40,7 +41,7 @@ class AuthTokenDataSource @Inject constructor(
         }
     }
 
-    suspend fun removeAccessTokenExp() {
+    override suspend fun removeAccessTokenExp() {
         authToken.updateData {
             it.toBuilder()
                 .clearAccessExp()
@@ -48,11 +49,11 @@ class AuthTokenDataSource @Inject constructor(
         }
     }
 
-    fun getRefreshToken(): Flow<String> = authToken.data.map {
+    override fun getRefreshToken(): Flow<String> = authToken.data.map {
         it.refreshToken ?: ""
     }
 
-    suspend fun setRefreshToken(refreshToken: String) {
+    override suspend fun setRefreshToken(refreshToken: String) {
         authToken.updateData {
             it.toBuilder()
                 .setRefreshToken(refreshToken)
@@ -60,7 +61,7 @@ class AuthTokenDataSource @Inject constructor(
         }
     }
 
-    suspend fun removeRefreshToken() {
+    override suspend fun removeRefreshToken() {
         authToken.updateData {
             it.toBuilder()
                 .clearRefreshToken()
@@ -68,11 +69,11 @@ class AuthTokenDataSource @Inject constructor(
         }
     }
 
-    fun getRefreshTokenExp(): Flow<String> = authToken.data.map {
+    override fun getRefreshTokenExp(): Flow<String> = authToken.data.map {
         it.refreshExp ?: ""
     }
 
-    suspend fun setRefreshTokenExp(refreshTokenExp: String) {
+    override suspend fun setRefreshTokenExp(refreshTokenExp: String) {
         authToken.updateData {
             it.toBuilder()
                 .setRefreshExp(refreshTokenExp)
@@ -80,7 +81,7 @@ class AuthTokenDataSource @Inject constructor(
         }
     }
 
-    suspend fun removeRefreshTokenExp() {
+    override suspend fun removeRefreshTokenExp() {
         authToken.updateData {
             it.toBuilder()
                 .clearRefreshExp()
@@ -88,11 +89,11 @@ class AuthTokenDataSource @Inject constructor(
         }
     }
 
-    fun getAuthority(): Flow<String> = authToken.data.map {
+    override fun getAuthority(): Flow<String> = authToken.data.map {
         it.authority ?: ""
     }
 
-    suspend fun setAuthority(authority: String) {
+    override suspend fun setAuthority(authority: String) {
         authToken.updateData {
             it.toBuilder()
                 .setAuthority(authority)
@@ -100,7 +101,7 @@ class AuthTokenDataSource @Inject constructor(
         }
     }
 
-    suspend fun removeAuthority() {
+    override suspend fun removeAuthority() {
         authToken.updateData {
             it.toBuilder()
                 .clearAuthority()

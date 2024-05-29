@@ -1,0 +1,26 @@
+<resources>
+    <string name="find_password">비밀번호 찾기</string>
+    <string name="input_number">인증번호 입력</string>
+    <string name="reset_password">비밀번호 재설정</string>
+
+    <string name="error_email_not_valid">이메일 형식이 올바르지 않습니다</string>
+    <string name="error_send_number">인증번호 전송이 실패했습니다</string>
+    <string name="email">이메일</string>
+    <string name="get_number">인증번호 받기</string>
+
+    <string name="error_password_already_use">이미 사용중인 비밀번호입니다</string>
+    <string name="error_password_mismatch">비밀번호가 일치하지 않습니다</string>
+    <string name="error_password_not_valid">비밀번호 요구사항을 충족하지 않습니다</string>
+    <string name="error_find_password">비밀번호 찾기가 실패했습니다</string>
+    <string name="password">비밀번호</string>
+    <string name="check_password">비밀번호 확인</string>
+    <string name="completion">완료</string>
+    <string name="reset_password_completion">재설정 완료</string>
+    <string name="go_back_home">비밀번호를 재설정했어요.\n홈으로 돌아갈게요!</string>
+    <string name="check">확인</string>
+
+    <string name="error_number_mismatch">인증번호가 일치하지 않습니다</string>
+    <string name="error_number_not_valid">잘못된 인증번호입니다</string>
+    <string name="error_verify_number">인증이 실패했습니다</string>
+    <string name="certified">인증</string>
+</resources>

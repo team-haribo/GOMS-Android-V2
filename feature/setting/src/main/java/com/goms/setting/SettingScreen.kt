@@ -23,6 +23,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -30,7 +31,6 @@ import com.goms.design_system.component.bottomsheet.ProfileBottomSheet
 import com.goms.design_system.component.button.ButtonState
 import com.goms.design_system.component.button.GomsButton
 import com.goms.design_system.component.dialog.GomsTwoButtonDialog
-import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.ThemeType
 import com.goms.design_system.util.lockScreenOrientation
@@ -48,13 +48,12 @@ import com.goms.setting.viewmodel.uistate.SetThemeUiState
 import com.goms.setting.viewmodel.SettingViewModel
 import com.goms.ui.GomsRoleBackButton
 
-
 @Composable
 internal fun SettingRoute(
     onBackClick: () -> Unit,
     onLogoutSuccess: () -> Unit,
     onPasswordCheck: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
+    onErrorToast: (throwable: Throwable?, message: Int?) -> Unit,
     onThemeSelect: () -> Unit,
     onUpdateAlarm: (String) -> Unit,
     viewModel: SettingViewModel = hiltViewModel(),
@@ -63,12 +62,12 @@ internal fun SettingRoute(
     val role by viewModel.role.collectAsStateWithLifecycle(initialValue = "")
     val getProfileUiState by viewModel.getProfileUiState.collectAsStateWithLifecycle()
     val profileImageUiState by viewModel.profileImageUiState.collectAsStateWithLifecycle()
+    val logoutUiState by viewModel.logoutState.collectAsStateWithLifecycle()
+    val setThemeUiState by viewModel.setThemeState.collectAsStateWithLifecycle()
     val themeState by viewModel.themeState.collectAsStateWithLifecycle()
     val qrcodeState by viewModel.qrcodeState.collectAsStateWithLifecycle()
     val alarmState by viewModel.alarmState.collectAsStateWithLifecycle()
     val timeState by viewModel.timeState.collectAsStateWithLifecycle()
-    val logoutUiState by viewModel.logoutState.collectAsStateWithLifecycle()
-    val setThemeUiState by viewModel.setThemeState.collectAsStateWithLifecycle()
 
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
     var qrcodeData by remember { mutableStateOf(qrcodeState) }
@@ -181,10 +180,9 @@ private fun SettingScreen(
     alarmState: String,
     timeState: String,
     profileImageUiState: ProfileImageUiState,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
+    onErrorToast: (throwable: Throwable?, message: Int?) -> Unit,
     onPasswordCheck: () -> Unit
 ) {
-    var isLoading by remember { mutableStateOf(false) }
     var openDialog by remember { mutableStateOf(false) }
     var openBottomSheet by remember { mutableStateOf(false) }
 
@@ -200,33 +198,34 @@ private fun SettingScreen(
         }
 
         is LogoutUiState.Error -> {
-            onErrorToast(logoutUiState.exception, "로그아웃에 실패 했습니다")
+            onErrorToast(logoutUiState.exception, R.string.error_logout)
         }
     }
 
     when (setThemeUiState) {
         is SetThemeUiState.Loading -> Unit
-        is SetThemeUiState.Success -> onUpdateTheme()
-        is SetThemeUiState.Error -> Unit
+        is SetThemeUiState.Success -> {
+            onUpdateTheme()
+        }
+
+        is SetThemeUiState.Error -> {
+            onErrorToast(null, R.string.error_set_theme)
+        }
     }
 
     when (profileImageUiState) {
-        is ProfileImageUiState.Loading -> {
-            isLoading = false
-        }
-
+        is ProfileImageUiState.Loading -> Unit
         is ProfileImageUiState.Success -> {
-            isLoading = true
             getProfile()
         }
 
         is ProfileImageUiState.EmptyProfileUrl -> {
-            onErrorToast(null, "이미 기본 프로필 입니다.")
+            onErrorToast(null, R.string.error_already_default_profile)
             setDefaultProfileUiState()
         }
 
         is ProfileImageUiState.Error -> {
-            onErrorToast(profileImageUiState.exception, "기본 프로필 변경에 실패했습니다.")
+            onErrorToast(profileImageUiState.exception, R.string.error_profile)
             setDefaultProfileUiState()
         }
     }
@@ -275,8 +274,8 @@ private fun SettingScreen(
             if (role == Authority.ROLE_STUDENT.name) {
                 SettingSwitchComponent(
                     modifier = Modifier.padding(horizontal = 8.dp),
-                    title = "시계 나타내기",
-                    detail = "프로필 카드에 초 단위의 시간을 나타내요",
+                    title = stringResource(id = R.string.show_clock),
+                    detail = stringResource(id = R.string.show_clock_description),
                     switchOnBackground = colors.P5,
                     switchOffBackground = colors.G4,
                     isSwitchOn = timeState == Switch.ON.value,
@@ -286,8 +285,8 @@ private fun SettingScreen(
                 Spacer(modifier = Modifier.height(32.dp))
                 SettingSwitchComponent(
                     modifier = Modifier.padding(horizontal = 8.dp),
-                    title = "외출제 푸시 알림",
-                    detail = "외출할 시간이 될 때마다 알려드려요",
+                    title = stringResource(id = R.string.outing_push_alarm),
+                    detail = stringResource(id = R.string.outing_push_alarm_description),
                     switchOnBackground = colors.P5,
                     switchOffBackground = colors.G4,
                     isSwitchOn = alarmState == Switch.ON.value,
@@ -297,8 +296,8 @@ private fun SettingScreen(
                 Spacer(modifier = Modifier.height(32.dp))
                 SettingSwitchComponent(
                     modifier = Modifier.padding(horizontal = 8.dp),
-                    title = "카메라 바로 켜기",
-                    detail = "앱을 실행하면 즉시 카메라가 켜져요",
+                    title = stringResource(id = R.string.right_now_camera),
+                    detail = stringResource(id = R.string.right_now_camera_description),
                     switchOnBackground = colors.P5,
                     switchOffBackground = colors.G4,
                     isSwitchOn = qrcodeState == Switch.ON.value,
@@ -309,8 +308,8 @@ private fun SettingScreen(
             if (role == Authority.ROLE_STUDENT_COUNCIL.name) {
                 SettingSwitchComponent(
                     modifier = Modifier.padding(horizontal = 8.dp),
-                    title = "시계 나타내기",
-                    detail = "프로필 카드에 초 단위의 시간을 나타내요",
+                    title = stringResource(id = R.string.show_clock),
+                    detail = stringResource(id = R.string.show_clock_description),
                     switchOnBackground = colors.A7,
                     switchOffBackground = colors.G4,
                     isSwitchOn = timeState == Switch.ON.value,
@@ -320,8 +319,8 @@ private fun SettingScreen(
                 Spacer(modifier = Modifier.height(32.dp))
                 SettingSwitchComponent(
                     modifier = Modifier.padding(horizontal = 8.dp),
-                    title = "Qr 생성 바로 켜기",
-                    detail = "앱을 실행하면 즉시 Qr코드를 생성해요",
+                    title = stringResource(id = R.string.right_now_qr_create),
+                    detail = stringResource(id = R.string.right_now_qr_create_description),
                     switchOnBackground = colors.A7,
                     switchOffBackground = colors.G4,
                     isSwitchOn = qrcodeState == Switch.ON.value,
@@ -332,7 +331,7 @@ private fun SettingScreen(
             Spacer(modifier = Modifier.weight(1f))
             GomsButton(
                 modifier = Modifier.fillMaxWidth(),
-                text = "로그아웃",
+                text = stringResource(id = R.string.logout),
                 state = ButtonState.Logout
             ) {
                 openDialog = true
@@ -340,17 +339,14 @@ private fun SettingScreen(
             Spacer(modifier = Modifier.height(40.dp))
         }
     }
-    if (isLoading) {
-        GomsCircularProgressIndicator()
-    }
     if (openDialog) {
         GomsTwoButtonDialog(
             openDialog = openDialog,
             onStateChange = { openDialog = it },
-            title = "로그아웃",
-            content = "로그아웃 하시겠습니까?",
-            dismissText = "취소",
-            checkText = "로그아웃",
+            title = stringResource(id = R.string.logout),
+            content = stringResource(id = R.string.want_logout),
+            dismissText = stringResource(id = R.string.cancel),
+            checkText = stringResource(id = R.string.logout),
             onDismissClick = { openDialog = false }
         ) {
             onLogoutClick()

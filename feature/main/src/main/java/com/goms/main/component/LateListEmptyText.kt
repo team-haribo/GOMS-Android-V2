@@ -10,11 +10,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.goms.design_system.icon.FireIcon
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
+import com.goms.main.R
 
 @Composable
 internal fun LateListEmptyText() {
@@ -29,7 +31,7 @@ internal fun LateListEmptyText() {
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = "지각자가 없네요! 축하해요!",
+            text = stringResource(id = R.string.no_late),
             style = typography.textSmall,
             fontWeight = FontWeight.SemiBold,
             color = colors.G4

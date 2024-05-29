@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -54,7 +55,7 @@ import java.util.UUID
 @Composable
 internal fun StudentManagementRoute(
     onBackClick: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
+    onErrorToast: (throwable: Throwable?, message: Int?) -> Unit,
     viewModel: MainViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
 ) {
     val role by viewModel.role.collectAsStateWithLifecycle(initialValue = "")
@@ -78,7 +79,7 @@ internal fun StudentManagementRoute(
         }
 
         is Result.Error -> {
-            onErrorToast((changeAuthorityUiState as Result.Error).exception, "권한 변경이 실패했습니다")
+            onErrorToast((changeAuthorityUiState as Result.Error).exception, R.string.error_change_authority)
         }
     }
 
@@ -90,7 +91,7 @@ internal fun StudentManagementRoute(
         }
 
         is Result.Error -> {
-            onErrorToast((setBlackListUiState as Result.Error).exception, "외출 금지가 실패했습니다")
+            onErrorToast((setBlackListUiState as Result.Error).exception, R.string.error_set_blacklist)
         }
     }
 
@@ -102,7 +103,7 @@ internal fun StudentManagementRoute(
         }
 
         is Result.Error -> {
-            onErrorToast((setBlackListUiState as Result.Error).exception, "외출 금지 해제가 실패했습니다")
+            onErrorToast((setBlackListUiState as Result.Error).exception, R.string.error_delete_blacklist)
         }
     }
 
@@ -179,7 +180,7 @@ private fun StudentManagementScreen(
     getStudentListUiState: GetStudentListUiState,
     studentSearchUiState: StudentSearchUiState,
     onBackClick: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
+    onErrorToast: (throwable: Throwable?, message: Int?) -> Unit,
     studentListCallBack: () -> Unit,
     studentSearchCallBack: (String) -> Unit,
     changeAuthorityCallBack: (UUID, String) -> Unit,
@@ -229,7 +230,7 @@ private fun StudentManagementScreen(
             GomsSearchTextField(
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                placeHolder = "학생 검색...",
+                placeHolder = stringResource(id = R.string.student_search),
                 setText = studentSearch,
                 onValueChange = onStudentSearchChange,
                 onSearchTextChange = studentSearchCallBack,
@@ -253,7 +254,7 @@ private fun StudentManagementScreen(
     if (onStatusBottomSheetOpenClick) {
         SwitchSelectorBottomSheet(
             modifier = Modifier.fillMaxWidth(),
-            title = "유저 권한 변경",
+            title = stringResource(id = R.string.change_user_authority),
             outing = outingState,
             role = roleState,
             closeSheet = { outingState, roleState ->
@@ -270,8 +271,8 @@ private fun StudentManagementScreen(
     if (onFilterBottomSheetOpenClick) {
         MultipleSelectorBottomSheet(
             modifier = Modifier.fillMaxWidth(),
-            title = "필터",
-            subTitle1 = "역할",
+            title = stringResource(id = R.string.filter),
+            subTitle1 = stringResource(id = R.string.role),
             list1 = listOf(
                 Status.ROLE_STUDENT.value,
                 Status.ROLE_STUDENT_COUNCIL.value,
@@ -279,7 +280,7 @@ private fun StudentManagementScreen(
             ).toPersistentList(),
             selected1 = filterStatus,
             itemChange1 = onFilterStatusChange,
-            subTitle2 = "학년",
+            subTitle2 = stringResource(id = R.string.grade),
             list2 = listOf(
                 Grade.FIRST_GRADE.value,
                 Grade.SECOND_GRADE.value,
@@ -287,14 +288,14 @@ private fun StudentManagementScreen(
             ).toPersistentList(),
             selected2 = filterGrade,
             itemChange2 = onFilterGradeChange,
-            subTitle3 = "성별",
+            subTitle3 = stringResource(id = R.string.gender),
             list3 = listOf(
                 Gender.MAN.value,
                 Gender.WOMAN.value
             ).toPersistentList(),
             selected3 = filterGender,
             itemChange3 = onFilterGenderChange,
-            subTitle4 = "학과",
+            subTitle4 = stringResource(id = R.string.major),
             list4 = listOf(
                 Major.SW_DEVELOP.value,
                 Major.SMART_IOT.value,

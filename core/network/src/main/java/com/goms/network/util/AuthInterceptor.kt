@@ -1,6 +1,6 @@
 package com.goms.network.util
 
-import com.goms.datastore.AuthTokenDataSource
+import com.goms.datastore.datasource.auth.AuthTokenDataSource
 import com.goms.model.util.ResourceKeys
 import com.goms.network.di.RequestUrls
 import kotlinx.coroutines.flow.first

@@ -1,6 +1,6 @@
 package com.goms.data.repository.setting
 
-import com.goms.datastore.SettingDataSource
+import com.goms.datastore.datasource.setting.SettingDataSource
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

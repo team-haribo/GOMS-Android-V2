@@ -34,7 +34,7 @@ fun NavGraphBuilder.inputLoginScreen(
     onBackClick: () -> Unit,
     onMainClick: () -> Unit,
     onRePasswordClick: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
+    onErrorToast: (throwable: Throwable?, message: Int?) -> Unit
 ) {
     composable(route = InputLoginRoute) {
         InputLoginRoute(

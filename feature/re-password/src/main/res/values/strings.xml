@@ -1,0 +1,17 @@
+<resources>
+    <string name="reset_password">비밀번호 재설정</string>
+
+    <string name="now_password">현재 비밀번호</string>
+    <string name="next">다음으로</string>
+
+    <string name="error_password_not_match_or_already_use">현재 비밀번호와 일치하지 않거나, 이미 사용중인 비밀번호입니다</string>
+    <string name="error_password_mismatch">비밀번호가 일치하지 않습니다</string>
+    <string name="error_password_not_valid">비밀번호 요구사항을 충족하지 않습니다</string>
+    <string name="error_re_password">비밀번호 재설정이 실패했습니다</string>
+    <string name="password">비밀번호</string>
+    <string name="check_password">비밀번호 확인</string>
+    <string name="completion">완료</string>
+    <string name="reset_password_completion">재설정 완료</string>
+    <string name="go_back_home">비밀번호를 재설정했어요.\n홈으로 돌아갈게요!</string>
+    <string name="check">확인</string>
+</resources>

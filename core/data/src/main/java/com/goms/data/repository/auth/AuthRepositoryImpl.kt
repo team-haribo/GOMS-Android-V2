@@ -1,6 +1,6 @@
 package com.goms.data.repository.auth
 
-import com.goms.datastore.AuthTokenDataSource
+import com.goms.datastore.datasource.auth.AuthTokenDataSource
 import com.goms.model.request.auth.LoginRequestModel
 import com.goms.model.request.auth.SendNumberRequestModel
 import com.goms.model.request.auth.SignUpRequestModel

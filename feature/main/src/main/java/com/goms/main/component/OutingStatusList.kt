@@ -23,15 +23,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.goms.design_system.R
 import com.goms.design_system.component.shimmer.shimmerEffect
 import com.goms.design_system.icon.DeleteIcon
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
 import com.goms.design_system.util.formatTime
+import com.goms.main.R
 import com.goms.main.data.OutingData
 import com.goms.main.data.toData
 import com.goms.main.viewmodel.uistate.GetOutingCountUiState
@@ -50,7 +51,7 @@ internal fun OutingStatusList(
     getOutingListUiState: GetOutingListUiState,
     getOutingCountUiState: GetOutingCountUiState,
     outingSearchUiState: OutingSearchUiState,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
+    onErrorToast: (throwable: Throwable?, message: Int?) -> Unit,
     onClick: (UUID) -> Unit
 ) {
     when (getOutingCountUiState) {
@@ -59,7 +60,7 @@ internal fun OutingStatusList(
         }
 
         is GetOutingCountUiState.Error -> {
-            onErrorToast(getOutingCountUiState.exception, "외출학생 숫자를 가져오지 못했습니다")
+            onErrorToast(getOutingCountUiState.exception, R.string.error_get_outing_count)
         }
 
         GetOutingCountUiState.Empty -> {
@@ -76,7 +77,7 @@ internal fun OutingStatusList(
                 }
 
                 is OutingSearchUiState.Error -> {
-                    onErrorToast(outingSearchUiState.exception, "외출자 검색이 실패했습니다")
+                    onErrorToast(outingSearchUiState.exception, R.string.error_outing_search)
                 }
 
                 OutingSearchUiState.QueryEmpty -> {
@@ -86,7 +87,7 @@ internal fun OutingStatusList(
                         }
 
                         is GetOutingListUiState.Error -> {
-                            onErrorToast(getOutingListUiState.exception, "외출자 정보를 가져오지 못했습니다")
+                            onErrorToast(getOutingListUiState.exception, R.string.error_get_outing_list)
                         }
 
                         is GetOutingListUiState.Success -> {
@@ -172,8 +173,8 @@ private fun OutingStatusListItem(
     ) {
         if (data.profileUrl.isNullOrEmpty()) {
             Image(
-                painter = painterResource(R.drawable.ic_profile),
-                contentDescription = "Default Profile Image",
+                painter = painterResource(com.goms.design_system.R.drawable.ic_profile),
+                contentDescription = stringResource(id = R.string.default_profile_image),
                 modifier = Modifier.size(48.dp)
             )
         } else {
@@ -183,7 +184,7 @@ private fun OutingStatusListItem(
                     .size(48.dp)
                     .clip(RoundedCornerShape(40.dp)),
                 contentScale = ContentScale.Crop,
-                contentDescription = "Profile Image",
+                contentDescription = stringResource(id = R.string.profile_image),
             )
         }
         Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {

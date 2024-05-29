@@ -1,0 +1,27 @@
+<resources>
+    <string name="reset_password">비밀번호 재설정</string>
+
+    <string name="app_theme_setting">앱 테마 설정</string>
+
+    <string name="default_profile_image">기본 프로필 이미지</string>
+    <string name="profile_image">프로필 이미지</string>
+    <string name="profile_change_button">프로필 변경 버튼</string>
+    <string name="late_count">지각 횟수</string>
+    <string name="number">번</string>
+
+    <string name="error_logout">로그아웃에 실패했습니다</string>
+    <string name="error_set_theme">앱 테마 변경이 실패했습니다</string>
+    <string name="error_already_default_profile">이미 기본 프로필입니다</string>
+    <string name="error_profile">프로필 변경에 실패했습니다</string>
+    <string name="show_clock">시계 나타내기</string>
+    <string name="show_clock_description">프로필 카드에 초 단위의 시간을 나타내요</string>
+    <string name="outing_push_alarm">외출제 푸시 알림</string>
+    <string name="outing_push_alarm_description">외출할 시간이 될 때마다 알려드려요</string>
+    <string name="right_now_camera">카메라 바로 켜기</string>
+    <string name="right_now_camera_description">앱을 실행하면 즉시 카메라가 켜져요</string>
+    <string name="right_now_qr_create">Qr 생성 바로 켜기</string>
+    <string name="right_now_qr_create_description">앱을 실행하면 즉시 Qr코드를 생성해요</string>
+    <string name="logout">로그아웃</string>
+    <string name="want_logout">로그아웃 하시겠습니까?</string>
+    <string name="cancel">취소</string>
+</resources>

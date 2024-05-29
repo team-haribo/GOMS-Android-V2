@@ -15,6 +15,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goms.design_system.component.dialog.GomsOneButtonDialog
@@ -80,6 +82,7 @@ private fun QrcodeScanScreen(
     onSuccess: () -> Unit,
     getProfile: () -> Unit,
 ) {
+    val context = LocalContext.current
     var openDialog by remember { mutableStateOf(false) }
     var dialogTitle by remember { mutableStateOf("") }
     var dialogContent by remember { mutableStateOf("") }
@@ -114,19 +117,20 @@ private fun QrcodeScanScreen(
         is OutingUiState.Loading -> Unit
         is OutingUiState.Success ->  {
             openDialog = true
-            dialogTitle = "QR코드 스캔 성공"
-            dialogContent = if (isOuting) "외출을 시작해요!\n7시 25분까지는 반으로 돌아와야 해요!" else "제 시간에 복귀에 성공했어요!\n다음 외출제에 또 만나요!"
+            dialogTitle = context.getString(R.string.success_qr_scan)
+            dialogContent = if (isOuting) context.getString(R.string.start_outing) else context.getString(R.string.back_outing)
         }
+
         is OutingUiState.BadRequest -> {
             openDialog = true
-            dialogTitle = "QR코드 스캔 실패"
-            dialogContent = "외출에 실패했어요 ㅠ\n외출 금지 상태 이거나 잘못된 QR코드예요."
+            dialogTitle = context.getString(R.string.fail_qr_scan)
+            dialogContent = context.getString(R.string.error_qr_mismatch)
         }
 
         is OutingUiState.Error -> {
             openDialog = true
-            dialogTitle = "QR코드 스캔 실패"
-            dialogContent = "예기치 못한 오류가 발생했어요.\n네트워크 상태를 확인 후 다시 시도해 주세요."
+            dialogTitle = context.getString(R.string.fail_qr_scan)
+            dialogContent = context.getString(R.string.error_outing)
         }
     }
 
@@ -138,7 +142,7 @@ private fun QrcodeScanScreen(
             },
             title = dialogTitle,
             content = dialogContent,
-            buttonText = "확인",
+            buttonText = stringResource(id = R.string.check),
             onClick = onSuccess
         )
     }

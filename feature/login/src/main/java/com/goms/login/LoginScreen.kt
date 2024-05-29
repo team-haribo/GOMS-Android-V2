@@ -12,14 +12,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.goms.design_system.component.button.ButtonState
 import com.goms.design_system.component.button.GomsButton
 import com.goms.design_system.component.text.LinkText
 import com.goms.design_system.icon.GomsIcon
-import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
-import com.goms.design_system.theme.ThemeType
 import com.goms.design_system.util.lockScreenOrientation
 import com.goms.login.component.LoginText
 
@@ -55,13 +54,13 @@ private fun LoginScreen(
         Spacer(modifier = Modifier.weight(1.1f))
         GomsButton(
             modifier = Modifier.fillMaxWidth(),
-            text = "로그인",
+            text = stringResource(id = R.string.login),
             state = ButtonState.Normal
         ) {
             onInputLoginClick()
         }
         Spacer(modifier = Modifier.height(16.dp))
-        LinkText(text = "회원가입") {
+        LinkText(text = stringResource(id = R.string.sign_up)) {
             onSignUpClick()
         }
         Spacer(modifier = Modifier.height(16.dp))

@@ -20,14 +20,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.goms.design_system.R
 import com.goms.design_system.component.clickable.gomsClickable
 import com.goms.design_system.component.shimmer.shimmerEffect
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
+import com.goms.main.R
 import com.goms.main.data.OutingData
 import com.goms.main.data.toData
 import com.goms.main.viewmodel.uistate.GetOutingCountUiState
@@ -41,7 +42,7 @@ internal fun MainOutingCard(
     role: Authority,
     getOutingListUiState: GetOutingListUiState,
     getOutingCountUiState: GetOutingCountUiState,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
+    onErrorToast: (throwable: Throwable?, message: Int?) -> Unit,
     onClick: () -> Unit
 ) {
     Column(
@@ -58,13 +59,13 @@ internal fun MainOutingCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "외출 현황",
+                    text = stringResource(id = R.string.outing_status),
                     style = typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = colors.WHITE
                 )
                 when (getOutingCountUiState) {
-                    GetOutingCountUiState.Loading -> {
+                    is GetOutingCountUiState.Loading -> {
                         Box(
                             modifier = Modifier
                                 .size(80.dp, 23.dp)
@@ -73,19 +74,19 @@ internal fun MainOutingCard(
                     }
 
                     is GetOutingCountUiState.Error -> {
-                        onErrorToast(getOutingCountUiState.exception, "외출학생 숫자를 가져오지 못했습니다")
+                        onErrorToast(getOutingCountUiState.exception, R.string.error_get_outing_count)
                     }
 
-                    GetOutingCountUiState.Empty -> {
+                    is GetOutingCountUiState.Empty -> {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(
-                                text = "0",
+                                text = stringResource(id = R.string.zero),
                                 style = typography.textMedium,
                                 fontWeight = FontWeight.SemiBold,
                                 color = if (role == Authority.ROLE_STUDENT_COUNCIL) colors.A7 else colors.P5
                             )
                             Text(
-                                text = "명이 외출중",
+                                text = stringResource(id = R.string.people_outing),
                                 style = typography.textMedium,
                                 fontWeight = FontWeight.Normal,
                                 color = colors.G4
@@ -104,7 +105,7 @@ internal fun MainOutingCard(
                                 color = if (role == Authority.ROLE_STUDENT_COUNCIL) colors.A7 else colors.P5
                             )
                             Text(
-                                text = "명이 외출 중",
+                                text = stringResource(id = R.string.people_outing),
                                 style = typography.textMedium,
                                 fontWeight = FontWeight.Normal,
                                 color = colors.G4
@@ -128,14 +129,14 @@ internal fun MainOutingCard(
             ) {
                 if (role == Authority.ROLE_STUDENT) {
                     Text(
-                        text = "더보기",
+                        text = stringResource(id = R.string.see_more_detail),
                         style = typography.buttonSmall,
                         fontWeight = FontWeight.Normal,
                         color = colors.G7
                     )
                 } else {
                     Text(
-                        text = "인원 관리하기",
+                        text = stringResource(id = R.string.management_people),
                         style = typography.buttonSmall,
                         fontWeight = FontWeight.Normal,
                         color = colors.G7
@@ -145,7 +146,7 @@ internal fun MainOutingCard(
         }
         if (getOutingCountUiState is GetOutingCountUiState.Success) {
             when (getOutingListUiState) {
-                GetOutingListUiState.Loading -> {
+                is GetOutingListUiState.Loading -> {
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -158,7 +159,7 @@ internal fun MainOutingCard(
                 }
 
                 is GetOutingListUiState.Error -> {
-                    onErrorToast(getOutingListUiState.exception, "외출자 정보를 가져오지 못했습니다")
+                    onErrorToast(getOutingListUiState.exception, R.string.error_get_outing_list)
                 }
 
                 is GetOutingListUiState.Success -> {
@@ -194,8 +195,8 @@ private fun MainOutingItem(
     ) {
         if (data.profileUrl.isNullOrEmpty()) {
             Image(
-                painter = painterResource(R.drawable.ic_profile),
-                contentDescription = "Default Profile Image",
+                painter = painterResource(com.goms.design_system.R.drawable.ic_profile),
+                contentDescription = stringResource(id = R.string.default_profile_image),
                 modifier = Modifier.size(28.dp)
             )
         } else {
@@ -205,7 +206,7 @@ private fun MainOutingItem(
                     .size(28.dp)
                     .clip(RoundedCornerShape(40.dp)),
                 contentScale = ContentScale.Crop,
-                contentDescription = "Profile Image",
+                contentDescription = stringResource(id = R.string.profile_image),
             )
         }
         Text(
