@@ -8,10 +8,10 @@ import com.goms.design_system.theme.color.DarkColor
 import com.goms.design_system.theme.color.LightColor
 import com.goms.design_system.util.ApplySystemUi
 
-enum class ThemeType(val value: String) {
-    DARK("Dark"),
-    LIGHT("Light"),
-    SYSTEM("System")
+enum class ThemeType(val value: String, val kr: String) {
+    DARK("Dark", "다크(기본)"),
+    LIGHT("Light", "라이트"),
+    SYSTEM("System", "시스템 테마 설정")
 }
 
 internal val LocalColorTheme = compositionLocalOf<ColorTheme> { error("No ColorTheme provided") }
