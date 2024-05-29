@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -96,7 +97,7 @@ private fun PasswordCheckScreen(
             GomsPasswordTextField(
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                placeHolder = "현재 비밀번호",
+                placeHolder = stringResource(id = R.string.now_password),
                 setText = password,
                 onValueChange = onPasswordChange,
                 singleLine = true
@@ -104,7 +105,7 @@ private fun PasswordCheckScreen(
             Spacer(modifier = Modifier.weight(1f))
             GomsButton(
                 modifier = Modifier.fillMaxWidth(),
-                text = "다음으로",
+                text = stringResource(id = R.string.next),
                 state = if (password.isNotBlank()) ButtonState.Normal
                 else ButtonState.Enable
             ) {

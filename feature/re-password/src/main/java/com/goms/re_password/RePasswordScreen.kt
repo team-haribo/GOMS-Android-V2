@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -47,7 +48,7 @@ import com.goms.re_password.viewmodel.uistate.RePasswordUiState
 internal fun RePasswordRoute(
     onBackClick: () -> Unit,
     onSuccessClick: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
+    onErrorToast: (throwable: Throwable?, message: Int?) -> Unit,
     viewModel: RePasswordViewmodel = hiltViewModel(LocalContext.current as ComponentActivity),
 ) {
     val rePasswordUiState by viewModel.rePasswordUiState.collectAsStateWithLifecycle()
@@ -83,7 +84,7 @@ private fun RePasswordScreen(
     onPasswordCheckChange: (String) -> Unit,
     onSuccessClick: () -> Unit,
     onBackClick: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
+    onErrorToast: (throwable: Throwable?, message: Int?) -> Unit,
     rePasswordUiState: RePasswordUiState,
     initRePassword: () -> Unit,
     rePasswordCallback: () -> Unit
@@ -107,28 +108,31 @@ private fun RePasswordScreen(
             is RePasswordUiState.Success -> {
                 openDialog = true
                 isLoading = false
+                isError = false
             }
 
             is RePasswordUiState.BadRequest -> {
                 isLoading = false
-                onErrorToast(null, "현재 비밀번호와 일치하지 않거나, 이미 사용중인 비밀번호입니다")
+                isError = true
+                onErrorToast(null, R.string.error_password_not_match_or_already_use)
             }
 
             is RePasswordUiState.PasswordMismatch -> {
                 isLoading = false
                 isError = true
-                onErrorToast(null, "비밀번호가 일치하지 않습니다")
+                onErrorToast(null, R.string.error_password_mismatch)
             }
 
             is RePasswordUiState.PasswordNotValid -> {
                 isLoading = false
                 isError = true
-                onErrorToast(null, "비밀번호 요구사항을 충족하지 않습니다")
+                onErrorToast(null, R.string.error_password_not_valid)
             }
 
             is RePasswordUiState.Error -> {
                 isLoading = false
-                onErrorToast(rePasswordUiState.exception, "비밀번호 재설정이 실패했습니다")
+                isError = true
+                onErrorToast(rePasswordUiState.exception, R.string.error_re_password)
             }
         }
         onDispose { initRePassword() }
@@ -161,17 +165,18 @@ private fun RePasswordScreen(
                 isError = isError,
                 isDescription = false,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                placeHolder = "비밀번호",
+                placeHolder = stringResource(id = R.string.password),
                 setText = password,
                 onValueChange = onPasswordChange,
                 singleLine = true
             )
+            Spacer(modifier = Modifier.height(24.dp))
             GomsPasswordTextField(
                 modifier = Modifier.fillMaxWidth(),
                 isDescription = true,
                 isError = isError,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                placeHolder = "비밀번호 확인",
+                placeHolder = stringResource(id = R.string.check_password),
                 setText = passwordCheck,
                 onValueChange = onPasswordCheckChange,
                 singleLine = true
@@ -179,7 +184,7 @@ private fun RePasswordScreen(
             Spacer(modifier = Modifier.weight(1f))
             GomsButton(
                 modifier = Modifier.fillMaxWidth(),
-                text = "완료",
+                text = stringResource(id = R.string.completion),
                 state = if (password.isNotBlank() && passwordCheck.isNotBlank()) ButtonState.Normal
                 else ButtonState.Enable
             ) {
@@ -198,10 +203,9 @@ private fun RePasswordScreen(
             onStateChange = {
                 openDialog = it
             },
-            title = "재설정 완료",
-            content = "비밀번호를 재설정했어요.\n" +
-                    "홈으로 돌아갈게요!",
-            buttonText = "확인",
+            title = stringResource(id = R.string.reset_password_completion),
+            content = stringResource(id = R.string.go_back_home),
+            buttonText = stringResource(id = R.string.check),
             onClick = onSuccessClick
         )
     }

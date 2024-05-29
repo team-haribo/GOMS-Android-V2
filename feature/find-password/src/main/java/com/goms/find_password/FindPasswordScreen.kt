@@ -109,10 +109,12 @@ private fun FindPasswordScreen(
             is FindPasswordUiState.Success -> {
                 openDialog = true
                 isLoading = false
+                isError = false
             }
 
             is FindPasswordUiState.BadRequest -> {
                 isLoading = false
+                isError = true
                 onErrorToast(null, R.string.error_password_already_use)
             }
 
@@ -130,6 +132,7 @@ private fun FindPasswordScreen(
 
             is FindPasswordUiState.Error -> {
                 isLoading = false
+                isError = true
                 onErrorToast(findPasswordUiState.exception, R.string.error_find_password)
             }
         }
