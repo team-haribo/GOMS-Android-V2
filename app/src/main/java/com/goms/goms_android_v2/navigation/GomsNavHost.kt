@@ -65,20 +65,20 @@ fun GomsNavHost(
     val context = LocalContext.current
     val navController = appState.navController
 
-    val onErrorToast: (throwable: Throwable?, message: String?) -> Unit = { throwable, message ->
+    val onErrorToast: (throwable: Throwable?, message: Int?) -> Unit = { throwable, message ->
         val errorMessage = throwable?.let {
             when (it) {
-                is ForBiddenException -> context.getString(R.string.error_for_bidden)
-                is TimeOutException -> context.getString(R.string.error_time_out)
-                is ServerException -> context.getString(R.string.error_server)
-                is NoInternetException -> context.getString(R.string.error_no_internet)
-                is OtherHttpException -> context.getString(R.string.error_other_http)
-                is UnKnownException -> context.getString(R.string.error_un_known)
+                is ForBiddenException -> R.string.error_for_bidden
+                is TimeOutException -> R.string.error_time_out
+                is ServerException -> R.string.error_server
+                is NoInternetException -> R.string.error_no_internet
+                is OtherHttpException -> R.string.error_other_http
+                is UnKnownException -> R.string.error_un_known
                 else -> message
             }
-        } ?: message ?: context.getString(R.string.error_default)
+        } ?: message ?: R.string.error_default
 
-        createToast(context, errorMessage)
+        createToast(context, context.getString(errorMessage))
     }
 
     NavHost(
