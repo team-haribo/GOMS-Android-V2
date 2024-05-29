@@ -21,6 +21,6 @@
 
     <string name="error_number_mismatch">인증번호가 일치하지 않습니다</string>
     <string name="error_number_not_valid">잘못된 인증번호입니다</string>
-    <string name="error_number_verify_number">인증이 실패했습니다</string>
+    <string name="error_verify_number">인증이 실패했습니다</string>
     <string name="certified">인증</string>
 </resources>
