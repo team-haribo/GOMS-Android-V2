@@ -36,8 +36,9 @@ import com.goms.design_system.theme.ThemeType
 import com.goms.design_system.util.lockScreenOrientation
 import com.goms.model.enum.Authority
 import com.goms.model.enum.Switch
-import com.goms.setting.component.PasswordChangeButton
+import com.goms.setting.component.SettingButton
 import com.goms.setting.component.SelectThemeDropDown
+import com.goms.setting.component.SettingButtonType
 import com.goms.setting.component.SettingProfileCard
 import com.goms.setting.component.SettingSwitchComponent
 import com.goms.setting.data.toData
@@ -253,7 +254,10 @@ private fun SettingScreen(
                 getProfileUiState = getProfileUiState
             )
             Spacer(modifier = Modifier.height(32.dp))
-            PasswordChangeButton(modifier = Modifier) {
+            SettingButton(
+                modifier = Modifier,
+                buttonType = SettingButtonType.PasswordChange.value
+            ) {
                 onPasswordCheck()
             }
             Spacer(modifier = Modifier.height(24.dp))
