@@ -43,4 +43,7 @@
     <string name="menu_icon_description">메뉴 아이콘</string>
     <string name="invisible_icon_description">안보이는 아이콘</string>
     <string name="visible_icon_description">보이는 아이콘</string>
+    <string name="password_change_icon_description">비밀번호 변경 아이콘</string>
+    <string name="logout_icon_description">로그아웃 아이콘</string>
+    <string name="withdrawal_icon_description">회원탈퇴 아이콘</string>
 </resources>

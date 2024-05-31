@@ -334,3 +334,42 @@ fun VisibleIcon(
         colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
     )
 }
+
+@Composable
+fun GomsLogoutIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+) {
+    Image(
+        painter = painterResource(id = R.drawable.ic_logout),
+        contentDescription = stringResource(id = R.string.logout_icon_description),
+        modifier = modifier,
+        colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
+    )
+}
+
+@Composable
+fun GomsPasswordChangeIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+) {
+    Image(
+        painter = painterResource(id = R.drawable.ic_password_change),
+        contentDescription = stringResource(id = R.string.password_change_icon_description),
+        modifier = modifier,
+        colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
+    )
+}
+
+@Composable
+fun GomsWithdrawalIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+) {
+    Image(
+        painter = painterResource(id = R.drawable.ic_withdrawal),
+        contentDescription = stringResource(id = R.string.withdrawal_icon_description),
+        modifier = modifier,
+        colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
+    )
+}
