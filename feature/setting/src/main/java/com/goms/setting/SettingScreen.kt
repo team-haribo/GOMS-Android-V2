@@ -332,12 +332,12 @@ private fun SettingScreen(
                     onFunctionOn = { onUpdateQrcode(Switch.ON.value) }
                 )
             }
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(32.dp))
             Divider(
                 modifier = Modifier.fillMaxWidth(),
                 color = colors.WHITE.copy(0.15f)
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(24.dp))
             SettingButton(
                 modifier = Modifier,
                 buttonType = SettingButtonType.PasswordChange.value
