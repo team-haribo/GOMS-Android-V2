@@ -23,5 +23,8 @@
     <string name="right_now_qr_create_description">앱을 실행하면 즉시 Qr코드를 생성해요</string>
     <string name="logout">로그아웃</string>
     <string name="want_logout">로그아웃 하시겠습니까?</string>
+    <string name="withdrawal">회원탈퇴</string>
+    <string name="want_withdrawal">정말 회원을 탈퇴하시겠어요?</string>
     <string name="cancel">취소</string>
+
 </resources>

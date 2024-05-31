@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.material3.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -186,6 +187,7 @@ private fun SettingScreen(
 ) {
     var openDialog by remember { mutableStateOf(false) }
     var openBottomSheet by remember { mutableStateOf(false) }
+    var isLogout by remember { mutableStateOf(true) }
 
     LaunchedEffect("load data") {
         getProfile()
@@ -254,12 +256,10 @@ private fun SettingScreen(
                 getProfileUiState = getProfileUiState
             )
             Spacer(modifier = Modifier.height(32.dp))
-            SettingButton(
-                modifier = Modifier,
-                buttonType = SettingButtonType.PasswordChange.value
-            ) {
-                onPasswordCheck()
-            }
+            Divider(
+                modifier = Modifier.fillMaxWidth(),
+                color = colors.WHITE.copy(0.15f)
+            )
             Spacer(modifier = Modifier.height(24.dp))
             SelectThemeDropDown(
                 modifier = Modifier,
@@ -332,25 +332,42 @@ private fun SettingScreen(
                     onFunctionOn = { onUpdateQrcode(Switch.ON.value) }
                 )
             }
-            Spacer(modifier = Modifier.weight(1f))
-            GomsButton(
+            Spacer(modifier = Modifier.height(24.dp))
+            Divider(
                 modifier = Modifier.fillMaxWidth(),
-                text = stringResource(id = R.string.logout),
-                state = ButtonState.Logout
+                color = colors.WHITE.copy(0.15f)
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            SettingButton(
+                modifier = Modifier,
+                buttonType = SettingButtonType.PasswordChange.value
             ) {
+                onPasswordCheck()
+            }
+            SettingButton(
+                modifier = Modifier,
+                buttonType = SettingButtonType.Logout.value
+            ) {
+                isLogout = true
                 openDialog = true
             }
-            Spacer(modifier = Modifier.height(40.dp))
+            SettingButton(
+                modifier = Modifier,
+                buttonType = SettingButtonType.Withdrawal.value
+            ) {
+                isLogout = false
+                openDialog = true
+            }
         }
     }
     if (openDialog) {
         GomsTwoButtonDialog(
             openDialog = openDialog,
             onStateChange = { openDialog = it },
-            title = stringResource(id = R.string.logout),
-            content = stringResource(id = R.string.want_logout),
+            title = stringResource(id = if(isLogout) R.string.logout else R.string.withdrawal),
+            content = stringResource(id = if(isLogout) R.string.want_logout else R.string.want_withdrawal),
             dismissText = stringResource(id = R.string.cancel),
-            checkText = stringResource(id = R.string.logout),
+            checkText = stringResource(id = if(isLogout) R.string.logout else R.string.withdrawal),
             onDismissClick = { openDialog = false }
         ) {
             onLogoutClick()
