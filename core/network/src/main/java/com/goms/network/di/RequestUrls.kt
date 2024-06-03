@@ -15,6 +15,7 @@ internal object RequestUrls {
         const val image = "$path/image"
         const val newPassword = "$path/new-password"
         const val changePassword = "$path/change-password"
+        const val withdraw = "$path/withdraw"
     }
 
     object AUTH {

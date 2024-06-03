@@ -3,6 +3,7 @@ package com.goms.network.api
 import com.goms.network.di.RequestUrls
 import com.goms.network.dto.request.account.FindPasswordRequest
 import com.goms.network.dto.request.account.RePasswordRequest
+import com.goms.network.dto.request.account.WithdrawRequest
 import com.goms.network.dto.response.account.ProfileResponse
 import okhttp3.MultipartBody
 import retrofit2.http.Body
@@ -40,5 +41,10 @@ interface AccountAPI {
     @PATCH(RequestUrls.ACCOUNT.changePassword)
     suspend fun rePassword(
         @Body body: RePasswordRequest
+    )
+
+    @DELETE(RequestUrls.ACCOUNT.withdraw)
+    suspend fun withdraw(
+        @Body body: WithdrawRequest
     )
 }
