@@ -2,6 +2,7 @@ package com.goms.setting.viewmodel
 
 import android.content.Context
 import android.net.Uri
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.goms.common.network.errorHandling
@@ -18,6 +19,7 @@ import com.goms.domain.setting.SetAlarmUseCase
 import com.goms.domain.setting.SetQrcodeUseCase
 import com.goms.domain.setting.SetThemeUseCase
 import com.goms.domain.setting.SetTimeUseCase
+import com.goms.model.util.Regex.PASSWORD
 import com.goms.setting.util.getMultipartFile
 import com.goms.setting.viewmodel.uistate.GetProfileUiState
 import com.goms.setting.viewmodel.uistate.LogoutUiState
@@ -46,9 +48,12 @@ class SettingViewModel @Inject constructor (
     private val setQrcodeUseCase: SetQrcodeUseCase,
     private val setAlarmUseCase: SetAlarmUseCase,
     private val setTimeUseCase: SetTimeUseCase,
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
     internal val role = authRepository.getRole()
+
+    internal var password = savedStateHandle.getStateFlow(key = PASSWORD, initialValue = "")
 
     private val _themeState = MutableStateFlow("")
     internal val themeState = _themeState.asStateFlow()
@@ -206,4 +211,9 @@ class SettingViewModel @Inject constructor (
                 _logoutState.value = LogoutUiState.Error(it)
             }
     }
+
+    internal fun onPasswordChange(value: String) {
+        savedStateHandle[PASSWORD] = value
+    }
+
 }

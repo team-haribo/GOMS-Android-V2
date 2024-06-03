@@ -44,6 +44,8 @@ import com.goms.re_password.navigation.passwordCheckScreen
 import com.goms.re_password.navigation.rePasswordScreen
 import com.goms.setting.navigation.navigateToSettingScreen
 import com.goms.setting.navigation.settingScreen
+import com.goms.setting.navigation.withdrawalRoute
+import com.goms.setting.navigation.withdrawalScreen
 import com.goms.sign_up.navigation.navigateToNumber
 import com.goms.sign_up.navigation.navigateToPassword
 import com.goms.sign_up.navigation.navigateToSignUp
@@ -173,6 +175,11 @@ fun GomsNavHost(
             onPasswordCheck = navController::navigateToPasswordCheck,
             onUpdateAlarm = onUpdateAlarm,
             onThemeSelect = onThemeSelect
+        )
+
+        withdrawalScreen(
+            onBackClick = navController::popBackStack,
+            onWithdrawal = onLogout
         )
 
         emailCheckScreen(
