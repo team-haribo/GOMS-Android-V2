@@ -58,7 +58,8 @@ internal fun SettingRoute(
     onErrorToast: (throwable: Throwable?, message: Int?) -> Unit,
     onThemeSelect: () -> Unit,
     onUpdateAlarm: (String) -> Unit,
-    viewModel: SettingViewModel = hiltViewModel(),
+    onWithdrawalClick: () -> Unit,
+    viewModel: SettingViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
     val role by viewModel.role.collectAsStateWithLifecycle(initialValue = "")
@@ -146,6 +147,9 @@ internal fun SettingRoute(
         onUpdateAlarm = { alarmData = it },
         onUpdateTime = { timeData = it },
         setDefaultProfileUiState = { viewModel.initProfileImage() },
+        onErrorToast = onErrorToast,
+        onPasswordCheck = onPasswordCheck,
+        onWithdrawalClick = onWithdrawalClick,
         logoutUiState = logoutUiState,
         setThemeUiState = setThemeUiState,
         getProfileUiState = getProfileUiState,
@@ -153,9 +157,7 @@ internal fun SettingRoute(
         qrcodeState = qrcodeState,
         alarmState = alarmState,
         timeState = timeState,
-        profileImageUiState = profileImageUiState,
-        onErrorToast = onErrorToast,
-        onPasswordCheck = onPasswordCheck
+        profileImageUiState = profileImageUiState
     )
 }
 
@@ -174,6 +176,9 @@ private fun SettingScreen(
     onUpdateAlarm: (String) -> Unit,
     onUpdateTime: (String) -> Unit,
     setDefaultProfileUiState: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: Int?) -> Unit,
+    onPasswordCheck: () -> Unit,
+    onWithdrawalClick: () -> Unit,
     logoutUiState: LogoutUiState,
     setThemeUiState: SetThemeUiState,
     getProfileUiState: GetProfileUiState,
@@ -181,9 +186,7 @@ private fun SettingScreen(
     qrcodeState: String,
     alarmState: String,
     timeState: String,
-    profileImageUiState: ProfileImageUiState,
-    onErrorToast: (throwable: Throwable?, message: Int?) -> Unit,
-    onPasswordCheck: () -> Unit
+    profileImageUiState: ProfileImageUiState
 ) {
     var openDialog by remember { mutableStateOf(false) }
     var openBottomSheet by remember { mutableStateOf(false) }
@@ -370,7 +373,7 @@ private fun SettingScreen(
             checkText = stringResource(id = if(isLogout) R.string.logout else R.string.withdrawal),
             onDismissClick = { openDialog = false }
         ) {
-            onLogoutClick()
+            if(isLogout) onLogoutClick() else onWithdrawalClick()
         }
     }
     if (openBottomSheet) {
