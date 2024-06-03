@@ -2,7 +2,9 @@ package com.goms.data.repository.account
 
 import com.goms.model.request.account.FindPasswordRequestModel
 import com.goms.model.request.account.RePasswordRequestModel
+import com.goms.model.request.account.WithdrawRequestModel
 import com.goms.model.response.account.ProfileResponseModel
+import com.goms.network.dto.request.account.WithdrawRequest
 import kotlinx.coroutines.flow.Flow
 import okhttp3.MultipartBody
 
@@ -18,4 +20,6 @@ interface AccountRepository {
     suspend fun findPassword(body: FindPasswordRequestModel): Flow<Unit>
 
     suspend fun rePassword(body: RePasswordRequestModel): Flow<Unit>
+
+    suspend fun withdraw(body: WithdrawRequestModel): Flow<Unit>
 }
