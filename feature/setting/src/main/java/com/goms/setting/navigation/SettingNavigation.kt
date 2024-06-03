@@ -20,6 +20,7 @@ fun NavGraphBuilder.settingScreen(
     onPasswordCheck: () -> Unit,
     onUpdateAlarm: (String) -> Unit,
     onThemeSelect: () -> Unit,
+    onWithdrawalClick: () -> Unit
 ) {
     composable(route = settingRoute) {
         SettingRoute(
@@ -28,7 +29,8 @@ fun NavGraphBuilder.settingScreen(
             onErrorToast = onErrorToast,
             onPasswordCheck = onPasswordCheck,
             onUpdateAlarm = onUpdateAlarm,
-            onThemeSelect = onThemeSelect
+            onThemeSelect = onThemeSelect,
+            onWithdrawalClick = onWithdrawalClick
         )
     }
 }
