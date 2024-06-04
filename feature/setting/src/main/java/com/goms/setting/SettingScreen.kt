@@ -1,5 +1,6 @@
 package com.goms.setting
 
+import android.Manifest
 import android.content.pm.ActivityInfo
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -47,6 +48,9 @@ import com.goms.setting.viewmodel.uistate.ProfileImageUiState
 import com.goms.setting.viewmodel.uistate.SetThemeUiState
 import com.goms.setting.viewmodel.SettingViewModel
 import com.goms.ui.GomsRoleBackButton
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
 
 @Composable
 internal fun SettingRoute(
@@ -157,6 +161,7 @@ internal fun SettingRoute(
     )
 }
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 private fun SettingScreen(
     role: String,
@@ -185,6 +190,7 @@ private fun SettingScreen(
 ) {
     var openDialog by remember { mutableStateOf(false) }
     var openBottomSheet by remember { mutableStateOf(false) }
+    val notificationPermissionState = rememberPermissionState(Manifest.permission.POST_NOTIFICATIONS)
 
     LaunchedEffect("load data") {
         getProfile()
@@ -291,7 +297,10 @@ private fun SettingScreen(
                     switchOffBackground = colors.G4,
                     isSwitchOn = alarmState == Switch.ON.value,
                     onFunctionOff = { onUpdateAlarm(Switch.OFF.value) },
-                    onFunctionOn = { onUpdateAlarm(Switch.ON.value) }
+                    onFunctionOn = {
+                        onUpdateAlarm(Switch.ON.value)
+                        if (!notificationPermissionState.status.isGranted) notificationPermissionState.launchPermissionRequest()
+                    }
                 )
                 Spacer(modifier = Modifier.height(32.dp))
                 SettingSwitchComponent(

@@ -3,8 +3,6 @@ package com.goms.main
 import android.Manifest
 import android.os.Build
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -45,6 +43,8 @@ import com.goms.main.component.MainTimeProfileCard
 import com.goms.main.viewmodel.MainViewModel
 import com.goms.main.viewmodel.uistate.TokenRefreshUiState
 import com.goms.model.enum.Switch
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -112,6 +112,7 @@ internal fun MainRoute(
     )
 }
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 private fun MainScreen(
     role: Authority,
@@ -133,26 +134,25 @@ private fun MainScreen(
     tokenRefreshCallBack: () -> Unit
 ) {
     var isPermissionRequest by rememberSaveable { mutableStateOf(false) }
-
-    val permissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestMultiplePermissions()
-    ) { isGrantedMap: Map<String, Boolean> -> }
+    val multiplePermissionState = rememberMultiplePermissionsState(
+        listOf(
+            Manifest.permission.CAMERA,
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                Manifest.permission.READ_MEDIA_IMAGES
+            } else {
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            },
+            Manifest.permission.POST_NOTIFICATIONS
+        )
+    )
 
     if (!isPermissionRequest) {
-        LaunchedEffect(true) {
-            permissionLauncher.launch(
-                arrayOf(
-                    Manifest.permission.CAMERA,
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        Manifest.permission.READ_MEDIA_IMAGES
-                    } else {
-                        Manifest.permission.READ_EXTERNAL_STORAGE
-                    },
-                    Manifest.permission.POST_NOTIFICATIONS
-                )
-            )
-            isPermissionRequest = true
+        LaunchedEffect("getPermission") {
+            if (!multiplePermissionState.allPermissionsGranted) {
+                multiplePermissionState.launchMultiplePermissionRequest()
+            }
         }
+        isPermissionRequest = true
     }
 
     LaunchedEffect(true) {
