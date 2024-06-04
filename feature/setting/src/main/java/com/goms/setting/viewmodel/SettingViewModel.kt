@@ -14,6 +14,7 @@ import com.goms.domain.account.DeleteProfileImageUseCase
 import com.goms.domain.account.GetProfileUseCase
 import com.goms.domain.account.SetProfileImageUseCase
 import com.goms.domain.account.UpdateProfileImageUseCase
+import com.goms.domain.account.WithdrawalUseCase
 import com.goms.domain.auth.LogoutUseCase
 import com.goms.domain.setting.SetAlarmUseCase
 import com.goms.domain.setting.SetQrcodeUseCase
@@ -25,6 +26,7 @@ import com.goms.setting.viewmodel.uistate.GetProfileUiState
 import com.goms.setting.viewmodel.uistate.LogoutUiState
 import com.goms.setting.viewmodel.uistate.ProfileImageUiState
 import com.goms.setting.viewmodel.uistate.SetThemeUiState
+import com.goms.setting.viewmodel.uistate.WithdrawalUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -48,6 +50,7 @@ class SettingViewModel @Inject constructor (
     private val setQrcodeUseCase: SetQrcodeUseCase,
     private val setAlarmUseCase: SetAlarmUseCase,
     private val setTimeUseCase: SetTimeUseCase,
+    private val withdrawalUseCase: WithdrawalUseCase,
     private val authRepository: AuthRepository,
     private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
@@ -78,6 +81,9 @@ class SettingViewModel @Inject constructor (
 
     private val _getProfileUiState = MutableStateFlow<GetProfileUiState>(GetProfileUiState.Loading)
     internal val getProfileUiState = _getProfileUiState.asStateFlow()
+
+    private val _withdrawalUiState = MutableStateFlow<WithdrawalUiState>(WithdrawalUiState.Loading)
+    internal val withdrawalUiState = _withdrawalUiState.asStateFlow()
 
     internal fun getProfile() = viewModelScope.launch {
         getProfileUseCase()
@@ -209,6 +215,19 @@ class SettingViewModel @Inject constructor (
                 }
             }.onFailure {
                 _logoutState.value = LogoutUiState.Error(it)
+            }
+    }
+
+    internal fun withdrawal() = viewModelScope.launch {
+        withdrawalUseCase(PASSWORD)
+            .onSuccess {
+                it.catch { remoteError ->
+                    _withdrawalUiState.value = WithdrawalUiState.Error(remoteError)
+                }.collect {
+                    _withdrawalUiState.value = WithdrawalUiState.Success
+                }
+            }.onFailure {
+                _withdrawalUiState.value = WithdrawalUiState.Error(it)
             }
     }
 
