@@ -28,7 +28,6 @@ import com.goms.qrcode.viewmodel.uistate.GetProfileUiState
 import com.goms.qrcode.viewmodel.uistate.OutingUiState
 import com.goms.qrcode.viewmodel.QrcodeViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
@@ -43,11 +42,11 @@ internal fun QrcodeScanRoute(
     viewModel: QrcodeViewModel = hiltViewModel(),
 ) {
     val outingUiState by viewModel.outingState.collectAsStateWithLifecycle()
-    val cameraPermissionState: PermissionState = rememberPermissionState(Manifest.permission.CAMERA)
     val getProfileUiState by viewModel.getProfileUiState.collectAsStateWithLifecycle()
+    val cameraPermissionState = rememberPermissionState(Manifest.permission.CAMERA)
 
     LaunchedEffect("getPermission") {
-        if (!cameraPermissionState.status.isGranted && !cameraPermissionState.status.shouldShowRationale) run {
+        if (!cameraPermissionState.status.isGranted && !cameraPermissionState.status.shouldShowRationale) {
             cameraPermissionState.launchPermissionRequest()
         }
     }
@@ -88,7 +87,9 @@ private fun QrcodeScanScreen(
     var dialogContent by remember { mutableStateOf("") }
     var isOuting by remember { mutableStateOf(false) }
 
-    LaunchedEffect("getProfile") { getProfile() }
+    LaunchedEffect("getProfile") {
+        getProfile()
+    }
 
     lockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
     QrcodeScanPreview(
