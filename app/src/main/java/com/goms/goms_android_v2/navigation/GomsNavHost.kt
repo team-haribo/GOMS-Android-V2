@@ -178,7 +178,8 @@ fun GomsNavHost(
         )
         withdrawalScreen(
             onBackClick = navController::popBackStack,
-            onWithdrawal = onLogout
+            onWithdrawal = onLogout,
+            onErrorToast = onErrorToast
         )
         emailCheckScreen(
             onBackClick = navController::popBackStack,

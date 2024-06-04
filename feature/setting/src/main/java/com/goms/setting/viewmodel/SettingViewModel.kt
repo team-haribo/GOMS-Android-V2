@@ -2,6 +2,7 @@ package com.goms.setting.viewmodel
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -219,15 +220,21 @@ class SettingViewModel @Inject constructor (
     }
 
     internal fun withdrawal() = viewModelScope.launch {
-        withdrawalUseCase(PASSWORD)
+        withdrawalUseCase(password.value)
             .onSuccess {
                 it.catch { remoteError ->
                     _withdrawalUiState.value = WithdrawalUiState.Error(remoteError)
+                    remoteError.errorHandling(
+                        badRequestAction = { _withdrawalUiState.value = WithdrawalUiState.BadRequest },
+                    )
                 }.collect {
                     _withdrawalUiState.value = WithdrawalUiState.Success
                 }
             }.onFailure {
                 _withdrawalUiState.value = WithdrawalUiState.Error(it)
+                it.errorHandling(
+                    badRequestAction = { _withdrawalUiState.value = WithdrawalUiState.BadRequest },
+                )
             }
     }
 

@@ -18,8 +18,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
@@ -33,24 +37,30 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goms.design_system.component.button.ButtonState
 import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.button.GomsButton
+import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
 import com.goms.design_system.component.textfield.GomsPasswordTextField
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.util.keyboardAsState
 import com.goms.design_system.util.lockScreenOrientation
+import com.goms.setting.viewmodel.uistate.WithdrawalUiState
 
 @Composable
 internal fun WithdrawalRoute(
     onBackClick: () -> Unit,
     onWithdrawal: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: Int?) -> Unit,
     viewModel: SettingViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
 ) {
     val password by viewModel.password.collectAsStateWithLifecycle()
+    val withdrawalUiState by viewModel.withdrawalUiState.collectAsStateWithLifecycle()
 
     WithdrawalScreen(
         password = password,
+        withdrawalUiState = withdrawalUiState,
         onPasswordChange = viewModel::onPasswordChange,
         onBackClick = onBackClick,
-        onWithdrawalClick = {},
+        onWithdrawalClick = viewModel::withdrawal,
+        onErrorToast = onErrorToast,
         onWithdrawal = onWithdrawal
     )
 }
@@ -58,18 +68,38 @@ internal fun WithdrawalRoute(
 @Composable
 private fun WithdrawalScreen(
     password: String,
+    withdrawalUiState: WithdrawalUiState,
     onPasswordChange: (String) -> Unit,
     onBackClick: () -> Unit,
     onWithdrawalClick: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: Int?) -> Unit,
     onWithdrawal: () -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
     val isKeyboardOpen by keyboardAsState()
     val animatedSpacerHeight by animateDpAsState(targetValue = if (!isKeyboardOpen) 100.dp else 16.dp)
+    var isLoading by remember { mutableStateOf(false) }
+    var openDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(isKeyboardOpen) {
         if (!isKeyboardOpen) {
             focusManager.clearFocus()
+        }
+    }
+
+    when(withdrawalUiState) {
+        is WithdrawalUiState.Loading -> Unit
+        is WithdrawalUiState.Success -> {
+            openDialog = true
+            isLoading = false
+        }
+        is WithdrawalUiState.BadRequest -> {
+            isLoading = false
+            onErrorToast(null, R.string.error_password_not_match_or_already_use)
+        }
+        is WithdrawalUiState.Error -> {
+            isLoading = false
+            onErrorToast(null,R.string.withdrawal)
         }
     }
 
@@ -112,8 +142,13 @@ private fun WithdrawalScreen(
                 else ButtonState.Enable
             ) {
                 onWithdrawalClick()
+                isLoading = true
             }
             Spacer(modifier = Modifier.height(animatedSpacerHeight))
         }
+    }
+
+    if (isLoading) {
+        GomsCircularProgressIndicator()
     }
 }

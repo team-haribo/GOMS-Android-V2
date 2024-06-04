@@ -41,12 +41,15 @@ fun NavController.navigateToWithdrawalScreen(navOptions: NavOptions? = null) {
 
 fun NavGraphBuilder.withdrawalScreen(
     onBackClick: () -> Unit,
-    onWithdrawal: () -> Unit
+    onWithdrawal: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: Int?) -> Unit,
+
 ) {
     composable(route = withdrawalRoute) {
         WithdrawalRoute(
             onBackClick = onBackClick,
-            onWithdrawal = onWithdrawal
+            onWithdrawal = onWithdrawal,
+            onErrorToast = onErrorToast
         )
     }
 }
