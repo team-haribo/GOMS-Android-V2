@@ -2,7 +2,6 @@ package com.goms.data.repository.account
 
 import com.goms.model.request.account.FindPasswordRequestModel
 import com.goms.model.request.account.RePasswordRequestModel
-import com.goms.model.request.account.WithdrawRequestModel
 import com.goms.model.response.account.ProfileResponseModel
 import com.goms.network.datasource.account.AccountDataSource
 import com.goms.network.mapper.request.account.toDto
@@ -39,7 +38,7 @@ class AccountRepositoryImpl @Inject constructor(
         return remoteAccountDataSource.rePassword(body = body.toDto())
     }
 
-    override suspend fun withdraw(body: WithdrawRequestModel): Flow<Unit> {
-        return remoteAccountDataSource.withdraw(body = body.toDto())
+    override suspend fun withdraw(password: String): Flow<Unit> {
+        return remoteAccountDataSource.withdraw(password = password)
     }
 }

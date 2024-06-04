@@ -4,7 +4,6 @@ import com.goms.network.dto.request.account.FindPasswordRequest
 import com.goms.network.dto.response.account.ProfileResponse
 import com.goms.network.api.AccountAPI
 import com.goms.network.dto.request.account.RePasswordRequest
-import com.goms.network.dto.request.account.WithdrawRequest
 import com.goms.network.util.GomsApiHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -64,10 +63,10 @@ class AccountDataSourceImpl @Inject constructor(
         )
     }.flowOn(Dispatchers.IO)
 
-    override suspend fun withdraw(body: WithdrawRequest): Flow<Unit> = flow {
+    override suspend fun withdraw(password: String): Flow<Unit> = flow {
         emit(
             GomsApiHandler<Unit>()
-                .httpRequest { accountAPI.withdraw(body = body) }
+                .httpRequest { accountAPI.withdraw(password = password) }
                 .sendRequest()
         )
     }.flowOn(Dispatchers.IO)

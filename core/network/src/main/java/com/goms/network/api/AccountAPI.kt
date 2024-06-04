@@ -3,7 +3,6 @@ package com.goms.network.api
 import com.goms.network.di.RequestUrls
 import com.goms.network.dto.request.account.FindPasswordRequest
 import com.goms.network.dto.request.account.RePasswordRequest
-import com.goms.network.dto.request.account.WithdrawRequest
 import com.goms.network.dto.response.account.ProfileResponse
 import okhttp3.MultipartBody
 import retrofit2.http.Body
@@ -13,6 +12,7 @@ import retrofit2.http.Multipart
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Part
+import retrofit2.http.Path
 
 interface AccountAPI {
     @GET(RequestUrls.ACCOUNT.profile)
@@ -45,6 +45,6 @@ interface AccountAPI {
 
     @DELETE(RequestUrls.ACCOUNT.withdraw)
     suspend fun withdraw(
-        @Body body: WithdrawRequest
+        @Path("password") password: String
     )
 }
