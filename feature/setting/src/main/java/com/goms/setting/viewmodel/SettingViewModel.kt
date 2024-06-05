@@ -238,6 +238,10 @@ class SettingViewModel @Inject constructor (
             }
     }
 
+    internal fun initWithdrawal() {
+        _withdrawalUiState.value = WithdrawalUiState.Loading
+    }
+
     internal fun onPasswordChange(value: String) {
         savedStateHandle[PASSWORD] = value
     }

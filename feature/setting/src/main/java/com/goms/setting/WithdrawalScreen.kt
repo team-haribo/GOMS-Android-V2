@@ -60,7 +60,10 @@ internal fun WithdrawalRoute(
         withdrawalUiState = withdrawalUiState,
         onPasswordChange = viewModel::onPasswordChange,
         onBackClick = onBackClick,
-        onWithdrawalClick = viewModel::withdrawal,
+        onWithdrawalClick = {
+            viewModel.initWithdrawal()
+            viewModel.withdrawal()
+        },
         onErrorToast = onErrorToast,
         onWithdrawal = onWithdrawal
     )
@@ -91,23 +94,26 @@ private fun WithdrawalScreen(
         }
     }
 
-    when(withdrawalUiState) {
-        is WithdrawalUiState.Loading -> Unit
-        is WithdrawalUiState.Success -> {
-            openDialog = true
-            isLoading = false
-            isError = false
+    DisposableEffect(withdrawalUiState) {
+        when(withdrawalUiState) {
+            is WithdrawalUiState.Loading -> Unit
+            is WithdrawalUiState.Success -> {
+                openDialog = true
+                isLoading = false
+                isError = false
+            }
+            is WithdrawalUiState.BadRequest -> {
+                isLoading = false
+                isError = true
+                onErrorToast(null, R.string.error_password_not_match_or_already_use)
+            }
+            is WithdrawalUiState.Error -> {
+                isLoading = false
+                isError = true
+                onErrorToast(null,R.string.withdrawal)
+            }
         }
-        is WithdrawalUiState.BadRequest -> {
-            isLoading = false
-            isError = true
-            onErrorToast(null, R.string.error_password_not_match_or_already_use)
-        }
-        is WithdrawalUiState.Error -> {
-            isLoading = false
-            isError = true
-            onErrorToast(null,R.string.withdrawal)
-        }
+        onDispose() {}
     }
 
     lockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
