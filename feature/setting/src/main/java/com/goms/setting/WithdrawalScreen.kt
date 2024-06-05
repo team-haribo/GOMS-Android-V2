@@ -145,7 +145,7 @@ private fun WithdrawalScreen(
             Spacer(modifier = Modifier.weight(1f))
             GomsButton(
                 modifier = Modifier.fillMaxWidth(),
-                text = stringResource(id = R.string.next),
+                text = stringResource(id = R.string.withdrawal),
                 state = if (password.isNotBlank()) ButtonState.Normal
                 else ButtonState.Enable
             ) {
