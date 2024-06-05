@@ -37,6 +37,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goms.design_system.component.button.ButtonState
 import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.button.GomsButton
+import com.goms.design_system.component.dialog.GomsOneButtonDialog
 import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
 import com.goms.design_system.component.textfield.GomsPasswordTextField
 import com.goms.design_system.theme.GomsTheme.colors
@@ -78,8 +79,10 @@ private fun WithdrawalScreen(
     val focusManager = LocalFocusManager.current
     val isKeyboardOpen by keyboardAsState()
     val animatedSpacerHeight by animateDpAsState(targetValue = if (!isKeyboardOpen) 100.dp else 16.dp)
+
     var isLoading by remember { mutableStateOf(false) }
     var openDialog by remember { mutableStateOf(false) }
+
 
     LaunchedEffect(isKeyboardOpen) {
         if (!isKeyboardOpen) {
@@ -150,5 +153,18 @@ private fun WithdrawalScreen(
 
     if (isLoading) {
         GomsCircularProgressIndicator()
+    }
+
+    if (openDialog) {
+        GomsOneButtonDialog(
+            openDialog = openDialog,
+            onStateChange = {
+                openDialog = it
+            },
+            title = stringResource(id = R.string.withdrawal_success),
+            content = stringResource(id = R.string.withdrawal_content),
+            buttonText = stringResource(id = R.string.withdrawal_confirm),
+            onClick = onWithdrawal
+        )
     }
 }
