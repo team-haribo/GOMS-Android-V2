@@ -82,6 +82,7 @@ private fun WithdrawalScreen(
 
     var isLoading by remember { mutableStateOf(false) }
     var openDialog by remember { mutableStateOf(false) }
+    var isError by remember { mutableStateOf(false) }
 
 
     LaunchedEffect(isKeyboardOpen) {
@@ -95,13 +96,16 @@ private fun WithdrawalScreen(
         is WithdrawalUiState.Success -> {
             openDialog = true
             isLoading = false
+            isError = false
         }
         is WithdrawalUiState.BadRequest -> {
             isLoading = false
+            isError = true
             onErrorToast(null, R.string.error_password_not_match_or_already_use)
         }
         is WithdrawalUiState.Error -> {
             isLoading = false
+            isError = true
             onErrorToast(null,R.string.withdrawal)
         }
     }
@@ -131,6 +135,7 @@ private fun WithdrawalScreen(
             Spacer(modifier = Modifier.height(28.dp))
             GomsPasswordTextField(
                 modifier = Modifier.fillMaxWidth(),
+                isError = isError,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                 placeHolder = stringResource(id = R.string.now_password),
                 setText = password,
