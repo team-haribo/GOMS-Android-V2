@@ -9,4 +9,5 @@ android {
 
 dependencies {
     implementation(libs.swiperefresh)
+    implementation(libs.accompanist.permission)
 }

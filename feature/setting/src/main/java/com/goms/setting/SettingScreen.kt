@@ -1,5 +1,6 @@
 package com.goms.setting
 
+import android.Manifest
 import android.content.pm.ActivityInfo
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -49,6 +50,9 @@ import com.goms.setting.viewmodel.uistate.ProfileImageUiState
 import com.goms.setting.viewmodel.uistate.SetThemeUiState
 import com.goms.setting.viewmodel.SettingViewModel
 import com.goms.ui.GomsRoleBackButton
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
 
 @Composable
 internal fun SettingRoute(
@@ -161,6 +165,7 @@ internal fun SettingRoute(
     )
 }
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 private fun SettingScreen(
     role: String,
@@ -191,6 +196,7 @@ private fun SettingScreen(
     var openDialog by remember { mutableStateOf(false) }
     var openBottomSheet by remember { mutableStateOf(false) }
     var isLogout by remember { mutableStateOf(true) }
+    val notificationPermissionState = rememberPermissionState(Manifest.permission.POST_NOTIFICATIONS)
 
     LaunchedEffect("load data") {
         getProfile()
@@ -259,10 +265,9 @@ private fun SettingScreen(
                 getProfileUiState = getProfileUiState
             )
             Spacer(modifier = Modifier.height(32.dp))
-            Divider(
-                modifier = Modifier.fillMaxWidth(),
-                color = colors.WHITE.copy(0.15f)
-            )
+            PasswordChangeButton(modifier = Modifier) {
+                onPasswordCheck()
+            }
             Spacer(modifier = Modifier.height(24.dp))
             SelectThemeDropDown(
                 modifier = Modifier,
