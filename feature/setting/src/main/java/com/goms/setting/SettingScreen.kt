@@ -51,7 +51,6 @@ import com.goms.setting.viewmodel.uistate.SetThemeUiState
 import com.goms.setting.viewmodel.SettingViewModel
 import com.goms.ui.GomsRoleBackButton
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 
 @Composable
@@ -265,9 +264,10 @@ private fun SettingScreen(
                 getProfileUiState = getProfileUiState
             )
             Spacer(modifier = Modifier.height(32.dp))
-            PasswordChangeButton(modifier = Modifier) {
-                onPasswordCheck()
-            }
+            Divider(
+                modifier = Modifier.fillMaxWidth(),
+                color = colors.WHITE.copy(0.15f)
+            )
             Spacer(modifier = Modifier.height(24.dp))
             SelectThemeDropDown(
                 modifier = Modifier,
