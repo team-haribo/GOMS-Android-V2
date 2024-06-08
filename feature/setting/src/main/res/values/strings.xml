@@ -1,7 +1,12 @@
 <resources>
     <string name="reset_password">비밀번호 재설정</string>
+    <string name="now_password">현재 비밀번호</string>
+
+    <string name="next">다음으로</string>
 
     <string name="app_theme_setting">앱 테마 설정</string>
+
+    <string name="error_password_not_match_or_already_use">현재 비밀번호와 일치하지 않습니다.</string>
 
     <string name="default_profile_image">기본 프로필 이미지</string>
     <string name="profile_image">프로필 이미지</string>
@@ -26,5 +31,8 @@
     <string name="withdrawal">회원탈퇴</string>
     <string name="want_withdrawal">정말 회원을 탈퇴하시겠어요?</string>
     <string name="cancel">취소</string>
+    <string name="withdrawal_success">회원 탈퇴 완료</string>
+    <string name="withdrawal_content">GOMS를 이용해주셔서 감사합니다.\n 안녕히 가세요!</string>
+    <string name="withdrawal_confirm">확인</string>
 
 </resources>
