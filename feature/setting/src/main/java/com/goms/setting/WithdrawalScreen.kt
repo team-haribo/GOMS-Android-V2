@@ -87,7 +87,6 @@ private fun WithdrawalScreen(
     var openDialog by remember { mutableStateOf(false) }
     var isError by remember { mutableStateOf(false) }
 
-
     LaunchedEffect(isKeyboardOpen) {
         if (!isKeyboardOpen) {
             focusManager.clearFocus()
@@ -110,7 +109,7 @@ private fun WithdrawalScreen(
             is WithdrawalUiState.Error -> {
                 isLoading = false
                 isError = true
-                onErrorToast(null,R.string.withdrawal)
+                onErrorToast(null, R.string.withdrawal)
             }
         }
         onDispose() {}
