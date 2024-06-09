@@ -43,7 +43,10 @@ import com.goms.re_password.navigation.navigateToRePassword
 import com.goms.re_password.navigation.passwordCheckScreen
 import com.goms.re_password.navigation.rePasswordScreen
 import com.goms.setting.navigation.navigateToSettingScreen
+import com.goms.setting.navigation.navigateToWithdrawalScreen
 import com.goms.setting.navigation.settingScreen
+import com.goms.setting.navigation.withdrawalRoute
+import com.goms.setting.navigation.withdrawalScreen
 import com.goms.sign_up.navigation.navigateToNumber
 import com.goms.sign_up.navigation.navigateToPassword
 import com.goms.sign_up.navigation.navigateToSignUp
@@ -153,7 +156,6 @@ fun GomsNavHost(
             onLateListClick = navController::navigateToLateList,
             onSettingClick = navController::navigateToSettingScreen
         )
-
         qrcodeScanScreen(
             onPermissionBlock = navController::popBackStack,
             onSuccess = navController::popBackStack,
@@ -165,16 +167,20 @@ fun GomsNavHost(
             onRemoteError = navController::popBackStack,
             onErrorToast = onErrorToast
         )
-
         settingScreen(
             onBackClick = navController::popBackStack,
             onLogoutSuccess = onLogout,
             onErrorToast = onErrorToast,
             onPasswordCheck = navController::navigateToPasswordCheck,
             onUpdateAlarm = onUpdateAlarm,
-            onThemeSelect = onThemeSelect
+            onThemeSelect = onThemeSelect,
+            onWithdrawalClick = navController::navigateToWithdrawalScreen
         )
-
+        withdrawalScreen(
+            onBackClick = navController::popBackStack,
+            onWithdrawal = onLogout,
+            onErrorToast = onErrorToast
+        )
         emailCheckScreen(
             onBackClick = navController::popBackStack,
             onNumberClick = navController::navigateToPasswordNumber,
@@ -190,8 +196,6 @@ fun GomsNavHost(
             onSuccessClick = { appState.navigateToTopLevelDestination(TopLevelDestination.LOGIN) },
             onErrorToast = onErrorToast
         )
-
-
         passwordCheckScreen(
             onBackClick = navController::popBackStack,
             onRePasswordClick = navController::navigateToRePassword

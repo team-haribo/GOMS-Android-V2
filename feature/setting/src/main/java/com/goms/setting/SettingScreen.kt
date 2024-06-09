@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.material3.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -37,8 +38,9 @@ import com.goms.design_system.theme.ThemeType
 import com.goms.design_system.util.lockScreenOrientation
 import com.goms.model.enum.Authority
 import com.goms.model.enum.Switch
-import com.goms.setting.component.PasswordChangeButton
+import com.goms.setting.component.SettingButton
 import com.goms.setting.component.SelectThemeDropDown
+import com.goms.setting.component.SettingButtonType
 import com.goms.setting.component.SettingProfileCard
 import com.goms.setting.component.SettingSwitchComponent
 import com.goms.setting.data.toData
@@ -49,7 +51,6 @@ import com.goms.setting.viewmodel.uistate.SetThemeUiState
 import com.goms.setting.viewmodel.SettingViewModel
 import com.goms.ui.GomsRoleBackButton
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 
 @Composable
@@ -60,7 +61,8 @@ internal fun SettingRoute(
     onErrorToast: (throwable: Throwable?, message: Int?) -> Unit,
     onThemeSelect: () -> Unit,
     onUpdateAlarm: (String) -> Unit,
-    viewModel: SettingViewModel = hiltViewModel(),
+    onWithdrawalClick: () -> Unit,
+    viewModel: SettingViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
     val role by viewModel.role.collectAsStateWithLifecycle(initialValue = "")
@@ -148,6 +150,9 @@ internal fun SettingRoute(
         onUpdateAlarm = { alarmData = it },
         onUpdateTime = { timeData = it },
         setDefaultProfileUiState = { viewModel.initProfileImage() },
+        onErrorToast = onErrorToast,
+        onPasswordCheck = onPasswordCheck,
+        onWithdrawalClick = onWithdrawalClick,
         logoutUiState = logoutUiState,
         setThemeUiState = setThemeUiState,
         getProfileUiState = getProfileUiState,
@@ -155,9 +160,7 @@ internal fun SettingRoute(
         qrcodeState = qrcodeState,
         alarmState = alarmState,
         timeState = timeState,
-        profileImageUiState = profileImageUiState,
-        onErrorToast = onErrorToast,
-        onPasswordCheck = onPasswordCheck
+        profileImageUiState = profileImageUiState
     )
 }
 
@@ -177,6 +180,9 @@ private fun SettingScreen(
     onUpdateAlarm: (String) -> Unit,
     onUpdateTime: (String) -> Unit,
     setDefaultProfileUiState: () -> Unit,
+    onErrorToast: (throwable: Throwable?, message: Int?) -> Unit,
+    onPasswordCheck: () -> Unit,
+    onWithdrawalClick: () -> Unit,
     logoutUiState: LogoutUiState,
     setThemeUiState: SetThemeUiState,
     getProfileUiState: GetProfileUiState,
@@ -184,12 +190,11 @@ private fun SettingScreen(
     qrcodeState: String,
     alarmState: String,
     timeState: String,
-    profileImageUiState: ProfileImageUiState,
-    onErrorToast: (throwable: Throwable?, message: Int?) -> Unit,
-    onPasswordCheck: () -> Unit
+    profileImageUiState: ProfileImageUiState
 ) {
     var openDialog by remember { mutableStateOf(false) }
     var openBottomSheet by remember { mutableStateOf(false) }
+    var isLogout by remember { mutableStateOf(true) }
     val notificationPermissionState = rememberPermissionState(Manifest.permission.POST_NOTIFICATIONS)
 
     LaunchedEffect("load data") {
@@ -259,9 +264,10 @@ private fun SettingScreen(
                 getProfileUiState = getProfileUiState
             )
             Spacer(modifier = Modifier.height(32.dp))
-            PasswordChangeButton(modifier = Modifier) {
-                onPasswordCheck()
-            }
+            Divider(
+                modifier = Modifier.fillMaxWidth(),
+                color = colors.WHITE.copy(0.15f)
+            )
             Spacer(modifier = Modifier.height(24.dp))
             SelectThemeDropDown(
                 modifier = Modifier,
@@ -297,10 +303,7 @@ private fun SettingScreen(
                     switchOffBackground = colors.G4,
                     isSwitchOn = alarmState == Switch.ON.value,
                     onFunctionOff = { onUpdateAlarm(Switch.OFF.value) },
-                    onFunctionOn = {
-                        onUpdateAlarm(Switch.ON.value)
-                        if (!notificationPermissionState.status.isGranted) notificationPermissionState.launchPermissionRequest()
-                    }
+                    onFunctionOn = { onUpdateAlarm(Switch.ON.value) }
                 )
                 Spacer(modifier = Modifier.height(32.dp))
                 SettingSwitchComponent(
@@ -337,28 +340,45 @@ private fun SettingScreen(
                     onFunctionOn = { onUpdateQrcode(Switch.ON.value) }
                 )
             }
-            Spacer(modifier = Modifier.weight(1f))
-            GomsButton(
+            Spacer(modifier = Modifier.height(32.dp))
+            Divider(
                 modifier = Modifier.fillMaxWidth(),
-                text = stringResource(id = R.string.logout),
-                state = ButtonState.Logout
+                color = colors.WHITE.copy(0.15f)
+            )
+            Spacer(modifier = Modifier.height(24.dp))
+            SettingButton(
+                modifier = Modifier,
+                buttonType = SettingButtonType.PasswordChange.value
             ) {
+                onPasswordCheck()
+            }
+            SettingButton(
+                modifier = Modifier,
+                buttonType = SettingButtonType.Logout.value
+            ) {
+                isLogout = true
                 openDialog = true
             }
-            Spacer(modifier = Modifier.height(40.dp))
+            SettingButton(
+                modifier = Modifier,
+                buttonType = SettingButtonType.Withdrawal.value
+            ) {
+                isLogout = false
+                openDialog = true
+            }
         }
     }
     if (openDialog) {
         GomsTwoButtonDialog(
             openDialog = openDialog,
             onStateChange = { openDialog = it },
-            title = stringResource(id = R.string.logout),
-            content = stringResource(id = R.string.want_logout),
+            title = stringResource(id = if(isLogout) R.string.logout else R.string.withdrawal),
+            content = stringResource(id = if(isLogout) R.string.want_logout else R.string.want_withdrawal),
             dismissText = stringResource(id = R.string.cancel),
-            checkText = stringResource(id = R.string.logout),
+            checkText = stringResource(id = if(isLogout) R.string.logout else R.string.withdrawal),
             onDismissClick = { openDialog = false }
         ) {
-            onLogoutClick()
+            if(isLogout) onLogoutClick() else onWithdrawalClick()
         }
     }
     if (openBottomSheet) {

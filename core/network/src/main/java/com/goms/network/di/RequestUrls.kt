@@ -5,6 +5,7 @@ internal object RequestUrls {
         const val accountIdx = "accountIdx"
         const val deviceToken = "deviceToken"
         const val outingUUID = "outingUUID"
+        const val password = "password"
     }
 
     object ACCOUNT {
@@ -15,6 +16,7 @@ internal object RequestUrls {
         const val image = "$path/image"
         const val newPassword = "$path/new-password"
         const val changePassword = "$path/change-password"
+        const val withdraw = "$path/withdraw/{${PATH.password}}"
     }
 
     object AUTH {

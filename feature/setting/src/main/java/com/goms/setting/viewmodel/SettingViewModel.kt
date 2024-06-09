@@ -2,6 +2,8 @@ package com.goms.setting.viewmodel
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.goms.common.network.errorHandling
@@ -13,16 +15,19 @@ import com.goms.domain.account.DeleteProfileImageUseCase
 import com.goms.domain.account.GetProfileUseCase
 import com.goms.domain.account.SetProfileImageUseCase
 import com.goms.domain.account.UpdateProfileImageUseCase
+import com.goms.domain.account.WithdrawalUseCase
 import com.goms.domain.auth.LogoutUseCase
 import com.goms.domain.setting.SetAlarmUseCase
 import com.goms.domain.setting.SetQrcodeUseCase
 import com.goms.domain.setting.SetThemeUseCase
 import com.goms.domain.setting.SetTimeUseCase
+import com.goms.model.util.Regex.PASSWORD
 import com.goms.setting.util.getMultipartFile
 import com.goms.setting.viewmodel.uistate.GetProfileUiState
 import com.goms.setting.viewmodel.uistate.LogoutUiState
 import com.goms.setting.viewmodel.uistate.ProfileImageUiState
 import com.goms.setting.viewmodel.uistate.SetThemeUiState
+import com.goms.setting.viewmodel.uistate.WithdrawalUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -46,9 +51,13 @@ class SettingViewModel @Inject constructor (
     private val setQrcodeUseCase: SetQrcodeUseCase,
     private val setAlarmUseCase: SetAlarmUseCase,
     private val setTimeUseCase: SetTimeUseCase,
-    private val authRepository: AuthRepository
+    private val withdrawalUseCase: WithdrawalUseCase,
+    private val authRepository: AuthRepository,
+    private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
     internal val role = authRepository.getRole()
+
+    internal var password = savedStateHandle.getStateFlow(key = PASSWORD, initialValue = "")
 
     private val _themeState = MutableStateFlow("")
     internal val themeState = _themeState.asStateFlow()
@@ -73,6 +82,9 @@ class SettingViewModel @Inject constructor (
 
     private val _getProfileUiState = MutableStateFlow<GetProfileUiState>(GetProfileUiState.Loading)
     internal val getProfileUiState = _getProfileUiState.asStateFlow()
+
+    private val _withdrawalUiState = MutableStateFlow<WithdrawalUiState>(WithdrawalUiState.Loading)
+    internal val withdrawalUiState = _withdrawalUiState.asStateFlow()
 
     internal fun getProfile() = viewModelScope.launch {
         getProfileUseCase()
@@ -206,4 +218,32 @@ class SettingViewModel @Inject constructor (
                 _logoutState.value = LogoutUiState.Error(it)
             }
     }
+
+    internal fun withdrawal() = viewModelScope.launch {
+        withdrawalUseCase(password.value)
+            .onSuccess {
+                it.catch { remoteError ->
+                    _withdrawalUiState.value = WithdrawalUiState.Error(remoteError)
+                    remoteError.errorHandling(
+                        badRequestAction = { _withdrawalUiState.value = WithdrawalUiState.BadRequest },
+                    )
+                }.collect {
+                    _withdrawalUiState.value = WithdrawalUiState.Success
+                }
+            }.onFailure {
+                _withdrawalUiState.value = WithdrawalUiState.Error(it)
+                it.errorHandling(
+                    badRequestAction = { _withdrawalUiState.value = WithdrawalUiState.BadRequest },
+                )
+            }
+    }
+
+    internal fun initWithdrawal() {
+        _withdrawalUiState.value = WithdrawalUiState.Loading
+    }
+
+    internal fun onPasswordChange(value: String) {
+        savedStateHandle[PASSWORD] = value
+    }
+
 }

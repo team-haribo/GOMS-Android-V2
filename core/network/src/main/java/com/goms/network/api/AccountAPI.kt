@@ -12,6 +12,7 @@ import retrofit2.http.Multipart
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Part
+import retrofit2.http.Path
 
 interface AccountAPI {
     @GET(RequestUrls.ACCOUNT.profile)
@@ -40,5 +41,10 @@ interface AccountAPI {
     @PATCH(RequestUrls.ACCOUNT.changePassword)
     suspend fun rePassword(
         @Body body: RePasswordRequest
+    )
+
+    @DELETE(RequestUrls.ACCOUNT.withdraw)
+    suspend fun withdraw(
+        @Path("password") password: String
     )
 }

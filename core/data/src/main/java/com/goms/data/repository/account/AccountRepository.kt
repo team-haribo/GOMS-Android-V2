@@ -18,4 +18,6 @@ interface AccountRepository {
     suspend fun findPassword(body: FindPasswordRequestModel): Flow<Unit>
 
     suspend fun rePassword(body: RePasswordRequestModel): Flow<Unit>
+
+    suspend fun withdraw(password: String): Flow<Unit>
 }
