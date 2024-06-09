@@ -21,7 +21,7 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                     applicationId = "com.goms.goms_android_v2"
                     minSdk = 26
                     targetSdk = 34
-                    versionCode = 12
+                    versionCode = 13
                     versionName = "1.2.2"
                     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
