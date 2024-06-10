@@ -37,4 +37,8 @@ class AccountRepositoryImpl @Inject constructor(
     override suspend fun rePassword(body: RePasswordRequestModel): Flow<Unit> {
         return remoteAccountDataSource.rePassword(body = body.toDto())
     }
+
+    override suspend fun withdraw(password: String): Flow<Unit> {
+        return remoteAccountDataSource.withdraw(password = password)
+    }
 }

@@ -19,17 +19,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.toColor
 import coil.compose.AsyncImage
-import com.goms.design_system.R
 import com.goms.design_system.component.clickable.gomsClickable
 import com.goms.design_system.component.shimmer.shimmerEffect
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
 import com.goms.design_system.util.shadow
 import com.goms.model.enum.Authority
+import com.goms.setting.R
 import com.goms.setting.data.ProfileData
 import com.goms.setting.data.toData
 import com.goms.setting.viewmodel.uistate.GetProfileUiState
@@ -81,8 +82,8 @@ private fun SettingProfileCardComponent(
         ) {
             if (data.profileUrl.isNullOrEmpty()) {
                 Image(
-                    painter = painterResource(R.drawable.ic_profile),
-                    contentDescription = "Default Profile Image",
+                    painter = painterResource(com.goms.design_system.R.drawable.ic_profile),
+                    contentDescription = stringResource(id = R.string.default_profile_image),
                     modifier = Modifier.size(64.dp)
                 )
             } else {
@@ -92,7 +93,7 @@ private fun SettingProfileCardComponent(
                         .size(64.dp)
                         .clip(RoundedCornerShape(40.dp)),
                     contentScale = ContentScale.Crop,
-                    contentDescription = "Profile Image",
+                    contentDescription = stringResource(id = R.string.profile_image),
                 )
             }
             Image(
@@ -107,10 +108,10 @@ private fun SettingProfileCardComponent(
                         blurRadius = 8.dp
                     ),
                 painter = painterResource(
-                    id = if (role == Authority.ROLE_STUDENT_COUNCIL.name) R.drawable.ic_change_profile_admin
-                    else R.drawable.ic_change_profile
+                    id = if (role == Authority.ROLE_STUDENT_COUNCIL.name) com.goms.design_system.R.drawable.ic_change_profile_admin
+                    else com.goms.design_system.R.drawable.ic_change_profile
                 ),
-                contentDescription = "profile change button"
+                contentDescription = stringResource(id = R.string.profile_change_button)
             )
         }
         Spacer(modifier = Modifier.width(16.dp))
@@ -134,7 +135,7 @@ private fun SettingProfileCardComponent(
             horizontalAlignment = Alignment.End
         ) {
             Text(
-                text = "지각 횟수",
+                text = stringResource(id = R.string.late_count),
                 style = typography.textMedium,
                 color = colors.G4,
                 fontWeight = FontWeight.Normal
@@ -148,7 +149,7 @@ private fun SettingProfileCardComponent(
                     fontWeight = FontWeight.SemiBold
                 )
                 Text(
-                    text = "번",
+                    text = stringResource(id = R.string.number),
                     color = colors.WHITE,
                     style = typography.titleSmall,
                     fontWeight = FontWeight.SemiBold
@@ -185,8 +186,8 @@ private fun ShimmerSettingProfileCardComponent(
                         offsetY = 4.dp,
                         blurRadius = 8.dp
                     ),
-                painter = painterResource(id = R.drawable.ic_change_profile),
-                contentDescription = "profile change button"
+                painter = painterResource(id = com.goms.design_system.R.drawable.ic_change_profile),
+                contentDescription = stringResource(id = R.string.profile_change_button)
             )
         }
         Spacer(modifier = Modifier.width(16.dp))
@@ -214,7 +215,7 @@ private fun ShimmerSettingProfileCardComponent(
             horizontalAlignment = Alignment.End
         ) {
             Text(
-                text = "지각 횟수",
+                text = stringResource(id = R.string.late_count),
                 style = typography.textMedium,
                 color = colors.G4,
                 fontWeight = FontWeight.Normal
@@ -230,7 +231,7 @@ private fun ShimmerSettingProfileCardComponent(
                         )
                 )
                 Text(
-                    text = "번",
+                    text = stringResource(id = R.string.number),
                     style = typography.titleSmall,
                     color = colors.WHITE,
                     fontWeight = FontWeight.SemiBold

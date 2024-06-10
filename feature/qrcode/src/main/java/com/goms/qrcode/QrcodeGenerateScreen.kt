@@ -18,6 +18,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -38,7 +39,7 @@ internal fun QrcodeGenerateRoute(
     viewModel: QrcodeViewModel = hiltViewModel(),
     onBackClick: () -> Unit,
     onTimerFinish: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
+    onErrorToast: (throwable: Throwable?, message: Int?) -> Unit
 ) {
     val role by viewModel.role.collectAsStateWithLifecycle(initialValue = "")
     val getOutingUUIDUiState by viewModel.getOutingUUIDState.collectAsStateWithLifecycle()
@@ -64,7 +65,7 @@ private fun QrcodeGenerateScreen(
     onQrCreate: () -> Unit,
     onRemoteError: () -> Unit,
     onTimerFinish: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
+    onErrorToast: (throwable: Throwable?, message: Int?) -> Unit
 ) {
     LaunchedEffect("qr create") {
         onQrCreate()
@@ -103,12 +104,12 @@ private fun QrcodeGenerateScreen(
 
                     Image(
                         painter = QrcodeGenerator(content = data.outingUUID),
-                        contentDescription = "outing qrcode image"
+                        contentDescription = stringResource(id = R.string.outing_qrcode_image)
                     )
                 }
                 is GetOutingUUIDUiState.Error -> {
                     onRemoteError()
-                    onErrorToast(getOutingUUIDUiState.exception, null)
+                    onErrorToast(getOutingUUIDUiState.exception, R.string.error_get_outing_uuid)
                 }
             }
             Spacer(modifier = Modifier.height(32.dp))

@@ -6,11 +6,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.goms.design_system.component.clickable.gomsClickable
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
+import com.goms.main.R
 
 @Composable
 internal fun FilterText(onFilterTextClick: () -> Unit) {
@@ -21,7 +23,7 @@ internal fun FilterText(onFilterTextClick: () -> Unit) {
     ) {
         Text(
             modifier = Modifier.align(Alignment.Center),
-            text = "필터",
+            text = stringResource(id = R.string.filter),
             style = typography.buttonLarge,
             fontWeight = FontWeight.Normal,
             color = colors.A7

@@ -10,15 +10,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.goms.design_system.component.dropdown.GomsDropdown
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
 import com.goms.design_system.theme.ThemeType
+import com.goms.setting.R
 import kotlinx.collections.immutable.toPersistentList
 
 @Composable
@@ -27,7 +28,7 @@ internal fun SelectThemeDropDown(
     onThemeSelect: (Int) -> Unit,
     themeState: String
 ) {
-    val dropdownList = listOf("다크(기본)", "라이트", "시스템 테마 설정")
+    val dropdownList = listOf(ThemeType.DARK.kr, ThemeType.LIGHT.kr, ThemeType.SYSTEM.kr)
     var selectedIndex by remember { mutableIntStateOf(0) }
 
     selectedIndex = when(themeState) {
@@ -41,7 +42,7 @@ internal fun SelectThemeDropDown(
         modifier = modifier.fillMaxWidth()
     ) {
         Text(
-            text = "앱 테마 설정",
+            text = stringResource(id = R.string.app_theme_setting),
             style = typography.textMedium,
             color = colors.WHITE,
             fontWeight = FontWeight.SemiBold

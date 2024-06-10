@@ -42,7 +42,7 @@ import kotlinx.datetime.toLocalDateTime
 @Composable
 internal fun LateListRoute(
     onBackClick: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
+    onErrorToast: (throwable: Throwable?, message: Int?) -> Unit,
     viewModel: MainViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
 ) {
     val role by viewModel.role.collectAsStateWithLifecycle(initialValue = "")
@@ -63,7 +63,7 @@ private fun LateListScreen(
     role: Authority,
     getLateListUiState: GetLateListUiState,
     onBackClick: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
+    onErrorToast: (throwable: Throwable?, message: Int?) -> Unit,
     lateListCallBack: (LocalDate) -> Unit
 ) {
     val scrollState = rememberScrollState()

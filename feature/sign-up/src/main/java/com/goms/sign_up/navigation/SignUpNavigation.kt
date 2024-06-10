@@ -19,7 +19,7 @@ fun NavController.navigateToSignUp(navOptions: NavOptions? = null) {
 fun NavGraphBuilder.signUpScreen(
     onBackClick: () -> Unit,
     onNumberClick: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
+    onErrorToast: (throwable: Throwable?, message: Int?) -> Unit
 ) {
     composable(route = signUpRoute) {
         SignUpRoute(
@@ -37,7 +37,7 @@ fun NavController.navigateToNumber(navOptions: NavOptions? = null) {
 fun NavGraphBuilder.numberScreen(
     onBackClick: () -> Unit,
     onPasswordClick: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
+    onErrorToast: (throwable: Throwable?, message: Int?) -> Unit
 ) {
     composable(route = numberRoute) {
         NumberRoute(
@@ -55,7 +55,7 @@ fun NavController.navigateToPassword(navOptions: NavOptions? = null) {
 fun NavGraphBuilder.passwordScreen(
     onBackClick: () -> Unit,
     onLoginClick: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
+    onErrorToast: (throwable: Throwable?, message: Int?) -> Unit
 ) {
     composable(route = passwordRoute) {
         PasswordRoute(

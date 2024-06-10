@@ -6,6 +6,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import com.goms.design_system.R
 
 @Composable
@@ -14,7 +15,7 @@ fun GomsIcon(
 ) {
     Image(
         painter = painterResource(id = R.drawable.ic_goms),
-        contentDescription = "Goms Icon",
+        contentDescription = stringResource(id = R.string.goms_icon_description),
         modifier = modifier
     )
 }
@@ -26,7 +27,7 @@ fun GomsTextIcon(
 ) {
     Image(
         painter = painterResource(id = R.drawable.ic_goms_text),
-        contentDescription = "Goms Text Icon",
+        contentDescription = stringResource(id = R.string.goms_text_icon_description),
         modifier = modifier,
         colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
     )
@@ -38,7 +39,7 @@ fun GAuthIcon(
 ) {
     Image(
         painter = painterResource(id = R.drawable.ic_gauth),
-        contentDescription = "GAuth Icon",
+        contentDescription = stringResource(id = R.string.gauth_icon_description),
         modifier = modifier
     )
 }
@@ -50,7 +51,7 @@ fun BackIcon(
 ) {
     Image(
         painter = painterResource(id = R.drawable.ic_back),
-        contentDescription = "Back Icon",
+        contentDescription = stringResource(id = R.string.back_icon_description),
         modifier = modifier,
         colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
     )
@@ -63,7 +64,7 @@ fun ChevronRightIcon(
 ) {
     Image(
         painter = painterResource(id = R.drawable.ic_chevron_right),
-        contentDescription = "ChevronRight Icon",
+        contentDescription = stringResource(id = R.string.chevron_right_icon_description),
         modifier = modifier,
         colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
     )
@@ -76,7 +77,7 @@ fun ChevronDownIcon(
 ) {
     Image(
         painter = painterResource(id = R.drawable.ic_chevron_down),
-        contentDescription = "ChevronRight Icon",
+        contentDescription = stringResource(id = R.string.chevron_down_icon_description),
         modifier = modifier,
         colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
     )
@@ -89,7 +90,7 @@ fun ChevronUpIcon(
 ) {
     Image(
         painter = painterResource(id = R.drawable.ic_chevron_up),
-        contentDescription = "ChevronRight Icon",
+        contentDescription = stringResource(id = R.string.chevron_up_icon_description),
         modifier = modifier,
         colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
     )
@@ -102,7 +103,7 @@ fun CheckIcon(
 ) {
     Image(
         painter = painterResource(id = R.drawable.ic_check),
-        contentDescription = "Check Icon",
+        contentDescription = stringResource(id = R.string.check_icon_description),
         modifier = modifier,
         colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
     )
@@ -115,7 +116,7 @@ fun CloseIcon(
 ) {
     Image(
         painter = painterResource(id = R.drawable.ic_close),
-        contentDescription = "Close Icon",
+        contentDescription = stringResource(id = R.string.close_icon_description),
         modifier = modifier,
         colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
     )
@@ -128,7 +129,7 @@ fun SettingIcon(
 ) {
     Image(
         painter = painterResource(id = R.drawable.ic_setting),
-        contentDescription = "Setting Icon",
+        contentDescription = stringResource(id = R.string.setting_icon_description),
         modifier = modifier,
         colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
     )
@@ -140,7 +141,7 @@ fun QrScanIcon(
 ) {
     Image(
         painter = painterResource(id = R.drawable.ic_qr_scan),
-        contentDescription = "Qr Scan Icon",
+        contentDescription = stringResource(id = R.string.qr_scan_icon_description),
         modifier = modifier
     )
 }
@@ -151,7 +152,7 @@ fun QrScanGuideIcon(
 ) {
     Image(
         painter = painterResource(id = R.drawable.ic_qr_scan_guide),
-        contentDescription = "Qr Scan Guide Icon",
+        contentDescription = stringResource(id = R.string.qr_scan_guide_icon_description),
         modifier = modifier
     )
 }
@@ -163,7 +164,7 @@ fun QrCreateIcon(
 ) {
     Image(
         painter = painterResource(id = R.drawable.ic_qr_create),
-        contentDescription = "Qr Create Icon",
+        contentDescription = stringResource(id = R.string.qr_create_icon_description),
         modifier = modifier,
         colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
     )
@@ -176,7 +177,7 @@ fun PersonIcon(
 ) {
     Image(
         painter = painterResource(id = R.drawable.ic_person),
-        contentDescription = "Person Icon",
+        contentDescription = stringResource(id = R.string.person_icon_description),
         modifier = modifier,
         colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
     )
@@ -189,7 +190,7 @@ fun SearchIcon(
 ) {
     Image(
         painter = painterResource(id = R.drawable.ic_search),
-        contentDescription = "Search Icon",
+        contentDescription = stringResource(id = R.string.search_icon_description),
         modifier = modifier,
         colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
     )
@@ -201,7 +202,7 @@ fun DeleteIcon(
 ) {
     Image(
         painter = painterResource(id = R.drawable.ic_delete),
-        contentDescription = "Delete Icon",
+        contentDescription = stringResource(id = R.string.delete_icon_description),
         modifier = modifier
     )
 }
@@ -212,7 +213,7 @@ fun WriteIcon(
 ) {
     Image(
         painter = painterResource(id = R.drawable.ic_write),
-        contentDescription = "Write Icon",
+        contentDescription = stringResource(id = R.string.write_icon_description),
         modifier = modifier
     )
 }
@@ -224,7 +225,7 @@ fun FireIcon(
 ) {
     Image(
         painter = painterResource(id = R.drawable.ic_fire),
-        contentDescription = "Fire Icon",
+        contentDescription = stringResource(id = R.string.fire_icon_description),
         modifier = modifier,
         colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
     )
@@ -237,7 +238,7 @@ fun CoffeeIcon(
 ) {
     Image(
         painter = painterResource(id = R.drawable.ic_coffee),
-        contentDescription = "Coffee Icon",
+        contentDescription = stringResource(id = R.string.coffee_icon_description),
         modifier = modifier,
         colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
     )
@@ -250,7 +251,7 @@ fun GalleryIcon(
 ) {
     Image(
         painter = painterResource(id = R.drawable.ic_gallery_add),
-        contentDescription = "Gallery Icon",
+        contentDescription = stringResource(id = R.string.gallery_icon_description),
         modifier = modifier,
         colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
     )
@@ -263,7 +264,7 @@ fun DefaultImageIcon(
 ) {
     Image(
         painter = painterResource(id = R.drawable.ic_default_image),
-        contentDescription = "Default Image Icon",
+        contentDescription = stringResource(id = R.string.default_image_icon_description),
         modifier = modifier,
         colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
     )
@@ -276,7 +277,7 @@ fun OutingIcon(
 ) {
     Image(
         painter = painterResource(id = R.drawable.ic_outing),
-        contentDescription = "Outing Icon",
+        contentDescription = stringResource(id = R.string.outing_icon_description),
         modifier = modifier,
         colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
     )
@@ -289,7 +290,7 @@ fun ClockIcon(
 ) {
     Image(
         painter = painterResource(id = R.drawable.ic_clock),
-        contentDescription = "Clock Icon",
+        contentDescription = stringResource(id = R.string.clock_icon_description),
         modifier = modifier,
         colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
     )
@@ -302,7 +303,7 @@ fun MenuIcon(
 ) {
     Image(
         painter = painterResource(id = R.drawable.ic_menu),
-        contentDescription = "Menu Icon",
+        contentDescription = stringResource(id = R.string.menu_icon_description),
         modifier = modifier,
         colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
     )
@@ -315,7 +316,7 @@ fun InvisibleIcon(
 ) {
     Image(
         painter = painterResource(id = R.drawable.ic_invisible),
-        contentDescription = "Invisible Icon",
+        contentDescription = stringResource(id = R.string.invisible_icon_description),
         modifier = modifier,
         colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
     )
@@ -328,7 +329,46 @@ fun VisibleIcon(
 ) {
     Image(
         painter = painterResource(id = R.drawable.ic_visible),
-        contentDescription = "Visible Icon",
+        contentDescription = stringResource(id = R.string.visible_icon_description),
+        modifier = modifier,
+        colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
+    )
+}
+
+@Composable
+fun GomsLogoutIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+) {
+    Image(
+        painter = painterResource(id = R.drawable.ic_logout),
+        contentDescription = stringResource(id = R.string.logout_icon_description),
+        modifier = modifier,
+        colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
+    )
+}
+
+@Composable
+fun GomsPasswordChangeIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+) {
+    Image(
+        painter = painterResource(id = R.drawable.ic_password_change),
+        contentDescription = stringResource(id = R.string.password_change_icon_description),
+        modifier = modifier,
+        colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
+    )
+}
+
+@Composable
+fun GomsWithdrawalIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+) {
+    Image(
+        painter = painterResource(id = R.drawable.ic_withdrawal),
+        contentDescription = stringResource(id = R.string.withdrawal_icon_description),
         modifier = modifier,
         colorFilter = if (tint != Color.Unspecified) ColorFilter.tint(tint) else null
     )

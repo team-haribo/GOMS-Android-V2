@@ -18,4 +18,6 @@ interface AccountDataSource {
     suspend fun findPassword(body: FindPasswordRequest): Flow<Unit>
 
     suspend fun rePassword(body: RePasswordRequest): Flow<Unit>
+
+    suspend fun withdraw(password: String): Flow<Unit>
 }

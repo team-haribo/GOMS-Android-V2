@@ -18,6 +18,7 @@ import com.goms.find_password.navigation.navigateToEmailCheck
 import com.goms.find_password.navigation.navigateToFindPassword
 import com.goms.find_password.navigation.navigateToPasswordNumber
 import com.goms.find_password.navigation.passwordNumberScreen
+import com.goms.goms_android_v2.R
 import com.goms.goms_android_v2.ui.GomsAppState
 import com.goms.login.navigation.inputLoginScreen
 import com.goms.login.navigation.loginRoute
@@ -42,7 +43,10 @@ import com.goms.re_password.navigation.navigateToRePassword
 import com.goms.re_password.navigation.passwordCheckScreen
 import com.goms.re_password.navigation.rePasswordScreen
 import com.goms.setting.navigation.navigateToSettingScreen
+import com.goms.setting.navigation.navigateToWithdrawalScreen
 import com.goms.setting.navigation.settingScreen
+import com.goms.setting.navigation.withdrawalRoute
+import com.goms.setting.navigation.withdrawalScreen
 import com.goms.sign_up.navigation.navigateToNumber
 import com.goms.sign_up.navigation.navigateToPassword
 import com.goms.sign_up.navigation.navigateToSignUp
@@ -64,20 +68,20 @@ fun GomsNavHost(
     val context = LocalContext.current
     val navController = appState.navController
 
-    val onErrorToast: (throwable: Throwable?, message: String?) -> Unit = { throwable, message ->
+    val onErrorToast: (throwable: Throwable?, message: Int?) -> Unit = { throwable, message ->
         val errorMessage = throwable?.let {
             when (it) {
-                is ForBiddenException -> "학생회 권한인 학생만 요청 가능해요"
-                is TimeOutException -> "서버 응답이 지연되고 있습니다, 잠시 후 다시 시도해주세요"
-                is ServerException -> "서버 에러, 관리자에게 문의하세요"
-                is NoInternetException -> "네트워크가 불안정합니다, 데이터나 와이파이 연결 상태를 확인해주세요"
-                is OtherHttpException -> "알 수 없는 오류가 발생했습니다"
-                is UnKnownException -> "예상치 못한 오류가 발생했습니다"
+                is ForBiddenException -> R.string.error_for_bidden
+                is TimeOutException -> R.string.error_time_out
+                is ServerException -> R.string.error_server
+                is NoInternetException -> R.string.error_no_internet
+                is OtherHttpException -> R.string.error_other_http
+                is UnKnownException -> R.string.error_un_known
                 else -> message
             }
-        } ?: message ?: "오류가 발생했습니다"
+        } ?: message ?: R.string.error_default
 
-        createToast(context, errorMessage)
+        createToast(context, context.getString(errorMessage))
     }
 
     NavHost(
@@ -152,7 +156,6 @@ fun GomsNavHost(
             onLateListClick = navController::navigateToLateList,
             onSettingClick = navController::navigateToSettingScreen
         )
-
         qrcodeScanScreen(
             onPermissionBlock = navController::popBackStack,
             onSuccess = navController::popBackStack,
@@ -164,16 +167,20 @@ fun GomsNavHost(
             onRemoteError = navController::popBackStack,
             onErrorToast = onErrorToast
         )
-
         settingScreen(
             onBackClick = navController::popBackStack,
             onLogoutSuccess = onLogout,
             onErrorToast = onErrorToast,
             onPasswordCheck = navController::navigateToPasswordCheck,
             onUpdateAlarm = onUpdateAlarm,
-            onThemeSelect = onThemeSelect
+            onThemeSelect = onThemeSelect,
+            onWithdrawalClick = navController::navigateToWithdrawalScreen
         )
-
+        withdrawalScreen(
+            onBackClick = navController::popBackStack,
+            onWithdrawal = onLogout,
+            onErrorToast = onErrorToast
+        )
         emailCheckScreen(
             onBackClick = navController::popBackStack,
             onNumberClick = navController::navigateToPasswordNumber,
@@ -189,8 +196,6 @@ fun GomsNavHost(
             onSuccessClick = { appState.navigateToTopLevelDestination(TopLevelDestination.LOGIN) },
             onErrorToast = onErrorToast
         )
-
-
         passwordCheckScreen(
             onBackClick = navController::popBackStack,
             onRePasswordClick = navController::navigateToRePassword

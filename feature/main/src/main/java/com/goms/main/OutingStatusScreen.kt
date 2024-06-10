@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -47,7 +48,7 @@ import java.util.UUID
 @Composable
 internal fun OutingStatusRoute(
     onBackClick: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
+    onErrorToast: (throwable: Throwable?, message: Int?) -> Unit,
     viewModel: MainViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
 ) {
     val role by viewModel.role.collectAsStateWithLifecycle(initialValue = "")
@@ -88,7 +89,7 @@ private fun OutingStatusScreen(
     getOutingCountUiState: GetOutingCountUiState,
     outingSearchUiState: OutingSearchUiState,
     onBackClick: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
+    onErrorToast: (throwable: Throwable?, message: Int?) -> Unit,
     outingSearchCallBack: (String) -> Unit,
     deleteOutingCallBack: (UUID) -> Unit
 ) {
@@ -108,10 +109,10 @@ private fun OutingStatusScreen(
         GomsTwoButtonDialog(
             openDialog = openDialog,
             onStateChange = { openDialog = it },
-            title = "외출 강제 복귀",
-            content = "외출자를 강제로 복귀시키시겠습니까?",
-            dismissText = "취소",
-            checkText = "복귀",
+            title = stringResource(id = R.string.forced_return_outing),
+            content = stringResource(id = R.string.want_forced_return_outing),
+            dismissText = stringResource(id = R.string.cancel),
+            checkText = stringResource(id = R.string.return_outing),
             onDismissClick = { openDialog = false },
             onCheckClick = {
                 deleteOutingCallBack(uuid)
@@ -146,7 +147,7 @@ private fun OutingStatusScreen(
             GomsSearchTextField(
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-                placeHolder = "학생 검색...",
+                placeHolder = stringResource(id = R.string.student_search),
                 setText = outingSearch,
                 onValueChange = onOutingSearchChange,
                 onSearchTextChange = outingSearchCallBack,

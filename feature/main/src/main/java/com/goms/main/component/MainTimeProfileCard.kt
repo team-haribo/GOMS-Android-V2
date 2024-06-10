@@ -9,18 +9,19 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.goms.design_system.component.shimmer.shimmerEffect
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
+import com.goms.main.R
 import com.goms.main.data.ProfileData
 import com.goms.main.data.toData
 import com.goms.main.viewmodel.uistate.GetProfileUiState
@@ -35,7 +36,7 @@ internal fun MainTimeProfileCard(
     modifier: Modifier = Modifier,
     time: Date,
     getProfileUiState: GetProfileUiState,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit
+    onErrorToast: (throwable: Throwable?, message: Int?) -> Unit
 ) {
     when (getProfileUiState) {
         GetProfileUiState.Loading -> {
@@ -53,7 +54,7 @@ internal fun MainTimeProfileCard(
         }
 
         is GetProfileUiState.Error -> {
-            onErrorToast(getProfileUiState.exception, "사용자 정보를 가져오지 못했습니다")
+            onErrorToast(getProfileUiState.exception, R.string.error_get_profile)
         }
     }
 }
@@ -64,11 +65,13 @@ private fun MainTimeProfileCardComponent(
     data: ProfileData,
     time: Date
 ) {
+    val context = LocalContext.current
+
     val (stateColor, stateText) = when {
-        data.isBlackList -> Pair(colors.N5, "외출 금지")
-        data.isOuting -> Pair(colors.P5, "외출 중")
-        data.authority == Authority.ROLE_STUDENT_COUNCIL -> Pair(colors.A7, "학생회")
-        else -> Pair(colors.G7, "외출 대기 중")
+        data.isBlackList -> Pair(colors.N5, context.getString(R.string.blacklist))
+        data.isOuting -> Pair(colors.P5, context.getString(R.string.outing))
+        data.authority == Authority.ROLE_STUDENT_COUNCIL -> Pair(colors.A7, context.getString(R.string.student_council))
+        else -> Pair(colors.G4, context.getString(R.string.waiting_out))
     }
 
     Surface(

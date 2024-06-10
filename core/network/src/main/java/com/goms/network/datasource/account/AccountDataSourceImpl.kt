@@ -62,4 +62,12 @@ class AccountDataSourceImpl @Inject constructor(
                 .sendRequest()
         )
     }.flowOn(Dispatchers.IO)
+
+    override suspend fun withdraw(password: String): Flow<Unit> = flow {
+        emit(
+            GomsApiHandler<Unit>()
+                .httpRequest { accountAPI.withdraw(password = password) }
+                .sendRequest()
+        )
+    }.flowOn(Dispatchers.IO)
 }

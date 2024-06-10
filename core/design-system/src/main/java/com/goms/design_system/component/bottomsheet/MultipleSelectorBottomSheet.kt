@@ -22,11 +22,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.goms.design_system.R
 import com.goms.design_system.component.button.AdminBottomSheetButton
 import com.goms.design_system.component.button.InitBottomSheetButton
-import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
 import kotlinx.collections.immutable.PersistentList
@@ -180,7 +181,7 @@ fun MultipleSelectorBottomSheet(
             Spacer(modifier = Modifier.height(32.dp))
             InitBottomSheetButton(
                 modifier = Modifier.fillMaxWidth(),
-                text = "필터 초기화"
+                text = stringResource(id = R.string.initialize_filter)
             ) {
                 bottomSheetSelected1 = ""
                 bottomSheetSelected2 = ""

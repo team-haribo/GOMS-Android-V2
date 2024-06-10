@@ -14,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.goms.design_system.component.clickable.gomsClickable
@@ -25,6 +26,7 @@ import com.goms.design_system.icon.QrCreateIcon
 import com.goms.design_system.icon.SettingIcon
 import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
+import com.goms.main.R
 
 @Composable
 internal fun AdminMenuList(
@@ -47,7 +49,7 @@ internal fun AdminMenuList(
                         tint = colors.G7
                     )
                 },
-                text = "QR 생성",
+                text = stringResource(id = R.string.qr_create),
             ) { onQrCreateClick() }
             AdminMenuListItem(
                 icon = {
@@ -56,7 +58,7 @@ internal fun AdminMenuList(
                         tint = colors.G7
                     )
                 },
-                text = "학생 관리",
+                text = stringResource(id = R.string.student_management),
             ) { onStudentManagementClick() }
             AdminMenuListItem(
                 icon = {
@@ -65,7 +67,7 @@ internal fun AdminMenuList(
                         tint = colors.G7
                     )
                 },
-                text = "외출 현황",
+                text = stringResource(id = R.string.outing_status),
             ) { onOutingStatusClick() }
             AdminMenuListItem(
                 icon = {
@@ -74,7 +76,7 @@ internal fun AdminMenuList(
                         tint = colors.G7
                     )
                 },
-                text = "지각자 명단",
+                text = stringResource(id = R.string.late_list),
             ) { onLateListClick() }
             AdminMenuListItem(
                 icon = {
@@ -83,7 +85,7 @@ internal fun AdminMenuList(
                         tint = colors.G7
                     )
                 },
-                text = "개인 설정",
+                text = stringResource(id = R.string.setting),
             ) { onSettingClick() }
             Divider(
                 modifier = Modifier.fillMaxWidth(),

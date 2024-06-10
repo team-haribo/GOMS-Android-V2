@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -46,13 +47,12 @@ import com.goms.model.util.ResourceKeys
 import com.goms.sign_up.component.PasswordText
 import com.goms.sign_up.viewmodel.uistate.SignUpUiState
 import com.goms.sign_up.viewmodel.SignUpViewModel
-import com.goms.ui.isValidPassword
 
 @Composable
 internal fun PasswordRoute(
     onBackClick: () -> Unit,
     onLoginClick: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
+    onErrorToast: (throwable: Throwable?, message: Int?) -> Unit,
     viewModel: SignUpViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
 ) {
     val signUpUiState by viewModel.signUpUiState.collectAsStateWithLifecycle()
@@ -91,7 +91,7 @@ private fun PasswordScreen(
     signUpUiState: SignUpUiState,
     onBackClick: () -> Unit,
     onLoginClick: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
+    onErrorToast: (throwable: Throwable?, message: Int?) -> Unit,
     passwordCallback: () -> Unit
 ) {
     val focusManager = LocalFocusManager.current
@@ -113,25 +113,25 @@ private fun PasswordScreen(
             is SignUpUiState.Conflict -> {
                 isLoading = false
                 isError = true
-                onErrorToast(null, "이미 존재하는 계정입니다")
+                onErrorToast(null, R.string.error_already_exists_account)
             }
 
             is SignUpUiState.PasswordMismatch -> {
                 isLoading = false
                 isError = true
-                onErrorToast(null, "비밀번호가 일치하지 않습니다")
+                onErrorToast(null, R.string.error_password_mismatch)
             }
 
             is SignUpUiState.PasswordNotValid -> {
                 isLoading = false
                 isError = true
-                onErrorToast(null, "비밀번호 요구사항을 충족하지 않습니다")
+                onErrorToast(null, R.string.error_password_not_valid)
             }
 
             is SignUpUiState.Error -> {
                 isLoading = false
                 isError = true
-                onErrorToast(signUpUiState.exception, null)
+                onErrorToast(signUpUiState.exception, R.string.error_sign_up)
             }
         }
         onDispose {}
@@ -165,17 +165,18 @@ private fun PasswordScreen(
                 isError = isError,
                 isDescription = false,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                placeHolder = "비밀번호",
+                placeHolder = stringResource(id = R.string.password),
                 setText = password,
                 onValueChange = onPasswordChange,
                 singleLine = true
             )
+            Spacer(modifier = Modifier.height(24.dp))
             GomsPasswordTextField(
                 modifier = Modifier.fillMaxWidth(),
                 isDescription = true,
                 isError = isError,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-                placeHolder = "비밀번호 확인",
+                placeHolder = stringResource(id = R.string.check_password),
                 setText = checkPassword,
                 onValueChange = onCheckPasswordChange,
                 singleLine = true
@@ -183,7 +184,7 @@ private fun PasswordScreen(
             Spacer(modifier = Modifier.weight(1f))
             GomsButton(
                 modifier = Modifier.fillMaxWidth(),
-                text = "회원가입",
+                text = stringResource(id = R.string.sign_up),
                 state = if (password.isNotBlank() && checkPassword.isNotBlank()) ButtonState.Normal else ButtonState.Enable
             ) {
                 passwordCallback()

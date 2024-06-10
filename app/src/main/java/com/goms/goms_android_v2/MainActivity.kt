@@ -100,7 +100,7 @@ class MainActivity : ComponentActivity() {
         } else {
             doubleBackToExitPressedOnce = true
             backPressedTimestamp = currentTime
-            createToast(this, "'뒤로'버튼 한번 더 누르시면 종료됩니다.")
+            createToast(this, getString(R.string.close_app))
         }
     }
 

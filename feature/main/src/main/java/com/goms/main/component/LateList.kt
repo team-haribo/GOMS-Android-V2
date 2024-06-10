@@ -22,13 +22,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.goms.design_system.R
 import com.goms.design_system.component.shimmer.shimmerEffect
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
+import com.goms.main.R
 import com.goms.main.data.LateData
 import com.goms.main.data.toData
 import com.goms.main.viewmodel.uistate.GetLateListUiState
@@ -38,7 +39,7 @@ import com.goms.ui.toText
 internal fun LateList(
     modifier: Modifier = Modifier,
     getLateListUiState: GetLateListUiState,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
+    onErrorToast: (throwable: Throwable?, message: Int?) -> Unit,
     onBottomSheetOpenClick: () -> Unit
 ) {
     Column(
@@ -54,7 +55,7 @@ internal fun LateList(
             FilterText(onFilterTextClick = onBottomSheetOpenClick)
         }
         when (getLateListUiState) {
-            GetLateListUiState.Loading -> {
+            is GetLateListUiState.Loading -> {
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -71,10 +72,10 @@ internal fun LateList(
             }
 
             is GetLateListUiState.Error -> {
-                onErrorToast(getLateListUiState.exception, "지각자 리스트 정보를 가져오지 못했습니다")
+                onErrorToast(getLateListUiState.exception, R.string.error_get_late_list)
             }
 
-            GetLateListUiState.Empty -> {
+            is GetLateListUiState.Empty -> {
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Spacer(modifier = Modifier.height(248.dp))
                     LateListEmptyText()
@@ -118,8 +119,8 @@ private fun LateListItem(
     ) {
         if (data.profileUrl.isNullOrEmpty()) {
             Image(
-                painter = painterResource(R.drawable.ic_profile),
-                contentDescription = "Default Profile Image",
+                painter = painterResource(com.goms.design_system.R.drawable.ic_profile),
+                contentDescription = stringResource(id = R.string.default_profile_image),
                 modifier = Modifier.size(48.dp)
             )
         } else {
@@ -129,7 +130,7 @@ private fun LateListItem(
                     .size(48.dp)
                     .clip(RoundedCornerShape(40.dp)),
                 contentScale = ContentScale.Crop,
-                contentDescription = "Profile Image",
+                contentDescription = stringResource(id = R.string.profile_image),
             )
         }
         Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {

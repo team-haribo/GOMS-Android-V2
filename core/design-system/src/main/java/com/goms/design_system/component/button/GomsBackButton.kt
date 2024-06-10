@@ -9,11 +9,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.goms.design_system.R
 import com.goms.design_system.component.clickable.gomsClickable
 import com.goms.design_system.icon.BackIcon
-import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
 
@@ -31,7 +32,7 @@ fun GomsBackButton(
         BackIcon(tint = colors.P5)
         Spacer(modifier = Modifier.width(7.dp))
         Text(
-            text = "돌아가기",
+            text = stringResource(id = R.string.go_back),
             style = typography.textMedium,
             fontWeight = FontWeight.Normal,
             color = colors.P5

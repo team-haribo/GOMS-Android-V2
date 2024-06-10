@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -48,7 +49,7 @@ import com.goms.sign_up.viewmodel.uistate.VerifyNumberUiState
 internal fun NumberRoute(
     onBackClick: () -> Unit,
     onPasswordClick: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
+    onErrorToast: (throwable: Throwable?, message: Int?) -> Unit,
     viewModel: SignUpViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
 ) {
     val verifyNumberUiState by viewModel.verifyNumberUiState.collectAsState()
@@ -80,10 +81,11 @@ private fun NumberScreen(
     onBackClick: () -> Unit,
     onPasswordClick: () -> Unit,
     numberCallback: () -> Unit,
-    onErrorToast: (throwable: Throwable?, message: String?) -> Unit,
+    onErrorToast: (throwable: Throwable?, message: Int?) -> Unit,
     resentCallBack: () -> Unit,
     initCallBack: () -> Unit
 ) {
+    val context = LocalContext.current
     val focusManager = LocalFocusManager.current
     val isKeyboardOpen by keyboardAsState()
     val animatedSpacerHeight by animateDpAsState(targetValue = if (!isKeyboardOpen) 100.dp else 16.dp)
@@ -104,21 +106,22 @@ private fun NumberScreen(
             is VerifyNumberUiState.BadRequest -> {
                 isLoading = false
                 isError = true
-                errorText = "인증번호가 일치하지 않습니다"
-                onErrorToast(null, "인증번호가 일치하지 않습니다")
+                errorText = context.getString(R.string.error_number_mismatch)
+                onErrorToast(null, R.string.error_number_mismatch)
             }
 
             is VerifyNumberUiState.NotFound -> {
                 isLoading = false
                 isError = true
-                errorText = "잘못된 인증번호입니다"
-                onErrorToast(null, "잘못된 인증번호입니다")
+                errorText = context.getString(R.string.error_number_not_valid)
+                onErrorToast(null, R.string.error_number_not_valid)
             }
 
             is VerifyNumberUiState.Error -> {
                 isLoading = false
                 isError = true
-                onErrorToast(verifyNumberUiState.exception, null)
+                errorText = context.getString(R.string.error_verify_number)
+                onErrorToast(verifyNumberUiState.exception, R.string.error_verify_number)
             }
         }
         onDispose { initCallBack() }
@@ -150,7 +153,7 @@ private fun NumberScreen(
             NumberTextField(
                 setText = number,
                 isError = isError,
-                placeHolder = "인증번호 입력",
+                placeHolder = stringResource(id = R.string.input_number),
                 errorText = errorText,
                 onValueChange = onNumberChange,
                 onResendClick = {
@@ -160,7 +163,7 @@ private fun NumberScreen(
             Spacer(modifier = Modifier.weight(1f))
             GomsButton(
                 modifier = Modifier.fillMaxWidth(),
-                text = "인증",
+                text = stringResource(id = R.string.certified),
                 state = if (number.isNotBlank()) ButtonState.Normal else ButtonState.Enable
             ) {
                 numberCallback()
