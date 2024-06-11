@@ -52,7 +52,7 @@ internal fun NumberRoute(
     onErrorToast: (throwable: Throwable?, message: Int?) -> Unit,
     viewModel: SignUpViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
 ) {
-    val verifyNumberUiState by viewModel.verifyNumberUiState.collectAsState()
+    val verifyNumberUiState by viewModel.verifyNumberUiState.collectAsStateWithLifecycle()
     val number by viewModel.number.collectAsStateWithLifecycle()
 
     NumberScreen(

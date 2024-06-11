@@ -54,7 +54,7 @@ internal fun SignUpRoute(
     onErrorToast: (throwable: Throwable?, message: Int?) -> Unit,
     viewModel: SignUpViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
 ) {
-    val sendNumberUiState by viewModel.sendNumberUiState.collectAsState()
+    val sendNumberUiState by viewModel.sendNumberUiState.collectAsStateWithLifecycle()
     val name by viewModel.name.collectAsStateWithLifecycle()
     val email by viewModel.email.collectAsStateWithLifecycle()
     val gender by viewModel.gender.collectAsStateWithLifecycle()
