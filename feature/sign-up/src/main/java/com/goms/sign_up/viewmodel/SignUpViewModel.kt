@@ -1,6 +1,5 @@
 package com.goms.sign_up.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -76,6 +75,10 @@ class SignUpViewModel @Inject constructor(
                     }
             }
         }
+    }
+
+    internal fun initSignUp() {
+        _signUpUiState.value = SignUpUiState.Loading
     }
 
     internal fun sendNumber(body: SendNumberRequestModel) = viewModelScope.launch {

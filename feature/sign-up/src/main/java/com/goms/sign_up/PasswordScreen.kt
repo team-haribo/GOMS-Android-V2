@@ -78,7 +78,8 @@ internal fun PasswordRoute(
                     major = Major.values().find { it.fullName == viewModel.major.value }!!.name
                 )
             )
-        }
+        },
+        initCallBack = { viewModel.initSignUp() }
     )
 }
 
@@ -92,7 +93,8 @@ private fun PasswordScreen(
     onBackClick: () -> Unit,
     onLoginClick: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: Int?) -> Unit,
-    passwordCallback: () -> Unit
+    passwordCallback: () -> Unit,
+    initCallBack: () -> Unit
 ) {
     val focusManager = LocalFocusManager.current
     val isKeyboardOpen by keyboardAsState()
@@ -134,7 +136,7 @@ private fun PasswordScreen(
                 onErrorToast(signUpUiState.exception, R.string.error_sign_up)
             }
         }
-        onDispose {}
+        onDispose { initCallBack() }
     }
 
     lockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
