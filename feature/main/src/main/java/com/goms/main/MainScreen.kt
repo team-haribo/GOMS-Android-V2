@@ -186,6 +186,7 @@ private fun MainScreen(
 
     SwipeRefresh(
         state = swipeRefreshState,
+        modifier = Modifier.statusBarsPadding(),
         onRefresh = {
             tokenRefreshCallBack()
         },
