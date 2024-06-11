@@ -35,6 +35,7 @@ import com.goms.model.request.council.AuthorityRequestModel
 import com.goms.model.response.auth.LoginResponseModel
 import com.goms.model.util.ResourceKeys
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
@@ -134,6 +135,8 @@ class MainViewModel @Inject constructor(
     }
 
     internal fun tokenRefresh() = viewModelScope.launch {
+        _isRefreshing.value = true
+        delay(1_000)
         refreshToken = runBlocking { authRepository.getRefreshToken().first() }
         tokenRefreshUseCase(refreshToken = "${ResourceKeys.BEARER} $refreshToken")
             .asResult()
@@ -144,9 +147,16 @@ class MainViewModel @Inject constructor(
                         _tokenRefreshUiState.value = TokenRefreshUiState.Success(result.data)
                         saveToken(token = result.data)
                     }
-                    is Result.Error -> _tokenRefreshUiState.value = TokenRefreshUiState.Error(result.exception)
+                    is Result.Error -> {
+                        _tokenRefreshUiState.value = TokenRefreshUiState.Error(result.exception)
+                        _isRefreshing.value = false
+                    }
                 }
             }
+    }
+
+    internal fun initTokenRefresh() {
+        _tokenRefreshUiState.value = TokenRefreshUiState.Loading
     }
 
     private fun saveToken(token: LoginResponseModel) = viewModelScope.launch {
@@ -160,8 +170,10 @@ class MainViewModel @Inject constructor(
                 getLateRankList()
                 getOutingCount()
                 getTimeValue()
+                _isRefreshing.value = false
             }.onFailure {
                 _saveTokenUiState.value = SaveTokenUiState.Error(it)
+                _isRefreshing.value = false
             }
     }
 
