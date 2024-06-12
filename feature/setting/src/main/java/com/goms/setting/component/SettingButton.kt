@@ -60,7 +60,6 @@ internal fun SettingButton(
                     SettingButtonType.PasswordChange.value -> GomsPasswordChangeIcon(tint = colors.WHITE)
                     SettingButtonType.Logout.value -> GomsLogoutIcon(tint = colors.WHITE)
                     SettingButtonType.Withdrawal.value -> GomsWithdrawalIcon(tint = colors.WHITE)
-                    else -> GomsPasswordChangeIcon()
                 }
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
