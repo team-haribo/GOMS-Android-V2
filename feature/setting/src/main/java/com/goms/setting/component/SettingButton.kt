@@ -57,10 +57,9 @@ internal fun SettingButton(
         ) {
             Row {
                 when(buttonType) {
-                    SettingButtonType.PasswordChange.value -> GomsPasswordChangeIcon()
-                    SettingButtonType.Logout.value -> GomsLogoutIcon()
-                    SettingButtonType.Withdrawal.value -> GomsWithdrawalIcon()
-                    else -> GomsPasswordChangeIcon()
+                    SettingButtonType.PasswordChange.value -> GomsPasswordChangeIcon(tint = colors.WHITE)
+                    SettingButtonType.Logout.value -> GomsLogoutIcon(tint = colors.WHITE)
+                    SettingButtonType.Withdrawal.value -> GomsWithdrawalIcon(tint = colors.WHITE)
                 }
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(

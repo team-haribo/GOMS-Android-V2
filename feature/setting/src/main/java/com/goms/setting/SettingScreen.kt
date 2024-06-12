@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -33,6 +35,7 @@ import com.goms.design_system.component.bottomsheet.ProfileBottomSheet
 import com.goms.design_system.component.button.ButtonState
 import com.goms.design_system.component.button.GomsButton
 import com.goms.design_system.component.dialog.GomsTwoButtonDialog
+import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.ThemeType
 import com.goms.design_system.util.lockScreenOrientation
@@ -79,6 +82,7 @@ internal fun SettingRoute(
     var qrcodeData by remember { mutableStateOf(qrcodeState) }
     var alarmData by remember { mutableStateOf(alarmState) }
     var timeData by remember { mutableStateOf(timeState) }
+    var isLoading by remember { mutableStateOf(false) }
 
     val galleryLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
@@ -95,8 +99,10 @@ internal fun SettingRoute(
 
             if (data.profileUrl.isNullOrEmpty()) {
                 viewModel.setProfileImage(context, selectedImageUri!!)
+                isLoading = true
             } else {
                 viewModel.updateProfileImage(context, selectedImageUri!!)
+                isLoading = true
             }
         }
     }
@@ -125,6 +131,7 @@ internal fun SettingRoute(
                 galleryLauncher.launch("image/*")
             } else {
                 viewModel.deleteProfileImage()
+                isLoading = true
             }
         },
         onBackClick = onBackClick,
@@ -150,6 +157,7 @@ internal fun SettingRoute(
         onUpdateAlarm = { alarmData = it },
         onUpdateTime = { timeData = it },
         setDefaultProfileUiState = { viewModel.initProfileImage() },
+        isLoading = { isLoading = it },
         onErrorToast = onErrorToast,
         onPasswordCheck = onPasswordCheck,
         onWithdrawalClick = onWithdrawalClick,
@@ -160,6 +168,7 @@ internal fun SettingRoute(
         qrcodeState = qrcodeState,
         alarmState = alarmState,
         timeState = timeState,
+        loadingState = isLoading,
         profileImageUiState = profileImageUiState
     )
 }
@@ -183,6 +192,7 @@ private fun SettingScreen(
     onErrorToast: (throwable: Throwable?, message: Int?) -> Unit,
     onPasswordCheck: () -> Unit,
     onWithdrawalClick: () -> Unit,
+    isLoading: (Boolean) -> Unit,
     logoutUiState: LogoutUiState,
     setThemeUiState: SetThemeUiState,
     getProfileUiState: GetProfileUiState,
@@ -190,12 +200,15 @@ private fun SettingScreen(
     qrcodeState: String,
     alarmState: String,
     timeState: String,
+    loadingState: Boolean,
     profileImageUiState: ProfileImageUiState
 ) {
     var openDialog by remember { mutableStateOf(false) }
     var openBottomSheet by remember { mutableStateOf(false) }
     var isLogout by remember { mutableStateOf(true) }
+
     val notificationPermissionState = rememberPermissionState(Manifest.permission.POST_NOTIFICATIONS)
+    val scrollState = rememberScrollState()
 
     LaunchedEffect("load data") {
         getProfile()
@@ -227,15 +240,18 @@ private fun SettingScreen(
     when (profileImageUiState) {
         is ProfileImageUiState.Loading -> Unit
         is ProfileImageUiState.Success -> {
+            isLoading(false)
             getProfile()
         }
 
         is ProfileImageUiState.EmptyProfileUrl -> {
+            isLoading(false)
             onErrorToast(null, R.string.error_already_default_profile)
             setDefaultProfileUiState()
         }
 
         is ProfileImageUiState.Error -> {
+            isLoading(false)
             onErrorToast(profileImageUiState.exception, R.string.error_profile)
             setDefaultProfileUiState()
         }
@@ -253,7 +269,9 @@ private fun SettingScreen(
             onBackClick()
         }
         Column(
-            modifier = Modifier.padding(horizontal = 20.dp),
+            modifier = Modifier
+                .padding(horizontal = 20.dp)
+                .verticalScroll(scrollState),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier = Modifier.height(16.dp))
@@ -368,6 +386,10 @@ private fun SettingScreen(
             }
         }
     }
+    if (loadingState) {
+        GomsCircularProgressIndicator()
+    }
+
     if (openDialog) {
         GomsTwoButtonDialog(
             openDialog = openDialog,

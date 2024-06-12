@@ -34,6 +34,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goms.design_system.component.button.ButtonState
 import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.button.GomsButton
+import com.goms.design_system.component.dialog.GomsOneButtonDialog
 import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
 import com.goms.design_system.component.textfield.NumberTextField
 import com.goms.design_system.theme.GomsTheme.colors
@@ -52,7 +53,7 @@ internal fun NumberRoute(
     onErrorToast: (throwable: Throwable?, message: Int?) -> Unit,
     viewModel: SignUpViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
 ) {
-    val verifyNumberUiState by viewModel.verifyNumberUiState.collectAsState()
+    val verifyNumberUiState by viewModel.verifyNumberUiState.collectAsStateWithLifecycle()
     val number by viewModel.number.collectAsStateWithLifecycle()
 
     NumberScreen(
@@ -92,6 +93,7 @@ private fun NumberScreen(
     var isLoading by remember { mutableStateOf(false) }
     var isError by remember { mutableStateOf(false) }
     var errorText by remember { mutableStateOf("") }
+    var openDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(isKeyboardOpen) {
         if (!isKeyboardOpen) {
@@ -158,6 +160,7 @@ private fun NumberScreen(
                 onValueChange = onNumberChange,
                 onResendClick = {
                     resentCallBack()
+                    openDialog = true
                 }
             )
             Spacer(modifier = Modifier.weight(1f))
@@ -174,5 +177,17 @@ private fun NumberScreen(
     }
     if (isLoading) {
         GomsCircularProgressIndicator()
+    }
+    if (openDialog) {
+        GomsOneButtonDialog(
+            openDialog = openDialog,
+            onStateChange = {
+                openDialog = it
+            },
+            title = stringResource(id = R.string.resend_completion),
+            content = stringResource(id = R.string.resend_completion_description),
+            buttonText = stringResource(id = R.string.check),
+            onClick = {}
+        )
     }
 }

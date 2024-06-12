@@ -41,6 +41,7 @@ import com.goms.main.component.MainOutingCard
 import com.goms.main.component.MainProfileCard
 import com.goms.main.component.MainTimeProfileCard
 import com.goms.main.viewmodel.MainViewModel
+import com.goms.main.viewmodel.uistate.SaveTokenUiState
 import com.goms.main.viewmodel.uistate.TokenRefreshUiState
 import com.goms.model.enum.Switch
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -67,6 +68,7 @@ internal fun MainRoute(
     val timeValue by viewModel.timeValue.collectAsStateWithLifecycle(initialValue = Switch.OFF.value)
     val isRefreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
     val tokenRefreshUiState by viewModel.tokenRefreshUiState.collectAsStateWithLifecycle()
+    val saveTokenUiState by viewModel.saveTokenUiState.collectAsStateWithLifecycle()
     val getProfileUiState by viewModel.getProfileUiState.collectAsStateWithLifecycle()
     val getLateRankListUiState by viewModel.getLateRankListUiState.collectAsStateWithLifecycle()
     val getOutingListUiState by viewModel.getOutingListUiState.collectAsStateWithLifecycle()
@@ -89,6 +91,7 @@ internal fun MainRoute(
         isRefreshing = isRefreshing,
         isTimeLaunch = isTimeLaunch,
         tokenRefreshUiState = tokenRefreshUiState,
+        saveTokenUiState = saveTokenUiState,
         getProfileUiState = getProfileUiState,
         getLateRankListUiState = getLateRankListUiState,
         getOutingListUiState = getOutingListUiState,
@@ -108,6 +111,9 @@ internal fun MainRoute(
         },
         tokenRefreshCallBack = {
             viewModel.tokenRefresh()
+        },
+        initTokenRefreshCallBack = {
+            viewModel.initTokenRefresh()
         }
     )
 }
@@ -119,6 +125,7 @@ private fun MainScreen(
     isRefreshing: Boolean,
     isTimeLaunch: Boolean,
     tokenRefreshUiState: TokenRefreshUiState,
+    saveTokenUiState: SaveTokenUiState,
     getProfileUiState: GetProfileUiState,
     getLateRankListUiState: GetLateRankListUiState,
     getOutingListUiState: GetOutingListUiState,
@@ -131,7 +138,8 @@ private fun MainScreen(
     onAdminMenuClick: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: Int?) -> Unit,
     mainCallBack: () -> Unit,
-    tokenRefreshCallBack: () -> Unit
+    tokenRefreshCallBack: () -> Unit,
+    initTokenRefreshCallBack: () -> Unit
 ) {
     var isPermissionRequest by rememberSaveable { mutableStateOf(false) }
     val multiplePermissionState = rememberMultiplePermissionsState(
@@ -163,7 +171,7 @@ private fun MainScreen(
         if (tokenRefreshUiState is TokenRefreshUiState.Error) {
             onErrorToast(null, R.string.error_refresh)
         }
-        onDispose {}
+        onDispose { initTokenRefreshCallBack() }
     }
 
     val scrollState = rememberScrollState()
@@ -178,6 +186,7 @@ private fun MainScreen(
 
     SwipeRefresh(
         state = swipeRefreshState,
+        modifier = Modifier.statusBarsPadding(),
         onRefresh = {
             tokenRefreshCallBack()
         },

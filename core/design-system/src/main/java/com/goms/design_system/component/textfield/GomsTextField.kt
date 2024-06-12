@@ -62,6 +62,7 @@ fun GomsTextField(
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     maxLines: Int = Int.MAX_VALUE,
     singleLine: Boolean = false,
+    maxLength: Int = if (isEmail) 6 else Int.MAX_VALUE,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     onValueChange: (String) -> Unit = {},
 ) {
@@ -77,7 +78,9 @@ fun GomsTextField(
         OutlinedTextField(
             value = setText,
             onValueChange = {
-                onValueChange(it)
+                if (it.length <= maxLength) {
+                    onValueChange(it)
+                }
             },
             keyboardOptions = keyboardOptions,
             keyboardActions = keyboardActions,
@@ -141,6 +144,7 @@ fun NumberTextField(
     focusRequester: FocusRequester = FocusRequester(),
     isError: Boolean,
     errorText: String = "",
+    maxLength: Int = 4,
     onValueChange: (String) -> Unit,
     onResendClick: () -> Unit,
 ) {
@@ -164,7 +168,9 @@ fun NumberTextField(
         OutlinedTextField(
             value = setText,
             onValueChange = {
-                onValueChange(it)
+                if (it.length <= maxLength) {
+                    onValueChange(it)
+                }
             },
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
             placeholder = {
