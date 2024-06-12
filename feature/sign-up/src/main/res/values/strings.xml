@@ -9,6 +9,9 @@
     <string name="error_number_not_valid">잘못된 인증번호입니다</string>
     <string name="error_verify_number">인증이 실패했습니다</string>
     <string name="certified">인증</string>
+    <string name="resend_completion">재발송 완료</string>
+    <string name="resend_completion_description">인증번호를 재발송했어요.\n이메일을 확인해주세요!</string>
+    <string name="check">확인</string>
 
     <string name="error_already_exists_account">이미 존재하는 계정입니다</string>
     <string name="error_password_mismatch">비밀번호가 일치하지 않습니다</string>
