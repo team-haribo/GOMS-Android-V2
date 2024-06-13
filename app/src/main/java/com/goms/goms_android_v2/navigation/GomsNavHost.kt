@@ -98,24 +98,24 @@ fun GomsNavHost(
             onInputLoginClick = navController::navigateToInputLogin
         )
         inputLoginScreen(
-            onBackClick = navController::popBackStack,
+            onBackClick = navController::navigateUp,
             onMainClick = { appState.navigateToTopLevelDestination(TopLevelDestination.MAIN) },
             onRePasswordClick = navController::navigateToEmailCheck,
             onErrorToast = onErrorToast
         )
 
         signUpScreen(
-            onBackClick = navController::popBackStack,
+            onBackClick = navController::navigateUp,
             onNumberClick = navController::navigateToNumber,
             onErrorToast = onErrorToast
         )
         numberScreen(
-            onBackClick = navController::popBackStack,
+            onBackClick = navController::navigateUp,
             onPasswordClick = navController::navigateToPassword,
             onErrorToast = onErrorToast
         )
         passwordScreen(
-            onBackClick = navController::popBackStack,
+            onBackClick = navController::navigateUp,
             onLoginClick = { appState.navigateToTopLevelDestination(TopLevelDestination.LOGIN) },
             onErrorToast = onErrorToast
         )
@@ -137,19 +137,19 @@ fun GomsNavHost(
             onErrorToast = onErrorToast
         )
         outingStatusScreen(
-            onBackClick = navController::popBackStack,
+            onBackClick = navController::navigateUp,
             onErrorToast = onErrorToast
         )
         lateListScreen(
-            onBackClick = navController::popBackStack,
+            onBackClick = navController::navigateUp,
             onErrorToast = onErrorToast
         )
         studentManagementScreen(
-            onBackClick = navController::popBackStack,
+            onBackClick = navController::navigateUp,
             onErrorToast = onErrorToast
         )
         adminMenuScreen(
-            onBackClick = navController::popBackStack,
+            onBackClick = navController::navigateUp,
             onQrCreateClick = navController::navigateToQrGenerate,
             onStudentManagementClick = navController::navigateToStudentManagement,
             onOutingStatusClick = navController::navigateToOutingStatus,
@@ -157,18 +157,18 @@ fun GomsNavHost(
             onSettingClick = navController::navigateToSettingScreen
         )
         qrcodeScanScreen(
-            onPermissionBlock = navController::popBackStack,
-            onSuccess = navController::popBackStack,
-            onBackClick = navController::popBackStack,
+            onPermissionBlock = navController::navigateUp,
+            onSuccess = navController::navigateUp,
+            onBackClick = navController::navigateUp,
         )
         qrcodeGenerateScreen(
-            onTimerFinish = navController::popBackStack,
-            onBackClick = navController::popBackStack,
-            onRemoteError = navController::popBackStack,
+            onTimerFinish = navController::navigateUp,
+            onBackClick = navController::navigateUp,
+            onRemoteError = navController::navigateUp,
             onErrorToast = onErrorToast
         )
         settingScreen(
-            onBackClick = navController::popBackStack,
+            onBackClick = navController::navigateUp,
             onLogoutSuccess = onLogout,
             onErrorToast = onErrorToast,
             onPasswordCheck = navController::navigateToPasswordCheck,
@@ -177,31 +177,31 @@ fun GomsNavHost(
             onWithdrawalClick = navController::navigateToWithdrawalScreen
         )
         withdrawalScreen(
-            onBackClick = navController::popBackStack,
+            onBackClick = navController::navigateUp,
             onWithdrawal = onLogout,
             onErrorToast = onErrorToast
         )
         emailCheckScreen(
-            onBackClick = navController::popBackStack,
+            onBackClick = navController::navigateUp,
             onNumberClick = navController::navigateToPasswordNumber,
             onErrorToast = onErrorToast
         )
         passwordNumberScreen(
-            onBackClick = navController::popBackStack,
+            onBackClick = navController::navigateUp,
             onFindPasswordClick = navController::navigateToFindPassword,
             onErrorToast = onErrorToast
         )
         findPasswordScreen(
-            onBackClick = navController::popBackStack,
+            onBackClick = navController::navigateUp,
             onSuccessClick = { appState.navigateToTopLevelDestination(TopLevelDestination.LOGIN) },
             onErrorToast = onErrorToast
         )
         passwordCheckScreen(
-            onBackClick = navController::popBackStack,
+            onBackClick = navController::navigateUp,
             onRePasswordClick = navController::navigateToRePassword
         )
         rePasswordScreen(
-            onBackClick = navController::popBackStack,
+            onBackClick = navController::navigateUp,
             onSuccessClick = { appState.navigateToTopLevelDestination(TopLevelDestination.LOGIN) },
             onErrorToast = onErrorToast
         )
