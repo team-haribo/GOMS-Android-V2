@@ -125,7 +125,7 @@ private fun QrcodeScanScreen(
         is OutingUiState.BadRequest -> {
             openDialog = true
             dialogTitle = context.getString(R.string.fail_qr_scan)
-            dialogContent = context.getString(R.string.error_qr_mismatch)
+            dialogContent = context.getString(R.string.error_blacklist)
         }
 
         is OutingUiState.Error -> {

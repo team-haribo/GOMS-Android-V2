@@ -9,7 +9,7 @@
     <string name="start_outing">외출을 시작해요!\n7시 25분까지는 반으로 돌아와야 해요!</string>
     <string name="back_outing">제 시간에 복귀에 성공했어요!\n다음 외출제에 또 만나요!</string>
     <string name="fail_qr_scan">QR코드 스캔 실패</string>
-    <string name="error_qr_mismatch">외출에 실패했어요 ㅠ\n외출 금지 상태 이거나 잘못된 QR코드예요.</string>
+    <string name="error_blacklist">외출 금지 상태에서는\nQR스캔을 할 수 없어요.</string>
     <string name="error_outing">예기치 못한 오류가 발생했어요.\n다시 시도해 주세요.</string>
     <string name="check">확인</string>
 </resources>
