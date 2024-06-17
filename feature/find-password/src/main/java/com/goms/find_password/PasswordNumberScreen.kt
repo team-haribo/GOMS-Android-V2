@@ -36,6 +36,8 @@ import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.button.GomsButton
 import com.goms.design_system.component.dialog.GomsOneButtonDialog
 import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
+import com.goms.design_system.component.spacer.GomsSpacer
+import com.goms.design_system.component.spacer.SpacerSize
 import com.goms.design_system.component.textfield.NumberTextField
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.util.keyboardAsState
@@ -151,7 +153,7 @@ private fun PasswordNumberScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             NumberText(modifier = Modifier.align(Alignment.Start))
-            Spacer(modifier = Modifier.height(28.dp))
+            GomsSpacer(size = SpacerSize.MediumLarge)
             NumberTextField(
                 setText = number,
                 isError = isError,
@@ -172,7 +174,7 @@ private fun PasswordNumberScreen(
                 numberCallback()
                 isLoading = true
             }
-            Spacer(modifier = Modifier.height(animatedSpacerHeight))
+            GomsSpacer(height = animatedSpacerHeight)
         }
     }
     if (isLoading) {
