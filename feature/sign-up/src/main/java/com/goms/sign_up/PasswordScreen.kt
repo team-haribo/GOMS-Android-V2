@@ -36,6 +36,8 @@ import com.goms.design_system.component.button.ButtonState
 import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.button.GomsButton
 import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
+import com.goms.design_system.component.spacer.GomsSpacer
+import com.goms.design_system.component.spacer.SpacerSize
 import com.goms.design_system.component.textfield.GomsPasswordTextField
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.util.keyboardAsState
@@ -161,7 +163,7 @@ private fun PasswordScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             PasswordText(modifier = Modifier.align(Alignment.Start))
-            Spacer(modifier = Modifier.height(28.dp))
+            GomsSpacer(size = SpacerSize.MediumLarge)
             GomsPasswordTextField(
                 modifier = Modifier.fillMaxWidth(),
                 isError = isError,
@@ -172,7 +174,7 @@ private fun PasswordScreen(
                 onValueChange = onPasswordChange,
                 singleLine = true
             )
-            Spacer(modifier = Modifier.height(24.dp))
+            GomsSpacer(size = SpacerSize.Medium)
             GomsPasswordTextField(
                 modifier = Modifier.fillMaxWidth(),
                 isDescription = true,
@@ -192,7 +194,7 @@ private fun PasswordScreen(
                 passwordCallback()
                 isLoading = true
             }
-            Spacer(modifier = Modifier.height(animatedSpacerHeight))
+            GomsSpacer(height = animatedSpacerHeight)
         }
     }
     if (isLoading) {

@@ -35,6 +35,8 @@ import com.goms.design_system.component.button.ButtonState
 import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.button.GomsButton
 import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
+import com.goms.design_system.component.spacer.GomsSpacer
+import com.goms.design_system.component.spacer.SpacerSize
 import com.goms.design_system.component.textfield.GomsTextField
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.util.keyboardAsState
@@ -144,7 +146,7 @@ private fun SignUpScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             SignUpText(modifier = Modifier.align(Alignment.Start))
-            Spacer(modifier = Modifier.height(28.dp))
+            GomsSpacer(size = SpacerSize.MediumLarge)
             GomsTextField(
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
@@ -154,7 +156,7 @@ private fun SignUpScreen(
                 isEmail = false,
                 singleLine = true
             )
-            Spacer(modifier = Modifier.height(24.dp))
+            GomsSpacer(size = SpacerSize.Medium)
             GomsTextField(
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
@@ -163,13 +165,13 @@ private fun SignUpScreen(
                 onValueChange = onEmailChange,
                 singleLine = true
             )
-            Spacer(modifier = Modifier.height(24.dp))
+            GomsSpacer(size = SpacerSize.Medium)
             SelectGenderDropDown(
                 onSelectGender = onGenderChange
             ) {
                 focusManager.clearFocus()
             }
-            Spacer(modifier = Modifier.height(24.dp))
+            GomsSpacer(size = SpacerSize.Medium)
             SelectMajorDropDown(
                 onSelectMajor = onMajorChange
             ) {
@@ -185,7 +187,7 @@ private fun SignUpScreen(
                 signUpCallBack()
                 isLoading = true
             }
-            Spacer(modifier = Modifier.height(100.dp))
+            GomsSpacer(height = 100.dp)
         }
     }
     if (isLoading) {
