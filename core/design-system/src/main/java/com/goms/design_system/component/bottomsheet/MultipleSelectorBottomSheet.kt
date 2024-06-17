@@ -28,6 +28,8 @@ import androidx.compose.ui.unit.dp
 import com.goms.design_system.R
 import com.goms.design_system.component.button.AdminBottomSheetButton
 import com.goms.design_system.component.button.InitBottomSheetButton
+import com.goms.design_system.component.spacer.GomsSpacer
+import com.goms.design_system.component.spacer.SpacerSize
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
 import kotlinx.collections.immutable.PersistentList
@@ -115,7 +117,7 @@ fun MultipleSelectorBottomSheet(
                     }
                 }
             }
-            Spacer(modifier = Modifier.height(8.dp))
+            GomsSpacer(size = SpacerSize.ExtraSmall)
             Text(
                 text = subTitle2,
                 style = typography.titleSmall,
@@ -136,7 +138,7 @@ fun MultipleSelectorBottomSheet(
                     }
                 }
             }
-            Spacer(modifier = Modifier.height(8.dp))
+            GomsSpacer(size = SpacerSize.ExtraSmall)
             Text(
                 text = subTitle3,
                 style = typography.titleSmall,
@@ -157,7 +159,7 @@ fun MultipleSelectorBottomSheet(
                     }
                 }
             }
-            Spacer(modifier = Modifier.height(8.dp))
+            GomsSpacer(size = SpacerSize.ExtraSmall)
             Text(
                 text = subTitle4,
                 style = typography.titleSmall,
@@ -178,7 +180,7 @@ fun MultipleSelectorBottomSheet(
                     }
                 }
             }
-            Spacer(modifier = Modifier.height(32.dp))
+            GomsSpacer(size = SpacerSize.Large)
             InitBottomSheetButton(
                 modifier = Modifier.fillMaxWidth(),
                 text = stringResource(id = R.string.initialize_filter)
