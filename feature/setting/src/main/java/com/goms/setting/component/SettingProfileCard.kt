@@ -1,6 +1,7 @@
 package com.goms.setting.component
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,6 +27,8 @@ import androidx.core.graphics.toColor
 import coil.compose.AsyncImage
 import com.goms.design_system.component.clickable.gomsClickable
 import com.goms.design_system.component.shimmer.shimmerEffect
+import com.goms.design_system.component.spacer.GomsSpacer
+import com.goms.design_system.component.spacer.SpacerSize
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
 import com.goms.design_system.util.shadow
@@ -72,7 +75,8 @@ private fun SettingProfileCardComponent(
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Box(
             contentAlignment = Alignment.BottomEnd,
@@ -114,7 +118,6 @@ private fun SettingProfileCardComponent(
                 contentDescription = stringResource(id = R.string.profile_change_button)
             )
         }
-        Spacer(modifier = Modifier.width(16.dp))
         Column {
             Text(
                 text = data.name,
@@ -122,7 +125,7 @@ private fun SettingProfileCardComponent(
                 color = colors.WHITE,
                 fontWeight = FontWeight.SemiBold
             )
-            Spacer(modifier = Modifier.height(4.dp))
+            GomsSpacer(size = SpacerSize.Tiny)
             Text(
                 text = "${data.grade}기 | ${data.major.toText()}",
                 style = typography.textMedium,
@@ -140,7 +143,7 @@ private fun SettingProfileCardComponent(
                 color = colors.G4,
                 fontWeight = FontWeight.Normal
             )
-            Spacer(modifier = Modifier.height(4.dp))
+            GomsSpacer(size = SpacerSize.Tiny)
             Row {
                 Text(
                     text = data.lateCount.toString(),
@@ -165,7 +168,8 @@ private fun ShimmerSettingProfileCardComponent(
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Box(
             contentAlignment = Alignment.BottomEnd
@@ -190,7 +194,6 @@ private fun ShimmerSettingProfileCardComponent(
                 contentDescription = stringResource(id = R.string.profile_change_button)
             )
         }
-        Spacer(modifier = Modifier.width(16.dp))
         Column {
             Box(
                 modifier = Modifier
@@ -200,7 +203,7 @@ private fun ShimmerSettingProfileCardComponent(
                         shape = RoundedCornerShape(4.dp)
                     )
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            GomsSpacer(size = SpacerSize.ExtraSmall)
             Box(
                 modifier = Modifier
                     .size(64.dp, 20.dp)
@@ -220,7 +223,7 @@ private fun ShimmerSettingProfileCardComponent(
                 color = colors.G4,
                 fontWeight = FontWeight.Normal
             )
-            Spacer(modifier = Modifier.height(4.dp))
+            GomsSpacer(size = SpacerSize.Tiny)
             Row {
                 Box(
                     modifier = Modifier
