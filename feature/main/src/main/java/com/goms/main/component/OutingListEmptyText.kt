@@ -13,6 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.goms.design_system.component.spacer.GomsSpacer
+import com.goms.design_system.component.spacer.SpacerSize
 import com.goms.design_system.icon.CoffeeIcon
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
@@ -29,7 +31,7 @@ internal fun OutingListEmptyText() {
             modifier = Modifier.size(80.dp),
             tint = colors.G4
         )
-        Spacer(modifier = Modifier.height(8.dp))
+        GomsSpacer(size = SpacerSize.ExtraSmall)
         Text(
             text = stringResource(id = R.string.everyone_is_busy),
             style = typography.textSmall,

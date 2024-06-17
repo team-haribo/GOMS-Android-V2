@@ -32,6 +32,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goms.common.result.Result
 import com.goms.design_system.component.dialog.GomsTwoButtonDialog
+import com.goms.design_system.component.spacer.GomsSpacer
+import com.goms.design_system.component.spacer.SpacerSize
 import com.goms.design_system.component.textfield.GomsSearchTextField
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.util.keyboardAsState
@@ -143,7 +145,7 @@ private fun OutingStatusScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             OutingStatusText(modifier = Modifier.align(Alignment.Start))
-            Spacer(modifier = Modifier.height(16.dp))
+            GomsSpacer(size = SpacerSize.Small)
             GomsSearchTextField(
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
@@ -153,7 +155,7 @@ private fun OutingStatusScreen(
                 onSearchTextChange = outingSearchCallBack,
                 singleLine = true
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            GomsSpacer(size = SpacerSize.ExtraSmall)
             OutingStatusList(
                 role = role,
                 getOutingListUiState = getOutingListUiState,

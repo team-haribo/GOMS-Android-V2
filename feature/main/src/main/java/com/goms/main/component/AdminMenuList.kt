@@ -18,6 +18,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.goms.design_system.component.clickable.gomsClickable
+import com.goms.design_system.component.spacer.GomsSpacer
+import com.goms.design_system.component.spacer.SpacerSize
 import com.goms.design_system.icon.ChevronRightIcon
 import com.goms.design_system.icon.ClockIcon
 import com.goms.design_system.icon.OutingIcon
@@ -115,7 +117,7 @@ private fun AdminMenuListItem(
             modifier = Modifier.fillMaxWidth(),
             color = colors.WHITE.copy(0.15f)
         )
-        Spacer(modifier = Modifier.height(22.dp))
+        GomsSpacer(height = 22.dp)
         Row(
             modifier = modifier
                 .fillMaxWidth()
@@ -135,6 +137,6 @@ private fun AdminMenuListItem(
                 tint = colors.G7
             )
         }
-        Spacer(modifier = Modifier.height(22.dp))
+        GomsSpacer(height = 22.dp)
     }
 }

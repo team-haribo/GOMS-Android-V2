@@ -34,6 +34,8 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.goms.design_system.component.clickable.gomsClickable
 import com.goms.design_system.component.shimmer.shimmerEffect
+import com.goms.design_system.component.spacer.GomsSpacer
+import com.goms.design_system.component.spacer.SpacerSize
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
 import com.goms.main.R
@@ -101,7 +103,7 @@ internal fun MainLateCard(
                     }
                 }
             }
-            Spacer(modifier = Modifier.height(16.dp))
+            GomsSpacer(size = SpacerSize.Small)
             when (getLateRankListUiState) {
                 is GetLateRankListUiState.Loading -> {
                     LazyRow(

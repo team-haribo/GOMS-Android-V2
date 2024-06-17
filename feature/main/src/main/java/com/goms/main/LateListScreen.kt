@@ -26,6 +26,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goms.design_system.component.bottomsheet.DatePickerBottomSheet
+import com.goms.design_system.component.spacer.GomsSpacer
+import com.goms.design_system.component.spacer.SpacerSize
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.util.getDefaultWednesday
 import com.goms.main.component.LateList
@@ -96,7 +98,7 @@ private fun LateListScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             LateListText(modifier = Modifier.align(Alignment.Start))
-            Spacer(modifier = Modifier.height(8.dp))
+            GomsSpacer(size = SpacerSize.ExtraSmall)
             LateList(
                 getLateListUiState = getLateListUiState,
                 onBottomSheetOpenClick = { onDatePickerBottomSheetOpenClick = true },

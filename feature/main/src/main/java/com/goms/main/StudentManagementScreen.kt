@@ -32,6 +32,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goms.common.result.Result
 import com.goms.design_system.component.bottomsheet.MultipleSelectorBottomSheet
+import com.goms.design_system.component.spacer.GomsSpacer
+import com.goms.design_system.component.spacer.SpacerSize
 import com.goms.design_system.component.textfield.GomsSearchTextField
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.util.keyboardAsState
@@ -226,7 +228,7 @@ private fun StudentManagementScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             StudentManagementText(modifier = Modifier.align(Alignment.Start))
-            Spacer(modifier = Modifier.height(16.dp))
+            GomsSpacer(size = SpacerSize.Small)
             GomsSearchTextField(
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
@@ -236,7 +238,7 @@ private fun StudentManagementScreen(
                 onSearchTextChange = studentSearchCallBack,
                 singleLine = true
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            GomsSpacer(size = SpacerSize.ExtraSmall)
             StudentManagementList(
                 getStudentListUiState = getStudentListUiState,
                 studentSearchUiState = studentSearchUiState,
