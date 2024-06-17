@@ -1,5 +1,6 @@
 package com.goms.ui
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -28,10 +29,10 @@ fun GomsRoleBackButton(
         modifier = modifier
             .padding(start = 15.dp)
             .gomsClickable { onClick() },
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(7.dp)
     ) {
         BackIcon(tint = if (role == Authority.ROLE_STUDENT_COUNCIL) colors.A7 else colors.P5)
-        Spacer(modifier = Modifier.width(7.dp))
         Text(
             text = stringResource(id = R.string.go_back),
             style = GomsTheme.typography.textMedium,
