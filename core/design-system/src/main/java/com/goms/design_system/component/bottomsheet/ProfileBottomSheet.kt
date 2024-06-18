@@ -21,6 +21,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.goms.design_system.R
 import com.goms.design_system.component.clickable.gomsClickable
+import com.goms.design_system.component.spacer.GomsSpacer
+import com.goms.design_system.component.spacer.SpacerSize
 import com.goms.design_system.icon.DefaultImageIcon
 import com.goms.design_system.icon.GalleryIcon
 import com.goms.design_system.theme.GomsTheme.colors
@@ -66,7 +68,7 @@ fun ProfileBottomSheet(
                 content = stringResource(id = R.string.use_default_profile),
                 icon = { DefaultImageIcon(tint = colors.WHITE) }
             )
-            Spacer(modifier = Modifier.height(24.dp))
+            GomsSpacer(size = SpacerSize.Medium)
         }
     }
 }

@@ -24,6 +24,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.goms.design_system.component.spacer.GomsSpacer
+import com.goms.design_system.component.spacer.SpacerSize
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
 
@@ -59,7 +61,7 @@ fun GomsTwoButtonDialog(
                             style = typography.titleSmall,
                             fontWeight = FontWeight.SemiBold,
                         )
-                        Spacer(modifier = Modifier.height(8.dp))
+                        GomsSpacer(size = SpacerSize.ExtraSmall)
                         Text(
                             text = content,
                             modifier = Modifier.fillMaxWidth(),

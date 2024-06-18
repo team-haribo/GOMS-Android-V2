@@ -34,6 +34,8 @@ import com.goms.design_system.component.button.ButtonState
 import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.button.GomsButton
 import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
+import com.goms.design_system.component.spacer.GomsSpacer
+import com.goms.design_system.component.spacer.SpacerSize
 import com.goms.design_system.component.text.RowLinkText
 import com.goms.design_system.component.textfield.GomsPasswordTextField
 import com.goms.design_system.component.textfield.GomsTextField
@@ -172,7 +174,7 @@ private fun InputLoginScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             InputLoginText(modifier = Modifier.align(Alignment.Start))
-            Spacer(modifier = Modifier.height(28.dp))
+            GomsSpacer(size = SpacerSize.MediumLarge)
             GomsTextField(
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
@@ -182,7 +184,7 @@ private fun InputLoginScreen(
                 isError = isError,
                 singleLine = true
             )
-            Spacer(modifier = Modifier.height(24.dp))
+            GomsSpacer(size = SpacerSize.Medium)
             GomsPasswordTextField(
                 modifier = Modifier.fillMaxWidth(),
                 isError = isError,
@@ -193,7 +195,7 @@ private fun InputLoginScreen(
                 onValueChange = onPasswordChange,
                 singleLine = true
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            GomsSpacer(size = SpacerSize.ExtraSmall)
             RowLinkText {
                 onRePasswordClick()
             }
@@ -207,7 +209,7 @@ private fun InputLoginScreen(
                 loginCallBack()
                 isLoading = true
             }
-            Spacer(modifier = Modifier.height(animatedSpacerHeight))
+            GomsSpacer(height = animatedSpacerHeight)
         }
     }
     if (isLoading) {

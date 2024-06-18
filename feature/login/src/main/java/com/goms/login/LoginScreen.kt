@@ -16,6 +16,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.goms.design_system.component.button.ButtonState
 import com.goms.design_system.component.button.GomsButton
+import com.goms.design_system.component.spacer.GomsSpacer
+import com.goms.design_system.component.spacer.SpacerSize
 import com.goms.design_system.component.text.LinkText
 import com.goms.design_system.icon.GomsIcon
 import com.goms.design_system.theme.GomsTheme.colors
@@ -49,7 +51,7 @@ private fun LoginScreen(
     ) {
         Spacer(modifier = Modifier.weight(2f))
         GomsIcon()
-        Spacer(modifier = Modifier.height(48.dp))
+        GomsSpacer(size = SpacerSize.ExtraLarge)
         LoginText()
         Spacer(modifier = Modifier.weight(1.1f))
         GomsButton(
@@ -59,10 +61,10 @@ private fun LoginScreen(
         ) {
             onInputLoginClick()
         }
-        Spacer(modifier = Modifier.height(16.dp))
+        GomsSpacer(size = SpacerSize.Small)
         LinkText(text = stringResource(id = R.string.sign_up)) {
             onSignUpClick()
         }
-        Spacer(modifier = Modifier.height(16.dp))
+        GomsSpacer(size = SpacerSize.Small)
     }
 }

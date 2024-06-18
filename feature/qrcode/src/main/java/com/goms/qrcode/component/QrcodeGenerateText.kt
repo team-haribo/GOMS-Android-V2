@@ -17,7 +17,7 @@ internal fun QrcodeGenerateText(
     modifier: Modifier
 ) {
     Box(
-        modifier = modifier.padding(20.dp)
+        modifier = modifier.padding(horizontal = 20.dp)
     ) {
         Text(
             text = stringResource(id = R.string.outing_qrcode),

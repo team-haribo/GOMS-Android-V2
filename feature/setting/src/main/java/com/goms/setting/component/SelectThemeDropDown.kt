@@ -16,6 +16,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.goms.design_system.component.dropdown.GomsDropdown
+import com.goms.design_system.component.spacer.GomsSpacer
+import com.goms.design_system.component.spacer.SpacerSize
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
 import com.goms.design_system.theme.ThemeType
@@ -47,7 +49,7 @@ internal fun SelectThemeDropDown(
             color = colors.WHITE,
             fontWeight = FontWeight.SemiBold
         )
-        Spacer(modifier = Modifier.height(8.dp))
+        GomsSpacer(size = SpacerSize.ExtraSmall)
         GomsDropdown(
             dropdownList = dropdownList.toPersistentList(),
             dropdownListSize = dropdownList.size,

@@ -23,6 +23,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goms.design_system.component.shimmer.shimmerEffect
+import com.goms.design_system.component.spacer.GomsSpacer
+import com.goms.design_system.component.spacer.SpacerSize
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.util.lockScreenOrientation
 import com.goms.model.enum.Authority
@@ -112,7 +114,7 @@ private fun QrcodeGenerateScreen(
                     onErrorToast(getOutingUUIDUiState.exception, R.string.error_get_outing_uuid)
                 }
             }
-            Spacer(modifier = Modifier.height(32.dp))
+            GomsSpacer(size = SpacerSize.Large)
             QrcodeGenerateTimer(
                 onTimerFinish = onTimerFinish
             )

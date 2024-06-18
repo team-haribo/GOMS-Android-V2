@@ -36,6 +36,8 @@ import com.goms.design_system.component.button.ButtonState
 import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.button.GomsButton
 import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
+import com.goms.design_system.component.spacer.GomsSpacer
+import com.goms.design_system.component.spacer.SpacerSize
 import com.goms.design_system.component.textfield.GomsTextField
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.util.keyboardAsState
@@ -133,7 +135,7 @@ private fun EmailCheckScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             FindPasswordText(modifier = Modifier.align(Alignment.Start))
-            Spacer(modifier = Modifier.height(28.dp))
+            GomsSpacer(size = SpacerSize.MediumLarge)
             GomsTextField(
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
@@ -152,7 +154,7 @@ private fun EmailCheckScreen(
                 emailCheckCallBack()
                 isLoading = true
             }
-            Spacer(modifier = Modifier.height(animatedSpacerHeight))
+            GomsSpacer(height = animatedSpacerHeight)
         }
     }
     if (isLoading) {

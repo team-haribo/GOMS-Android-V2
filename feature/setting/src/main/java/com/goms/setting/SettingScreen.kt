@@ -36,6 +36,8 @@ import com.goms.design_system.component.button.ButtonState
 import com.goms.design_system.component.button.GomsButton
 import com.goms.design_system.component.dialog.GomsTwoButtonDialog
 import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
+import com.goms.design_system.component.spacer.GomsSpacer
+import com.goms.design_system.component.spacer.SpacerSize
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.ThemeType
 import com.goms.design_system.util.lockScreenOrientation
@@ -274,19 +276,19 @@ private fun SettingScreen(
                 .verticalScroll(scrollState),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(16.dp))
+            GomsSpacer(size = SpacerSize.Small)
             SettingProfileCard(
                 modifier = Modifier,
                 role = role,
                 onProfileClick = { openBottomSheet = true },
                 getProfileUiState = getProfileUiState
             )
-            Spacer(modifier = Modifier.height(32.dp))
+            GomsSpacer(size = SpacerSize.Large)
             Divider(
                 modifier = Modifier.fillMaxWidth(),
                 color = colors.WHITE.copy(0.15f)
             )
-            Spacer(modifier = Modifier.height(24.dp))
+            GomsSpacer(size = SpacerSize.Medium)
             SelectThemeDropDown(
                 modifier = Modifier,
                 onThemeSelect = {
@@ -300,7 +302,7 @@ private fun SettingScreen(
                 },
                 themeState = themeState
             )
-            Spacer(modifier = Modifier.height(24.dp))
+            GomsSpacer(size = SpacerSize.Medium)
             if (role == Authority.ROLE_STUDENT.name) {
                 SettingSwitchComponent(
                     modifier = Modifier.padding(horizontal = 8.dp),
@@ -312,7 +314,7 @@ private fun SettingScreen(
                     onFunctionOff = { onUpdateTime(Switch.OFF.value) },
                     onFunctionOn = { onUpdateTime(Switch.ON.value) }
                 )
-                Spacer(modifier = Modifier.height(32.dp))
+                GomsSpacer(size = SpacerSize.Large)
                 SettingSwitchComponent(
                     modifier = Modifier.padding(horizontal = 8.dp),
                     title = stringResource(id = R.string.outing_push_alarm),
@@ -323,7 +325,7 @@ private fun SettingScreen(
                     onFunctionOff = { onUpdateAlarm(Switch.OFF.value) },
                     onFunctionOn = { onUpdateAlarm(Switch.ON.value) }
                 )
-                Spacer(modifier = Modifier.height(32.dp))
+                GomsSpacer(size = SpacerSize.Large)
                 SettingSwitchComponent(
                     modifier = Modifier.padding(horizontal = 8.dp),
                     title = stringResource(id = R.string.right_now_camera),
@@ -346,7 +348,7 @@ private fun SettingScreen(
                     onFunctionOff = { onUpdateTime(Switch.OFF.value) },
                     onFunctionOn = { onUpdateTime(Switch.ON.value) }
                 )
-                Spacer(modifier = Modifier.height(32.dp))
+                GomsSpacer(size = SpacerSize.Large)
                 SettingSwitchComponent(
                     modifier = Modifier.padding(horizontal = 8.dp),
                     title = stringResource(id = R.string.right_now_qr_create),
@@ -358,12 +360,12 @@ private fun SettingScreen(
                     onFunctionOn = { onUpdateQrcode(Switch.ON.value) }
                 )
             }
-            Spacer(modifier = Modifier.height(32.dp))
+            GomsSpacer(size = SpacerSize.Large)
             Divider(
                 modifier = Modifier.fillMaxWidth(),
                 color = colors.WHITE.copy(0.15f)
             )
-            Spacer(modifier = Modifier.height(24.dp))
+            GomsSpacer(size = SpacerSize.Medium)
             SettingButton(
                 modifier = Modifier,
                 buttonType = SettingButtonType.PasswordChange.value

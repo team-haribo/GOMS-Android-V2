@@ -14,6 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.goms.design_system.component.clickable.gomsClickable
+import com.goms.design_system.component.spacer.GomsSpacer
+import com.goms.design_system.component.spacer.SpacerSize
 import com.goms.design_system.icon.ChevronRightIcon
 import com.goms.design_system.icon.GomsLogoutIcon
 import com.goms.design_system.icon.GomsPasswordChangeIcon
@@ -48,20 +50,19 @@ internal fun SettingButton(
                 onClick()
             }
     ) {
-        Spacer(modifier = Modifier.height(24.dp))
+        GomsSpacer(size = SpacerSize.Medium)
         Row(
             modifier = modifier
                 .fillMaxWidth()
                 .padding(horizontal = 8.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Row {
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 when(buttonType) {
                     SettingButtonType.PasswordChange.value -> GomsPasswordChangeIcon(tint = colors.WHITE)
                     SettingButtonType.Logout.value -> GomsLogoutIcon(tint = colors.WHITE)
                     SettingButtonType.Withdrawal.value -> GomsWithdrawalIcon(tint = colors.WHITE)
                 }
-                Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = text,
                     style = typography.textMedium,
@@ -73,6 +74,6 @@ internal fun SettingButton(
                 tint = colors.WHITE
             )
         }
-        Spacer(modifier = Modifier.height(24.dp))
+        GomsSpacer(size = SpacerSize.Medium)
     }
 }

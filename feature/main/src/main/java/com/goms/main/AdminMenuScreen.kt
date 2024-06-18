@@ -12,6 +12,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.goms.design_system.component.spacer.GomsSpacer
+import com.goms.design_system.component.spacer.SpacerSize
 import com.goms.design_system.theme.GomsTheme
 import com.goms.main.component.AdminMenuList
 import com.goms.main.component.AdminMenuText
@@ -63,7 +65,7 @@ private fun AdminMenuScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             AdminMenuText(modifier = Modifier.align(Alignment.Start))
-            Spacer(modifier = Modifier.height(16.dp))
+            GomsSpacer(size = SpacerSize.Small)
             AdminMenuList(
                 onQrCreateClick = onQrCreateClick,
                 onStudentManagementClick = onStudentManagementClick,

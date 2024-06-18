@@ -1,5 +1,6 @@
 package com.goms.design_system.component.button
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -27,10 +28,10 @@ fun GomsBackButton(
         modifier = modifier
             .padding(start = 15.dp)
             .gomsClickable { onClick() },
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(7.dp)
     ) {
         BackIcon(tint = colors.P5)
-        Spacer(modifier = Modifier.width(7.dp))
         Text(
             text = stringResource(id = R.string.go_back),
             style = typography.textMedium,
