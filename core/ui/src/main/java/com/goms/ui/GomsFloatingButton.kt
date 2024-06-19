@@ -10,8 +10,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.goms.design_system.icon.QrCreateIcon
 import com.goms.design_system.icon.QrScanIcon
+import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
-import com.goms.design_system.util.gomsPreview
 import com.goms.model.enum.Authority
 
 @Composable
@@ -36,7 +36,7 @@ fun GomsFloatingButton(
 @Preview
 @Composable
 fun GomsFloatingButtonPreview() {
-    gomsPreview {
+    GomsTheme {
         Column {
             GomsFloatingButton(role = Authority.ROLE_STUDENT) {}
             GomsFloatingButton(role = Authority.ROLE_STUDENT_COUNCIL) {}

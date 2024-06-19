@@ -1,5 +1,6 @@
 package com.goms.design_system.component.dialog
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -26,9 +27,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.goms.design_system.component.spacer.GomsSpacer
 import com.goms.design_system.component.spacer.SpacerSize
+import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
-import com.goms.design_system.util.gomsPreview
+import com.goms.design_system.theme.ThemeType
 
 @Composable
 fun GomsOneButtonDialog(
@@ -103,15 +105,16 @@ fun GomsOneButtonDialog(
     }
 }
 
-@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
 fun GomsOneButtonDialogPreview() {
-    gomsPreview {
+    GomsTheme(ThemeType.SYSTEM.value) {
         GomsOneButtonDialog(
             openDialog = true,
             onStateChange = {},
-            title = "Qr코드 스캔 성공",
-            content = "Qr코드 스캔에 성공했습니다.",
+            title = "GOMS",
+            content = "곰중에서 가장 큰 북극곰",
             buttonText = "확인"
         ) {}
     }

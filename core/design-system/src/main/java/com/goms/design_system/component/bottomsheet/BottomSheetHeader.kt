@@ -1,5 +1,6 @@
 package com.goms.design_system.component.bottomsheet
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,9 +16,10 @@ import com.goms.design_system.component.clickable.gomsClickable
 import com.goms.design_system.component.spacer.GomsSpacer
 import com.goms.design_system.component.spacer.SpacerSize
 import com.goms.design_system.icon.CloseIcon
+import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
-import com.goms.design_system.util.gomsPreview
+import com.goms.design_system.theme.ThemeType
 
 @Composable
 fun BottomSheetHeader(
@@ -46,10 +48,11 @@ fun BottomSheetHeader(
     GomsSpacer(size = SpacerSize.Small)
 }
 
-@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
 fun BottomSheetHeaderPreview() {
-    gomsPreview {
-        BottomSheetHeader(title = "바텀 시트") {}
+    GomsTheme(ThemeType.SYSTEM.value) {
+        BottomSheetHeader(title = "GOMS") {}
     }
 }

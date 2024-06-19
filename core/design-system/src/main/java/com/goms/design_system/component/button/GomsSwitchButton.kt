@@ -1,5 +1,6 @@
 package com.goms.design_system.component.button
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Arrangement
@@ -35,7 +36,7 @@ import androidx.wear.compose.material.swipeable
 import com.goms.design_system.component.clickable.gomsClickable
 import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
-import com.goms.design_system.util.gomsPreview
+import com.goms.design_system.theme.ThemeType
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
@@ -123,10 +124,11 @@ fun GomsSwitchButton(
     }
 }
 
-@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
 fun GomsSwitchButtonPreview() {
-    gomsPreview {
+    GomsTheme(ThemeType.SYSTEM.value) {
         Row {
             GomsSwitchButton(
                 stateOn = 0,

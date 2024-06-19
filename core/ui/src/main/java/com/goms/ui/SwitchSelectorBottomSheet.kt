@@ -1,5 +1,6 @@
 package com.goms.ui
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -30,9 +31,10 @@ import com.goms.design_system.component.bottomsheet.BottomSheetHeader
 import com.goms.design_system.component.button.GomsSwitchButton
 import com.goms.design_system.component.spacer.GomsSpacer
 import com.goms.design_system.component.spacer.SpacerSize
+import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
-import com.goms.design_system.util.gomsPreview
+import com.goms.design_system.theme.ThemeType
 import com.goms.model.enum.Authority
 import com.goms.model.enum.BlackList
 
@@ -147,12 +149,13 @@ fun SwitchSelectorBottomSheet(
     }
 }
 
-@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
 fun SwitchSelectorBottomSheetPreview() {
-    gomsPreview {
+    GomsTheme(ThemeType.SYSTEM.value) {
         SwitchSelectorBottomSheet(
-            title = "바텀 시트",
+            title = "GOMS",
             outing = BlackList.BLACK_LIST.name,
             role = Authority.ROLE_STUDENT.name
         ) { _, _ -> }

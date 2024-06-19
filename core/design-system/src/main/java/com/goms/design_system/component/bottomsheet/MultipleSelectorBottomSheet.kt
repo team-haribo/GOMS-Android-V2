@@ -1,5 +1,6 @@
 package com.goms.design_system.component.bottomsheet
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -34,9 +35,10 @@ import com.goms.design_system.component.button.AdminBottomSheetButton
 import com.goms.design_system.component.button.InitBottomSheetButton
 import com.goms.design_system.component.spacer.GomsSpacer
 import com.goms.design_system.component.spacer.SpacerSize
+import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
-import com.goms.design_system.util.gomsPreview
+import com.goms.design_system.theme.ThemeType
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
@@ -148,20 +150,21 @@ fun MultipleSelectorBottomSheetItem(
     GomsSpacer(size = SpacerSize.Large)
 }
 
-@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
 fun MultipleSelectorBottomSheetPreview() {
-    gomsPreview {
+    GomsTheme(ThemeType.SYSTEM.value) {
         MultipleSelectorBottomSheet(
-            title = "바텀 시트",
-            subTitles = listOf("1", "2").toPersistentList(),
+            title = "GOMS",
+            subTitles = listOf("곰", "하리보").toPersistentList(),
             lists = ListData(
                 list = listOf(
-                    listOf("1", "2").toPersistentList(),
-                    listOf("1", "2").toPersistentList()
+                    listOf("반달가슴곰", "불곰").toPersistentList(),
+                    listOf("빨강", "노랑").toPersistentList()
                 ).toPersistentList()
             ),
-            selectedItems = listOf("1", "2").toPersistentList(),
+            selectedItems = listOf("반달가슴곰", "노랑").toPersistentList(),
             itemChanges = persistentListOf(),
             initClick = {}
         ) {}

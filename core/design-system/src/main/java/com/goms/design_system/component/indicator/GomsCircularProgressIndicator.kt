@@ -26,7 +26,6 @@ import androidx.compose.ui.unit.dp
 import com.goms.design_system.component.clickable.gomsClickable
 import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
-import com.goms.design_system.util.gomsPreview
 
 @Composable
 fun GomsCircularProgressIndicator() {
@@ -79,7 +78,7 @@ fun GomsCircularProgressIndicator() {
 @Preview
 @Composable
 fun GomsCircularProgressIndicatorPreview() {
-    gomsPreview {
+    GomsTheme {
         GomsCircularProgressIndicator()
     }
 }

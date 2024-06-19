@@ -1,5 +1,6 @@
 package com.goms.design_system.component.bottomsheet
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -27,9 +28,10 @@ import com.goms.design_system.component.spacer.GomsSpacer
 import com.goms.design_system.component.spacer.SpacerSize
 import com.goms.design_system.icon.DefaultImageIcon
 import com.goms.design_system.icon.GalleryIcon
+import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
-import com.goms.design_system.util.gomsPreview
+import com.goms.design_system.theme.ThemeType
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -104,10 +106,11 @@ fun ProfileBottomSheetComponent(
     }
 }
 
-@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
 fun ProfileBottomSheetPreview() {
-    gomsPreview {
+    GomsTheme(ThemeType.SYSTEM.value) {
         ProfileBottomSheet(
             closeSheet = {},
             onGalleryClick = {}

@@ -1,5 +1,6 @@
 package com.goms.design_system.component.text
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,11 +17,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.goms.design_system.R
-import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.clickable.gomsClickable
+import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
-import com.goms.design_system.util.gomsPreview
+import com.goms.design_system.theme.ThemeType
 
 @Composable
 fun LinkText(
@@ -73,10 +74,11 @@ fun LinkText(
     }
 }
 
-@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
 fun LinkTextPreview() {
-    gomsPreview {
-        LinkText(text = "가나다라마바사") {}
+    GomsTheme(ThemeType.SYSTEM.value) {
+        LinkText(text = "GOMS") {}
     }
 }

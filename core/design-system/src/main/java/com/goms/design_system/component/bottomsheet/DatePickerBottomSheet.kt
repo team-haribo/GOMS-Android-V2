@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.goms.design_system.R
 import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
-import com.goms.design_system.util.gomsPreview
+import com.goms.design_system.theme.ThemeType
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -72,10 +72,11 @@ fun DatePickerBottomSheet(
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
 fun DatePickerBottomSheetPreview() {
-    gomsPreview {
+    GomsTheme(ThemeType.SYSTEM.value) {
         DatePickerBottomSheet(state = rememberDatePickerState()) {}
     }
 }

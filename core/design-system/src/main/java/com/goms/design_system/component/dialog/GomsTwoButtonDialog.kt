@@ -1,5 +1,6 @@
 package com.goms.design_system.component.dialog
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -26,9 +27,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.goms.design_system.component.spacer.GomsSpacer
 import com.goms.design_system.component.spacer.SpacerSize
+import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
-import com.goms.design_system.util.gomsPreview
+import com.goms.design_system.theme.ThemeType
 
 @Composable
 fun GomsTwoButtonDialog(
@@ -121,17 +123,18 @@ fun GomsTwoButtonDialog(
     }
 }
 
-@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
 fun GomsTwoButtonDialogPreview() {
-    gomsPreview {
+    GomsTheme(ThemeType.SYSTEM.value) {
         GomsTwoButtonDialog(
             openDialog = true,
             onStateChange = {},
-            title = "외출 강제 복귀",
-            content = "외출자를 강제로 복귀시키시겠습니까?",
+            title = "GOMS",
+            content = "연어사냥하는 불곰",
             dismissText = "취소",
-            checkText = "복귀",
+            checkText = "먹기",
             onDismissClick = {},
             onCheckClick = {}
         )

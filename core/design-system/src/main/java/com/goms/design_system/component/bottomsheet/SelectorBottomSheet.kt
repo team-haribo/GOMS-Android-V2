@@ -1,5 +1,6 @@
 package com.goms.design_system.component.bottomsheet
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,8 +22,9 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.goms.design_system.component.button.BottomSheetButton
+import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
-import com.goms.design_system.util.gomsPreview
+import com.goms.design_system.theme.ThemeType
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 
@@ -80,14 +82,15 @@ fun SelectorBottomSheet(
     }
 }
 
-@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
 fun SelectorBottomSheetPreview() {
-    gomsPreview {
+    GomsTheme(ThemeType.SYSTEM.value) {
         SelectorBottomSheet(
-            title = "바텀 시트",
-            list = listOf("1", "2").toPersistentList(),
-            selected = "1",
+            title = "GOMS",
+            list = listOf("북극곰", "판다").toPersistentList(),
+            selected = "북극곰",
             itemChange = {}
         ) {}
     }

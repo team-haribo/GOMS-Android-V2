@@ -1,5 +1,6 @@
 package com.goms.design_system.component.button
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -23,9 +24,10 @@ import androidx.compose.ui.unit.dp
 import com.goms.design_system.R
 import com.goms.design_system.component.clickable.gomsClickable
 import com.goms.design_system.icon.GAuthIcon
+import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
-import com.goms.design_system.util.gomsPreview
+import com.goms.design_system.theme.ThemeType
 
 @Composable
 fun GomsButton(
@@ -174,10 +176,11 @@ fun InitBottomSheetButton(
     }
 }
 
-@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
 fun GomsButtonPreview() {
-    gomsPreview {
+    GomsTheme(ThemeType.SYSTEM.value) {
         Column {
             GomsButton(
                 modifier = Modifier.fillMaxWidth(),

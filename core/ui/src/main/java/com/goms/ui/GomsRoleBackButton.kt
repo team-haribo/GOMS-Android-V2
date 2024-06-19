@@ -17,7 +17,6 @@ import com.goms.design_system.component.clickable.gomsClickable
 import com.goms.design_system.icon.BackIcon
 import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
-import com.goms.design_system.util.gomsPreview
 import com.goms.model.enum.Authority
 
 @Composable
@@ -46,7 +45,7 @@ fun GomsRoleBackButton(
 @Preview
 @Composable
 fun GomsBackButtonPreview() {
-    gomsPreview {
+    GomsTheme {
         Column {
             GomsRoleBackButton(role = Authority.ROLE_STUDENT) {}
             GomsRoleBackButton(role = Authority.ROLE_STUDENT_COUNCIL) {}

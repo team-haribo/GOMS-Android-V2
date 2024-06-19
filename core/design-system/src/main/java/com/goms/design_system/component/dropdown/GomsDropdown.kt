@@ -1,5 +1,6 @@
 package com.goms.design_system.component.dropdown
 
+import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -34,9 +35,10 @@ import com.goms.design_system.component.clickable.gomsClickable
 import com.goms.design_system.icon.CheckIcon
 import com.goms.design_system.icon.ChevronDownIcon
 import com.goms.design_system.icon.ChevronUpIcon
+import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
-import com.goms.design_system.util.gomsPreview
+import com.goms.design_system.theme.ThemeType
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 
@@ -191,12 +193,13 @@ fun GomsDropdown(
     }
 }
 
-@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
 fun GomsDropdownPreview() {
-    gomsPreview {
+    GomsTheme(ThemeType.SYSTEM.value) {
         GomsDropdown(
-            dropdownList = listOf("사과", "바나나", "포도").toPersistentList(),
+            dropdownList = listOf("과일", "꿀", "열매").toPersistentList(),
             dropdownListSize = 3,
             selectedIndex = 0,
             backgroundColor = colors.G1,
