@@ -28,6 +28,7 @@ import com.goms.design_system.component.spacer.GomsSpacer
 import com.goms.design_system.component.spacer.SpacerSize
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
+import com.goms.design_system.util.gomsPreview
 
 @Composable
 fun GomsOneButtonDialog(
@@ -105,13 +106,13 @@ fun GomsOneButtonDialog(
 @Preview(showBackground = true)
 @Composable
 fun GomsOneButtonDialogPreview() {
-    GomsOneButtonDialog(
-        openDialog = true,
-        onStateChange = {},
-        title = "Qr코드 스캔 성공",
-        content = "Qr코드 스캔에 성공했습니다.",
-        buttonText = "확인"
-    ) {
-
+    gomsPreview {
+        GomsOneButtonDialog(
+            openDialog = true,
+            onStateChange = {},
+            title = "Qr코드 스캔 성공",
+            content = "Qr코드 스캔에 성공했습니다.",
+            buttonText = "확인"
+        ) {}
     }
 }

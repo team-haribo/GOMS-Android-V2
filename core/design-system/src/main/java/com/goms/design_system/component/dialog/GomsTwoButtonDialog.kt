@@ -28,6 +28,7 @@ import com.goms.design_system.component.spacer.GomsSpacer
 import com.goms.design_system.component.spacer.SpacerSize
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
+import com.goms.design_system.util.gomsPreview
 
 @Composable
 fun GomsTwoButtonDialog(
@@ -122,15 +123,17 @@ fun GomsTwoButtonDialog(
 
 @Preview(showBackground = true)
 @Composable
-fun GomsDialogPreview() {
-    GomsTwoButtonDialog(
-        openDialog = true,
-        onStateChange = {},
-        title = "외출 강제 복귀",
-        content = "외출자를 강제로 복귀시키시겠습니까?",
-        dismissText = "취소",
-        checkText = "복귀",
-        onDismissClick = {},
-        onCheckClick = {}
-    )
+fun GomsTwoButtonDialogPreview() {
+    gomsPreview {
+        GomsTwoButtonDialog(
+            openDialog = true,
+            onStateChange = {},
+            title = "외출 강제 복귀",
+            content = "외출자를 강제로 복귀시키시겠습니까?",
+            dismissText = "취소",
+            checkText = "복귀",
+            onDismissClick = {},
+            onCheckClick = {}
+        )
+    }
 }
