@@ -174,9 +174,8 @@ fun InitBottomSheetButton(
     }
 }
 
-
+@Preview
 @Composable
-@Preview(showBackground = true)
 fun GomsButtonPreview() {
     gomsPreview {
         Column {
