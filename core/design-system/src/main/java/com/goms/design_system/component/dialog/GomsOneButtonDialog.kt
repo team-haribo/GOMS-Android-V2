@@ -103,7 +103,7 @@ fun GomsOneButtonDialog(
     }
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
 fun GomsOneButtonDialogPreview() {
     gomsPreview {

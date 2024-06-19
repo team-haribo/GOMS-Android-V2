@@ -121,7 +121,7 @@ fun GomsTwoButtonDialog(
     }
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
 fun GomsTwoButtonDialogPreview() {
     gomsPreview {
