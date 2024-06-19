@@ -24,6 +24,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.goms.design_system.component.bottomsheet.BottomSheetHeader
 import com.goms.design_system.component.button.GomsSwitchButton
@@ -31,13 +32,14 @@ import com.goms.design_system.component.spacer.GomsSpacer
 import com.goms.design_system.component.spacer.SpacerSize
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
+import com.goms.design_system.util.gomsPreview
 import com.goms.model.enum.Authority
 import com.goms.model.enum.BlackList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SwitchSelectorBottomSheet(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     title: String,
     outing: String,
     role: String,
@@ -142,5 +144,17 @@ fun SwitchSelectorBottomSheet(
                 )
             }
         }
+    }
+}
+
+@Preview
+@Composable
+fun SwitchSelectorBottomSheetPreview() {
+    gomsPreview {
+        SwitchSelectorBottomSheet(
+            title = "바텀 시트",
+            outing = BlackList.BLACK_LIST.name,
+            role = Authority.ROLE_STUDENT.name
+        ) { _, _ -> }
     }
 }
