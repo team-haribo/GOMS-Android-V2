@@ -176,11 +176,11 @@ private fun MainScreen(
 
     val scrollState = rememberScrollState()
     val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = isRefreshing)
-    var currentTime by rememberSaveable { mutableStateOf(Date()) }
+    var currentTime by rememberSaveable { mutableStateOf(System.currentTimeMillis()) }
     LaunchedEffect("Time") {
         while (true) {
             delay(1_000)
-            currentTime = Date()
+            currentTime = System.currentTimeMillis()
         }
     }
 
