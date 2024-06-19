@@ -25,6 +25,7 @@ import com.goms.design_system.component.clickable.gomsClickable
 import com.goms.design_system.icon.GAuthIcon
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
+import com.goms.design_system.util.gomsPreview
 
 @Composable
 fun GomsButton(
@@ -177,44 +178,46 @@ fun InitBottomSheetButton(
 @Composable
 @Preview(showBackground = true)
 fun GomsButtonPreview() {
-    Column {
-        GomsButton(
-            modifier = Modifier.fillMaxWidth(),
-            text = "버튼",
-            state = ButtonState.Enable,
-            onClick = {}
-        )
-        GomsButton(
-            modifier = Modifier.fillMaxWidth(),
-            text = "버튼",
-            state = ButtonState.Normal,
-            onClick = {}
-        )
-        GomsButton(
-            modifier = Modifier.fillMaxWidth(),
-            text = "버튼",
-            state = ButtonState.Logout,
-            onClick = {}
-        )
-        AuthButton(modifier = Modifier.fillMaxWidth()) {}
-        BottomSheetButton(
-            modifier = Modifier.fillMaxWidth(),
-            text = "버튼",
-            selected = true,
-        ) {}
-        BottomSheetButton(
-            modifier = Modifier.fillMaxWidth(),
-            text = "버튼",
-            selected = false,
-        ) {}
-        AdminBottomSheetButton(
-            modifier = Modifier.fillMaxWidth(),
-            text = "버튼",
-            selected = true,
-        ) {}
-        InitBottomSheetButton(
-            modifier = Modifier.fillMaxWidth(),
-            text = "버튼"
-        ) {}
+    gomsPreview {
+        Column {
+            GomsButton(
+                modifier = Modifier.fillMaxWidth(),
+                text = "버튼",
+                state = ButtonState.Enable,
+                onClick = {}
+            )
+            GomsButton(
+                modifier = Modifier.fillMaxWidth(),
+                text = "버튼",
+                state = ButtonState.Normal,
+                onClick = {}
+            )
+            GomsButton(
+                modifier = Modifier.fillMaxWidth(),
+                text = "버튼",
+                state = ButtonState.Logout,
+                onClick = {}
+            )
+            AuthButton(modifier = Modifier.fillMaxWidth()) {}
+            BottomSheetButton(
+                modifier = Modifier.fillMaxWidth(),
+                text = "버튼",
+                selected = true,
+            ) {}
+            BottomSheetButton(
+                modifier = Modifier.fillMaxWidth(),
+                text = "버튼",
+                selected = false,
+            ) {}
+            AdminBottomSheetButton(
+                modifier = Modifier.fillMaxWidth(),
+                text = "버튼",
+                selected = true,
+            ) {}
+            InitBottomSheetButton(
+                modifier = Modifier.fillMaxWidth(),
+                text = "버튼"
+            ) {}
+        }
     }
 }

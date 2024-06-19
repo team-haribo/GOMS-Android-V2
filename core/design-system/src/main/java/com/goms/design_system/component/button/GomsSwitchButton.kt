@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -34,6 +35,7 @@ import androidx.wear.compose.material.swipeable
 import com.goms.design_system.component.clickable.gomsClickable
 import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
+import com.goms.design_system.util.gomsPreview
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
@@ -117,6 +119,29 @@ fun GomsSwitchButton(
                     .background(color = Color.White)
                     .size(circleSize)
             )
+        }
+    }
+}
+
+@Preview
+@Composable
+fun GomsSwitchButtonPreview() {
+    gomsPreview {
+        Row {
+            GomsSwitchButton(
+                stateOn = 0,
+                stateOff = 1,
+                switchOnBackground = colors.P5,
+                switchOffBackground = colors.G4,
+                initialValue = 1
+            ) {}
+            GomsSwitchButton(
+                stateOn = 0,
+                stateOff = 1,
+                switchOnBackground = colors.P5,
+                switchOffBackground = colors.G4,
+                initialValue = 0
+            ) {}
         }
     }
 }
