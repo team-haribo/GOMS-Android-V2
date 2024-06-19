@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -26,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
@@ -34,10 +34,11 @@ import com.goms.design_system.component.clickable.gomsClickable
 import com.goms.design_system.icon.CheckIcon
 import com.goms.design_system.icon.ChevronDownIcon
 import com.goms.design_system.icon.ChevronUpIcon
-import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
+import com.goms.design_system.util.gomsPreview
 import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.toPersistentList
 
 @Composable
 fun GomsDropdown(
@@ -46,7 +47,7 @@ fun GomsDropdown(
     useDefaultText: Boolean = false,
     defaultText: String? = null,
     selectedIndex: Int,
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     height: Dp = 64.dp,
     backgroundColor: Color = Color.Unspecified,
     onItemClick: (Int) -> Unit,
@@ -190,3 +191,16 @@ fun GomsDropdown(
     }
 }
 
+@Preview
+@Composable
+fun GomsDropdownPreview() {
+    gomsPreview {
+        GomsDropdown(
+            dropdownList = listOf("사과", "바나나", "포도").toPersistentList(),
+            dropdownListSize = 3,
+            selectedIndex = 0,
+            backgroundColor = colors.G1,
+            onItemClick = {}
+        ) {}
+    }
+}
