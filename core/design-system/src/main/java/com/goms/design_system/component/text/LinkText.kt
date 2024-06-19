@@ -13,11 +13,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.goms.design_system.R
+import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.clickable.gomsClickable
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
+import com.goms.design_system.util.gomsPreview
 
 @Composable
 fun LinkText(
@@ -67,5 +70,13 @@ fun LinkText(
                 color = colors.P5
             )
         }
+    }
+}
+
+@Preview
+@Composable
+fun LinkTextPreview() {
+    gomsPreview {
+        LinkText(text = "가나다라마바사") {}
     }
 }
