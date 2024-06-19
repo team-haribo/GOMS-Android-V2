@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goms.common.result.Result
+import com.goms.design_system.component.bottomsheet.ListData
 import com.goms.design_system.component.bottomsheet.MultipleSelectorBottomSheet
 import com.goms.design_system.component.spacer.GomsSpacer
 import com.goms.design_system.component.spacer.SpacerSize
@@ -274,37 +275,47 @@ private fun StudentManagementScreen(
         MultipleSelectorBottomSheet(
             modifier = Modifier.fillMaxWidth(),
             title = stringResource(id = R.string.filter),
-            subTitle1 = stringResource(id = R.string.role),
-            list1 = listOf(
-                Status.ROLE_STUDENT.value,
-                Status.ROLE_STUDENT_COUNCIL.value,
-                Status.BLACK_LIST.value
+            subTitles = listOf(
+                stringResource(id = R.string.role),
+                stringResource(id = R.string.grade),
+                stringResource(id = R.string.gender),
+                stringResource(id = R.string.major)
             ).toPersistentList(),
-            selected1 = filterStatus,
-            itemChange1 = onFilterStatusChange,
-            subTitle2 = stringResource(id = R.string.grade),
-            list2 = listOf(
-                Grade.FIRST_GRADE.value,
-                Grade.SECOND_GRADE.value,
-                Grade.THIRD_GRADE.value
+            lists = ListData(
+                list = listOf(
+                    listOf(
+                        Status.ROLE_STUDENT.value,
+                        Status.ROLE_STUDENT_COUNCIL.value,
+                        Status.BLACK_LIST.value
+                    ).toPersistentList(),
+                    listOf(
+                        Grade.FIRST_GRADE.value,
+                        Grade.SECOND_GRADE.value,
+                        Grade.THIRD_GRADE.value
+                    ).toPersistentList(),
+                    listOf(
+                        Gender.MAN.value,
+                        Gender.WOMAN.value
+                    ).toPersistentList(),
+                    listOf(
+                        Major.SW_DEVELOP.value,
+                        Major.SMART_IOT.value,
+                        Major.AI.value
+                    ).toPersistentList()
+                ).toPersistentList()
+            ),
+            selectedItems = listOf(
+                filterStatus,
+                filterGrade,
+                filterGender,
+                filterMajor
             ).toPersistentList(),
-            selected2 = filterGrade,
-            itemChange2 = onFilterGradeChange,
-            subTitle3 = stringResource(id = R.string.gender),
-            list3 = listOf(
-                Gender.MAN.value,
-                Gender.WOMAN.value
+            itemChanges = listOf(
+                onFilterStatusChange,
+                onFilterGradeChange,
+                onFilterGenderChange,
+                onFilterMajorChange
             ).toPersistentList(),
-            selected3 = filterGender,
-            itemChange3 = onFilterGenderChange,
-            subTitle4 = stringResource(id = R.string.major),
-            list4 = listOf(
-                Major.SW_DEVELOP.value,
-                Major.SMART_IOT.value,
-                Major.AI.value
-            ).toPersistentList(),
-            selected4 = filterMajor,
-            itemChange4 = onFilterMajorChange,
             initClick = {
                 onFilterStatusChange("")
                 onFilterGradeChange("")
@@ -314,7 +325,7 @@ private fun StudentManagementScreen(
             closeSheet = {
                 onFilterBottomSheetOpenClick = false
                 studentSearchCallBack(studentSearch)
-            },
+            }
         )
     }
 }
