@@ -1,5 +1,6 @@
 package com.goms.design_system.component.bottomsheet
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -10,14 +11,18 @@ import androidx.compose.material3.DatePickerDefaults
 import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.goms.design_system.R
+import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
+import com.goms.design_system.util.gomsPreview
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -64,4 +69,17 @@ fun DatePickerBottomSheet(
             )
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview
+@Composable
+fun DatePickerBottomSheetPreview() {
+    gomsPreview(
+        content = {
+            DatePickerBottomSheet(
+                state = rememberDatePickerState()
+            ) {}
+        }
+    )
 }

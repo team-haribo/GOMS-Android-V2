@@ -18,15 +18,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.goms.design_system.component.button.BottomSheetButton
 import com.goms.design_system.theme.GomsTheme.colors
+import com.goms.design_system.util.gomsPreview
 import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.toPersistentList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SelectorBottomSheet(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     title: String,
     list: PersistentList<String>,
     selected: String,
@@ -75,4 +78,19 @@ fun SelectorBottomSheet(
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun SelectorBottomSheetPreview() {
+    gomsPreview(
+        content = {
+            SelectorBottomSheet(
+                title = "바텀 시트",
+                list = listOf("1", "2").toPersistentList(),
+                selected = "1",
+                itemChange = {}
+            ) {}
+        }
+    )
 }
