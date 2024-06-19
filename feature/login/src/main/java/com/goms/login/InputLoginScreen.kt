@@ -1,6 +1,7 @@
 package com.goms.login
 
 import android.content.pm.ActivityInfo
+import android.content.res.Configuration
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -27,6 +28,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -39,7 +41,9 @@ import com.goms.design_system.component.spacer.SpacerSize
 import com.goms.design_system.component.text.RowLinkText
 import com.goms.design_system.component.textfield.GomsPasswordTextField
 import com.goms.design_system.component.textfield.GomsTextField
+import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
+import com.goms.design_system.theme.ThemeType
 import com.goms.design_system.util.keyboardAsState
 import com.goms.design_system.util.lockScreenOrientation
 import com.goms.login.component.InputLoginText
@@ -214,5 +218,25 @@ private fun InputLoginScreen(
     }
     if (isLoading) {
         GomsCircularProgressIndicator()
+    }
+}
+
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Composable
+fun InputLoginScreenPreview() {
+    GomsTheme(ThemeType.SYSTEM.value) {
+        InputLoginScreen(
+            email = "GOMS",
+            password = "GOMS",
+            onEmailChange = {},
+            onPasswordChange = {},
+            loginUiState = LoginUiState.Loading,
+            saveTokenUiState = SaveTokenUiState.Loading,
+            onBackClick = {},
+            onMainClick = {},
+            onRePasswordClick = {},
+            onErrorToast = { _, _ -> },
+        ) {}
     }
 }
