@@ -21,10 +21,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.rotate
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.goms.design_system.component.clickable.gomsClickable
 import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
+import com.goms.design_system.util.gomsPreview
 
 @Composable
 fun GomsCircularProgressIndicator() {
@@ -71,5 +73,13 @@ fun GomsCircularProgressIndicator() {
                 )
             }
         }
+    }
+}
+
+@Preview
+@Composable
+fun GomsCircularProgressIndicatorPreview() {
+    gomsPreview {
+        GomsCircularProgressIndicator()
     }
 }
