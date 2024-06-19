@@ -83,14 +83,12 @@ fun SelectorBottomSheet(
 @Preview
 @Composable
 fun SelectorBottomSheetPreview() {
-    gomsPreview(
-        content = {
-            SelectorBottomSheet(
-                title = "바텀 시트",
-                list = listOf("1", "2").toPersistentList(),
-                selected = "1",
-                itemChange = {}
-            ) {}
-        }
-    )
+    gomsPreview {
+        SelectorBottomSheet(
+            title = "바텀 시트",
+            list = listOf("1", "2").toPersistentList(),
+            selected = "1",
+            itemChange = {}
+        ) {}
+    }
 }

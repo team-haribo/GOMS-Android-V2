@@ -49,11 +49,7 @@ fun BottomSheetHeader(
 @Preview
 @Composable
 fun BottomSheetHeaderPreview() {
-    gomsPreview(
-        content = {
-            BottomSheetHeader(
-                title = "바텀 시트"
-            ) {}
-        }
-    )
+    gomsPreview {
+        BottomSheetHeader(title = "바텀 시트") {}
+    }
 }

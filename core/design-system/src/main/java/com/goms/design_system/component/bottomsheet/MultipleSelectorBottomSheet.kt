@@ -151,21 +151,19 @@ fun MultipleSelectorBottomSheetItem(
 @Preview
 @Composable
 fun MultipleSelectorBottomSheetPreview() {
-    gomsPreview(
-        content = {
-            MultipleSelectorBottomSheet(
-                title = "바텀 시트",
-                subTitles = listOf("1", "2").toPersistentList(),
-                lists = ListData(
-                    list = listOf(
-                        listOf("1", "2").toPersistentList(),
-                        listOf("1", "2").toPersistentList()
-                    ).toPersistentList()
-                ),
-                selectedItems = listOf("1", "2").toPersistentList(),
-                itemChanges = persistentListOf(),
-                initClick = {}
-            ) {}
-        }
-    )
+    gomsPreview {
+        MultipleSelectorBottomSheet(
+            title = "바텀 시트",
+            subTitles = listOf("1", "2").toPersistentList(),
+            lists = ListData(
+                list = listOf(
+                    listOf("1", "2").toPersistentList(),
+                    listOf("1", "2").toPersistentList()
+                ).toPersistentList()
+            ),
+            selectedItems = listOf("1", "2").toPersistentList(),
+            itemChanges = persistentListOf(),
+            initClick = {}
+        ) {}
+    }
 }

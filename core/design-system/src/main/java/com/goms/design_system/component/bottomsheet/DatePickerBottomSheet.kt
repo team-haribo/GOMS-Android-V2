@@ -75,11 +75,7 @@ fun DatePickerBottomSheet(
 @Preview
 @Composable
 fun DatePickerBottomSheetPreview() {
-    gomsPreview(
-        content = {
-            DatePickerBottomSheet(
-                state = rememberDatePickerState()
-            ) {}
-        }
-    )
+    gomsPreview {
+        DatePickerBottomSheet(state = rememberDatePickerState()) {}
+    }
 }
