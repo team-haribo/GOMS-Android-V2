@@ -45,8 +45,10 @@ internal fun QrcodeScanTopBar(
     }
 }
 
+@Preview
 @Composable
-@Preview(showBackground = true)
 private fun QrcodeScanTopBarPreview() {
-    QrcodeScanTopBar(onClick = {})
+    GomsTheme {
+        QrcodeScanTopBar {}
+    }
 }
