@@ -75,7 +75,7 @@ fun DatePickerBottomSheet(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
-fun DatePickerBottomSheetPreview() {
+private fun DatePickerBottomSheetPreview() {
     GomsTheme(ThemeType.SYSTEM.value) {
         DatePickerBottomSheet(state = rememberDatePickerState()) {}
     }

@@ -85,7 +85,7 @@ fun SelectorBottomSheet(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
-fun SelectorBottomSheetPreview() {
+private fun SelectorBottomSheetPreview() {
     GomsTheme(ThemeType.SYSTEM.value) {
         SelectorBottomSheet(
             title = "GOMS",

@@ -427,7 +427,7 @@ private fun SettingScreen(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
-fun SettingScreenPreview() {
+private fun SettingScreenPreview() {
     GomsTheme(ThemeType.SYSTEM.value) {
         SettingScreen(
             role = Authority.ROLE_STUDENT.name,

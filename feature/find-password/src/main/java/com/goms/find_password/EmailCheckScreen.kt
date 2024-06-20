@@ -170,7 +170,7 @@ private fun EmailCheckScreen(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
-fun EmailCheckScreenPreview() {
+private fun EmailCheckScreenPreview() {
     GomsTheme(ThemeType.SYSTEM.value) {
         EmailCheckScreen(
             email = "GOMS",

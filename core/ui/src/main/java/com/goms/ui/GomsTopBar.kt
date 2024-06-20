@@ -59,7 +59,7 @@ fun GomsTopBar(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
-fun GomsTopBarPreview() {
+private fun GomsTopBarPreview() {
     GomsTheme(ThemeType.SYSTEM.value) {
         Column {
             GomsTopBar(icon = { SettingIcon() }) {}

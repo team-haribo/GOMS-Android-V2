@@ -181,7 +181,7 @@ private fun OutingStatusScreen(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
-fun OutingStatusScreenPreview() {
+private fun OutingStatusScreenPreview() {
     GomsTheme(ThemeType.SYSTEM.value) {
         OutingStatusScreen(
             role = Authority.ROLE_STUDENT_COUNCIL,

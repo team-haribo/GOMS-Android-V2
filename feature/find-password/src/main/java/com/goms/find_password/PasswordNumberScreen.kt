@@ -202,7 +202,7 @@ private fun PasswordNumberScreen(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
-fun PasswordNumberScreenPreview() {
+private fun PasswordNumberScreenPreview() {
     GomsTheme(ThemeType.SYSTEM.value) {
         PasswordNumberScreen(
             number = "GOMS",

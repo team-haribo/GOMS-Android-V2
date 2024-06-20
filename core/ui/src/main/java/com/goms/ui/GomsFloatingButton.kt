@@ -35,7 +35,7 @@ fun GomsFloatingButton(
 
 @Preview
 @Composable
-fun GomsFloatingButtonPreview() {
+private fun GomsFloatingButtonPreview() {
     GomsTheme {
         Column {
             GomsFloatingButton(role = Authority.ROLE_STUDENT) {}

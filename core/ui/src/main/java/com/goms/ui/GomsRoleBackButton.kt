@@ -44,7 +44,7 @@ fun GomsRoleBackButton(
 
 @Preview
 @Composable
-fun GomsBackButtonPreview() {
+private fun GomsBackButtonPreview() {
     GomsTheme {
         Column {
             GomsRoleBackButton(role = Authority.ROLE_STUDENT) {}

@@ -51,7 +51,7 @@ fun BottomSheetHeader(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
-fun BottomSheetHeaderPreview() {
+private fun BottomSheetHeaderPreview() {
     GomsTheme(ThemeType.SYSTEM.value) {
         BottomSheetHeader(title = "GOMS") {}
     }

@@ -202,7 +202,7 @@ private fun SignUpScreen(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
-fun SignUpScreenPreview() {
+private fun SignUpScreenPreview() {
     GomsTheme(ThemeType.SYSTEM.value) {
         SignUpScreen(
             name = "GOMS",

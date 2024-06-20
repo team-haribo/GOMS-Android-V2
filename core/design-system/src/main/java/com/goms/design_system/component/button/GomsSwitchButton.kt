@@ -127,7 +127,7 @@ fun GomsSwitchButton(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
-fun GomsSwitchButtonPreview() {
+private fun GomsSwitchButtonPreview() {
     GomsTheme(ThemeType.SYSTEM.value) {
         Row {
             GomsSwitchButton(

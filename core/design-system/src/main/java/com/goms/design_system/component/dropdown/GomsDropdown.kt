@@ -196,7 +196,7 @@ fun GomsDropdown(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
-fun GomsDropdownPreview() {
+private fun GomsDropdownPreview() {
     GomsTheme(ThemeType.SYSTEM.value) {
         GomsDropdown(
             dropdownList = listOf("과일", "꿀", "열매").toPersistentList(),

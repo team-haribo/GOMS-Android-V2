@@ -130,7 +130,7 @@ private fun QrcodeGenerateScreen(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
-fun QrcodeGenerateScreenPreview() {
+private fun QrcodeGenerateScreenPreview() {
     GomsTheme(ThemeType.SYSTEM.value) {
         QrcodeGenerateScreen(
             role = Authority.ROLE_STUDENT_COUNCIL,

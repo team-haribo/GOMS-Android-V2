@@ -109,7 +109,7 @@ fun ProfileBottomSheetComponent(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
-fun ProfileBottomSheetPreview() {
+private fun ProfileBottomSheetPreview() {
     GomsTheme(ThemeType.SYSTEM.value) {
         ProfileBottomSheet(
             closeSheet = {},

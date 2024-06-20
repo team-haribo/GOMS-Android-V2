@@ -188,7 +188,7 @@ private fun WithdrawalScreen(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
-fun WithdrawalScreenPreview() {
+private fun WithdrawalScreenPreview() {
     GomsTheme(ThemeType.SYSTEM.value) {
         WithdrawalScreen(
             password = "GOMS",

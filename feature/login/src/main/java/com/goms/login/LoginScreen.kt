@@ -76,7 +76,7 @@ private fun LoginScreen(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
-fun LoginScreenPreview() {
+private fun LoginScreenPreview() {
     GomsTheme(ThemeType.SYSTEM.value) {
         LoginScreen(
             onSignUpClick = {}

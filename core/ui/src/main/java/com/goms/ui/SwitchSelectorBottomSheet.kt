@@ -152,7 +152,7 @@ fun SwitchSelectorBottomSheet(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
-fun SwitchSelectorBottomSheetPreview() {
+private fun SwitchSelectorBottomSheetPreview() {
     GomsTheme(ThemeType.SYSTEM.value) {
         SwitchSelectorBottomSheet(
             title = "GOMS",

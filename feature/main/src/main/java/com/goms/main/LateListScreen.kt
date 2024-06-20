@@ -124,7 +124,7 @@ private fun LateListScreen(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
-fun LateListScreenPreview() {
+private fun LateListScreenPreview() {
     GomsTheme(ThemeType.SYSTEM.value) {
         LateListScreen(
             role = Authority.ROLE_STUDENT_COUNCIL,

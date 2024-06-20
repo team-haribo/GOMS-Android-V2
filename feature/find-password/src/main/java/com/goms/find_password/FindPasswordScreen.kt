@@ -222,7 +222,7 @@ private fun FindPasswordScreen(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
-fun FindPasswordScreenPreview() {
+private fun FindPasswordScreenPreview() {
     GomsTheme(ThemeType.SYSTEM.value) {
         FindPasswordScreen(
             password = "GOMS",

@@ -126,7 +126,7 @@ fun GomsTwoButtonDialog(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
-fun GomsTwoButtonDialogPreview() {
+private fun GomsTwoButtonDialogPreview() {
     GomsTheme(ThemeType.SYSTEM.value) {
         GomsTwoButtonDialog(
             openDialog = true,

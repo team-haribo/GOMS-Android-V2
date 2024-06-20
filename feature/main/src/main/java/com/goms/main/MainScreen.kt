@@ -272,7 +272,7 @@ private fun MainScreen(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
-fun MainScreenPreview() {
+private fun MainScreenPreview() {
     GomsTheme(ThemeType.SYSTEM.value) {
         MainScreen(
             role = Authority.ROLE_STUDENT_COUNCIL,

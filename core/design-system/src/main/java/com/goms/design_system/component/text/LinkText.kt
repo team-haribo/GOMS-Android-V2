@@ -77,7 +77,7 @@ fun LinkText(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
-fun LinkTextPreview() {
+private fun LinkTextPreview() {
     GomsTheme(ThemeType.SYSTEM.value) {
         LinkText(text = "GOMS") {}
     }

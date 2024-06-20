@@ -77,7 +77,7 @@ fun GomsCircularProgressIndicator() {
 
 @Preview
 @Composable
-fun GomsCircularProgressIndicatorPreview() {
+private fun GomsCircularProgressIndicatorPreview() {
     GomsTheme {
         GomsCircularProgressIndicator()
     }

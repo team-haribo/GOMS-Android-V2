@@ -30,7 +30,7 @@ fun Modifier.shimmerEffect(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
-fun GomsCircularProgressIndicatorPreview() {
+private fun GomsCircularProgressIndicatorPreview() {
     GomsTheme(ThemeType.SYSTEM.value) {
         Box(
             modifier = Modifier

@@ -398,7 +398,7 @@ fun GomsSearchTextField(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
-fun GomsTextFieldPreview() {
+private fun GomsTextFieldPreview() {
     GomsTheme(ThemeType.SYSTEM.value) {
         Column {
             GomsTextField(

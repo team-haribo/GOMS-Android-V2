@@ -153,7 +153,7 @@ fun MultipleSelectorBottomSheetItem(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
-fun MultipleSelectorBottomSheetPreview() {
+private fun MultipleSelectorBottomSheetPreview() {
     GomsTheme(ThemeType.SYSTEM.value) {
         MultipleSelectorBottomSheet(
             title = "GOMS",

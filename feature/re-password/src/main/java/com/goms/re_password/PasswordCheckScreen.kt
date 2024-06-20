@@ -125,7 +125,7 @@ private fun PasswordCheckScreen(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
-fun PasswordCheckScreenPreview() {
+private fun PasswordCheckScreenPreview() {
     GomsTheme(ThemeType.SYSTEM.value) {
         PasswordCheckScreen(
             password = "GOMS",

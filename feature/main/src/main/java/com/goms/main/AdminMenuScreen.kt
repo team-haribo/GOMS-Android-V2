@@ -83,7 +83,7 @@ private fun AdminMenuScreen(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
-fun AdminMenuScreenPreview() {
+private fun AdminMenuScreenPreview() {
     GomsTheme(ThemeType.SYSTEM.value) {
         AdminMenuScreen(
             onBackClick = {},

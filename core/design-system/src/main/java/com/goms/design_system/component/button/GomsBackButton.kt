@@ -43,7 +43,7 @@ fun GomsBackButton(
 
 @Preview
 @Composable
-fun GomsBackButtonPreview() {
+private fun GomsBackButtonPreview() {
     GomsTheme {
         GomsBackButton {}
     }

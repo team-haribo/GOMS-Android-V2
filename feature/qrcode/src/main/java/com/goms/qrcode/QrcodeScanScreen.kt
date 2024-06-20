@@ -156,7 +156,7 @@ private fun QrcodeScanScreen(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
-fun QrcodeScanScreenPreview() {
+private fun QrcodeScanScreenPreview() {
     GomsTheme(ThemeType.SYSTEM.value) {
         QrcodeScanScreen(
             outingUiState = OutingUiState.Loading,

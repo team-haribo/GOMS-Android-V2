@@ -201,7 +201,7 @@ private fun NumberScreen(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
-fun NumberScreenPreview() {
+private fun NumberScreenPreview() {
     GomsTheme(ThemeType.SYSTEM.value) {
         NumberScreen(
             number = "GOMS",

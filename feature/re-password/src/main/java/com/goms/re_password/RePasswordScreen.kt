@@ -220,7 +220,7 @@ private fun RePasswordScreen(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
-fun RePasswordScreenPreview() {
+private fun RePasswordScreenPreview() {
     GomsTheme(ThemeType.SYSTEM.value) {
         RePasswordScreen(
             password = "GOMS",

@@ -340,7 +340,7 @@ private fun StudentManagementScreen(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
-fun StudentManagementScreenPreview() {
+private fun StudentManagementScreenPreview() {
     GomsTheme(ThemeType.SYSTEM.value) {
         StudentManagementScreen(
             role = Authority.ROLE_STUDENT_COUNCIL,

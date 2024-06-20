@@ -224,7 +224,7 @@ private fun InputLoginScreen(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
-fun InputLoginScreenPreview() {
+private fun InputLoginScreenPreview() {
     GomsTheme(ThemeType.SYSTEM.value) {
         InputLoginScreen(
             email = "GOMS",
