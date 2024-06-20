@@ -33,11 +33,13 @@ fun GomsFloatingButton(
     }
 }
 
+@Preview
 @Composable
-@Preview(showBackground = true)
-fun GomsFloatingButtonPreview() {
-    Column {
-        GomsFloatingButton(role = Authority.ROLE_STUDENT) {}
-        GomsFloatingButton(role = Authority.ROLE_STUDENT_COUNCIL) {}
+private fun GomsFloatingButtonPreview() {
+    GomsTheme {
+        Column {
+            GomsFloatingButton(role = Authority.ROLE_STUDENT) {}
+            GomsFloatingButton(role = Authority.ROLE_STUDENT_COUNCIL) {}
+        }
     }
 }

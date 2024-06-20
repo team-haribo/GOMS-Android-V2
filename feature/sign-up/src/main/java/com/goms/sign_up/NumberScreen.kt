@@ -1,6 +1,7 @@
 package com.goms.sign_up
 
 import android.content.pm.ActivityInfo
+import android.content.res.Configuration
 import androidx.activity.ComponentActivity
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
@@ -28,6 +29,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -39,7 +41,9 @@ import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
 import com.goms.design_system.component.spacer.GomsSpacer
 import com.goms.design_system.component.spacer.SpacerSize
 import com.goms.design_system.component.textfield.NumberTextField
+import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
+import com.goms.design_system.theme.ThemeType
 import com.goms.design_system.util.keyboardAsState
 import com.goms.design_system.util.lockScreenOrientation
 import com.goms.model.request.auth.SendNumberRequestModel
@@ -191,5 +195,23 @@ private fun NumberScreen(
             buttonText = stringResource(id = R.string.check),
             onClick = {}
         )
+    }
+}
+
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Composable
+private fun NumberScreenPreview() {
+    GomsTheme(ThemeType.SYSTEM.value) {
+        NumberScreen(
+            number = "GOMS",
+            onNumberChange = {},
+            verifyNumberUiState = VerifyNumberUiState.Loading,
+            onBackClick = {},
+            onPasswordClick = {},
+            numberCallback = {},
+            onErrorToast = { _, _ -> },
+            resentCallBack = {}
+        ) {}
     }
 }

@@ -34,7 +34,7 @@ import java.util.Locale
 @Composable
 internal fun MainTimeProfileCard(
     modifier: Modifier = Modifier,
-    time: Date,
+    time: Long,
     getProfileUiState: GetProfileUiState,
     onErrorToast: (throwable: Throwable?, message: Int?) -> Unit
 ) {
@@ -63,7 +63,7 @@ internal fun MainTimeProfileCard(
 private fun MainTimeProfileCardComponent(
     modifier: Modifier,
     data: ProfileData,
-    time: Date
+    time: Long
 ) {
     val context = LocalContext.current
 
@@ -121,13 +121,13 @@ private fun MainTimeProfileCardComponent(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = SimpleDateFormat("aa", Locale.ENGLISH).format(time).toString(),
+                        text = SimpleDateFormat("aa", Locale.ENGLISH).format(Date(time)).toString(),
                         style = typography.textLarge,
                         fontWeight = FontWeight.Bold,
                         color = colors.G4
                     )
                     Text(
-                        text = SimpleDateFormat("HH : mm : ss").format(time).toString(),
+                        text = SimpleDateFormat("HH : mm : ss").format(Date(time)).toString(),
                         style = typography.titleMedium,
                         fontWeight = FontWeight.Bold,
                         color = colors.G4

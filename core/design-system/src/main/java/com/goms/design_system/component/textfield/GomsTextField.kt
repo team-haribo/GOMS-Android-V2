@@ -1,5 +1,6 @@
 package com.goms.design_system.component.textfield
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -44,8 +45,10 @@ import com.goms.design_system.component.timer.CountdownTimer
 import com.goms.design_system.icon.InvisibleIcon
 import com.goms.design_system.icon.SearchIcon
 import com.goms.design_system.icon.VisibleIcon
+import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
+import com.goms.design_system.theme.ThemeType
 import kotlinx.coroutines.delay
 
 @Composable
@@ -392,39 +395,55 @@ fun GomsSearchTextField(
     }
 }
 
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
-@Preview(showBackground = true)
-fun GomsTextFieldPreview() {
-    Column(
-        verticalArrangement = Arrangement.SpaceEvenly
-    ) {
-        GomsTextField(
-            modifier = Modifier.fillMaxWidth(),
-            placeHolder = "Test",
-            isError = false,
-            onValueChange = {},
-            setText = ""
-        )
-        GomsTextField(
-            modifier = Modifier.fillMaxWidth(),
-            placeHolder = "Test",
-            isError = true,
-            onValueChange = {},
-            setText = ""
-        )
-        NumberTextField(
-            modifier = Modifier.fillMaxWidth(),
-            placeHolder = "Test",
-            isError = true,
-            onValueChange = {},
-            setText = ""
-        ) {}
-        NumberTextField(
-            modifier = Modifier.fillMaxWidth(),
-            placeHolder = "Test",
-            isError = true,
-            onValueChange = {},
-            setText = ""
-        ) {}
+private fun GomsTextFieldPreview() {
+    GomsTheme(ThemeType.SYSTEM.value) {
+        Column {
+            GomsTextField(
+                modifier = Modifier.fillMaxWidth(),
+                placeHolder = "GOMS",
+                isError = false,
+                onValueChange = {},
+                setText = ""
+            )
+            GomsTextField(
+                modifier = Modifier.fillMaxWidth(),
+                placeHolder = "GOMS",
+                isError = true,
+                onValueChange = {},
+                setText = ""
+            )
+            NumberTextField(
+                modifier = Modifier.fillMaxWidth(),
+                placeHolder = "GOMS",
+                isError = false,
+                onValueChange = {},
+                setText = ""
+            ) {}
+            NumberTextField(
+                modifier = Modifier.fillMaxWidth(),
+                placeHolder = "GOMS",
+                isError = true,
+                errorText = "Error",
+                onValueChange = {},
+                setText = ""
+            ) {}
+            GomsPasswordTextField(
+                modifier = Modifier.fillMaxWidth(),
+                isDescription = true,
+                placeHolder = "GOMS",
+                isError = false,
+                onValueChange = {},
+                setText = ""
+            )
+            GomsSearchTextField(
+                modifier = Modifier.fillMaxWidth(),
+                placeHolder = "GOMS",
+                onValueChange = {},
+                setText = ""
+            ) {}
+        }
     }
 }

@@ -1,8 +1,8 @@
 package com.goms.design_system.component.bottomsheet
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Text
@@ -10,17 +10,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.goms.design_system.component.clickable.gomsClickable
 import com.goms.design_system.component.spacer.GomsSpacer
 import com.goms.design_system.component.spacer.SpacerSize
 import com.goms.design_system.icon.CloseIcon
+import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
+import com.goms.design_system.theme.ThemeType
 
 @Composable
 fun BottomSheetHeader(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     title: String,
     closeSheet: () -> Unit
 ) {
@@ -43,4 +46,13 @@ fun BottomSheetHeader(
         )
     }
     GomsSpacer(size = SpacerSize.Small)
+}
+
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Composable
+private fun BottomSheetHeaderPreview() {
+    GomsTheme(ThemeType.SYSTEM.value) {
+        BottomSheetHeader(title = "GOMS") {}
+    }
 }

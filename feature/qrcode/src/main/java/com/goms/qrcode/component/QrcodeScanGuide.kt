@@ -10,8 +10,10 @@ internal fun QrcodeScanGuide() {
     QrScanGuideIcon()
 }
 
+@Preview
 @Composable
-@Preview(showBackground = true)
 private fun QrcodeScanGuidePreview() {
-    QrcodeScanGuide()
+    GomsTheme {
+        QrcodeScanGuide()
+    }
 }

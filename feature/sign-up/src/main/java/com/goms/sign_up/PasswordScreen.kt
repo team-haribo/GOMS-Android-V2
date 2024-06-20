@@ -1,6 +1,7 @@
 package com.goms.sign_up
 
 import android.content.pm.ActivityInfo
+import android.content.res.Configuration
 import androidx.activity.ComponentActivity
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
@@ -29,6 +30,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -39,7 +41,9 @@ import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
 import com.goms.design_system.component.spacer.GomsSpacer
 import com.goms.design_system.component.spacer.SpacerSize
 import com.goms.design_system.component.textfield.GomsPasswordTextField
+import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
+import com.goms.design_system.theme.ThemeType
 import com.goms.design_system.util.keyboardAsState
 import com.goms.design_system.util.lockScreenOrientation
 import com.goms.model.enum.Gender
@@ -199,5 +203,24 @@ private fun PasswordScreen(
     }
     if (isLoading) {
         GomsCircularProgressIndicator()
+    }
+}
+
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Composable
+private fun PasswordScreenPreview() {
+    GomsTheme(ThemeType.SYSTEM.value) {
+        PasswordScreen(
+            password = "GOMS",
+            checkPassword = "GOMS",
+            onPasswordChange = {},
+            onCheckPasswordChange = {},
+            signUpUiState = SignUpUiState.Loading,
+            onBackClick = {},
+            onLoginClick = {},
+            onErrorToast = { _, _ -> },
+            passwordCallback= {},
+        ) {}
     }
 }

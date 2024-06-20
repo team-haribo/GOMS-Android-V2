@@ -33,7 +33,7 @@ fun GomsApp(
 
     if (alarmState == Switch.ON.value) onAlarmOn()
 
-    GomsTheme(themeMode = themeState) { _, _ ->
+    GomsTheme(themeMode = themeState) {
         CompositionLocalProvider {
             GomsNavHost(
                 appState = appState,

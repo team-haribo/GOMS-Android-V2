@@ -1,6 +1,7 @@
 package com.goms.main
 
 import android.Manifest
+import android.content.res.Configuration
 import android.os.Build
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
@@ -23,12 +24,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goms.design_system.icon.MenuIcon
 import com.goms.design_system.icon.SettingIcon
+import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
+import com.goms.design_system.theme.ThemeType
 import com.goms.main.viewmodel.uistate.GetLateRankListUiState
 import com.goms.main.viewmodel.uistate.GetOutingCountUiState
 import com.goms.main.viewmodel.uistate.GetOutingListUiState
@@ -44,13 +48,12 @@ import com.goms.main.viewmodel.MainViewModel
 import com.goms.main.viewmodel.uistate.SaveTokenUiState
 import com.goms.main.viewmodel.uistate.TokenRefreshUiState
 import com.goms.model.enum.Switch
+import com.goms.ui.rememberMultiplePermissionsStateSafe
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import kotlinx.coroutines.delay
-import java.util.Date
 
 @Composable
 internal fun MainRoute(
@@ -142,7 +145,7 @@ private fun MainScreen(
     initTokenRefreshCallBack: () -> Unit
 ) {
     var isPermissionRequest by rememberSaveable { mutableStateOf(false) }
-    val multiplePermissionState = rememberMultiplePermissionsState(
+    val multiplePermissionState = rememberMultiplePermissionsStateSafe(
         listOf(
             Manifest.permission.CAMERA,
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -176,11 +179,11 @@ private fun MainScreen(
 
     val scrollState = rememberScrollState()
     val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = isRefreshing)
-    var currentTime by rememberSaveable { mutableStateOf(Date()) }
+    var currentTime by rememberSaveable { mutableStateOf(System.currentTimeMillis()) }
     LaunchedEffect("Time") {
         while (true) {
             delay(1_000)
-            currentTime = Date()
+            currentTime = System.currentTimeMillis()
         }
     }
 
@@ -263,5 +266,33 @@ private fun MainScreen(
                 onQrcodeClick(role)
             }
         }
+    }
+}
+
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Composable
+private fun MainScreenPreview() {
+    GomsTheme(ThemeType.SYSTEM.value) {
+        MainScreen(
+            role = Authority.ROLE_STUDENT_COUNCIL,
+            isRefreshing = false,
+            isTimeLaunch = false,
+            tokenRefreshUiState = TokenRefreshUiState.Loading,
+            saveTokenUiState = SaveTokenUiState.Loading,
+            getProfileUiState = GetProfileUiState.Loading,
+            getLateRankListUiState = GetLateRankListUiState.Loading,
+            getOutingListUiState = GetOutingListUiState.Loading,
+            getOutingCountUiState = GetOutingCountUiState.Loading,
+            onOutingStatusClick = {},
+            onLateListClick = {},
+            onStudentManagementClick = {},
+            onQrcodeClick = {},
+            onSettingClick = {},
+            onAdminMenuClick = {},
+            onErrorToast = { _, _ -> },
+            mainCallBack = {},
+            tokenRefreshCallBack = {},
+        ) {}
     }
 }
