@@ -198,19 +198,13 @@ private fun ShimmerSettingProfileCardComponent(
             Box(
                 modifier = Modifier
                     .size(50.dp, 24.dp)
-                    .shimmerEffect(
-                        color = colors.WHITE,
-                        shape = RoundedCornerShape(4.dp)
-                    )
+                    .shimmerEffect(color = colors.WHITE)
             )
             GomsSpacer(size = SpacerSize.ExtraSmall)
             Box(
                 modifier = Modifier
                     .size(64.dp, 20.dp)
-                    .shimmerEffect(
-                        color = colors.WHITE,
-                        shape = RoundedCornerShape(4.dp)
-                    )
+                    .shimmerEffect(color = colors.WHITE,)
             )
         }
         Spacer(modifier = Modifier.weight(1f))
@@ -227,17 +221,8 @@ private fun ShimmerSettingProfileCardComponent(
             Row {
                 Box(
                     modifier = Modifier
-                        .size(24.dp)
-                        .shimmerEffect(
-                            color = colors.WHITE,
-                            shape = RoundedCornerShape(4.dp)
-                        )
-                )
-                Text(
-                    text = stringResource(id = R.string.number),
-                    style = typography.titleSmall,
-                    color = colors.WHITE,
-                    fontWeight = FontWeight.SemiBold
+                        .size(40.dp, 25.dp)
+                        .shimmerEffect(color = colors.WHITE)
                 )
             }
         }
