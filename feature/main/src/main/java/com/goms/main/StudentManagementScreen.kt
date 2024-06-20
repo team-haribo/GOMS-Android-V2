@@ -1,5 +1,6 @@
 package com.goms.main
 
+import android.content.res.Configuration
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -27,6 +28,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -36,12 +38,17 @@ import com.goms.design_system.component.bottomsheet.MultipleSelectorBottomSheet
 import com.goms.design_system.component.spacer.GomsSpacer
 import com.goms.design_system.component.spacer.SpacerSize
 import com.goms.design_system.component.textfield.GomsSearchTextField
+import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
+import com.goms.design_system.theme.ThemeType
 import com.goms.design_system.util.keyboardAsState
 import com.goms.main.component.StudentManagementList
 import com.goms.main.component.StudentManagementText
 import com.goms.main.viewmodel.uistate.GetStudentListUiState
 import com.goms.main.viewmodel.MainViewModel
+import com.goms.main.viewmodel.uistate.GetOutingCountUiState
+import com.goms.main.viewmodel.uistate.GetOutingListUiState
+import com.goms.main.viewmodel.uistate.OutingSearchUiState
 import com.goms.main.viewmodel.uistate.StudentSearchUiState
 import com.goms.model.enum.Authority
 import com.goms.model.enum.BlackList
@@ -327,5 +334,38 @@ private fun StudentManagementScreen(
                 studentSearchCallBack(studentSearch)
             }
         )
+    }
+}
+
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Composable
+fun StudentManagementScreenPreview() {
+    GomsTheme(ThemeType.SYSTEM.value) {
+        StudentManagementScreen(
+            role = Authority.ROLE_STUDENT_COUNCIL,
+            studentSearch = "GOMS",
+            outingState = "GOMS",
+            roleState = "GOMS",
+            filterStatus = "GOMS",
+            filterGrade = "GOMS",
+            filterGender = "GOMS",
+            filterMajor = "GOMS",
+            onStudentSearchChange = {},
+            onOutingStateChange = {},
+            onRoleStateChange = {},
+            onFilterStatusChange = {},
+            onFilterGradeChange = {},
+            onFilterGenderChange = {},
+            onFilterMajorChange = {},
+            getStudentListUiState = GetStudentListUiState.Loading,
+            studentSearchUiState = StudentSearchUiState.Loading,
+            onBackClick = {},
+            onErrorToast = { _, _ -> },
+            studentListCallBack = {},
+            studentSearchCallBack = {},
+            changeAuthorityCallBack = { _, _ -> },
+            setBlackListCallBack = {},
+        ) {}
     }
 }
