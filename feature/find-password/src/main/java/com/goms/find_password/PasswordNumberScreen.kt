@@ -50,6 +50,7 @@ import com.goms.model.request.auth.SendNumberRequestModel
 import com.goms.find_password.component.NumberText
 import com.goms.find_password.viewmodel.FindPasswordViewmodel
 import com.goms.find_password.viewmodel.uistate.FindPasswordUiState
+import com.goms.find_password.viewmodel.uistate.SendNumberUiState
 import com.goms.find_password.viewmodel.uistate.VerifyNumberUiState
 import com.goms.model.util.ResourceKeys
 
@@ -124,6 +125,13 @@ private fun PasswordNumberScreen(
                 isError = true
                 errorText = context.getString(R.string.error_number_not_valid)
                 onErrorToast(null, R.string.error_number_not_valid)
+            }
+
+            is VerifyNumberUiState.TooManyRequest -> {
+                isLoading = false
+                isError = true
+                errorText = context.getString(R.string.error_too_many_request_verify_number)
+                onErrorToast(null, R.string.error_too_many_request_verify_number)
             }
 
             is VerifyNumberUiState.Error -> {

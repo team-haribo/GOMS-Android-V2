@@ -121,6 +121,11 @@ private fun SignUpScreen(
                 onErrorToast(null, R.string.error_email_not_valid)
             }
 
+            is SendNumberUiState.TooManyRequest -> {
+                isLoading = false
+                onErrorToast(null, R.string.error_too_many_request_send_email)
+            }
+
             is SendNumberUiState.Error -> {
                 isLoading = false
                 onErrorToast(sendNumberUiState.exception, R.string.error_send_number)
