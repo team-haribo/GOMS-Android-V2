@@ -125,6 +125,13 @@ private fun NumberScreen(
                 onErrorToast(null, R.string.error_number_not_valid)
             }
 
+            is VerifyNumberUiState.TooManyRequest -> {
+                isLoading = false
+                isError = true
+                errorText = context.getString(R.string.error_too_many_request_verify_number)
+                onErrorToast(null, R.string.error_too_many_request_verify_number)
+            }
+
             is VerifyNumberUiState.Error -> {
                 isLoading = false
                 isError = true

@@ -44,7 +44,11 @@ class GomsApiHandler<T> {
                     message = message,
                 )
 
-                500, 501, 502, 503 -> ServerException(
+                429 -> TooManyRequestException(
+                    message = message
+                )
+
+                in 500..599 -> ServerException(
                     message = message,
                 )
 
