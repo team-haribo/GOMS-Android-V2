@@ -41,10 +41,10 @@ fun getMultipartFile(context: Context, uri: Uri): MultipartBody.Part? {
 
 @Throws(IOException::class)
 private fun createTempJpegFile(context: Context): File? {
-    val outputDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+    val outputDirectory = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
     return File.createTempFile(
         "image_",
         ".jpg",
-        outputDir
+        outputDirectory
     )
 }
