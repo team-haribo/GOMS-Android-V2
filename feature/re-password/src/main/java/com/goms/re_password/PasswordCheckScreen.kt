@@ -1,6 +1,7 @@
 package com.goms.re_password
 
 import android.content.pm.ActivityInfo
+import android.content.res.Configuration
 import androidx.activity.ComponentActivity
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
@@ -25,14 +26,19 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goms.design_system.component.button.ButtonState
 import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.button.GomsButton
+import com.goms.design_system.component.spacer.GomsSpacer
+import com.goms.design_system.component.spacer.SpacerSize
 import com.goms.design_system.component.textfield.GomsPasswordTextField
+import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
+import com.goms.design_system.theme.ThemeType
 import com.goms.design_system.util.keyboardAsState
 import com.goms.design_system.util.lockScreenOrientation
 import com.goms.re_password.component.RePasswordText
@@ -93,7 +99,7 @@ private fun PasswordCheckScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             RePasswordText(modifier = Modifier.align(Alignment.Start))
-            Spacer(modifier = Modifier.height(28.dp))
+            GomsSpacer(size = SpacerSize.MediumLarge)
             GomsPasswordTextField(
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
@@ -111,7 +117,20 @@ private fun PasswordCheckScreen(
             ) {
                 onRePasswordClick()
             }
-            Spacer(modifier = Modifier.height(animatedSpacerHeight))
+            GomsSpacer(height = animatedSpacerHeight)
         }
+    }
+}
+
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Composable
+private fun PasswordCheckScreenPreview() {
+    GomsTheme(ThemeType.SYSTEM.value) {
+        PasswordCheckScreen(
+            password = "GOMS",
+            onPasswordChange = {},
+            onBackClick = {},
+        ) {}
     }
 }

@@ -1,6 +1,7 @@
 package com.goms.sign_up
 
 import android.content.pm.ActivityInfo
+import android.content.res.Configuration
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -28,6 +29,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -35,8 +37,12 @@ import com.goms.design_system.component.button.ButtonState
 import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.button.GomsButton
 import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
+import com.goms.design_system.component.spacer.GomsSpacer
+import com.goms.design_system.component.spacer.SpacerSize
 import com.goms.design_system.component.textfield.GomsTextField
+import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
+import com.goms.design_system.theme.ThemeType
 import com.goms.design_system.util.keyboardAsState
 import com.goms.design_system.util.lockScreenOrientation
 import com.goms.model.request.auth.SendNumberRequestModel
@@ -115,6 +121,11 @@ private fun SignUpScreen(
                 onErrorToast(null, R.string.error_email_not_valid)
             }
 
+            is SendNumberUiState.TooManyRequest -> {
+                isLoading = false
+                onErrorToast(null, R.string.error_too_many_request_send_email)
+            }
+
             is SendNumberUiState.Error -> {
                 isLoading = false
                 onErrorToast(sendNumberUiState.exception, R.string.error_send_number)
@@ -144,7 +155,7 @@ private fun SignUpScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             SignUpText(modifier = Modifier.align(Alignment.Start))
-            Spacer(modifier = Modifier.height(28.dp))
+            GomsSpacer(size = SpacerSize.MediumLarge)
             GomsTextField(
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
@@ -154,7 +165,7 @@ private fun SignUpScreen(
                 isEmail = false,
                 singleLine = true
             )
-            Spacer(modifier = Modifier.height(24.dp))
+            GomsSpacer(size = SpacerSize.Medium)
             GomsTextField(
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
@@ -163,13 +174,13 @@ private fun SignUpScreen(
                 onValueChange = onEmailChange,
                 singleLine = true
             )
-            Spacer(modifier = Modifier.height(24.dp))
+            GomsSpacer(size = SpacerSize.Medium)
             SelectGenderDropDown(
                 onSelectGender = onGenderChange
             ) {
                 focusManager.clearFocus()
             }
-            Spacer(modifier = Modifier.height(24.dp))
+            GomsSpacer(size = SpacerSize.Medium)
             SelectMajorDropDown(
                 onSelectMajor = onMajorChange
             ) {
@@ -185,10 +196,33 @@ private fun SignUpScreen(
                 signUpCallBack()
                 isLoading = true
             }
-            Spacer(modifier = Modifier.height(100.dp))
+            GomsSpacer(height = 100.dp)
         }
     }
     if (isLoading) {
         GomsCircularProgressIndicator()
+    }
+}
+
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Composable
+private fun SignUpScreenPreview() {
+    GomsTheme(ThemeType.SYSTEM.value) {
+        SignUpScreen(
+            name = "GOMS",
+            email = "haribo",
+            gender = "GOMS",
+            major = "GOMS",
+            onNameChange = {},
+            onEmailChange = {},
+            onGenderChange = {},
+            onMajorChange = {},
+            sendNumberUiState = SendNumberUiState.Loading,
+            onBackClick = {},
+            onNumberClick = {},
+            onErrorToast = { _, _ -> },
+            signUpCallBack = {},
+        ) {}
     }
 }

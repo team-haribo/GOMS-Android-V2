@@ -1,5 +1,6 @@
 package com.goms.design_system.component.bottomsheet
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,15 +19,19 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.goms.design_system.component.button.BottomSheetButton
+import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
+import com.goms.design_system.theme.ThemeType
 import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.toPersistentList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SelectorBottomSheet(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     title: String,
     list: PersistentList<String>,
     selected: String,
@@ -74,5 +79,19 @@ fun SelectorBottomSheet(
                 }
             }
         }
+    }
+}
+
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Composable
+private fun SelectorBottomSheetPreview() {
+    GomsTheme(ThemeType.SYSTEM.value) {
+        SelectorBottomSheet(
+            title = "GOMS",
+            list = listOf("북극곰", "판다").toPersistentList(),
+            selected = "북극곰",
+            itemChange = {}
+        ) {}
     }
 }

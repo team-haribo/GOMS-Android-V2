@@ -1,5 +1,6 @@
 package com.goms.find_password
 
+import android.content.res.Configuration
 import androidx.activity.ComponentActivity
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
@@ -28,6 +29,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -36,13 +38,18 @@ import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.button.GomsButton
 import com.goms.design_system.component.dialog.GomsOneButtonDialog
 import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
+import com.goms.design_system.component.spacer.GomsSpacer
+import com.goms.design_system.component.spacer.SpacerSize
 import com.goms.design_system.component.textfield.GomsPasswordTextField
+import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
+import com.goms.design_system.theme.ThemeType
 import com.goms.design_system.util.keyboardAsState
 import com.goms.model.request.account.FindPasswordRequestModel
 import com.goms.find_password.component.RePasswordText
 import com.goms.find_password.viewmodel.uistate.FindPasswordUiState
 import com.goms.find_password.viewmodel.FindPasswordViewmodel
+import com.goms.find_password.viewmodel.uistate.SendNumberUiState
 import com.goms.model.util.ResourceKeys
 
 @Composable
@@ -160,7 +167,7 @@ private fun FindPasswordScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             RePasswordText(modifier = Modifier.align(Alignment.Start))
-            Spacer(modifier = Modifier.height(28.dp))
+            GomsSpacer(size = SpacerSize.MediumLarge)
             GomsPasswordTextField(
                 modifier = Modifier.fillMaxWidth(),
                 isError = isError,
@@ -171,7 +178,7 @@ private fun FindPasswordScreen(
                 onValueChange = onPasswordChange,
                 singleLine = true
             )
-            Spacer(modifier = Modifier.height(24.dp))
+            GomsSpacer(size = SpacerSize.Medium)
             GomsPasswordTextField(
                 modifier = Modifier.fillMaxWidth(),
                 isDescription = true,
@@ -192,7 +199,7 @@ private fun FindPasswordScreen(
                 findPasswordCallback()
                 isLoading = true
             }
-            Spacer(modifier = Modifier.height(animatedSpacerHeight))
+            GomsSpacer(height = animatedSpacerHeight)
         }
     }
     if (isLoading) {
@@ -209,5 +216,24 @@ private fun FindPasswordScreen(
             buttonText = stringResource(id = R.string.check),
             onClick = onSuccessClick
         )
+    }
+}
+
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Composable
+private fun FindPasswordScreenPreview() {
+    GomsTheme(ThemeType.SYSTEM.value) {
+        FindPasswordScreen(
+            password = "GOMS",
+            passwordCheck = "GOMS",
+            onPasswordChange = {},
+            onPasswordCheckChange = {},
+            onSuccessClick = {},
+            onBackClick = {},
+            onErrorToast = { _, _ -> },
+            findPasswordUiState = FindPasswordUiState.Loading,
+            initFindPassword = {}
+        ) {}
     }
 }

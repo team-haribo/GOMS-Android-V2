@@ -2,6 +2,7 @@ package com.goms.setting
 
 import android.Manifest
 import android.content.pm.ActivityInfo
+import android.content.res.Configuration
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -28,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -36,6 +38,9 @@ import com.goms.design_system.component.button.ButtonState
 import com.goms.design_system.component.button.GomsButton
 import com.goms.design_system.component.dialog.GomsTwoButtonDialog
 import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
+import com.goms.design_system.component.spacer.GomsSpacer
+import com.goms.design_system.component.spacer.SpacerSize
+import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.ThemeType
 import com.goms.design_system.util.lockScreenOrientation
@@ -53,8 +58,8 @@ import com.goms.setting.viewmodel.uistate.ProfileImageUiState
 import com.goms.setting.viewmodel.uistate.SetThemeUiState
 import com.goms.setting.viewmodel.SettingViewModel
 import com.goms.ui.GomsRoleBackButton
+import com.goms.ui.rememberMultiplePermissionsStateSafe
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.rememberPermissionState
 
 @Composable
 internal fun SettingRoute(
@@ -207,7 +212,7 @@ private fun SettingScreen(
     var openBottomSheet by remember { mutableStateOf(false) }
     var isLogout by remember { mutableStateOf(true) }
 
-    val notificationPermissionState = rememberPermissionState(Manifest.permission.POST_NOTIFICATIONS)
+    val notificationPermissionState = rememberMultiplePermissionsStateSafe(listOf(Manifest.permission.POST_NOTIFICATIONS))
     val scrollState = rememberScrollState()
 
     LaunchedEffect("load data") {
@@ -274,19 +279,19 @@ private fun SettingScreen(
                 .verticalScroll(scrollState),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(16.dp))
+            GomsSpacer(size = SpacerSize.Small)
             SettingProfileCard(
                 modifier = Modifier,
                 role = role,
                 onProfileClick = { openBottomSheet = true },
                 getProfileUiState = getProfileUiState
             )
-            Spacer(modifier = Modifier.height(32.dp))
+            GomsSpacer(size = SpacerSize.Large)
             Divider(
                 modifier = Modifier.fillMaxWidth(),
                 color = colors.WHITE.copy(0.15f)
             )
-            Spacer(modifier = Modifier.height(24.dp))
+            GomsSpacer(size = SpacerSize.Medium)
             SelectThemeDropDown(
                 modifier = Modifier,
                 onThemeSelect = {
@@ -300,7 +305,7 @@ private fun SettingScreen(
                 },
                 themeState = themeState
             )
-            Spacer(modifier = Modifier.height(24.dp))
+            GomsSpacer(size = SpacerSize.Medium)
             if (role == Authority.ROLE_STUDENT.name) {
                 SettingSwitchComponent(
                     modifier = Modifier.padding(horizontal = 8.dp),
@@ -312,7 +317,7 @@ private fun SettingScreen(
                     onFunctionOff = { onUpdateTime(Switch.OFF.value) },
                     onFunctionOn = { onUpdateTime(Switch.ON.value) }
                 )
-                Spacer(modifier = Modifier.height(32.dp))
+                GomsSpacer(size = SpacerSize.Large)
                 SettingSwitchComponent(
                     modifier = Modifier.padding(horizontal = 8.dp),
                     title = stringResource(id = R.string.outing_push_alarm),
@@ -323,7 +328,7 @@ private fun SettingScreen(
                     onFunctionOff = { onUpdateAlarm(Switch.OFF.value) },
                     onFunctionOn = { onUpdateAlarm(Switch.ON.value) }
                 )
-                Spacer(modifier = Modifier.height(32.dp))
+                GomsSpacer(size = SpacerSize.Large)
                 SettingSwitchComponent(
                     modifier = Modifier.padding(horizontal = 8.dp),
                     title = stringResource(id = R.string.right_now_camera),
@@ -346,7 +351,7 @@ private fun SettingScreen(
                     onFunctionOff = { onUpdateTime(Switch.OFF.value) },
                     onFunctionOn = { onUpdateTime(Switch.ON.value) }
                 )
-                Spacer(modifier = Modifier.height(32.dp))
+                GomsSpacer(size = SpacerSize.Large)
                 SettingSwitchComponent(
                     modifier = Modifier.padding(horizontal = 8.dp),
                     title = stringResource(id = R.string.right_now_qr_create),
@@ -358,12 +363,12 @@ private fun SettingScreen(
                     onFunctionOn = { onUpdateQrcode(Switch.ON.value) }
                 )
             }
-            Spacer(modifier = Modifier.height(32.dp))
+            GomsSpacer(size = SpacerSize.Large)
             Divider(
                 modifier = Modifier.fillMaxWidth(),
                 color = colors.WHITE.copy(0.15f)
             )
-            Spacer(modifier = Modifier.height(24.dp))
+            GomsSpacer(size = SpacerSize.Medium)
             SettingButton(
                 modifier = Modifier,
                 buttonType = SettingButtonType.PasswordChange.value
@@ -415,6 +420,42 @@ private fun SettingScreen(
                 openBottomSheet = false
                 onProfileClick(false)
             }
+        )
+    }
+}
+
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Composable
+private fun SettingScreenPreview() {
+    GomsTheme(ThemeType.SYSTEM.value) {
+        SettingScreen(
+            role = Authority.ROLE_STUDENT.name,
+            onProfileClick = {},
+            onBackClick = {},
+            onLogoutClick = {},
+            onLogoutSuccess = {},
+            getProfile = {},
+            getSettingInfo = {},
+            onThemeSelect = {},
+            onUpdateTheme = {},
+            onUpdateQrcode = {},
+            onUpdateAlarm = {},
+            onUpdateTime = {},
+            setDefaultProfileUiState = {},
+            onErrorToast = { _, _ -> },
+            onPasswordCheck = {},
+            onWithdrawalClick = {},
+            isLoading = {},
+            logoutUiState = LogoutUiState.Loading,
+            setThemeUiState = SetThemeUiState.Loading,
+            getProfileUiState = GetProfileUiState.Loading,
+            themeState = "GOMS",
+            qrcodeState = "GOMS",
+            alarmState = "GOMS",
+            timeState = "GOMS",
+            loadingState = false,
+            profileImageUiState = ProfileImageUiState.Loading
         )
     }
 }

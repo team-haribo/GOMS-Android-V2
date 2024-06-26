@@ -1,5 +1,6 @@
 package com.goms.design_system.component.bottomsheet
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,24 +13,30 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.goms.design_system.R
 import com.goms.design_system.component.clickable.gomsClickable
+import com.goms.design_system.component.spacer.GomsSpacer
+import com.goms.design_system.component.spacer.SpacerSize
 import com.goms.design_system.icon.DefaultImageIcon
 import com.goms.design_system.icon.GalleryIcon
+import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
+import com.goms.design_system.theme.ThemeType
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileBottomSheet(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     closeSheet: () -> Unit,
     onGalleryClick: () -> Unit,
     onDefaultImageClick: () -> Unit
@@ -66,7 +73,7 @@ fun ProfileBottomSheet(
                 content = stringResource(id = R.string.use_default_profile),
                 icon = { DefaultImageIcon(tint = colors.WHITE) }
             )
-            Spacer(modifier = Modifier.height(24.dp))
+            GomsSpacer(size = SpacerSize.Medium)
         }
     }
 }
@@ -82,7 +89,7 @@ fun ProfileBottomSheetComponent(
         modifier = modifier
             .height(72.dp)
             .fillMaxWidth()
-            .gomsClickable (
+            .gomsClickable(
                 isIndication = true,
                 rippleColor = colors.G7.copy(0.5f)
             ) { onClick() },
@@ -96,5 +103,17 @@ fun ProfileBottomSheetComponent(
             fontWeight = FontWeight.SemiBold
         )
         icon()
+    }
+}
+
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Composable
+private fun ProfileBottomSheetPreview() {
+    GomsTheme(ThemeType.SYSTEM.value) {
+        ProfileBottomSheet(
+            closeSheet = {},
+            onGalleryClick = {}
+        ) {}
     }
 }

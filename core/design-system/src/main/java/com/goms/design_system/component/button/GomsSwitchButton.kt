@@ -1,5 +1,6 @@
 package com.goms.design_system.component.button
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Arrangement
@@ -24,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -34,6 +36,7 @@ import androidx.wear.compose.material.swipeable
 import com.goms.design_system.component.clickable.gomsClickable
 import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
+import com.goms.design_system.theme.ThemeType
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
@@ -117,6 +120,30 @@ fun GomsSwitchButton(
                     .background(color = Color.White)
                     .size(circleSize)
             )
+        }
+    }
+}
+
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Composable
+private fun GomsSwitchButtonPreview() {
+    GomsTheme(ThemeType.SYSTEM.value) {
+        Row {
+            GomsSwitchButton(
+                stateOn = 0,
+                stateOff = 1,
+                switchOnBackground = colors.P5,
+                switchOffBackground = colors.G4,
+                initialValue = 1
+            ) {}
+            GomsSwitchButton(
+                stateOn = 0,
+                stateOff = 1,
+                switchOnBackground = colors.P5,
+                switchOffBackground = colors.G4,
+                initialValue = 0
+            ) {}
         }
     }
 }

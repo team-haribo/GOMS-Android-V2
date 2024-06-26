@@ -1,5 +1,6 @@
 package com.goms.main
 
+import android.content.res.Configuration
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -27,18 +28,27 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goms.common.result.Result
+import com.goms.design_system.component.bottomsheet.ListData
 import com.goms.design_system.component.bottomsheet.MultipleSelectorBottomSheet
+import com.goms.design_system.component.spacer.GomsSpacer
+import com.goms.design_system.component.spacer.SpacerSize
 import com.goms.design_system.component.textfield.GomsSearchTextField
+import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
+import com.goms.design_system.theme.ThemeType
 import com.goms.design_system.util.keyboardAsState
 import com.goms.main.component.StudentManagementList
 import com.goms.main.component.StudentManagementText
 import com.goms.main.viewmodel.uistate.GetStudentListUiState
 import com.goms.main.viewmodel.MainViewModel
+import com.goms.main.viewmodel.uistate.GetOutingCountUiState
+import com.goms.main.viewmodel.uistate.GetOutingListUiState
+import com.goms.main.viewmodel.uistate.OutingSearchUiState
 import com.goms.main.viewmodel.uistate.StudentSearchUiState
 import com.goms.model.enum.Authority
 import com.goms.model.enum.BlackList
@@ -226,7 +236,7 @@ private fun StudentManagementScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             StudentManagementText(modifier = Modifier.align(Alignment.Start))
-            Spacer(modifier = Modifier.height(16.dp))
+            GomsSpacer(size = SpacerSize.Small)
             GomsSearchTextField(
                 modifier = Modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
@@ -236,7 +246,7 @@ private fun StudentManagementScreen(
                 onSearchTextChange = studentSearchCallBack,
                 singleLine = true
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            GomsSpacer(size = SpacerSize.ExtraSmall)
             StudentManagementList(
                 getStudentListUiState = getStudentListUiState,
                 studentSearchUiState = studentSearchUiState,
@@ -272,37 +282,47 @@ private fun StudentManagementScreen(
         MultipleSelectorBottomSheet(
             modifier = Modifier.fillMaxWidth(),
             title = stringResource(id = R.string.filter),
-            subTitle1 = stringResource(id = R.string.role),
-            list1 = listOf(
-                Status.ROLE_STUDENT.value,
-                Status.ROLE_STUDENT_COUNCIL.value,
-                Status.BLACK_LIST.value
+            subTitles = listOf(
+                stringResource(id = R.string.role),
+                stringResource(id = R.string.grade),
+                stringResource(id = R.string.gender),
+                stringResource(id = R.string.major)
             ).toPersistentList(),
-            selected1 = filterStatus,
-            itemChange1 = onFilterStatusChange,
-            subTitle2 = stringResource(id = R.string.grade),
-            list2 = listOf(
-                Grade.FIRST_GRADE.value,
-                Grade.SECOND_GRADE.value,
-                Grade.THIRD_GRADE.value
+            lists = ListData(
+                list = listOf(
+                    listOf(
+                        Status.ROLE_STUDENT.value,
+                        Status.ROLE_STUDENT_COUNCIL.value,
+                        Status.BLACK_LIST.value
+                    ).toPersistentList(),
+                    listOf(
+                        Grade.FIRST_GRADE.value,
+                        Grade.SECOND_GRADE.value,
+                        Grade.THIRD_GRADE.value
+                    ).toPersistentList(),
+                    listOf(
+                        Gender.MAN.value,
+                        Gender.WOMAN.value
+                    ).toPersistentList(),
+                    listOf(
+                        Major.SW_DEVELOP.value,
+                        Major.SMART_IOT.value,
+                        Major.AI.value
+                    ).toPersistentList()
+                ).toPersistentList()
+            ),
+            selectedItems = listOf(
+                filterStatus,
+                filterGrade,
+                filterGender,
+                filterMajor
             ).toPersistentList(),
-            selected2 = filterGrade,
-            itemChange2 = onFilterGradeChange,
-            subTitle3 = stringResource(id = R.string.gender),
-            list3 = listOf(
-                Gender.MAN.value,
-                Gender.WOMAN.value
+            itemChanges = listOf(
+                onFilterStatusChange,
+                onFilterGradeChange,
+                onFilterGenderChange,
+                onFilterMajorChange
             ).toPersistentList(),
-            selected3 = filterGender,
-            itemChange3 = onFilterGenderChange,
-            subTitle4 = stringResource(id = R.string.major),
-            list4 = listOf(
-                Major.SW_DEVELOP.value,
-                Major.SMART_IOT.value,
-                Major.AI.value
-            ).toPersistentList(),
-            selected4 = filterMajor,
-            itemChange4 = onFilterMajorChange,
             initClick = {
                 onFilterStatusChange("")
                 onFilterGradeChange("")
@@ -312,7 +332,40 @@ private fun StudentManagementScreen(
             closeSheet = {
                 onFilterBottomSheetOpenClick = false
                 studentSearchCallBack(studentSearch)
-            },
+            }
         )
+    }
+}
+
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Composable
+private fun StudentManagementScreenPreview() {
+    GomsTheme(ThemeType.SYSTEM.value) {
+        StudentManagementScreen(
+            role = Authority.ROLE_STUDENT_COUNCIL,
+            studentSearch = "GOMS",
+            outingState = "GOMS",
+            roleState = "GOMS",
+            filterStatus = "GOMS",
+            filterGrade = "GOMS",
+            filterGender = "GOMS",
+            filterMajor = "GOMS",
+            onStudentSearchChange = {},
+            onOutingStateChange = {},
+            onRoleStateChange = {},
+            onFilterStatusChange = {},
+            onFilterGradeChange = {},
+            onFilterGenderChange = {},
+            onFilterMajorChange = {},
+            getStudentListUiState = GetStudentListUiState.Loading,
+            studentSearchUiState = StudentSearchUiState.Loading,
+            onBackClick = {},
+            onErrorToast = { _, _ -> },
+            studentListCallBack = {},
+            studentSearchCallBack = {},
+            changeAuthorityCallBack = { _, _ -> },
+            setBlackListCallBack = {},
+        ) {}
     }
 }

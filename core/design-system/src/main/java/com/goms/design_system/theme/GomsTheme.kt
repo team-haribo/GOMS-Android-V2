@@ -20,7 +20,7 @@ internal val LocalTypography = compositionLocalOf<GomsTypography> { error("No Go
 @Composable
 fun GomsTheme(
     themeMode: String = ThemeType.DARK.value,
-    content: @Composable (colors: ColorTheme, typography: GomsTypography) -> Unit
+    content: @Composable () -> Unit
 ) {
     val theme = when (themeMode) {
         ThemeType.DARK.value -> true
@@ -37,7 +37,7 @@ fun GomsTheme(
         LocalTypography provides typography
     ) {
         ApplySystemUi(theme)
-        content(colors, typography)
+        content()
     }
 }
 

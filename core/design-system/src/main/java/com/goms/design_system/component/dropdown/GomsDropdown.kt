@@ -1,5 +1,6 @@
 package com.goms.design_system.component.dropdown
 
+import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -7,7 +8,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
@@ -37,7 +38,9 @@ import com.goms.design_system.icon.ChevronUpIcon
 import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
+import com.goms.design_system.theme.ThemeType
 import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.toPersistentList
 
 @Composable
 fun GomsDropdown(
@@ -46,7 +49,7 @@ fun GomsDropdown(
     useDefaultText: Boolean = false,
     defaultText: String? = null,
     selectedIndex: Int,
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     height: Dp = 64.dp,
     backgroundColor: Color = Color.Unspecified,
     onItemClick: (Int) -> Unit,
@@ -190,3 +193,17 @@ fun GomsDropdown(
     }
 }
 
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Composable
+private fun GomsDropdownPreview() {
+    GomsTheme(ThemeType.SYSTEM.value) {
+        GomsDropdown(
+            dropdownList = listOf("과일", "꿀", "열매").toPersistentList(),
+            dropdownListSize = 3,
+            selectedIndex = 0,
+            backgroundColor = colors.G1,
+            onItemClick = {}
+        ) {}
+    }
+}

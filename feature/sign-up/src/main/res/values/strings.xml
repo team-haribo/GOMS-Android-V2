@@ -7,6 +7,7 @@
 
     <string name="error_number_mismatch">인증번호가 일치하지 않습니다</string>
     <string name="error_number_not_valid">잘못된 인증번호입니다</string>
+    <string name="error_too_many_request_send_email">인증번호 요청이 5번을 초과했습니다, 5분후에 재시도해주세요</string>
     <string name="error_verify_number">인증이 실패했습니다</string>
     <string name="certified">인증</string>
     <string name="resend_completion">재발송 완료</string>
@@ -21,6 +22,7 @@
     <string name="check_password">비밀번호 확인</string>
 
     <string name="error_email_not_valid">이메일 형식이 올바르지 않습니다</string>
+    <string name="error_too_many_request_verify_number">인증번호 검증 요청이 5번을 초과했습니다, 5분후에 재시도해주세요</string>
     <string name="error_send_number">인증번호 전송이 실패했습니다</string>
     <string name="name">이름</string>
     <string name="email">이메일</string>

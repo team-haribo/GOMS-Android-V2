@@ -1,5 +1,6 @@
 package com.goms.setting.component
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,10 +18,11 @@ import com.goms.design_system.component.button.GomsSwitchButton
 import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
+import com.goms.design_system.theme.ThemeType
 
 @Composable
 internal fun SettingSwitchComponent(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     title: String,
     detail: String,
     isSwitchOn: Boolean,
@@ -62,14 +64,17 @@ internal fun SettingSwitchComponent(
     }
 }
 
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
-@Preview(showBackground = true)
 private fun SettingSwitchComponentPreview() {
-    SettingSwitchComponent(
-        modifier = Modifier.padding(20.dp),
-        title = "외출제 푸시 알림",
-        detail = "외출할 시간이 될 때마다 알려드려요",
-        onFunctionOff = {},
-        isSwitchOn = false
-    ) {}
+    GomsTheme(ThemeType.SYSTEM.value) {
+        SettingSwitchComponent(
+            modifier = Modifier.padding(20.dp),
+            title = "곰",
+            detail = "식육목 곰과에 속하는 포유동물",
+            onFunctionOff = {},
+            isSwitchOn = true
+        ) {}
+    }
 }

@@ -26,6 +26,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.goms.design_system.component.shimmer.shimmerEffect
+import com.goms.design_system.component.spacer.GomsSpacer
+import com.goms.design_system.component.spacer.SpacerSize
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
 import com.goms.main.R
@@ -84,7 +86,8 @@ private fun MainProfileCardComponent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             if (data.profileUrl.isNullOrEmpty()) {
                 Image(
@@ -103,7 +106,6 @@ private fun MainProfileCardComponent(
                     contentDescription = stringResource(id = R.string.profile_image),
                 )
             }
-            Spacer(modifier = Modifier.width(16.dp))
             Column(
                 modifier = Modifier.height(56.dp),
                 verticalArrangement = Arrangement.SpaceBetween
@@ -143,14 +145,14 @@ private fun ShimmerMainProfileCardComponent(modifier: Modifier) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Box(
                 modifier = Modifier
                     .size(64.dp)
                     .shimmerEffect(color = colors.WHITE)
             )
-            Spacer(modifier = Modifier.width(16.dp))
             Column(
                 modifier = Modifier.height(56.dp),
                 verticalArrangement = Arrangement.SpaceBetween
