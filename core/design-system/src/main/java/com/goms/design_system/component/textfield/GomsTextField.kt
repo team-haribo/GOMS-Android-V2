@@ -81,8 +81,9 @@ fun GomsTextField(
         OutlinedTextField(
             value = setText,
             onValueChange = {
-                if (it.length <= maxLength) {
-                    onValueChange(it)
+                val filteredText = it.filterNot { text -> text.isWhitespace() }
+                if (filteredText.length <= maxLength) {
+                    onValueChange(filteredText)
                 }
             },
             keyboardOptions = keyboardOptions,
@@ -171,8 +172,9 @@ fun NumberTextField(
         OutlinedTextField(
             value = setText,
             onValueChange = {
-                if (it.length <= maxLength) {
-                    onValueChange(it)
+                val filteredText = it.filterNot { text -> text.isWhitespace() }
+                if (filteredText.length <= maxLength) {
+                    onValueChange(filteredText)
                 }
             },
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
@@ -259,7 +261,8 @@ fun GomsPasswordTextField(
         OutlinedTextField(
             value = setText,
             onValueChange = {
-                onValueChange(it)
+                val filteredText = it.filterNot { text -> text.isWhitespace() }
+                onValueChange(filteredText)
             },
             keyboardOptions = keyboardOptions,
             keyboardActions = keyboardActions,
@@ -354,7 +357,8 @@ fun GomsSearchTextField(
         TextField(
             value = setText,
             onValueChange = {
-                onValueChange(it)
+                val filteredText = it.filterNot { text -> text.isWhitespace() }
+                onValueChange(filteredText)
             },
             keyboardOptions = keyboardOptions,
             keyboardActions = keyboardActions,
