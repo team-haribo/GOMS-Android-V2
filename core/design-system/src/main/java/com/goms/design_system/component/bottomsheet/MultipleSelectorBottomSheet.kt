@@ -143,7 +143,11 @@ fun MultipleSelectorBottomSheetItem(
                 text = list[it],
                 selected = selectedItem == list[it]
             ) {
-                itemChange(list[it])
+                if (selectedItem == list[it]) {
+                    itemChange("")
+                } else {
+                    itemChange(list[it])
+                }
             }
         }
     }
