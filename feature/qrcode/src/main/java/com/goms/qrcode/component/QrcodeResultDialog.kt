@@ -63,7 +63,7 @@ internal fun QrcodeResultDialog(
                 )
                 QrcodeResultText(
                     text = title,
-                    modifier = Modifier.padding(top = 16.dp, bottom = 8.dp)
+                    modifier = Modifier.padding(top = 16.dp, bottom = 12.dp)
                 )
                 QrcodeResultDescriptionText(text = description)
                 Spacer(modifier = Modifier.weight(1f))
