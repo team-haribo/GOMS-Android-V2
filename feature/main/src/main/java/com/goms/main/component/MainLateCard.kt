@@ -114,7 +114,7 @@ internal fun MainLateCard(
                             ShimmerMainLateItem(
                                 modifier = Modifier
                                     .widthIn((componentWidth - 24.dp) / 3)
-                                    .height(143.dp)
+                                    .height(138.dp)
                             )
                         }
                     }
