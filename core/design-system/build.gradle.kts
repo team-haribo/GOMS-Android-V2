@@ -27,6 +27,7 @@ dependencies {
     implementation(libs.kotlinx.datetime)
     implementation(libs.kotlinx.immutable)
     implementation(libs.androidx.wear.compose)
+    implementation(libs.lottie.compose)
 }
 
 fun getApiKey(propertyKey: String): String {
