@@ -178,7 +178,7 @@ private fun QrcodeScanScreen(
             description = dialogDescription,
             buttonText = stringResource(id = dialogButtonText),
             onClick = {
-                if (outingUiState !is OutingUiState.Error) onSuccess() else Unit
+                if (outingUiState !is OutingUiState.Error) onSuccess()
             }
         )
     }
