@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -21,16 +22,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.goms.design_system.component.dialog.GomsOneButtonDialog
 import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.ThemeType
 import com.goms.design_system.util.lockScreenOrientation
+import com.goms.qrcode.component.QrcodeResultDialog
 import com.goms.qrcode.component.QrcodeScanGuide
 import com.goms.qrcode.component.QrcodeScanPreview
 import com.goms.qrcode.component.QrcodeScanTopBar
 import com.goms.qrcode.viewmodel.uistate.GetProfileUiState
 import com.goms.qrcode.viewmodel.uistate.OutingUiState
 import com.goms.qrcode.viewmodel.QrcodeViewModel
+import com.goms.ui.isAfterReturnTime
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -87,8 +89,11 @@ private fun QrcodeScanScreen(
 ) {
     val context = LocalContext.current
     var openDialog by remember { mutableStateOf(false) }
+    var isPlaying by remember { mutableStateOf(false) }
+    var dialogRawId by remember { mutableIntStateOf(0) }
     var dialogTitle by remember { mutableStateOf("") }
-    var dialogContent by remember { mutableStateOf("") }
+    var dialogDescription by remember { mutableStateOf("") }
+    var dialogButtonText by remember { mutableStateOf(R.string.check) }
     var isOuting by remember { mutableStateOf(false) }
 
     LaunchedEffect("getProfile") {
@@ -120,35 +125,61 @@ private fun QrcodeScanScreen(
 
     when (outingUiState) {
         is OutingUiState.Loading -> Unit
-        is OutingUiState.Success ->  {
+        is OutingUiState.Success -> {
             openDialog = true
-            dialogTitle = context.getString(R.string.success_qr_scan)
-            dialogContent = if (isOuting) context.getString(R.string.start_outing) else context.getString(R.string.back_outing)
+            when {
+                isAfterReturnTime() -> {
+                    dialogRawId = com.goms.design_system.R.raw.outing_failed
+                    dialogTitle = context.getString(R.string.late_outing)
+                    dialogDescription = context.getString(R.string.late_outing_description)
+                }
+
+                isOuting -> {
+                    isPlaying = true
+                    dialogRawId = com.goms.design_system.R.raw.outing_success
+                    dialogTitle = context.getString(R.string.success_qrcode)
+                    dialogDescription = context.getString(R.string.success_qrcode_description)
+                }
+
+                else -> {
+                    dialogRawId = com.goms.design_system.R.raw.return_success
+                    dialogTitle = context.getString(R.string.success_return)
+                    dialogDescription = context.getString(R.string.success_return_description)
+                }
+            }
         }
 
         is OutingUiState.BadRequest -> {
             openDialog = true
-            dialogTitle = context.getString(R.string.fail_qr_scan)
-            dialogContent = context.getString(R.string.error_blacklist)
+            dialogRawId = com.goms.design_system.R.raw.blacklist
+            dialogTitle = context.getString(R.string.no_outing)
+            dialogDescription = context.getString(R.string.no_outing_description)
+            dialogButtonText = R.string.back_home
         }
 
         is OutingUiState.Error -> {
             openDialog = true
-            dialogTitle = context.getString(R.string.fail_qr_scan)
-            dialogContent = context.getString(R.string.error_outing)
+            dialogRawId = com.goms.design_system.R.raw.outing_failed
+            dialogTitle = context.getString(R.string.fail_qrcode)
+            dialogDescription = context.getString(R.string.fail_qrcode_description)
+            dialogButtonText = R.string.back_camera
         }
     }
 
     if (openDialog) {
-        GomsOneButtonDialog(
+        QrcodeResultDialog(
             openDialog = openDialog,
             onStateChange = {
                 openDialog = it
             },
+            rawId = dialogRawId,
+            isPlaying = isPlaying,
             title = dialogTitle,
-            content = dialogContent,
-            buttonText = stringResource(id = R.string.check),
-            onClick = onSuccess
+            description = dialogDescription,
+            buttonText = stringResource(id = dialogButtonText),
+            onClick = {
+                if (outingUiState !is OutingUiState.Error) onSuccess()
+            }
         )
     }
 }

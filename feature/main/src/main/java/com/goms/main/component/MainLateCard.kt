@@ -114,7 +114,7 @@ internal fun MainLateCard(
                             ShimmerMainLateItem(
                                 modifier = Modifier
                                     .widthIn((componentWidth - 24.dp) / 3)
-                                    .height(143.dp)
+                                    .height(136.dp)
                             )
                         }
                     }
@@ -133,7 +133,9 @@ internal fun MainLateCard(
                     ) {
                         items(list.take(3).size) {
                             MainLateItem(
-                                modifier = Modifier.widthIn((componentWidth - 24.dp) / 3),
+                                modifier = Modifier
+                                    .widthIn((componentWidth - 24.dp) / 3)
+                                    .height(136.dp),
                                 data = list[it].toData()
                             )
                         }
