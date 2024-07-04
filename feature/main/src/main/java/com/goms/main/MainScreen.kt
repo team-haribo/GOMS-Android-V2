@@ -107,17 +107,15 @@ internal fun MainRoute(
         onAdminMenuClick = onAdminMenuClick,
         onErrorToast = onErrorToast,
         mainCallBack = {
-            viewModel.getProfile()
-            viewModel.getLateRankList()
-            viewModel.getOutingCount()
-            viewModel.getTimeValue()
+            with(viewModel) {
+                getProfile()
+                getLateRankList()
+                getOutingCount()
+                getTimeValue()
+            }
         },
-        tokenRefreshCallBack = {
-            viewModel.tokenRefresh()
-        },
-        initTokenRefreshCallBack = {
-            viewModel.initTokenRefresh()
-        }
+        tokenRefreshCallBack = viewModel::tokenRefresh,
+        initTokenRefreshCallBack = viewModel::initTokenRefresh
     )
 }
 

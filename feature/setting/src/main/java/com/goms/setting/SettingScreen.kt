@@ -141,28 +141,32 @@ internal fun SettingRoute(
             }
         },
         onBackClick = onBackClick,
-        onLogoutClick = { viewModel.logout() },
+        onLogoutClick = viewModel::logout,
         onLogoutSuccess = onLogoutSuccess,
         getProfile = {
-            viewModel.initProfileImage()
-            viewModel.initGetProfile()
-            viewModel.getProfile()
+            with(viewModel) {
+                initProfileImage()
+                initGetProfile()
+                getProfile()
+            }
         },
         getSettingInfo = {
-            viewModel.getThemeValue()
-            viewModel.getQrcodeValue()
-            viewModel.getAlarmValue()
-            viewModel.getTimeValue()
+            with(viewModel) {
+                getThemeValue()
+                getQrcodeValue()
+                getAlarmValue()
+                getTimeValue()
+            }
         },
         onThemeSelect = { selectedTheme ->
             viewModel.initSetTheme()
             viewModel.setTheme(selectedTheme)
         },
-        onUpdateTheme = { onThemeSelect() },
+        onUpdateTheme = onThemeSelect,
         onUpdateQrcode = { qrcodeData = it },
         onUpdateAlarm = { alarmData = it },
         onUpdateTime = { timeData = it },
-        setDefaultProfileUiState = { viewModel.initProfileImage() },
+        setDefaultProfileUiState = viewModel::initProfileImage,
         isLoading = { isLoading = it },
         onErrorToast = onErrorToast,
         onPasswordCheck = onPasswordCheck,

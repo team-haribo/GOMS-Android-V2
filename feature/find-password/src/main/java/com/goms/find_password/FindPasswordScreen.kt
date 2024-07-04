@@ -72,7 +72,7 @@ internal fun FindPasswordRoute(
         onBackClick = onBackClick,
         onErrorToast = onErrorToast,
         findPasswordUiState = findPasswordUiState,
-        initFindPassword = { viewModel.initFindPassword() },
+        initFindPassword = viewModel::initFindPassword,
         findPasswordCallback = {
             viewModel.findPassword(
                 body = FindPasswordRequestModel(

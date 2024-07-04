@@ -58,7 +58,7 @@ internal fun LateListRoute(
         role = if (role.isNotBlank()) Authority.valueOf(role) else Authority.ROLE_STUDENT,
         getLateListUiState = getLateListUiState,
         onBackClick = onBackClick,
-        lateListCallBack = { viewModel.getLateList(it) },
+        lateListCallBack = viewModel::getLateList,
         onErrorToast = onErrorToast
     )
 }

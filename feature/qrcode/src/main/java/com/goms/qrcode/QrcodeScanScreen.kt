@@ -70,7 +70,7 @@ internal fun QrcodeScanRoute(
             },
             onSuccess = onSuccess,
             onBackClick = onBackClick,
-            getProfile = { viewModel.getProfile() }
+            getProfile = viewModel::getProfile
         )
     } else {
         onPermissionBlock()

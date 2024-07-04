@@ -74,7 +74,7 @@ internal fun EmailCheckRoute(
             )
         },
         onNumberClick = onNumberClick,
-        initCallBack = { viewModel.initSendNumber() },
+        initCallBack = viewModel::initSendNumber,
         onErrorToast = onErrorToast
     )
 }
