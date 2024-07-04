@@ -127,13 +127,14 @@ internal fun MainLateCard(
 
                 is GetLateRankListUiState.Success -> {
                     val list = getLateRankListUiState.getLateRankListResponse
+                    val takeList by remember { mutableStateOf(list.take(3)) }
 
                     LazyRow(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         items(
-                            items = list.take(3),
+                            items = takeList,
                             key = { data ->
                                 data.accountIdx
                             }
