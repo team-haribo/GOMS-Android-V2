@@ -36,6 +36,9 @@ class QrcodeScanner(
                 .addOnFailureListener {
                     Log.d("qrcode","scan fail")
                 }
+                .addOnCompleteListener {
+                    imageProxy.close()
+                }
         }
         imageProxy.close()
     }
