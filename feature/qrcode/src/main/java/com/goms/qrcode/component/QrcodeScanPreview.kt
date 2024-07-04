@@ -5,6 +5,8 @@ import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.Preview
+import androidx.camera.core.resolutionselector.AspectRatioStrategy
+import androidx.camera.core.resolutionselector.ResolutionSelector
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.layout.PaddingValues
@@ -48,6 +50,14 @@ internal fun QrcodeScanPreview(
                     val imageCapture = ImageCapture.Builder().build()
 
                     val imageAnalyzer = ImageAnalysis.Builder()
+                        .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                        .setResolutionSelector(
+                            ResolutionSelector.Builder()
+                                .setAspectRatioStrategy(
+                                    AspectRatioStrategy.RATIO_16_9_FALLBACK_AUTO_STRATEGY
+                                )
+                                .build()
+                        )
                         .build()
                         .also {
                             it.setAnalyzer(cameraExecutor, QrcodeScanner { qrcodeData ->
