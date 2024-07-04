@@ -85,8 +85,8 @@ internal fun OutingStatusRoute(
         outingSearchUiState = outingSearchUiState,
         onBackClick = onBackClick,
         onErrorToast = onErrorToast,
-        outingSearchCallBack = { viewModel.outingSearch(it) },
-        deleteOutingCallBack = { viewModel.deleteOuting(it) }
+        outingSearchCallBack = viewModel::outingSearch,
+        deleteOutingCallBack = viewModel::deleteOuting
     )
 }
 

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -38,7 +39,7 @@ fun LinkText(
                 .height(20.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Divider(
+            HorizontalDivider(
                 modifier = Modifier
                     .weight(1f)
                     .height(1.dp),
@@ -51,7 +52,7 @@ fun LinkText(
                 fontWeight = FontWeight.Normal,
                 color = colors.G4
             )
-            Divider(
+            HorizontalDivider(
                 modifier = Modifier
                     .weight(1f)
                     .height(1.dp),

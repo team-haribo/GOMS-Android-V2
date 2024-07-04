@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -150,7 +151,7 @@ internal fun MainOutingCard(
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .heightIn(max = 10000.dp)
+                            .heightIn(max = 10_000.dp)
                     ) {
                         items(5) {
                             ShimmerMainOutingItem(modifier = modifier)
@@ -168,12 +169,17 @@ internal fun MainOutingCard(
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .heightIn(max = 10000.dp)
+                            .heightIn(max = 10_000.dp)
                     ) {
-                        items(list.size) {
+                        items(
+                            items = list,
+                            key = { data ->
+                                data.accountIdx
+                            }
+                        ) { data ->
                             MainOutingItem(
                                 modifier = Modifier.fillMaxWidth(),
-                                data = list[it].toData()
+                                data = data.toData()
                             )
                         }
                     }

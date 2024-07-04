@@ -13,9 +13,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -137,15 +139,20 @@ private fun StudentManagementListComponent(
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
-                .heightIn(max = 10000.dp)
+                .heightIn(max = 10_000.dp)
         ) {
-            items(list.size) {
+            items(
+                items = list,
+                key = { data ->
+                    data.accountIdx
+                }
+            ) { data ->
                 StudentManagementListItem(
                     modifier = Modifier.fillMaxWidth(),
-                    data = list[it],
+                    data = data,
                     onClick = onClick
                 )
-                Divider(
+                HorizontalDivider(
                     modifier = Modifier.fillMaxWidth(),
                     color = colors.WHITE.copy(0.15f)
                 )
@@ -245,11 +252,11 @@ private fun ShimmerStudentManagementListComponent(modifier: Modifier) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
-                .heightIn(max = 10000.dp)
+                .heightIn(max = 10_000.dp)
         ) {
             items(10) {
                 ShimmerStudentManagementListItem(modifier = modifier)
-                Divider(
+                HorizontalDivider(
                     modifier = Modifier.fillMaxWidth(),
                     color = colors.WHITE.copy(0.15f)
                 )

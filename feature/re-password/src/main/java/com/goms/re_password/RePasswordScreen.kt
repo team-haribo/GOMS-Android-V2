@@ -70,7 +70,7 @@ internal fun RePasswordRoute(
         onBackClick = onBackClick,
         onErrorToast = onErrorToast,
         rePasswordUiState = rePasswordUiState,
-        initRePassword = { viewModel.initRePassword() },
+        initRePassword = viewModel::initRePassword,
         rePasswordCallback = {
             viewModel.rePassword(
                 body = RePasswordRequestModel(
