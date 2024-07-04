@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
@@ -92,10 +93,15 @@ internal fun LateList(
                         .fillMaxWidth()
                         .heightIn(max = 10000.dp)
                 ) {
-                    items(list.size) {
+                    items(
+                        items = list,
+                        key = { data ->
+                            data.accountIdx
+                        }
+                    ) { data ->
                         LateListItem(
                             modifier = Modifier.fillMaxWidth(),
-                            data = list[it].toData()
+                            data = data.toData()
                         )
                         Divider(
                             modifier = Modifier.fillMaxWidth(),

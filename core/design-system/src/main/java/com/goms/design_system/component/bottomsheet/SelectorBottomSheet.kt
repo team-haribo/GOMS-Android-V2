@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
@@ -68,13 +69,18 @@ fun SelectorBottomSheet(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                items(list.size) {
+                items(
+                    items = list,
+                    key = { data ->
+                        data
+                    }
+                ) { data ->
                     BottomSheetButton(
                         modifier = Modifier.widthIn((componentWidth - 16.dp * list.lastIndex) / list.size),
-                        text = list[it],
-                        selected = selected == list[it]
+                        text = data,
+                        selected = selected == data
                     ) {
-                        itemChange(list[it])
+                        itemChange(data)
                     }
                 }
             }
