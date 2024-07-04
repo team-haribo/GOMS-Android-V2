@@ -14,7 +14,7 @@ import androidx.compose.ui.graphics.Color
 @Composable
 fun ShimmerBrush(
     color: Color = Color.LightGray,
-    targetValue: Float = 1300f
+    targetValue: Float = 1_300f
 ): Brush {
     val shimmerColors = listOf(
         color.copy(alpha = 0.1f),
@@ -30,7 +30,7 @@ fun ShimmerBrush(
         targetValue = targetValue,
         animationSpec = infiniteRepeatable(
             animation = tween(
-                durationMillis = 1000,
+                durationMillis = 1_000,
                 easing = FastOutSlowInEasing
             ), repeatMode = RepeatMode.Restart
         )

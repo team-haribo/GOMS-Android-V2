@@ -53,7 +53,7 @@ class GomsNotification : FirebaseMessagingService() {
             setContentTitle(title)
             setContentText(body)
             setPriority(NotificationCompat.PRIORITY_HIGH)
-            setVibrate(longArrayOf(1000, 1000, 1000))
+            setVibrate(longArrayOf(1_000L, 1_000L, 1_000L))
             setContentIntent(pendingIntent)
             setAutoCancel(true)
             setGroup(GROUP_NAME)

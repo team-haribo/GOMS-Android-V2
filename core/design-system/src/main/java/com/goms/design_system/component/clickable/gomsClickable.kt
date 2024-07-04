@@ -17,7 +17,7 @@ fun Modifier.gomsClickable(
     rippleColor: Color? = null,
     onClickLabel: String? = null,
     role: Role? = null,
-    interval: Long = 1000L,
+    interval: Long = 1_000L,
     onClick: () -> Unit
 ) = composed(
     inspectorInfo = debugInspectorInfo {

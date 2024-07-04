@@ -144,7 +144,7 @@ private fun OutingStatusListComponent(
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
-                .heightIn(max = 10000.dp)
+                .heightIn(max = 10_000.dp)
         ) {
             items(
                 items = list,
@@ -242,7 +242,7 @@ private fun ShimmerOutingStatusListComponent(modifier: Modifier) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
-                .heightIn(max = 10000.dp)
+                .heightIn(max = 10_000.dp)
         ) {
             items(10) {
                 ShimmerOutingStatusListItem(modifier = modifier)

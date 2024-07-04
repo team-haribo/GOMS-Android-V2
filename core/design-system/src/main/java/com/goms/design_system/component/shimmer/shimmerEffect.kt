@@ -17,7 +17,7 @@ import com.goms.design_system.theme.ThemeType
 
 fun Modifier.shimmerEffect(
     color: Color = Color.LightGray,
-    targetValue: Float = 1300f,
+    targetValue: Float = 1_300f,
     shape: Shape = CircleShape
 ) = composed {
     val brush = ShimmerBrush(

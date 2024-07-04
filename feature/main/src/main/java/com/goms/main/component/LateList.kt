@@ -63,7 +63,7 @@ internal fun LateList(
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .heightIn(max = 10000.dp)
+                        .heightIn(max = 10_000.dp)
                 ) {
                     items(10) {
                         ShimmerLateListItem(modifier = modifier)
@@ -92,7 +92,7 @@ internal fun LateList(
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .heightIn(max = 10000.dp)
+                        .heightIn(max = 10_000.dp)
                 ) {
                     items(
                         items = list,

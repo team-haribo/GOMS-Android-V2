@@ -151,7 +151,7 @@ internal fun MainOutingCard(
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .heightIn(max = 10000.dp)
+                            .heightIn(max = 10_000.dp)
                     ) {
                         items(5) {
                             ShimmerMainOutingItem(modifier = modifier)
@@ -169,7 +169,7 @@ internal fun MainOutingCard(
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .heightIn(max = 10000.dp)
+                            .heightIn(max = 10_000.dp)
                     ) {
                         items(
                             items = list,

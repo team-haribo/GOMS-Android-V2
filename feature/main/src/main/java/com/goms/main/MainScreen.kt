@@ -182,7 +182,7 @@ private fun MainScreen(
     var currentTime by rememberSaveable { mutableStateOf(System.currentTimeMillis()) }
     LaunchedEffect("Time") {
         while (true) {
-            delay(1_000)
+            delay(1_000L)
             currentTime = System.currentTimeMillis()
         }
     }

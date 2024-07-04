@@ -95,7 +95,7 @@ class MainActivity : ComponentActivity() {
 
     private fun controlTheStackWhenBackPressed() {
         val currentTime = System.currentTimeMillis()
-        if (doubleBackToExitPressedOnce && currentTime - backPressedTimestamp <= 2000) {
+        if (doubleBackToExitPressedOnce && currentTime - backPressedTimestamp <= 2_000L) {
             finishAffinity()
         } else {
             doubleBackToExitPressedOnce = true
