@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -287,7 +288,7 @@ private fun SettingScreen(
                 getProfileUiState = getProfileUiState
             )
             GomsSpacer(size = SpacerSize.Large)
-            Divider(
+            HorizontalDivider(
                 modifier = Modifier.fillMaxWidth(),
                 color = colors.WHITE.copy(0.15f)
             )
@@ -364,7 +365,7 @@ private fun SettingScreen(
                 )
             }
             GomsSpacer(size = SpacerSize.Large)
-            Divider(
+            HorizontalDivider(
                 modifier = Modifier.fillMaxWidth(),
                 color = colors.WHITE.copy(0.15f)
             )

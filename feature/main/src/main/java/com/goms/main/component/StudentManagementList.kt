@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -151,7 +152,7 @@ private fun StudentManagementListComponent(
                     data = data,
                     onClick = onClick
                 )
-                Divider(
+                HorizontalDivider(
                     modifier = Modifier.fillMaxWidth(),
                     color = colors.WHITE.copy(0.15f)
                 )
@@ -255,7 +256,7 @@ private fun ShimmerStudentManagementListComponent(modifier: Modifier) {
         ) {
             items(10) {
                 ShimmerStudentManagementListItem(modifier = modifier)
-                Divider(
+                HorizontalDivider(
                     modifier = Modifier.fillMaxWidth(),
                     color = colors.WHITE.copy(0.15f)
                 )

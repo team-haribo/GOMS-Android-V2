@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -89,7 +90,7 @@ internal fun AdminMenuList(
                 },
                 text = stringResource(id = R.string.setting),
             ) { onSettingClick() }
-            Divider(
+            HorizontalDivider(
                 modifier = Modifier.fillMaxWidth(),
                 color = colors.WHITE.copy(0.15f)
             )
@@ -113,7 +114,7 @@ private fun AdminMenuListItem(
                 onItemClick()
             }
     ) {
-        Divider(
+        HorizontalDivider(
             modifier = Modifier.fillMaxWidth(),
             color = colors.WHITE.copy(0.15f)
         )

@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -157,7 +158,7 @@ private fun OutingStatusListComponent(
                     data = data,
                     onClick = onClick
                 )
-                Divider(
+                HorizontalDivider(
                     modifier = Modifier.fillMaxWidth(),
                     color = colors.WHITE.copy(0.15f)
                 )
@@ -212,7 +213,7 @@ private fun OutingStatusListItem(
                     fontWeight = FontWeight.Normal,
                     color = colors.G4
                 )
-                Divider(
+                HorizontalDivider(
                     modifier = Modifier.size(1.dp, 8.dp),
                     color = colors.WHITE.copy(0.15f)
                 )
@@ -245,7 +246,7 @@ private fun ShimmerOutingStatusListComponent(modifier: Modifier) {
         ) {
             items(10) {
                 ShimmerOutingStatusListItem(modifier = modifier)
-                Divider(
+                HorizontalDivider(
                     modifier = Modifier.fillMaxWidth(),
                     color = colors.WHITE.copy(0.15f)
                 )

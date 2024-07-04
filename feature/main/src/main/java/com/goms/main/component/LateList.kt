@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -66,7 +67,7 @@ internal fun LateList(
                 ) {
                     items(10) {
                         ShimmerLateListItem(modifier = modifier)
-                        Divider(
+                        HorizontalDivider(
                             modifier = Modifier.fillMaxWidth(),
                             color = colors.WHITE.copy(0.15f)
                         )
@@ -103,7 +104,7 @@ internal fun LateList(
                             modifier = Modifier.fillMaxWidth(),
                             data = data.toData()
                         )
-                        Divider(
+                        HorizontalDivider(
                             modifier = Modifier.fillMaxWidth(),
                             color = colors.WHITE.copy(0.15f)
                         )
