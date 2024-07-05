@@ -85,7 +85,7 @@ internal fun PasswordRoute(
                 )
             )
         },
-        initCallBack = { viewModel.initSignUp() }
+        initCallBack = viewModel::initSignUp
     )
 }
 

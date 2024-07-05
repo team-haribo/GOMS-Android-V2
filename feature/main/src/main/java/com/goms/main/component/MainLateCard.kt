@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -114,7 +115,7 @@ internal fun MainLateCard(
                             ShimmerMainLateItem(
                                 modifier = Modifier
                                     .widthIn((componentWidth - 24.dp) / 3)
-                                    .height(143.dp)
+                                    .height(136.dp)
                             )
                         }
                     }
@@ -126,15 +127,23 @@ internal fun MainLateCard(
 
                 is GetLateRankListUiState.Success -> {
                     val list = getLateRankListUiState.getLateRankListResponse
+                    val takeList by remember(list) { mutableStateOf(list.take(3)) }
 
                     LazyRow(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-                        items(list.take(3).size) {
+                        items(
+                            items = takeList,
+                            key = { data ->
+                                data.accountIdx
+                            }
+                        ) { data ->
                             MainLateItem(
-                                modifier = Modifier.widthIn((componentWidth - 24.dp) / 3),
-                                data = list[it].toData()
+                                modifier = Modifier
+                                    .widthIn((componentWidth - 24.dp) / 3)
+                                    .height(136.dp),
+                                data = data.toData()
                             )
                         }
                     }

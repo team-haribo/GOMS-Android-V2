@@ -36,7 +36,7 @@ fun CountdownTimer(
         if (remainingTime == 0) {
             onTimerFinish()
         }
-        delay(1000)
+        delay(1_000L)
         remainingTime--
     }
 

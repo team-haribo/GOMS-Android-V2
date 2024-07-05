@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -95,7 +96,12 @@ fun MultipleSelectorBottomSheet(
                 closeSheet = closeSheet
             )
             LazyColumn {
-                itemsIndexed(subTitles) { index, subTitle ->
+                itemsIndexed(
+                    items = subTitles,
+                    key = { index, data ->
+                        data
+                    }
+                ) { index, subTitle ->
                     MultipleSelectorBottomSheetItem(
                         componentWidth = componentWidth,
                         title = subTitle,
@@ -137,13 +143,22 @@ fun MultipleSelectorBottomSheetItem(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        items(list.size) {
+        items(
+            items = list,
+            key = { data ->
+                data
+            }
+        ) { data ->
             AdminBottomSheetButton(
                 modifier = Modifier.widthIn((componentWidth - 16.dp * (list.size - 1)) / list.size),
-                text = list[it],
-                selected = selectedItem == list[it]
+                text = data,
+                selected = selectedItem == data
             ) {
-                itemChange(list[it])
+                if (selectedItem == data) {
+                    itemChange("")
+                } else {
+                    itemChange(data)
+                }
             }
         }
     }

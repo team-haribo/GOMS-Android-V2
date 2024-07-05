@@ -76,7 +76,7 @@ internal fun NumberRoute(
         },
         onErrorToast = onErrorToast,
         resentCallBack = { viewModel.sendNumber(body = SendNumberRequestModel("${viewModel.email.value}${ResourceKeys.EMAIL_DOMAIN}")) },
-        initCallBack = { viewModel.initVerifyNumber() }
+        initCallBack = viewModel::initVerifyNumber
     )
 }
 

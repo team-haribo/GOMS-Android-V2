@@ -80,7 +80,7 @@ internal fun SignUpRoute(
         onNumberClick = onNumberClick,
         onErrorToast = onErrorToast,
         signUpCallBack = { viewModel.sendNumber(body = SendNumberRequestModel("${viewModel.email.value}${ResourceKeys.EMAIL_DOMAIN}")) },
-        initCallBack = { viewModel.initSendNumber() }
+        initCallBack = viewModel::initSendNumber
     )
 }
 

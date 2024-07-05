@@ -53,9 +53,7 @@ internal fun QrcodeGenerateRoute(
     QrcodeGenerateScreen(
         role = if (role.isNotBlank()) Authority.valueOf(role) else Authority.ROLE_STUDENT,
         getOutingUUIDUiState = getOutingUUIDUiState,
-        onQrCreate = {
-            viewModel.getOutingUUID()
-        },
+        onQrCreate = viewModel::getOutingUUID,
         onBackClick = onBackClick,
         onRemoteError = onRemoteError,
         onTimerFinish = onTimerFinish,

@@ -137,7 +137,7 @@ internal fun StudentManagementRoute(
         studentSearchUiState = studentSearchUiState,
         onBackClick = onBackClick,
         onErrorToast = onErrorToast,
-        studentListCallBack = { viewModel.getStudentList() },
+        studentListCallBack = viewModel::getStudentList,
         studentSearchCallBack = { name ->
             viewModel.studentSearch(
                 grade = if (filterGrade.isNotBlank()) Grade.values()
@@ -161,12 +161,8 @@ internal fun StudentManagementRoute(
                 )
             )
         },
-        setBlackListCallBack = { accountIdx ->
-            viewModel.setBlackList(accountIdx = accountIdx)
-        },
-        deleteBlackListCallBack = { accountIdx ->
-            viewModel.deleteBlackList(accountIdx = accountIdx)
-        }
+        setBlackListCallBack = viewModel::setBlackList,
+        deleteBlackListCallBack = viewModel::deleteBlackList
     )
 }
 

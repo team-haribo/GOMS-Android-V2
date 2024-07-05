@@ -47,7 +47,7 @@ fun GomsCircularProgressIndicator() {
             targetValue = 0f,
             animationSpec = infiniteRepeatable(
                 animation = tween(
-                    durationMillis = 1000,
+                    durationMillis = 1_000,
                     easing = LinearEasing
                 ),
                 repeatMode = RepeatMode.Restart

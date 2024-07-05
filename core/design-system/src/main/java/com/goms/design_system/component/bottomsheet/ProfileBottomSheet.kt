@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
@@ -63,7 +64,7 @@ fun ProfileBottomSheet(
                 content = stringResource(id = R.string.select_gallery),
                 icon = { GalleryIcon(tint = colors.WHITE) }
             )
-            Divider(
+            HorizontalDivider(
                 modifier = Modifier.fillMaxWidth(),
                 color = colors.WHITE.copy(0.15f)
             )

@@ -107,17 +107,15 @@ internal fun MainRoute(
         onAdminMenuClick = onAdminMenuClick,
         onErrorToast = onErrorToast,
         mainCallBack = {
-            viewModel.getProfile()
-            viewModel.getLateRankList()
-            viewModel.getOutingCount()
-            viewModel.getTimeValue()
+            with(viewModel) {
+                getProfile()
+                getLateRankList()
+                getOutingCount()
+                getTimeValue()
+            }
         },
-        tokenRefreshCallBack = {
-            viewModel.tokenRefresh()
-        },
-        initTokenRefreshCallBack = {
-            viewModel.initTokenRefresh()
-        }
+        tokenRefreshCallBack = viewModel::tokenRefresh,
+        initTokenRefreshCallBack = viewModel::initTokenRefresh
     )
 }
 
@@ -182,7 +180,7 @@ private fun MainScreen(
     var currentTime by rememberSaveable { mutableStateOf(System.currentTimeMillis()) }
     LaunchedEffect("Time") {
         while (true) {
-            delay(1_000)
+            delay(1_000L)
             currentTime = System.currentTimeMillis()
         }
     }
