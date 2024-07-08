@@ -22,6 +22,7 @@ import com.goms.domain.setting.SetQrcodeUseCase
 import com.goms.domain.setting.SetThemeUseCase
 import com.goms.domain.setting.SetTimeUseCase
 import com.goms.model.util.Regex.PASSWORD
+import com.goms.model.util.ResourceKeys
 import com.goms.setting.util.getMultipartFile
 import com.goms.setting.viewmodel.uistate.GetProfileUiState
 import com.goms.setting.viewmodel.uistate.LogoutUiState
@@ -57,18 +58,18 @@ class SettingViewModel @Inject constructor (
 ) : ViewModel() {
     internal val role = authRepository.getRole()
 
-    internal var password = savedStateHandle.getStateFlow(key = PASSWORD, initialValue = "")
+    internal var password = savedStateHandle.getStateFlow(key = PASSWORD, initialValue = ResourceKeys.EMPTY)
 
-    private val _themeState = MutableStateFlow("")
+    private val _themeState = MutableStateFlow(ResourceKeys.EMPTY)
     internal val themeState = _themeState.asStateFlow()
 
-    private val _qrcodeState = MutableStateFlow("")
+    private val _qrcodeState = MutableStateFlow(ResourceKeys.EMPTY)
     internal val qrcodeState = _qrcodeState.asStateFlow()
 
-    private val _alarmState = MutableStateFlow("")
+    private val _alarmState = MutableStateFlow(ResourceKeys.EMPTY)
     internal val alarmState = _alarmState.asStateFlow()
 
-    private val _timeState = MutableStateFlow("")
+    private val _timeState = MutableStateFlow(ResourceKeys.EMPTY)
     internal val timeState = _timeState.asStateFlow()
 
     private val _setThemeState = MutableStateFlow<SetThemeUiState>(SetThemeUiState.Loading)
@@ -187,22 +188,22 @@ class SettingViewModel @Inject constructor (
     }
 
     internal fun getThemeValue() = viewModelScope.launch {
-        val themeValue = settingRepository.getThemeValue().first().replace("\"","")
+        val themeValue = settingRepository.getThemeValue().first()
         _themeState.value = themeValue
     }
 
     internal fun getQrcodeValue() = viewModelScope.launch {
-        val qrcodeValue = settingRepository.getQrcodeValue().first().replace("\"","")
+        val qrcodeValue = settingRepository.getQrcodeValue().first()
         _qrcodeState.value = qrcodeValue
     }
 
     internal fun getAlarmValue() = viewModelScope.launch {
-        val alarmValue = settingRepository.getAlarmValue().first().replace("\"","")
+        val alarmValue = settingRepository.getAlarmValue().first()
         _alarmState.value = alarmValue
     }
 
     internal fun getTimeValue() = viewModelScope.launch {
-        val timeValue = settingRepository.getTimeValue().first().replace("\"","")
+        val timeValue = settingRepository.getTimeValue().first()
         _timeState.value = timeValue
     }
 

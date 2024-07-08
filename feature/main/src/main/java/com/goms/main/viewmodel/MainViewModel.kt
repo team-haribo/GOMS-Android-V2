@@ -74,7 +74,7 @@ class MainViewModel @Inject constructor(
     private val _isRefreshing = MutableStateFlow(false)
     internal val isRefreshing = _isRefreshing.asStateFlow()
 
-    private val _timeValue = MutableStateFlow("")
+    private val _timeValue = MutableStateFlow(ResourceKeys.EMPTY)
     internal val timeValue = _timeValue.asStateFlow()
 
     private val _tokenRefreshUiState = MutableStateFlow<TokenRefreshUiState>(TokenRefreshUiState.Loading)
@@ -119,14 +119,14 @@ class MainViewModel @Inject constructor(
     private val _studentSearchUiState = MutableStateFlow<StudentSearchUiState>(StudentSearchUiState.Loading)
     internal val studentSearchUiState = _studentSearchUiState.asStateFlow()
 
-    internal var outingSearch = savedStateHandle.getStateFlow(key = OUTING_SEARCH, initialValue = "")
-    internal var studentSearch = savedStateHandle.getStateFlow(key = STUDENT_SEARCH, initialValue = "")
-    internal var outingState = savedStateHandle.getStateFlow(key = OUTING_STATE, initialValue = "")
-    internal var roleState = savedStateHandle.getStateFlow(key = ROLE_STATE, initialValue = "")
-    internal var filterStatus = savedStateHandle.getStateFlow(key = FILTER_STATUS, initialValue = "")
-    internal var filterGrade = savedStateHandle.getStateFlow(key = FILTER_GRADE, initialValue = "")
-    internal var filterGender = savedStateHandle.getStateFlow(key = FILTER_GENDER, initialValue = "")
-    internal var filterMajor = savedStateHandle.getStateFlow(key = FILTER_MAJOR, initialValue = "")
+    internal var outingSearch = savedStateHandle.getStateFlow(key = OUTING_SEARCH, initialValue = ResourceKeys.EMPTY)
+    internal var studentSearch = savedStateHandle.getStateFlow(key = STUDENT_SEARCH, initialValue = ResourceKeys.EMPTY)
+    internal var outingState = savedStateHandle.getStateFlow(key = OUTING_STATE, initialValue = ResourceKeys.EMPTY)
+    internal var roleState = savedStateHandle.getStateFlow(key = ROLE_STATE, initialValue = ResourceKeys.EMPTY)
+    internal var filterStatus = savedStateHandle.getStateFlow(key = FILTER_STATUS, initialValue = ResourceKeys.EMPTY)
+    internal var filterGrade = savedStateHandle.getStateFlow(key = FILTER_GRADE, initialValue = ResourceKeys.EMPTY)
+    internal var filterGender = savedStateHandle.getStateFlow(key = FILTER_GENDER, initialValue = ResourceKeys.EMPTY)
+    internal var filterMajor = savedStateHandle.getStateFlow(key = FILTER_MAJOR, initialValue = ResourceKeys.EMPTY)
 
     internal fun getTimeValue() = viewModelScope.launch {
         settingRepository.getTimeValue().distinctUntilChanged().collect {

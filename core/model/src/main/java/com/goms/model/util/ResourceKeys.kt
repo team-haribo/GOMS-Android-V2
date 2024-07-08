@@ -5,4 +5,5 @@ object ResourceKeys {
     const val EMAIL_DOMAIN = "@gsm.hs.kr"
     const val DEVICE = "device"
     const val DEVICE_TOKEN = "deviceToken"
+    const val EMPTY = ""
 }

@@ -66,13 +66,13 @@ class MainActivityViewModel @Inject constructor(
     private val _saveDeviceTokenUiState = MutableStateFlow<Result<Unit>>(Result.Loading)
     val saveDeviceTokenUiState = _saveDeviceTokenUiState.asStateFlow()
 
-    private val _themeState = MutableStateFlow("")
+    private val _themeState = MutableStateFlow(ResourceKeys.EMPTY)
     val themeState = _themeState.asStateFlow()
 
-    private val _qrcodeState = MutableStateFlow("")
+    private val _qrcodeState = MutableStateFlow(ResourceKeys.EMPTY)
     val qrcodeState = _qrcodeState.asStateFlow()
 
-    private val _alarmState = MutableStateFlow("")
+    private val _alarmState = MutableStateFlow(ResourceKeys.EMPTY)
     val alarmState = _alarmState.asStateFlow()
 
     fun saveDeviceToken(deviceToken: String) = viewModelScope.launch {
@@ -97,14 +97,14 @@ class MainActivityViewModel @Inject constructor(
     }
 
     fun getTheme() = viewModelScope.launch {
-        val themeValue = settingRepository.getThemeValue().first().replace("\"","")
+        val themeValue = settingRepository.getThemeValue().first()
         _themeState.value = themeValue
     }
 
     fun getSettingInfo() = viewModelScope.launch {
-        val themeValue = settingRepository.getThemeValue().first().replace("\"","")
-        val qrcodeValue = settingRepository.getQrcodeValue().first().replace("\"","")
-        val alarmValue = settingRepository.getAlarmValue().first().replace("\"","")
+        val themeValue = settingRepository.getThemeValue().first()
+        val qrcodeValue = settingRepository.getQrcodeValue().first()
+        val alarmValue = settingRepository.getAlarmValue().first()
         _themeState.value = themeValue
         _qrcodeState.value = qrcodeValue
         _alarmState.value = alarmValue

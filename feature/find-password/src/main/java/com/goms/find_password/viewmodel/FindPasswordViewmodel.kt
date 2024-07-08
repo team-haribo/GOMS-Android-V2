@@ -12,6 +12,7 @@ import com.goms.model.request.auth.SendNumberRequestModel
 import com.goms.find_password.viewmodel.uistate.FindPasswordUiState
 import com.goms.find_password.viewmodel.uistate.SendNumberUiState
 import com.goms.find_password.viewmodel.uistate.VerifyNumberUiState
+import com.goms.model.util.ResourceKeys
 import com.goms.ui.isValidEmail
 import com.goms.ui.isValidPassword
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -37,10 +38,10 @@ class FindPasswordViewmodel @Inject constructor(
     private val _verifyNumberUiState = MutableStateFlow<VerifyNumberUiState>(VerifyNumberUiState.Loading)
     internal val verifyNumberUiState = _verifyNumberUiState.asStateFlow()
 
-    internal var email = savedStateHandle.getStateFlow(key = EMAIL, initialValue = "")
-    internal var password = savedStateHandle.getStateFlow(key = PASSWORD, initialValue = "")
-    internal var passwordCheck = savedStateHandle.getStateFlow(key = CHECK_PASSWORD, initialValue = "")
-    internal var number = savedStateHandle.getStateFlow(key = NUMBER, initialValue = "")
+    internal var email = savedStateHandle.getStateFlow(key = EMAIL, initialValue = ResourceKeys.EMPTY)
+    internal var password = savedStateHandle.getStateFlow(key = PASSWORD, initialValue = ResourceKeys.EMPTY)
+    internal var passwordCheck = savedStateHandle.getStateFlow(key = CHECK_PASSWORD, initialValue = ResourceKeys.EMPTY)
+    internal var number = savedStateHandle.getStateFlow(key = NUMBER, initialValue = ResourceKeys.EMPTY)
 
     internal fun findPassword(body: FindPasswordRequestModel) = viewModelScope.launch {
         when {

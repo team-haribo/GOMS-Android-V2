@@ -51,12 +51,14 @@ import com.goms.design_system.theme.GomsTheme.typography
 import com.goms.design_system.theme.ThemeType
 import kotlinx.coroutines.delay
 
+const val EMPTY = ""
+
 @Composable
 fun GomsTextField(
     modifier: Modifier = Modifier,
     isError: Boolean = false,
     isEmail: Boolean = true,
-    placeHolder: String = "",
+    placeHolder: String = EMPTY,
     readOnly: Boolean = false,
     focusManager: FocusManager = LocalFocusManager.current,
     focusRequester: FocusRequester = FocusRequester(),
@@ -143,11 +145,11 @@ fun GomsTextField(
 fun NumberTextField(
     modifier: Modifier = Modifier,
     setText: String,
-    placeHolder: String = "",
+    placeHolder: String = EMPTY,
     focusManager: FocusManager = LocalFocusManager.current,
     focusRequester: FocusRequester = FocusRequester(),
     isError: Boolean,
-    errorText: String = "",
+    errorText: String = EMPTY,
     maxLength: Int = 4,
     onValueChange: (String) -> Unit,
     onResendClick: () -> Unit,
@@ -200,7 +202,7 @@ fun NumberTextField(
                 .onFocusChanged {
                     isFocused.value = it.isFocused
                     if (it.isFocused) {
-                        onValueChange("")
+                        onValueChange(EMPTY)
                     }
                 },
             maxLines = 1,
@@ -226,7 +228,7 @@ fun NumberTextField(
         },
         onTimerReset = {
             isErrorTextField.value = false
-            errorTextTextField.value = ""
+            errorTextTextField.value = EMPTY
             onResendClick()
         }
     )
@@ -237,7 +239,7 @@ fun GomsPasswordTextField(
     modifier: Modifier = Modifier,
     isDescription: Boolean = false,
     isError: Boolean = false,
-    placeHolder: String = "",
+    placeHolder: String = EMPTY,
     readOnly: Boolean = false,
     focusManager: FocusManager = LocalFocusManager.current,
     focusRequester: FocusRequester = FocusRequester(),
@@ -327,7 +329,7 @@ fun GomsPasswordTextField(
 fun GomsSearchTextField(
     modifier: Modifier = Modifier,
     debounceTime: Long = 300L,
-    placeHolder: String = "",
+    placeHolder: String = EMPTY,
     readOnly: Boolean = false,
     focusManager: FocusManager = LocalFocusManager.current,
     focusRequester: FocusRequester = FocusRequester(),
@@ -410,21 +412,21 @@ private fun GomsTextFieldPreview() {
                 placeHolder = "GOMS",
                 isError = false,
                 onValueChange = {},
-                setText = ""
+                setText = EMPTY
             )
             GomsTextField(
                 modifier = Modifier.fillMaxWidth(),
                 placeHolder = "GOMS",
                 isError = true,
                 onValueChange = {},
-                setText = ""
+                setText = EMPTY
             )
             NumberTextField(
                 modifier = Modifier.fillMaxWidth(),
                 placeHolder = "GOMS",
                 isError = false,
                 onValueChange = {},
-                setText = ""
+                setText = EMPTY
             ) {}
             NumberTextField(
                 modifier = Modifier.fillMaxWidth(),
@@ -432,7 +434,7 @@ private fun GomsTextFieldPreview() {
                 isError = true,
                 errorText = "Error",
                 onValueChange = {},
-                setText = ""
+                setText = EMPTY
             ) {}
             GomsPasswordTextField(
                 modifier = Modifier.fillMaxWidth(),
@@ -440,13 +442,13 @@ private fun GomsTextFieldPreview() {
                 placeHolder = "GOMS",
                 isError = false,
                 onValueChange = {},
-                setText = ""
+                setText = EMPTY
             )
             GomsSearchTextField(
                 modifier = Modifier.fillMaxWidth(),
                 placeHolder = "GOMS",
                 onValueChange = {},
-                setText = ""
+                setText = EMPTY
             ) {}
         }
     }

@@ -52,6 +52,7 @@ import com.goms.main.viewmodel.uistate.OutingSearchUiState
 import com.goms.main.viewmodel.uistate.SaveTokenUiState
 import com.goms.main.viewmodel.uistate.TokenRefreshUiState
 import com.goms.model.enum.Authority
+import com.goms.model.util.ResourceKeys
 import com.goms.ui.GomsRoleBackButton
 import java.util.UUID
 
@@ -61,7 +62,7 @@ internal fun OutingStatusRoute(
     onErrorToast: (throwable: Throwable?, message: Int?) -> Unit,
     viewModel: MainViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
 ) {
-    val role by viewModel.role.collectAsStateWithLifecycle(initialValue = "")
+    val role by viewModel.role.collectAsStateWithLifecycle(initialValue = ResourceKeys.EMPTY)
     val outingSearch by viewModel.outingSearch.collectAsStateWithLifecycle()
     val getOutingListUiState by viewModel.getOutingListUiState.collectAsStateWithLifecycle()
     val getOutingCountUiState by viewModel.getOutingCountUiState.collectAsStateWithLifecycle()

@@ -49,6 +49,8 @@ data class ListData(
     val list: PersistentList<PersistentList<String>>
 )
 
+const val EMPTY = ""
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MultipleSelectorBottomSheet(
@@ -117,7 +119,7 @@ fun MultipleSelectorBottomSheet(
                 modifier = Modifier.fillMaxWidth(),
                 text = stringResource(id = R.string.initialize_filter)
             ) {
-                bottomSheetSelectedItems.indices.forEach { bottomSheetSelectedItems[it] = "" }
+                bottomSheetSelectedItems.indices.forEach { bottomSheetSelectedItems[it] = EMPTY }
                 initClick()
             }
         }
@@ -155,7 +157,7 @@ fun MultipleSelectorBottomSheetItem(
                 selected = selectedItem == data
             ) {
                 if (selectedItem == data) {
-                    itemChange("")
+                    itemChange(EMPTY)
                 } else {
                     itemChange(data)
                 }
