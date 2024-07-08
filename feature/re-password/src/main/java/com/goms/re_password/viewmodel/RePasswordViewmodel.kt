@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.goms.common.network.errorHandling
 import com.goms.domain.account.RePasswordUseCase
 import com.goms.model.request.account.RePasswordRequestModel
+import com.goms.model.util.ResourceKeys
 import com.goms.re_password.viewmodel.uistate.RePasswordUiState
 import com.goms.ui.isValidPassword
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,9 +24,9 @@ class RePasswordViewmodel @Inject constructor(
     private val _rePasswordUiState = MutableStateFlow<RePasswordUiState>(RePasswordUiState.Loading)
     internal val rePasswordUiState = _rePasswordUiState.asStateFlow()
 
-    internal var password = savedStateHandle.getStateFlow(key = PASSWORD, initialValue = "")
-    internal var newPassword = savedStateHandle.getStateFlow(key = NEW_PASSWORD, initialValue = "")
-    internal var newCheckPassword = savedStateHandle.getStateFlow(key = NEW_CHECK_PASSWORD, initialValue = "")
+    internal var password = savedStateHandle.getStateFlow(key = PASSWORD, initialValue = ResourceKeys.EMPTY)
+    internal var newPassword = savedStateHandle.getStateFlow(key = NEW_PASSWORD, initialValue = ResourceKeys.EMPTY)
+    internal var newCheckPassword = savedStateHandle.getStateFlow(key = NEW_CHECK_PASSWORD, initialValue = ResourceKeys.EMPTY)
 
     internal fun rePassword(body: RePasswordRequestModel) = viewModelScope.launch {
         when {

@@ -57,6 +57,7 @@ import com.goms.model.enum.Grade
 import com.goms.model.enum.Major
 import com.goms.model.enum.Status
 import com.goms.model.request.council.AuthorityRequestModel
+import com.goms.model.util.ResourceKeys
 import com.goms.ui.GomsRoleBackButton
 import com.goms.ui.SwitchSelectorBottomSheet
 import kotlinx.collections.immutable.toPersistentList
@@ -68,7 +69,7 @@ internal fun StudentManagementRoute(
     onErrorToast: (throwable: Throwable?, message: Int?) -> Unit,
     viewModel: MainViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
 ) {
-    val role by viewModel.role.collectAsStateWithLifecycle(initialValue = "")
+    val role by viewModel.role.collectAsStateWithLifecycle(initialValue = ResourceKeys.EMPTY)
     val studentSearch by viewModel.studentSearch.collectAsStateWithLifecycle()
     val outingState by viewModel.outingState.collectAsStateWithLifecycle()
     val roleState by viewModel.roleState.collectAsStateWithLifecycle()
@@ -320,10 +321,10 @@ private fun StudentManagementScreen(
                 onFilterMajorChange
             ).toPersistentList(),
             initClick = {
-                onFilterStatusChange("")
-                onFilterGradeChange("")
-                onFilterGenderChange("")
-                onFilterMajorChange("")
+                onFilterStatusChange(ResourceKeys.EMPTY)
+                onFilterGradeChange(ResourceKeys.EMPTY)
+                onFilterGenderChange(ResourceKeys.EMPTY)
+                onFilterMajorChange(ResourceKeys.EMPTY)
             },
             closeSheet = {
                 onFilterBottomSheetOpenClick = false

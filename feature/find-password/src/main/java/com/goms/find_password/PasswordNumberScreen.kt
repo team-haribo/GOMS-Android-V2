@@ -100,7 +100,7 @@ private fun PasswordNumberScreen(
     val animatedSpacerHeight by animateDpAsState(targetValue = if (!isKeyboardOpen) 100.dp else 16.dp)
     var isLoading by remember { mutableStateOf(false) }
     var isError by remember { mutableStateOf(false) }
-    var errorText by remember { mutableStateOf("") }
+    var errorText by remember { mutableStateOf(ResourceKeys.EMPTY) }
     var openDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(isKeyboardOpen) {

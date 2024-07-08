@@ -32,6 +32,7 @@ import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.ThemeType
 import com.goms.design_system.util.lockScreenOrientation
 import com.goms.model.enum.Authority
+import com.goms.model.util.ResourceKeys
 import com.goms.qrcode.component.QrcodeGenerateText
 import com.goms.qrcode.component.QrcodeGenerateTimer
 import com.goms.qrcode.util.QrcodeGenerator
@@ -47,7 +48,7 @@ internal fun QrcodeGenerateRoute(
     onTimerFinish: () -> Unit,
     onErrorToast: (throwable: Throwable?, message: Int?) -> Unit
 ) {
-    val role by viewModel.role.collectAsStateWithLifecycle(initialValue = "")
+    val role by viewModel.role.collectAsStateWithLifecycle(initialValue = ResourceKeys.EMPTY)
     val getOutingUUIDUiState by viewModel.getOutingUUIDState.collectAsStateWithLifecycle()
 
     QrcodeGenerateScreen(

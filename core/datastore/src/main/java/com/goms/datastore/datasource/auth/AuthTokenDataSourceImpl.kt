@@ -2,6 +2,7 @@ package com.goms.datastore.datasource.auth
 
 import androidx.datastore.core.DataStore
 import com.goms.datastore.AuthToken
+import com.goms.model.util.ResourceKeys
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -10,7 +11,7 @@ class AuthTokenDataSourceImpl @Inject constructor(
     private val authToken: DataStore<AuthToken>
 ) : AuthTokenDataSource {
     override fun getAccessToken(): Flow<String> = authToken.data.map {
-        it.accessToken ?: ""
+        it.accessToken ?: ResourceKeys.EMPTY
     }
 
     override suspend fun setAccessToken(accessToken: String) {
@@ -30,7 +31,7 @@ class AuthTokenDataSourceImpl @Inject constructor(
     }
 
     override fun getAccessTokenExp(): Flow<String> = authToken.data.map {
-        it.accessExp ?: ""
+        it.accessExp ?: ResourceKeys.EMPTY
     }
 
     override suspend fun setAccessTokenExp(accessTokenExp: String) {
@@ -50,7 +51,7 @@ class AuthTokenDataSourceImpl @Inject constructor(
     }
 
     override fun getRefreshToken(): Flow<String> = authToken.data.map {
-        it.refreshToken ?: ""
+        it.refreshToken ?: ResourceKeys.EMPTY
     }
 
     override suspend fun setRefreshToken(refreshToken: String) {
@@ -70,7 +71,7 @@ class AuthTokenDataSourceImpl @Inject constructor(
     }
 
     override fun getRefreshTokenExp(): Flow<String> = authToken.data.map {
-        it.refreshExp ?: ""
+        it.refreshExp ?: ResourceKeys.EMPTY
     }
 
     override suspend fun setRefreshTokenExp(refreshTokenExp: String) {
@@ -90,7 +91,7 @@ class AuthTokenDataSourceImpl @Inject constructor(
     }
 
     override fun getAuthority(): Flow<String> = authToken.data.map {
-        it.authority ?: ""
+        it.authority ?: ResourceKeys.EMPTY
     }
 
     override suspend fun setAuthority(authority: String) {

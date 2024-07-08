@@ -47,6 +47,7 @@ import com.goms.design_system.theme.ThemeType
 import com.goms.design_system.util.lockScreenOrientation
 import com.goms.model.enum.Authority
 import com.goms.model.enum.Switch
+import com.goms.model.util.ResourceKeys
 import com.goms.setting.component.SettingButton
 import com.goms.setting.component.SelectThemeDropDown
 import com.goms.setting.component.SettingButtonType
@@ -74,7 +75,7 @@ internal fun SettingRoute(
     viewModel: SettingViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
-    val role by viewModel.role.collectAsStateWithLifecycle(initialValue = "")
+    val role by viewModel.role.collectAsStateWithLifecycle(initialValue = ResourceKeys.EMPTY)
     val getProfileUiState by viewModel.getProfileUiState.collectAsStateWithLifecycle()
     val profileImageUiState by viewModel.profileImageUiState.collectAsStateWithLifecycle()
     val logoutUiState by viewModel.logoutState.collectAsStateWithLifecycle()
