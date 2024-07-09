@@ -1,7 +1,9 @@
 package com.goms.goms_android_v2.navigation
 
+import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -26,6 +28,7 @@ import com.goms.login.navigation.loginScreen
 import com.goms.login.navigation.navigateToInputLogin
 import com.goms.main.navigation.adminMenuScreen
 import com.goms.main.navigation.lateListScreen
+import com.goms.main.navigation.mainRoute
 import com.goms.main.navigation.mainScreen
 import com.goms.main.navigation.navigateToAdminMenu
 import com.goms.main.navigation.navigateToLateList
@@ -45,7 +48,6 @@ import com.goms.re_password.navigation.rePasswordScreen
 import com.goms.setting.navigation.navigateToSettingScreen
 import com.goms.setting.navigation.navigateToWithdrawalScreen
 import com.goms.setting.navigation.settingScreen
-import com.goms.setting.navigation.withdrawalRoute
 import com.goms.setting.navigation.withdrawalScreen
 import com.goms.sign_up.navigation.navigateToNumber
 import com.goms.sign_up.navigation.navigateToPassword
@@ -87,10 +89,38 @@ fun GomsNavHost(
     NavHost(
         navController = navController,
         startDestination = startDestination,
-        enterTransition = { EnterTransition.None },
-        exitTransition = { ExitTransition.None },
-        popEnterTransition = { EnterTransition.None },
-        popExitTransition = { ExitTransition.None },
+        enterTransition = {
+            if (targetState.destination.route != mainRoute) {
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    animationSpec = tween(500)
+                )
+            } else {
+                EnterTransition.None
+            }
+        },
+        exitTransition = {
+            if (targetState.destination.route != mainRoute) {
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    animationSpec = tween(500)
+                )
+            } else {
+                ExitTransition.None
+            }
+        },
+        popEnterTransition = {
+            slideIntoContainer(
+                AnimatedContentTransitionScope.SlideDirection.Right,
+                animationSpec = tween(500)
+            )
+        },
+        popExitTransition = {
+            slideOutOfContainer(
+                AnimatedContentTransitionScope.SlideDirection.Right,
+                animationSpec = tween(500)
+            )
+        },
         modifier = modifier
     ) {
         loginScreen(
