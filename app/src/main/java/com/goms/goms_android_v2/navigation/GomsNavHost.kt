@@ -93,7 +93,7 @@ fun GomsNavHost(
             if (targetState.destination.route != mainRoute) {
                 slideIntoContainer(
                     AnimatedContentTransitionScope.SlideDirection.Left,
-                    animationSpec = tween(700)
+                    animationSpec = tween(500)
                 )
             } else {
                 EnterTransition.None
@@ -103,7 +103,7 @@ fun GomsNavHost(
             if (targetState.destination.route != mainRoute) {
                 slideOutOfContainer(
                     AnimatedContentTransitionScope.SlideDirection.Left,
-                    animationSpec = tween(700)
+                    animationSpec = tween(500)
                 )
             } else {
                 ExitTransition.None
@@ -112,13 +112,13 @@ fun GomsNavHost(
         popEnterTransition = {
             slideIntoContainer(
                 AnimatedContentTransitionScope.SlideDirection.Right,
-                animationSpec = tween(700)
+                animationSpec = tween(500)
             )
         },
         popExitTransition = {
             slideOutOfContainer(
                 AnimatedContentTransitionScope.SlideDirection.Right,
-                animationSpec = tween(700)
+                animationSpec = tween(500)
             )
         },
         modifier = modifier
