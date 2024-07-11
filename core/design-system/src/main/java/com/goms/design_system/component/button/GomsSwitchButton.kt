@@ -56,22 +56,24 @@ fun GomsSwitchButton(
     onCheckedChanged: (checked: Boolean) -> Unit
 ) {
     var clickListener by remember { mutableStateOf(false) }
+    var isActivation by remember { mutableStateOf(false) }
 
     val swipeableState =
         rememberSwipeableState(initialValue = initialValue, confirmStateChange = { true })
 
     val sizePx = with(LocalDensity.current) { (width - height).toPx() }
-    val anchors = mapOf(0f to stateOff, sizePx to stateOn) // Maps anchor points (in px) to states
+    val anchors = mapOf(0f to stateOff, sizePx to stateOn)
     val scope = rememberCoroutineScope()
 
     LaunchedEffect("init") {
         if(initialValue == stateOn) {
             clickListener = true
+            isActivation = true
         }
     }
 
-    LaunchedEffect(clickListener) {
-        if (clickListener) onCheckedChanged(true) else onCheckedChanged(false)
+    LaunchedEffect(isActivation) {
+        if (isActivation) onCheckedChanged(true) else onCheckedChanged(false)
     }
 
     Box(
@@ -95,9 +97,11 @@ fun GomsSwitchButton(
                 .clip(RoundedCornerShape(height))
                 .background(
                     if (swipeableState.currentValue == stateOff) {
-                        if (clickListener) switchOnBackground else switchOffBackground
+                        isActivation = false
+                        switchOffBackground
                     } else {
-                        if (clickListener) switchOnBackground else switchOffBackground
+                        isActivation = true
+                        switchOnBackground
                     }
                 ),
             verticalAlignment = Alignment.CenterVertically,
