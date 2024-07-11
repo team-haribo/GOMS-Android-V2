@@ -106,6 +106,7 @@ private fun LateListScreen(
             GomsSpacer(size = SpacerSize.ExtraSmall)
             LateList(
                 getLateListUiState = getLateListUiState,
+                localDate = selectedLocalDate,
                 onBottomSheetOpenClick = { onDatePickerBottomSheetOpenClick = true },
                 onErrorToast = onErrorToast
             )

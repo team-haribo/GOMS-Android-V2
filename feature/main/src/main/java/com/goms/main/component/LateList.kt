@@ -38,11 +38,13 @@ import com.goms.main.data.LateData
 import com.goms.main.data.toData
 import com.goms.main.viewmodel.uistate.GetLateListUiState
 import com.goms.ui.toText
+import kotlinx.datetime.LocalDate
 
 @Composable
 internal fun LateList(
     modifier: Modifier = Modifier,
     getLateListUiState: GetLateListUiState,
+    localDate: LocalDate,
     onErrorToast: (throwable: Throwable?, message: Int?) -> Unit,
     onBottomSheetOpenClick: () -> Unit
 ) {
@@ -55,7 +57,7 @@ internal fun LateList(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            SearchResultText(modifier = Modifier)
+            LocalDateText(date = localDate)
             FilterText(onFilterTextClick = onBottomSheetOpenClick)
         }
         when (getLateListUiState) {
