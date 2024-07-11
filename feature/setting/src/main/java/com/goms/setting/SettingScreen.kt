@@ -8,16 +8,13 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Divider
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -33,10 +30,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LifecycleStartEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goms.design_system.component.bottomsheet.ProfileBottomSheet
-import com.goms.design_system.component.button.ButtonState
-import com.goms.design_system.component.button.GomsButton
 import com.goms.design_system.component.dialog.GomsTwoButtonDialog
 import com.goms.design_system.component.indicator.GomsCircularProgressIndicator
 import com.goms.design_system.component.spacer.GomsSpacer
@@ -48,17 +44,17 @@ import com.goms.design_system.util.lockScreenOrientation
 import com.goms.model.enum.Authority
 import com.goms.model.enum.Switch
 import com.goms.model.util.ResourceKeys
-import com.goms.setting.component.SettingButton
 import com.goms.setting.component.SelectThemeDropDown
+import com.goms.setting.component.SettingButton
 import com.goms.setting.component.SettingButtonType
 import com.goms.setting.component.SettingProfileCard
 import com.goms.setting.component.SettingSwitchComponent
 import com.goms.setting.data.toData
+import com.goms.setting.viewmodel.SettingViewModel
 import com.goms.setting.viewmodel.uistate.GetProfileUiState
 import com.goms.setting.viewmodel.uistate.LogoutUiState
 import com.goms.setting.viewmodel.uistate.ProfileImageUiState
 import com.goms.setting.viewmodel.uistate.SetThemeUiState
-import com.goms.setting.viewmodel.SettingViewModel
 import com.goms.ui.GomsRoleBackButton
 import com.goms.ui.rememberMultiplePermissionsStateSafe
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -114,8 +110,8 @@ internal fun SettingRoute(
         }
     }
 
-    DisposableEffect("setting data set") {
-        onDispose {
+    LifecycleStartEffect() {
+        onStopOrDispose {
             if (!qrcodeData.isNullOrEmpty()) {
                 viewModel.setQrcode(qrcodeData)
             }
