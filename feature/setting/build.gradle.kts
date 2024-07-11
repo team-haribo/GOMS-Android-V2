@@ -9,4 +9,6 @@ android {
 
 dependencies {
     implementation(libs.accompanist.permission)
+    implementation(libs.androidx.lifecycle.runtimeCompose)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
 }
