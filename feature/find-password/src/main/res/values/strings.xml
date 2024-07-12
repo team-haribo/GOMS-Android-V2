@@ -4,6 +4,7 @@
     <string name="reset_password">비밀번호 재설정</string>
 
     <string name="error_email_not_valid">이메일 형식이 올바르지 않습니다</string>
+    <string name="error_not_found_send_email">존재하지 않는 이메일입니다.</string>
     <string name="error_too_many_request_send_email">인증번호 요청이 5번을 초과했습니다, 5분후에 재시도해주세요</string>
     <string name="error_send_number">인증번호 전송이 실패했습니다</string>
     <string name="email">이메일</string>
