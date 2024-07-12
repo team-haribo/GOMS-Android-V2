@@ -51,6 +51,7 @@ import com.goms.find_password.component.FindPasswordText
 import com.goms.model.request.auth.SendNumberRequestModel
 import com.goms.find_password.viewmodel.FindPasswordViewmodel
 import com.goms.find_password.viewmodel.uistate.SendNumberUiState
+import com.goms.model.enum.EmailStatus
 import com.goms.model.util.ResourceKeys
 
 @Composable
@@ -70,7 +71,10 @@ internal fun EmailCheckRoute(
         sendNumberUiState = sendNumberUiState,
         emailCheckCallBack = {
             viewModel.sendNumber(
-                body = SendNumberRequestModel("${viewModel.email.value}${ResourceKeys.EMAIL_DOMAIN}")
+                body = SendNumberRequestModel(
+                    email = "${viewModel.email.value}${ResourceKeys.EMAIL_DOMAIN}",
+                    emailStatus = EmailStatus.AFTER_SIGNUP
+                )
             )
         },
         onNumberClick = onNumberClick,
@@ -108,6 +112,11 @@ private fun EmailCheckScreen(
             is SendNumberUiState.EmailNotValid -> {
                 isLoading = false
                 onErrorToast(null, R.string.error_email_not_valid)
+            }
+
+            is SendNumberUiState.NotFound -> {
+                isLoading = false
+                onErrorToast(null, R.string.error_not_found_send_email)
             }
 
             is SendNumberUiState.TooManyRequest -> {
