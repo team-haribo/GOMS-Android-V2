@@ -91,6 +91,7 @@ class FindPasswordViewmodel @Inject constructor(
                     it.catch { remoteError ->
                         _sendNumberUiState.value = SendNumberUiState.Error(remoteError)
                         remoteError.errorHandling(
+                            notFoundAction = { _sendNumberUiState.value = SendNumberUiState.NotFound },
                             tooManyRequestAction = { _sendNumberUiState.value = SendNumberUiState.TooManyRequest }
                         )
                     }.collect { result ->
@@ -99,6 +100,7 @@ class FindPasswordViewmodel @Inject constructor(
                 }.onFailure {
                     _sendNumberUiState.value = SendNumberUiState.Error(it)
                     it.errorHandling(
+                        notFoundAction = { _sendNumberUiState.value = SendNumberUiState.NotFound },
                         tooManyRequestAction = { _sendNumberUiState.value = SendNumberUiState.TooManyRequest }
                     )
                 }
