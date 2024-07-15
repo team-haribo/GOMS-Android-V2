@@ -12,6 +12,7 @@ import com.goms.login.viewmodel.uistate.LoginUiState
 import com.goms.login.viewmodel.uistate.SaveTokenUiState
 import com.goms.model.request.auth.LoginRequestModel
 import com.goms.model.response.auth.LoginResponseModel
+import com.goms.model.util.ResourceKeys
 import com.goms.ui.isValidEmail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,8 +33,8 @@ class LoginViewModel @Inject constructor(
     private val _saveTokenUiState = MutableStateFlow<SaveTokenUiState>(SaveTokenUiState.Loading)
     internal val saveTokenUiState = _saveTokenUiState.asStateFlow()
 
-    internal var email = savedStateHandle.getStateFlow(key = EMAIL, initialValue = "")
-    internal var password = savedStateHandle.getStateFlow(key = PASSWORD, initialValue = "")
+    internal var email = savedStateHandle.getStateFlow(key = EMAIL, initialValue = ResourceKeys.EMPTY)
+    internal var password = savedStateHandle.getStateFlow(key = PASSWORD, initialValue = ResourceKeys.EMPTY)
 
     internal fun login(body: LoginRequestModel) = viewModelScope.launch {
         if (!isValidEmail(body.email)) {

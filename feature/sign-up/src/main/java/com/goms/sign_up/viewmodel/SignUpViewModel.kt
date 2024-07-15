@@ -9,6 +9,7 @@ import com.goms.domain.auth.SighUpUseCase
 import com.goms.domain.auth.VerifyNumberUseCase
 import com.goms.model.request.auth.SendNumberRequestModel
 import com.goms.model.request.auth.SignUpRequestModel
+import com.goms.model.util.ResourceKeys
 import com.goms.sign_up.viewmodel.uistate.SendNumberUiState
 import com.goms.sign_up.viewmodel.uistate.SignUpUiState
 import com.goms.sign_up.viewmodel.uistate.VerifyNumberUiState
@@ -37,13 +38,13 @@ class SignUpViewModel @Inject constructor(
     private val _verifyNumberUiState = MutableStateFlow<VerifyNumberUiState>(VerifyNumberUiState.Loading)
     internal val verifyNumberUiState = _verifyNumberUiState.asStateFlow()
 
-    internal var name = savedStateHandle.getStateFlow(key = NAME, initialValue = "")
-    internal var email = savedStateHandle.getStateFlow(key = EMAIL, initialValue = "")
-    internal var gender = savedStateHandle.getStateFlow(key = GENDER, initialValue = "")
-    internal var major = savedStateHandle.getStateFlow(key = MAJOR, initialValue = "")
-    internal var number = savedStateHandle.getStateFlow(key = NUMBER, initialValue = "")
-    internal var password = savedStateHandle.getStateFlow(key = PASSWORD, initialValue = "")
-    internal var checkPassword = savedStateHandle.getStateFlow(key = CHECK_PASSWORD, initialValue = "")
+    internal var name = savedStateHandle.getStateFlow(key = NAME, initialValue = ResourceKeys.EMPTY)
+    internal var email = savedStateHandle.getStateFlow(key = EMAIL, initialValue = ResourceKeys.EMPTY)
+    internal var gender = savedStateHandle.getStateFlow(key = GENDER, initialValue = ResourceKeys.EMPTY)
+    internal var major = savedStateHandle.getStateFlow(key = MAJOR, initialValue = ResourceKeys.EMPTY)
+    internal var number = savedStateHandle.getStateFlow(key = NUMBER, initialValue = ResourceKeys.EMPTY)
+    internal var password = savedStateHandle.getStateFlow(key = PASSWORD, initialValue = ResourceKeys.EMPTY)
+    internal var checkPassword = savedStateHandle.getStateFlow(key = CHECK_PASSWORD, initialValue = ResourceKeys.EMPTY)
 
     internal fun signUp(body: SignUpRequestModel) = viewModelScope.launch {
         _signUpUiState.value = SignUpUiState.Loading

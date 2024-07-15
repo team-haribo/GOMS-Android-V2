@@ -109,7 +109,7 @@ class MainActivity : ComponentActivity() {
             if (task.isSuccessful) {
                 val deviceTokenSF = getSharedPreferences(ResourceKeys.DEVICE_TOKEN, MODE_PRIVATE)
                 val deviceToken = task.result
-                if (deviceTokenSF.getString(ResourceKeys.DEVICE, "") == deviceToken) {
+                if (deviceTokenSF.getString(ResourceKeys.DEVICE, ResourceKeys.EMPTY) == deviceToken) {
                     viewModel.saveDeviceToken(deviceToken = deviceToken)
                     setNotification(deviceToken = deviceToken)
                 }

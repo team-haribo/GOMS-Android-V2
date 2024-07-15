@@ -46,6 +46,7 @@ import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.ThemeType
 import com.goms.design_system.util.keyboardAsState
 import com.goms.design_system.util.lockScreenOrientation
+import com.goms.model.enum.EmailStatus
 import com.goms.model.request.auth.SendNumberRequestModel
 import com.goms.model.util.ResourceKeys
 import com.goms.sign_up.component.NumberText
@@ -75,7 +76,14 @@ internal fun NumberRoute(
             )
         },
         onErrorToast = onErrorToast,
-        resentCallBack = { viewModel.sendNumber(body = SendNumberRequestModel("${viewModel.email.value}${ResourceKeys.EMAIL_DOMAIN}")) },
+        resentCallBack = {
+            viewModel.sendNumber(
+                body = SendNumberRequestModel(
+                    email = "${viewModel.email.value}${ResourceKeys.EMAIL_DOMAIN}",
+                    emailStatus = EmailStatus.BEFORE_SIGNUP
+                )
+            )
+        },
         initCallBack = viewModel::initVerifyNumber
     )
 }
@@ -98,7 +106,7 @@ private fun NumberScreen(
     val animatedSpacerHeight by animateDpAsState(targetValue = if (!isKeyboardOpen) 100.dp else 16.dp)
     var isLoading by remember { mutableStateOf(false) }
     var isError by remember { mutableStateOf(false) }
-    var errorText by remember { mutableStateOf("") }
+    var errorText by remember { mutableStateOf(ResourceKeys.EMPTY) }
     var openDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(isKeyboardOpen) {

@@ -48,6 +48,7 @@ import com.goms.main.viewmodel.MainViewModel
 import com.goms.main.viewmodel.uistate.SaveTokenUiState
 import com.goms.main.viewmodel.uistate.TokenRefreshUiState
 import com.goms.model.enum.Switch
+import com.goms.model.util.ResourceKeys
 import com.goms.ui.rememberMultiplePermissionsStateSafe
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.swiperefresh.SwipeRefresh
@@ -67,7 +68,7 @@ internal fun MainRoute(
     onErrorToast: (throwable: Throwable?, message: Int?) -> Unit,
     viewModel: MainViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
 ) {
-    val role by viewModel.role.collectAsStateWithLifecycle(initialValue = "")
+    val role by viewModel.role.collectAsStateWithLifecycle(initialValue = ResourceKeys.EMPTY)
     val timeValue by viewModel.timeValue.collectAsStateWithLifecycle(initialValue = Switch.OFF.value)
     val isRefreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
     val tokenRefreshUiState by viewModel.tokenRefreshUiState.collectAsStateWithLifecycle()

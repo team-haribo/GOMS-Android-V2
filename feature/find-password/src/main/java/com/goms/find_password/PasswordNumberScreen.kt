@@ -52,6 +52,7 @@ import com.goms.find_password.viewmodel.FindPasswordViewmodel
 import com.goms.find_password.viewmodel.uistate.FindPasswordUiState
 import com.goms.find_password.viewmodel.uistate.SendNumberUiState
 import com.goms.find_password.viewmodel.uistate.VerifyNumberUiState
+import com.goms.model.enum.EmailStatus
 import com.goms.model.util.ResourceKeys
 
 @Composable
@@ -77,7 +78,14 @@ internal fun PasswordNumberRoute(
                 authCode = viewModel.number.value
             )
         },
-        resentCallBack = { viewModel.sendNumber(body = SendNumberRequestModel("${viewModel.email.value}${ResourceKeys.EMAIL_DOMAIN}")) },
+        resentCallBack = {
+            viewModel.sendNumber(
+                body = SendNumberRequestModel(
+                    email = "${viewModel.email.value}${ResourceKeys.EMAIL_DOMAIN}",
+                    emailStatus = EmailStatus.AFTER_SIGNUP
+                )
+            )
+        },
         initCallBack = viewModel::initVerifyNumber
     )
 }
@@ -100,7 +108,7 @@ private fun PasswordNumberScreen(
     val animatedSpacerHeight by animateDpAsState(targetValue = if (!isKeyboardOpen) 100.dp else 16.dp)
     var isLoading by remember { mutableStateOf(false) }
     var isError by remember { mutableStateOf(false) }
-    var errorText by remember { mutableStateOf("") }
+    var errorText by remember { mutableStateOf(ResourceKeys.EMPTY) }
     var openDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(isKeyboardOpen) {

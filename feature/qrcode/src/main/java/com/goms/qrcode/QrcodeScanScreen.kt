@@ -25,6 +25,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.ThemeType
 import com.goms.design_system.util.lockScreenOrientation
+import com.goms.model.util.ResourceKeys
 import com.goms.qrcode.component.QrcodeResultDialog
 import com.goms.qrcode.component.QrcodeScanGuide
 import com.goms.qrcode.component.QrcodeScanPreview
@@ -91,8 +92,8 @@ private fun QrcodeScanScreen(
     var openDialog by remember { mutableStateOf(false) }
     var isPlaying by remember { mutableStateOf(false) }
     var dialogRawId by remember { mutableIntStateOf(0) }
-    var dialogTitle by remember { mutableStateOf("") }
-    var dialogDescription by remember { mutableStateOf("") }
+    var dialogTitle by remember { mutableStateOf(ResourceKeys.EMPTY) }
+    var dialogDescription by remember { mutableStateOf(ResourceKeys.EMPTY) }
     var dialogButtonText by remember { mutableStateOf(R.string.check) }
     var isOuting by remember { mutableStateOf(false) }
 

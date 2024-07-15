@@ -39,6 +39,7 @@ import com.goms.main.component.LateListText
 import com.goms.main.viewmodel.uistate.GetLateListUiState
 import com.goms.main.viewmodel.MainViewModel
 import com.goms.model.enum.Authority
+import com.goms.model.util.ResourceKeys
 import com.goms.ui.GomsRoleBackButton
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
@@ -51,7 +52,7 @@ internal fun LateListRoute(
     onErrorToast: (throwable: Throwable?, message: Int?) -> Unit,
     viewModel: MainViewModel = hiltViewModel(LocalContext.current as ComponentActivity)
 ) {
-    val role by viewModel.role.collectAsStateWithLifecycle(initialValue = "")
+    val role by viewModel.role.collectAsStateWithLifecycle(initialValue = ResourceKeys.EMPTY)
     val getLateListUiState by viewModel.getLateListUiState.collectAsStateWithLifecycle()
 
     LateListScreen(
@@ -105,6 +106,7 @@ private fun LateListScreen(
             GomsSpacer(size = SpacerSize.ExtraSmall)
             LateList(
                 getLateListUiState = getLateListUiState,
+                localDate = selectedLocalDate,
                 onBottomSheetOpenClick = { onDatePickerBottomSheetOpenClick = true },
                 onErrorToast = onErrorToast
             )
