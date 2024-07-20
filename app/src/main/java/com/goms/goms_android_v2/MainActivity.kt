@@ -13,9 +13,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
-import com.goms.common.result.Result
 import com.goms.goms_android_v2.ui.GomsApp
-import com.goms.model.util.ResourceKeys
 import com.goms.ui.createToast
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.model.AppUpdateType
@@ -67,7 +65,7 @@ class MainActivity : ComponentActivity() {
                     windowSizeClass = calculateWindowSizeClass(this),
                     onLogout = { logout() },
                     onAlarmOff = { viewModel.deleteDeviceToken() },
-                    onAlarmOn = { getNotification() },
+                    onAlarmOn = { saveNotification() },
                     uiState = uiState,
                 )
             }
@@ -104,30 +102,11 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun getNotification() {
+    private fun saveNotification() {
         FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                val deviceTokenSF = getSharedPreferences(ResourceKeys.DEVICE_TOKEN, MODE_PRIVATE)
                 val deviceToken = task.result
-                if (deviceTokenSF.getString(ResourceKeys.DEVICE, ResourceKeys.EMPTY) == deviceToken) {
-                    viewModel.saveDeviceToken(deviceToken = deviceToken)
-                    setNotification(deviceToken = deviceToken)
-                }
-            }
-        }
-    }
-
-    private fun setNotification(deviceToken: String) {
-        lifecycleScope.launch {
-            viewModel.saveDeviceTokenUiState.collect {
-                when (it) {
-                    is Result.Success -> {
-                        val deviceTokenSF = getSharedPreferences(ResourceKeys.DEVICE_TOKEN, MODE_PRIVATE)
-                        deviceTokenSF.edit().putString(ResourceKeys.DEVICE, deviceToken).apply()
-                    }
-
-                    is Result.Error, Result.Loading -> Unit
-                }
+                viewModel.saveDeviceToken(deviceToken = deviceToken)
             }
         }
     }
