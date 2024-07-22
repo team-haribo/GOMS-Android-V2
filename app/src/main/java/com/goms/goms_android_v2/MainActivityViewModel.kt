@@ -66,6 +66,9 @@ class MainActivityViewModel @Inject constructor(
     private val _saveDeviceTokenUiState = MutableStateFlow<Result<Unit>>(Result.Loading)
     val saveDeviceTokenUiState = _saveDeviceTokenUiState.asStateFlow()
 
+    private val _deleteDeviceTokenUiState = MutableStateFlow<Result<Unit>>(Result.Loading)
+    val deleteDeviceTokenUiState = _deleteDeviceTokenUiState.asStateFlow()
+
     private val _themeState = MutableStateFlow(ResourceKeys.EMPTY)
     val themeState = _themeState.asStateFlow()
 
@@ -90,6 +93,15 @@ class MainActivityViewModel @Inject constructor(
 
     fun deleteDeviceToken() = viewModelScope.launch {
         deleteDeviceTokenUseCase()
+            .onSuccess {
+                it.catch { remoteError ->
+                    _deleteDeviceTokenUiState.value = Result.Error(remoteError)
+                }.collect { result ->
+                    _deleteDeviceTokenUiState.value = Result.Success(result)
+                }
+            }.onFailure {
+                _deleteDeviceTokenUiState.value = Result.Error(it)
+            }
     }
 
     fun deleteToken() = viewModelScope.launch {
