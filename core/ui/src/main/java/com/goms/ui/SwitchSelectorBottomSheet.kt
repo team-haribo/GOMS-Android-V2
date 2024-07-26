@@ -35,6 +35,7 @@ import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
 import com.goms.design_system.theme.ThemeType
+import com.goms.design_system.util.ThemePreviews
 import com.goms.model.enum.Authority
 import com.goms.model.enum.BlackList
 
@@ -149,8 +150,7 @@ fun SwitchSelectorBottomSheet(
     }
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@ThemePreviews
 @Composable
 private fun SwitchSelectorBottomSheetPreview() {
     GomsTheme(ThemeType.SYSTEM.value) {

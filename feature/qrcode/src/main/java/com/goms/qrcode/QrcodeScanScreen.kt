@@ -2,7 +2,6 @@ package com.goms.qrcode
 
 import android.Manifest
 import android.content.pm.ActivityInfo
-import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,11 +18,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.ThemeType
+import com.goms.design_system.util.DevicePreviews
 import com.goms.design_system.util.lockScreenOrientation
 import com.goms.model.util.ResourceKeys
 import com.goms.qrcode.component.QrcodeResultDialog
@@ -185,8 +184,7 @@ private fun QrcodeScanScreen(
     }
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@DevicePreviews
 @Composable
 private fun QrcodeScanScreenPreview() {
     GomsTheme(ThemeType.SYSTEM.value) {

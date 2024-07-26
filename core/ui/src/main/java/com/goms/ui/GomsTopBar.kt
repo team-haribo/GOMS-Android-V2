@@ -23,6 +23,7 @@ import com.goms.design_system.icon.SettingIcon
 import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.ThemeType
+import com.goms.design_system.util.ThemePreviews
 
 @Composable
 fun GomsTopBar(
@@ -56,8 +57,7 @@ fun GomsTopBar(
     }
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@ThemePreviews
 @Composable
 private fun GomsTopBarPreview() {
     GomsTheme(ThemeType.SYSTEM.value) {

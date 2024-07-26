@@ -44,6 +44,7 @@ import com.goms.design_system.component.textfield.GomsPasswordTextField
 import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.ThemeType
+import com.goms.design_system.util.ThemeDevicePreviews
 import com.goms.design_system.util.keyboardAsState
 import com.goms.model.request.account.RePasswordRequestModel
 import com.goms.re_password.component.RePasswordText
@@ -217,8 +218,7 @@ private fun RePasswordScreen(
     }
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@ThemeDevicePreviews
 @Composable
 private fun RePasswordScreenPreview() {
     GomsTheme(ThemeType.SYSTEM.value) {

@@ -1,6 +1,5 @@
 package com.goms.design_system.component.textfield
 
-import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -38,7 +37,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.goms.design_system.R
 import com.goms.design_system.component.timer.CountdownTimer
@@ -49,6 +47,7 @@ import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
 import com.goms.design_system.theme.ThemeType
+import com.goms.design_system.util.ThemePreviews
 import kotlinx.coroutines.delay
 
 const val EMPTY = ""
@@ -401,8 +400,7 @@ fun GomsSearchTextField(
     }
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@ThemePreviews
 @Composable
 private fun GomsTextFieldPreview() {
     GomsTheme(ThemeType.SYSTEM.value) {

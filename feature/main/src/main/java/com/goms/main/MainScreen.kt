@@ -1,7 +1,6 @@
 package com.goms.main
 
 import android.Manifest
-import android.content.res.Configuration
 import android.os.Build
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
@@ -24,7 +23,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -33,6 +31,7 @@ import com.goms.design_system.icon.SettingIcon
 import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.ThemeType
+import com.goms.design_system.util.ThemeDevicePreviews
 import com.goms.main.viewmodel.uistate.GetLateRankListUiState
 import com.goms.main.viewmodel.uistate.GetOutingCountUiState
 import com.goms.main.viewmodel.uistate.GetOutingListUiState
@@ -268,8 +267,7 @@ private fun MainScreen(
     }
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@ThemeDevicePreviews
 @Composable
 private fun MainScreenPreview() {
     GomsTheme(ThemeType.SYSTEM.value) {
