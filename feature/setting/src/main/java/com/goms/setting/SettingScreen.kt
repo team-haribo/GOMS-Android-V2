@@ -57,6 +57,7 @@ import com.goms.setting.viewmodel.uistate.LogoutUiState
 import com.goms.setting.viewmodel.uistate.ProfileImageUiState
 import com.goms.setting.viewmodel.uistate.SetThemeUiState
 import com.goms.ui.GomsRoleBackButton
+import com.goms.ui.TrackScreenViewEvent
 import com.goms.ui.rememberMultiplePermissionsStateSafe
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 
@@ -397,7 +398,6 @@ private fun SettingScreen(
     if (loadingState) {
         GomsCircularProgressIndicator()
     }
-
     if (openDialog) {
         GomsTwoButtonDialog(
             openDialog = openDialog,
@@ -425,6 +425,7 @@ private fun SettingScreen(
             }
         )
     }
+    TrackScreenViewEvent(screenName = stringResource(id = R.string.setting_screen))
 }
 
 @ThemeDevicePreviews
