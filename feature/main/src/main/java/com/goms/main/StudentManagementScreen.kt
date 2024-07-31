@@ -59,6 +59,7 @@ import com.goms.model.request.council.AuthorityRequestModel
 import com.goms.model.util.ResourceKeys
 import com.goms.ui.GomsRoleBackButton
 import com.goms.ui.SwitchSelectorBottomSheet
+import com.goms.ui.TrackScreenViewEvent
 import kotlinx.collections.immutable.toPersistentList
 import java.util.UUID
 
@@ -331,6 +332,7 @@ private fun StudentManagementScreen(
             }
         )
     }
+    TrackScreenViewEvent(screenName = stringResource(id = R.string.student_management_screen))
 }
 
 @ThemeDevicePreviews

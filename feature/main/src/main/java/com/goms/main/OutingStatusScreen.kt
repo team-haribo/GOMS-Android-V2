@@ -53,6 +53,7 @@ import com.goms.main.viewmodel.uistate.TokenRefreshUiState
 import com.goms.model.enum.Authority
 import com.goms.model.util.ResourceKeys
 import com.goms.ui.GomsRoleBackButton
+import com.goms.ui.TrackScreenViewEvent
 import java.util.UUID
 
 @Composable
@@ -176,6 +177,7 @@ private fun OutingStatusScreen(
             }
         }
     }
+    TrackScreenViewEvent(screenName = stringResource(id = R.string.outing_status_screen))
 }
 
 @ThemeDevicePreviews
