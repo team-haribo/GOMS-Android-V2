@@ -1,4 +1,7 @@
 <resources>
+    <string name="qrcode_generate_screen">QrcodeGenerateScreen</string>
+    <string name="qrcode_scan_screen">QrcodeScanScreen</string>
+
     <string name="outing_qrcode">외출 QR코드</string>
     <string name="until_qrcode_expires">QR코드 만료까지</string>
 
