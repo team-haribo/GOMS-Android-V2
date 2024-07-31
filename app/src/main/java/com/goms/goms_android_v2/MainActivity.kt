@@ -13,6 +13,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
+import com.goms.analytics.AnalyticsHelper
 import com.goms.goms_android_v2.ui.GomsApp
 import com.goms.ui.createToast
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
@@ -22,6 +23,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -32,6 +34,9 @@ class MainActivity : ComponentActivity() {
             controlTheStackWhenBackPressed()
         }
     }
+
+    @Inject
+    lateinit var analyticsHelper: AnalyticsHelper
 
     private val viewModel: MainActivityViewModel by viewModels()
 
@@ -67,6 +72,7 @@ class MainActivity : ComponentActivity() {
                     onAlarmOff = { viewModel.deleteDeviceToken() },
                     onAlarmOn = { saveNotification() },
                     uiState = uiState,
+                    analyticsHelper = analyticsHelper
                 )
             }
         }
