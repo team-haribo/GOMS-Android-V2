@@ -1,4 +1,9 @@
 <resources>
+    <string name="main_screen">MainScreen</string>
+    <string name="outing_status_screen">OutingStatusScreen</string>
+    <string name="late_list_screen">LateListScreen</string>
+    <string name="student_management_screen">StudentManagementScreen</string>
+
     <string name="qr_create">QR 생성</string>
     <string name="student_management">학생 관리</string>
     <string name="outing_status">외출 현황</string>

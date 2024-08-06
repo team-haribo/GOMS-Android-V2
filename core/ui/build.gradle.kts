@@ -9,6 +9,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:analytics"))
     implementation(project(":core:design-system"))
     implementation(project(":core:model"))
 

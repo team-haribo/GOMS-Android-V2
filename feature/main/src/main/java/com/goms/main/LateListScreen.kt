@@ -22,6 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -40,6 +41,7 @@ import com.goms.main.viewmodel.MainViewModel
 import com.goms.model.enum.Authority
 import com.goms.model.util.ResourceKeys
 import com.goms.ui.GomsRoleBackButton
+import com.goms.ui.TrackScreenViewEvent
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
@@ -120,6 +122,7 @@ private fun LateListScreen(
             }
         )
     }
+    TrackScreenViewEvent(screenName = stringResource(id = R.string.late_list_screen))
 }
 
 @ThemeDevicePreviews

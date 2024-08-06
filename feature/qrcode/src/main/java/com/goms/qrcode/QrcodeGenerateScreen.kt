@@ -40,6 +40,7 @@ import com.goms.qrcode.util.QrcodeGenerator
 import com.goms.qrcode.viewmodel.uistate.GetOutingUUIDUiState
 import com.goms.qrcode.viewmodel.QrcodeViewModel
 import com.goms.ui.GomsRoleBackButton
+import com.goms.ui.TrackScreenViewEvent
 
 @Composable
 internal fun QrcodeGenerateRoute(
@@ -125,6 +126,7 @@ private fun QrcodeGenerateScreen(
             Spacer(modifier = Modifier.weight(1f))
         }
     }
+    TrackScreenViewEvent(screenName = stringResource(id = R.string.qrcode_generate_screen))
 }
 
 @ThemeDevicePreviews

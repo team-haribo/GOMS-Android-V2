@@ -23,6 +23,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -48,6 +49,7 @@ import com.goms.main.viewmodel.uistate.SaveTokenUiState
 import com.goms.main.viewmodel.uistate.TokenRefreshUiState
 import com.goms.model.enum.Switch
 import com.goms.model.util.ResourceKeys
+import com.goms.ui.TrackScreenViewEvent
 import com.goms.ui.rememberMultiplePermissionsStateSafe
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.swiperefresh.SwipeRefresh
@@ -265,6 +267,7 @@ private fun MainScreen(
             }
         }
     }
+    TrackScreenViewEvent(screenName = stringResource(id = R.string.main_screen))
 }
 
 @ThemeDevicePreviews
