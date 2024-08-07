@@ -29,6 +29,7 @@ GOMS Android
  ┃ ┗ 📂activity
  ┣ 📂build-logic
  ┣ 📂core
+ ┃ ┣ 📂analytice
  ┃ ┣ 📂common
  ┃ ┣ 📂data
  ┃ ┃ ┣ 📂di
@@ -82,11 +83,12 @@ GOMS Android
 ## :rocket: Tech Skills
 | Tech Stack   |                                               |
 |:-------------|:----------------------------------------------|
+| Minimum SDK  | 26                                            |
 | Language     | Kotlin                                        |
 | Architecture | MVVM, Android App Architecture                |
-| Async        | Coroutine                                     |
 | Compose      | Navigation, Kotlinx.Immutable                 |
 | DI           | Hilt                                          |
+| Image        | Coil                                          |
 | Network      | Retrofit2, OkHttp3                            |
 | Asynchronous | Coroutine, Flow                               |
 | Jetpack      | Proto DataStore, ViewModel                    |
