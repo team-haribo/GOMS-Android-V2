@@ -5,8 +5,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.goms.find_password.EmailCheckRoute
-import com.goms.find_password.PasswordNumberRoute
 import com.goms.find_password.FindPasswordRoute
+import com.goms.find_password.PasswordNumberRoute
 
 const val emailCheckRoute = "email_check_route"
 const val passwordNumberRoute = "password_number_route"
