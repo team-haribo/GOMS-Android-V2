@@ -29,9 +29,9 @@ import com.goms.qrcode.component.QrcodeResultDialog
 import com.goms.qrcode.component.QrcodeScanGuide
 import com.goms.qrcode.component.QrcodeScanPreview
 import com.goms.qrcode.component.QrcodeScanTopBar
+import com.goms.qrcode.viewmodel.QrcodeViewModel
 import com.goms.qrcode.viewmodel.uistate.GetProfileUiState
 import com.goms.qrcode.viewmodel.uistate.OutingUiState
-import com.goms.qrcode.viewmodel.QrcodeViewModel
 import com.goms.ui.TrackScreenViewEvent
 import com.goms.ui.isAfterReturnTime
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
