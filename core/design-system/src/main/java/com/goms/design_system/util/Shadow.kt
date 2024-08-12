@@ -2,7 +2,6 @@ package com.goms.design_system.util
 
 import android.graphics.BlurMaskFilter
 import android.graphics.Color
-import android.graphics.Typeface.NORMAL
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Paint
