@@ -1,8 +1,6 @@
 package com.goms.data.repository.setting
 
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
 interface SettingRepository {
     fun getThemeValue(): Flow<String>
