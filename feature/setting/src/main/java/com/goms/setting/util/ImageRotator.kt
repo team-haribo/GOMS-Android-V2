@@ -7,7 +7,6 @@ import android.graphics.Matrix
 import android.media.ExifInterface
 import android.net.Uri
 import android.provider.MediaStore
-import android.util.Log
 
 fun rotateImage(bitmap: Bitmap, exif: String): Bitmap {
     val matrix = Matrix()

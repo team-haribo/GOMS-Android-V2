@@ -5,8 +5,8 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.dataStoreFile
 import com.goms.datastore.AuthToken
-import com.goms.datastore.serializer.AuthTokenSerializer
 import com.goms.datastore.SettingInfo
+import com.goms.datastore.serializer.AuthTokenSerializer
 import com.goms.datastore.serializer.SettingSerializer
 import dagger.Module
 import dagger.Provides

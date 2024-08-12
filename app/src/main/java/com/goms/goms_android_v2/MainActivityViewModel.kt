@@ -4,14 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.goms.common.result.Result
 import com.goms.common.result.asResult
-import com.goms.data.repository.account.AccountRepository
 import com.goms.data.repository.auth.AuthRepository
 import com.goms.data.repository.setting.SettingRepository
 import com.goms.domain.auth.SaveTokenUseCase
 import com.goms.domain.auth.TokenRefreshUseCase
 import com.goms.domain.notification.DeleteDeviceTokenUseCase
 import com.goms.domain.notification.SaveDeviceTokenUseCase
-import com.goms.model.response.account.ProfileResponseModel
 import com.goms.model.response.auth.LoginResponseModel
 import com.goms.model.util.ResourceKeys
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,7 +18,6 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map

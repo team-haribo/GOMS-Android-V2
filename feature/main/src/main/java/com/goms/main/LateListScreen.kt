@@ -3,9 +3,7 @@ package com.goms.main
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -36,8 +34,8 @@ import com.goms.design_system.util.ThemeDevicePreviews
 import com.goms.design_system.util.getDefaultWednesday
 import com.goms.main.component.LateList
 import com.goms.main.component.LateListText
-import com.goms.main.viewmodel.uistate.GetLateListUiState
 import com.goms.main.viewmodel.MainViewModel
+import com.goms.main.viewmodel.uistate.GetLateListUiState
 import com.goms.model.enum.Authority
 import com.goms.model.util.ResourceKeys
 import com.goms.ui.GomsRoleBackButton

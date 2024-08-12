@@ -1,7 +1,5 @@
 package com.goms.network.dto.request.auth
 
-import com.goms.model.enum.Gender
-import com.goms.model.enum.Major
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 

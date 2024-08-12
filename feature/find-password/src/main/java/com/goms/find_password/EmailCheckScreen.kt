@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -32,7 +31,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.goms.design_system.component.bottomsheet.BottomSheetHeader
 import com.goms.design_system.component.button.ButtonState
 import com.goms.design_system.component.button.GomsBackButton
 import com.goms.design_system.component.button.GomsButton
@@ -47,10 +45,10 @@ import com.goms.design_system.util.ThemeDevicePreviews
 import com.goms.design_system.util.keyboardAsState
 import com.goms.design_system.util.lockScreenOrientation
 import com.goms.find_password.component.FindPasswordText
-import com.goms.model.request.auth.SendNumberRequestModel
 import com.goms.find_password.viewmodel.FindPasswordViewmodel
 import com.goms.find_password.viewmodel.uistate.SendNumberUiState
 import com.goms.model.enum.EmailStatus
+import com.goms.model.request.auth.SendNumberRequestModel
 import com.goms.model.util.ResourceKeys
 
 @Composable
