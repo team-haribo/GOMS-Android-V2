@@ -1,7 +1,7 @@
 package com.goms.network.datasource.late
 
-import com.goms.network.dto.response.late.RankResponse
 import com.goms.network.api.LateAPI
+import com.goms.network.dto.response.late.RankResponse
 import com.goms.network.util.GomsApiHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
