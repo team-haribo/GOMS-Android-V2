@@ -62,12 +62,11 @@ internal fun MainLateCard(
                 componentWidth = with(density) {
                     it.size.width.toDp()
                 }
-            }
+            },
+        color = colors.BACKGROUND
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(color = colors.BACKGROUND)
+            modifier = Modifier.fillMaxWidth()
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
