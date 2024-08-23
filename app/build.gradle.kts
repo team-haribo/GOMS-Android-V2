@@ -36,5 +36,5 @@ dependencies {
     androidTestImplementation(libs.androidx.test.ext)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.firebase.messaging)
-    implementation(libs.`in`.app.update)
+    implementation(libs.app.update.ktx)
 }
