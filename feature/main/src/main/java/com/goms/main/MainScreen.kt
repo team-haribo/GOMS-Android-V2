@@ -62,7 +62,6 @@ internal fun MainRoute(
     qrcodeState: String,
     onOutingStatusClick: () -> Unit,
     onLateListClick: () -> Unit,
-    onStudentManagementClick: () -> Unit,
     onQrcodeClick: (role: Authority) -> Unit,
     onSettingClick: () -> Unit,
     onAdminMenuClick: () -> Unit,
@@ -73,7 +72,6 @@ internal fun MainRoute(
     val timeValue by viewModel.timeValue.collectAsStateWithLifecycle(initialValue = Switch.OFF.value)
     val isRefreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
     val tokenRefreshUiState by viewModel.tokenRefreshUiState.collectAsStateWithLifecycle()
-    val saveTokenUiState by viewModel.saveTokenUiState.collectAsStateWithLifecycle()
     val getProfileUiState by viewModel.getProfileUiState.collectAsStateWithLifecycle()
     val getLateRankListUiState by viewModel.getLateRankListUiState.collectAsStateWithLifecycle()
     val getOutingListUiState by viewModel.getOutingListUiState.collectAsStateWithLifecycle()
@@ -96,14 +94,12 @@ internal fun MainRoute(
         isRefreshing = isRefreshing,
         isTimeLaunch = isTimeLaunch,
         tokenRefreshUiState = tokenRefreshUiState,
-        saveTokenUiState = saveTokenUiState,
         getProfileUiState = getProfileUiState,
         getLateRankListUiState = getLateRankListUiState,
         getOutingListUiState = getOutingListUiState,
         getOutingCountUiState = getOutingCountUiState,
         onOutingStatusClick = onOutingStatusClick,
         onLateListClick = onLateListClick,
-        onStudentManagementClick = onStudentManagementClick,
         onQrcodeClick = onQrcodeClick,
         onSettingClick = onSettingClick,
         onAdminMenuClick = onAdminMenuClick,
@@ -128,14 +124,12 @@ private fun MainScreen(
     isRefreshing: Boolean,
     isTimeLaunch: Boolean,
     tokenRefreshUiState: TokenRefreshUiState,
-    saveTokenUiState: SaveTokenUiState,
     getProfileUiState: GetProfileUiState,
     getLateRankListUiState: GetLateRankListUiState,
     getOutingListUiState: GetOutingListUiState,
     getOutingCountUiState: GetOutingCountUiState,
     onOutingStatusClick: () -> Unit,
     onLateListClick: () -> Unit,
-    onStudentManagementClick: () -> Unit,
     onQrcodeClick: (role: Authority) -> Unit,
     onSettingClick: () -> Unit,
     onAdminMenuClick: () -> Unit,
@@ -279,14 +273,12 @@ private fun MainScreenPreview() {
             isRefreshing = false,
             isTimeLaunch = false,
             tokenRefreshUiState = TokenRefreshUiState.Loading,
-            saveTokenUiState = SaveTokenUiState.Loading,
             getProfileUiState = GetProfileUiState.Loading,
             getLateRankListUiState = GetLateRankListUiState.Loading,
             getOutingListUiState = GetOutingListUiState.Loading,
             getOutingCountUiState = GetOutingCountUiState.Loading,
             onOutingStatusClick = {},
             onLateListClick = {},
-            onStudentManagementClick = {},
             onQrcodeClick = {},
             onSettingClick = {},
             onAdminMenuClick = {},
