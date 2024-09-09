@@ -4,14 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.goms.common.result.Result
 import com.goms.common.result.asResult
-import com.goms.data.repository.account.AccountRepository
 import com.goms.data.repository.auth.AuthRepository
 import com.goms.data.repository.setting.SettingRepository
 import com.goms.domain.auth.SaveTokenUseCase
 import com.goms.domain.auth.TokenRefreshUseCase
 import com.goms.domain.notification.DeleteDeviceTokenUseCase
 import com.goms.domain.notification.SaveDeviceTokenUseCase
-import com.goms.model.response.account.ProfileResponseModel
 import com.goms.model.response.auth.LoginResponseModel
 import com.goms.model.util.ResourceKeys
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,7 +18,6 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
@@ -66,6 +63,9 @@ class MainActivityViewModel @Inject constructor(
     private val _saveDeviceTokenUiState = MutableStateFlow<Result<Unit>>(Result.Loading)
     val saveDeviceTokenUiState = _saveDeviceTokenUiState.asStateFlow()
 
+    private val _deleteDeviceTokenUiState = MutableStateFlow<Result<Unit>>(Result.Loading)
+    val deleteDeviceTokenUiState = _deleteDeviceTokenUiState.asStateFlow()
+
     private val _themeState = MutableStateFlow(ResourceKeys.EMPTY)
     val themeState = _themeState.asStateFlow()
 
@@ -90,6 +90,15 @@ class MainActivityViewModel @Inject constructor(
 
     fun deleteDeviceToken() = viewModelScope.launch {
         deleteDeviceTokenUseCase()
+            .onSuccess {
+                it.catch { remoteError ->
+                    _deleteDeviceTokenUiState.value = Result.Error(remoteError)
+                }.collect { result ->
+                    _deleteDeviceTokenUiState.value = Result.Success(result)
+                }
+            }.onFailure {
+                _deleteDeviceTokenUiState.value = Result.Error(it)
+            }
     }
 
     fun deleteToken() = viewModelScope.launch {

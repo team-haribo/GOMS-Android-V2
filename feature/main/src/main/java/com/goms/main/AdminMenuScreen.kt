@@ -1,23 +1,20 @@
 package com.goms.main
 
-import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.goms.design_system.component.spacer.GomsSpacer
 import com.goms.design_system.component.spacer.SpacerSize
 import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.ThemeType
+import com.goms.design_system.util.ThemeDevicePreviews
 import com.goms.main.component.AdminMenuList
 import com.goms.main.component.AdminMenuText
 import com.goms.model.enum.Authority
@@ -80,8 +77,7 @@ private fun AdminMenuScreen(
     }
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@ThemeDevicePreviews
 @Composable
 private fun AdminMenuScreenPreview() {
     GomsTheme(ThemeType.SYSTEM.value) {

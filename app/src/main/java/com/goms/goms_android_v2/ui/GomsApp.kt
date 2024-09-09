@@ -1,12 +1,13 @@
 package com.goms.goms_android_v2.ui
 
-import android.util.Log
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.goms.analytics.AnalyticsHelper
+import com.goms.analytics.LocalAnalyticsHelper
 import com.goms.design_system.theme.GomsTheme
 import com.goms.goms_android_v2.MainActivityUiState
 import com.goms.goms_android_v2.MainActivityViewModel
@@ -25,6 +26,7 @@ fun GomsApp(
     onAlarmOff: () -> Unit,
     onAlarmOn: () -> Unit,
     uiState: MainActivityUiState,
+    analyticsHelper: AnalyticsHelper,
     viewModel: MainActivityViewModel = hiltViewModel(),
 ) {
     val themeState by viewModel.themeState.collectAsState()
@@ -34,7 +36,9 @@ fun GomsApp(
     if (alarmState == Switch.ON.value) onAlarmOn()
 
     GomsTheme(themeMode = themeState) {
-        CompositionLocalProvider {
+        CompositionLocalProvider(
+            LocalAnalyticsHelper provides analyticsHelper
+        ) {
             GomsNavHost(
                 appState = appState,
                 qrcodeState = qrcodeState,

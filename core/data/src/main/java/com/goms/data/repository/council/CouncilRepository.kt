@@ -4,10 +4,6 @@ import com.goms.model.request.council.AuthorityRequestModel
 import com.goms.model.response.council.LateResponseModel
 import com.goms.model.response.council.OutingUUIDResponseModel
 import com.goms.model.response.council.StudentResponseModel
-import com.goms.network.dto.request.council.AuthorityRequest
-import com.goms.network.dto.response.council.LateResponse
-import com.goms.network.dto.response.council.OutingUUIDResponse
-import com.goms.network.dto.response.council.StudentResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.datetime.LocalDate
 import java.util.UUID

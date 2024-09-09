@@ -6,13 +6,23 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
 import androidx.core.app.NotificationCompat
+import com.goms.design_system.R
+import com.goms.domain.notification.SaveDeviceTokenUseCase
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.goms.design_system.R
-import com.goms.model.util.ResourceKeys
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class GomsNotification : FirebaseMessagingService() {
-    companion object {
+
+    @Inject
+    lateinit var saveDeviceTokenUseCase: SaveDeviceTokenUseCase
+
+    private companion object {
         private const val CHANNEL_NAME = "GOMS"
         private const val CHANNEL_DESCRIPTION = "GOMS NOTIFICATION"
         private const val CHANNEL_ID = "goms_channel_id"
@@ -22,12 +32,16 @@ class GomsNotification : FirebaseMessagingService() {
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
         createNotificationChannel()
-        message.notification?.let { sendNotification(it.title, it.body) }
+        val title = message.data["title"].orEmpty()
+        val body = message.data["body"].orEmpty()
+        sendNotification(title, body)
     }
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-        saveDeviceToken(token)
+        CoroutineScope(Dispatchers.IO).launch {
+            saveDeviceTokenUseCase(token)
+        }
     }
 
     private fun createNotificationChannel() {
@@ -63,10 +77,5 @@ class GomsNotification : FirebaseMessagingService() {
 
         val notificationManager = getSystemService(NotificationManager::class.java)
         notificationManager?.notify(messageId, notificationBuilder.build())
-    }
-
-    private fun saveDeviceToken(token: String) {
-        val deviceTokenSF = getSharedPreferences(ResourceKeys.DEVICE_TOKEN, MODE_PRIVATE)
-        deviceTokenSF.edit().putString(ResourceKeys.DEVICE, token).apply()
     }
 }

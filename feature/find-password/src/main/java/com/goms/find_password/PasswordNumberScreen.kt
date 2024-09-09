@@ -1,7 +1,6 @@
 package com.goms.find_password
 
 import android.content.pm.ActivityInfo
-import android.content.res.Configuration
 import androidx.activity.ComponentActivity
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
@@ -10,7 +9,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -29,7 +27,6 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -44,15 +41,14 @@ import com.goms.design_system.component.textfield.NumberTextField
 import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.ThemeType
+import com.goms.design_system.util.ThemeDevicePreviews
 import com.goms.design_system.util.keyboardAsState
 import com.goms.design_system.util.lockScreenOrientation
-import com.goms.model.request.auth.SendNumberRequestModel
 import com.goms.find_password.component.NumberText
 import com.goms.find_password.viewmodel.FindPasswordViewmodel
-import com.goms.find_password.viewmodel.uistate.FindPasswordUiState
-import com.goms.find_password.viewmodel.uistate.SendNumberUiState
 import com.goms.find_password.viewmodel.uistate.VerifyNumberUiState
 import com.goms.model.enum.EmailStatus
+import com.goms.model.request.auth.SendNumberRequestModel
 import com.goms.model.util.ResourceKeys
 
 @Composable
@@ -215,8 +211,7 @@ private fun PasswordNumberScreen(
     }
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@ThemeDevicePreviews
 @Composable
 private fun PasswordNumberScreenPreview() {
     GomsTheme(ThemeType.SYSTEM.value) {

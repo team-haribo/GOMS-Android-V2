@@ -2,8 +2,6 @@ package com.goms.data.repository.outing
 
 import com.goms.model.response.outing.CountResponseModel
 import com.goms.model.response.outing.OutingResponseModel
-import com.goms.network.dto.response.outing.CountResponse
-import com.goms.network.dto.response.outing.OutingResponse
 import com.goms.network.datasource.outing.OutingDataSource
 import com.goms.network.mapper.response.outing.toModel
 import kotlinx.coroutines.flow.Flow

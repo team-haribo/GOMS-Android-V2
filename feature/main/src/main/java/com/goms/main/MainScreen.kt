@@ -1,7 +1,6 @@
 package com.goms.main
 
 import android.Manifest
-import android.content.res.Configuration
 import android.os.Build
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
@@ -24,7 +23,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -33,22 +32,24 @@ import com.goms.design_system.icon.SettingIcon
 import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.ThemeType
-import com.goms.main.viewmodel.uistate.GetLateRankListUiState
-import com.goms.main.viewmodel.uistate.GetOutingCountUiState
-import com.goms.main.viewmodel.uistate.GetOutingListUiState
-import com.goms.main.viewmodel.uistate.GetProfileUiState
-import com.goms.model.enum.Authority
-import com.goms.ui.GomsTopBar
-import com.goms.ui.GomsFloatingButton
+import com.goms.design_system.util.ThemeDevicePreviews
 import com.goms.main.component.MainLateCard
 import com.goms.main.component.MainOutingCard
 import com.goms.main.component.MainProfileCard
 import com.goms.main.component.MainTimeProfileCard
 import com.goms.main.viewmodel.MainViewModel
+import com.goms.main.viewmodel.uistate.GetLateRankListUiState
+import com.goms.main.viewmodel.uistate.GetOutingCountUiState
+import com.goms.main.viewmodel.uistate.GetOutingListUiState
+import com.goms.main.viewmodel.uistate.GetProfileUiState
 import com.goms.main.viewmodel.uistate.SaveTokenUiState
 import com.goms.main.viewmodel.uistate.TokenRefreshUiState
+import com.goms.model.enum.Authority
 import com.goms.model.enum.Switch
 import com.goms.model.util.ResourceKeys
+import com.goms.ui.GomsFloatingButton
+import com.goms.ui.GomsTopBar
+import com.goms.ui.TrackScreenViewEvent
 import com.goms.ui.rememberMultiplePermissionsStateSafe
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.swiperefresh.SwipeRefresh
@@ -61,7 +62,6 @@ internal fun MainRoute(
     qrcodeState: String,
     onOutingStatusClick: () -> Unit,
     onLateListClick: () -> Unit,
-    onStudentManagementClick: () -> Unit,
     onQrcodeClick: (role: Authority) -> Unit,
     onSettingClick: () -> Unit,
     onAdminMenuClick: () -> Unit,
@@ -72,7 +72,6 @@ internal fun MainRoute(
     val timeValue by viewModel.timeValue.collectAsStateWithLifecycle(initialValue = Switch.OFF.value)
     val isRefreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
     val tokenRefreshUiState by viewModel.tokenRefreshUiState.collectAsStateWithLifecycle()
-    val saveTokenUiState by viewModel.saveTokenUiState.collectAsStateWithLifecycle()
     val getProfileUiState by viewModel.getProfileUiState.collectAsStateWithLifecycle()
     val getLateRankListUiState by viewModel.getLateRankListUiState.collectAsStateWithLifecycle()
     val getOutingListUiState by viewModel.getOutingListUiState.collectAsStateWithLifecycle()
@@ -95,14 +94,12 @@ internal fun MainRoute(
         isRefreshing = isRefreshing,
         isTimeLaunch = isTimeLaunch,
         tokenRefreshUiState = tokenRefreshUiState,
-        saveTokenUiState = saveTokenUiState,
         getProfileUiState = getProfileUiState,
         getLateRankListUiState = getLateRankListUiState,
         getOutingListUiState = getOutingListUiState,
         getOutingCountUiState = getOutingCountUiState,
         onOutingStatusClick = onOutingStatusClick,
         onLateListClick = onLateListClick,
-        onStudentManagementClick = onStudentManagementClick,
         onQrcodeClick = onQrcodeClick,
         onSettingClick = onSettingClick,
         onAdminMenuClick = onAdminMenuClick,
@@ -127,14 +124,12 @@ private fun MainScreen(
     isRefreshing: Boolean,
     isTimeLaunch: Boolean,
     tokenRefreshUiState: TokenRefreshUiState,
-    saveTokenUiState: SaveTokenUiState,
     getProfileUiState: GetProfileUiState,
     getLateRankListUiState: GetLateRankListUiState,
     getOutingListUiState: GetOutingListUiState,
     getOutingCountUiState: GetOutingCountUiState,
     onOutingStatusClick: () -> Unit,
     onLateListClick: () -> Unit,
-    onStudentManagementClick: () -> Unit,
     onQrcodeClick: (role: Authority) -> Unit,
     onSettingClick: () -> Unit,
     onAdminMenuClick: () -> Unit,
@@ -266,10 +261,10 @@ private fun MainScreen(
             }
         }
     }
+    TrackScreenViewEvent(screenName = stringResource(id = R.string.main_screen))
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@ThemeDevicePreviews
 @Composable
 private fun MainScreenPreview() {
     GomsTheme(ThemeType.SYSTEM.value) {
@@ -278,14 +273,12 @@ private fun MainScreenPreview() {
             isRefreshing = false,
             isTimeLaunch = false,
             tokenRefreshUiState = TokenRefreshUiState.Loading,
-            saveTokenUiState = SaveTokenUiState.Loading,
             getProfileUiState = GetProfileUiState.Loading,
             getLateRankListUiState = GetLateRankListUiState.Loading,
             getOutingListUiState = GetOutingListUiState.Loading,
             getOutingCountUiState = GetOutingCountUiState.Loading,
             onOutingStatusClick = {},
             onLateListClick = {},
-            onStudentManagementClick = {},
             onQrcodeClick = {},
             onSettingClick = {},
             onAdminMenuClick = {},

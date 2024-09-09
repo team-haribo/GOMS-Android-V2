@@ -1,7 +1,6 @@
 package com.goms.qrcode
 
 import android.content.pm.ActivityInfo
-import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -9,7 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -20,7 +18,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -30,15 +27,17 @@ import com.goms.design_system.component.spacer.SpacerSize
 import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.ThemeType
+import com.goms.design_system.util.ThemeDevicePreviews
 import com.goms.design_system.util.lockScreenOrientation
 import com.goms.model.enum.Authority
 import com.goms.model.util.ResourceKeys
 import com.goms.qrcode.component.QrcodeGenerateText
 import com.goms.qrcode.component.QrcodeGenerateTimer
 import com.goms.qrcode.util.QrcodeGenerator
-import com.goms.qrcode.viewmodel.uistate.GetOutingUUIDUiState
 import com.goms.qrcode.viewmodel.QrcodeViewModel
+import com.goms.qrcode.viewmodel.uistate.GetOutingUUIDUiState
 import com.goms.ui.GomsRoleBackButton
+import com.goms.ui.TrackScreenViewEvent
 
 @Composable
 internal fun QrcodeGenerateRoute(
@@ -124,10 +123,10 @@ private fun QrcodeGenerateScreen(
             Spacer(modifier = Modifier.weight(1f))
         }
     }
+    TrackScreenViewEvent(screenName = stringResource(id = R.string.qrcode_generate_screen))
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@ThemeDevicePreviews
 @Composable
 private fun QrcodeGenerateScreenPreview() {
     GomsTheme(ThemeType.SYSTEM.value) {

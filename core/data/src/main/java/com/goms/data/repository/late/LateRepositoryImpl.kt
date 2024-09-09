@@ -1,7 +1,6 @@
 package com.goms.data.repository.late
 
 import com.goms.model.response.late.RankResponseModel
-import com.goms.network.dto.response.late.RankResponse
 import com.goms.network.datasource.late.LateDataSource
 import com.goms.network.mapper.response.late.toModel
 import kotlinx.coroutines.flow.Flow

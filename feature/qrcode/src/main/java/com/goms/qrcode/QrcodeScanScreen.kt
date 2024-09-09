@@ -2,7 +2,6 @@ package com.goms.qrcode
 
 import android.Manifest
 import android.content.pm.ActivityInfo
-import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,20 +18,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.ThemeType
+import com.goms.design_system.util.DevicePreviews
 import com.goms.design_system.util.lockScreenOrientation
 import com.goms.model.util.ResourceKeys
 import com.goms.qrcode.component.QrcodeResultDialog
 import com.goms.qrcode.component.QrcodeScanGuide
 import com.goms.qrcode.component.QrcodeScanPreview
 import com.goms.qrcode.component.QrcodeScanTopBar
+import com.goms.qrcode.viewmodel.QrcodeViewModel
 import com.goms.qrcode.viewmodel.uistate.GetProfileUiState
 import com.goms.qrcode.viewmodel.uistate.OutingUiState
-import com.goms.qrcode.viewmodel.QrcodeViewModel
+import com.goms.ui.TrackScreenViewEvent
 import com.goms.ui.isAfterReturnTime
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
@@ -166,7 +166,6 @@ private fun QrcodeScanScreen(
             dialogButtonText = R.string.back_camera
         }
     }
-
     if (openDialog) {
         QrcodeResultDialog(
             openDialog = openDialog,
@@ -183,10 +182,10 @@ private fun QrcodeScanScreen(
             }
         )
     }
+    TrackScreenViewEvent(screenName = stringResource(id = R.string.qrcode_scan_screen))
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@DevicePreviews
 @Composable
 private fun QrcodeScanScreenPreview() {
     GomsTheme(ThemeType.SYSTEM.value) {

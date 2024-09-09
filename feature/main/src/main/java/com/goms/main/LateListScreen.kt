@@ -1,12 +1,9 @@
 package com.goms.main
 
-import android.content.res.Configuration
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -23,7 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -33,14 +30,16 @@ import com.goms.design_system.component.spacer.SpacerSize
 import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.ThemeType
+import com.goms.design_system.util.ThemeDevicePreviews
 import com.goms.design_system.util.getDefaultWednesday
 import com.goms.main.component.LateList
 import com.goms.main.component.LateListText
-import com.goms.main.viewmodel.uistate.GetLateListUiState
 import com.goms.main.viewmodel.MainViewModel
+import com.goms.main.viewmodel.uistate.GetLateListUiState
 import com.goms.model.enum.Authority
 import com.goms.model.util.ResourceKeys
 import com.goms.ui.GomsRoleBackButton
+import com.goms.ui.TrackScreenViewEvent
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
@@ -121,10 +120,10 @@ private fun LateListScreen(
             }
         )
     }
+    TrackScreenViewEvent(screenName = stringResource(id = R.string.late_list_screen))
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@ThemeDevicePreviews
 @Composable
 private fun LateListScreenPreview() {
     GomsTheme(ThemeType.SYSTEM.value) {

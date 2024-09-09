@@ -2,7 +2,6 @@ package com.goms.setting
 
 import android.Manifest
 import android.content.pm.ActivityInfo
-import android.content.res.Configuration
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -17,7 +16,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,7 +25,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LifecycleStartEffect
@@ -40,6 +37,7 @@ import com.goms.design_system.component.spacer.SpacerSize
 import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.ThemeType
+import com.goms.design_system.util.ThemeDevicePreviews
 import com.goms.design_system.util.lockScreenOrientation
 import com.goms.model.enum.Authority
 import com.goms.model.enum.Switch
@@ -56,6 +54,7 @@ import com.goms.setting.viewmodel.uistate.LogoutUiState
 import com.goms.setting.viewmodel.uistate.ProfileImageUiState
 import com.goms.setting.viewmodel.uistate.SetThemeUiState
 import com.goms.ui.GomsRoleBackButton
+import com.goms.ui.TrackScreenViewEvent
 import com.goms.ui.rememberMultiplePermissionsStateSafe
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 
@@ -396,7 +395,6 @@ private fun SettingScreen(
     if (loadingState) {
         GomsCircularProgressIndicator()
     }
-
     if (openDialog) {
         GomsTwoButtonDialog(
             openDialog = openDialog,
@@ -424,10 +422,10 @@ private fun SettingScreen(
             }
         )
     }
+    TrackScreenViewEvent(screenName = stringResource(id = R.string.setting_screen))
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@ThemeDevicePreviews
 @Composable
 private fun SettingScreenPreview() {
     GomsTheme(ThemeType.SYSTEM.value) {

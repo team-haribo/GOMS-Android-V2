@@ -1,14 +1,11 @@
 package com.goms.main
 
-import android.content.res.Configuration
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -28,7 +25,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -41,14 +37,12 @@ import com.goms.design_system.component.textfield.GomsSearchTextField
 import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.ThemeType
+import com.goms.design_system.util.ThemeDevicePreviews
 import com.goms.design_system.util.keyboardAsState
 import com.goms.main.component.StudentManagementList
 import com.goms.main.component.StudentManagementText
-import com.goms.main.viewmodel.uistate.GetStudentListUiState
 import com.goms.main.viewmodel.MainViewModel
-import com.goms.main.viewmodel.uistate.GetOutingCountUiState
-import com.goms.main.viewmodel.uistate.GetOutingListUiState
-import com.goms.main.viewmodel.uistate.OutingSearchUiState
+import com.goms.main.viewmodel.uistate.GetStudentListUiState
 import com.goms.main.viewmodel.uistate.StudentSearchUiState
 import com.goms.model.enum.Authority
 import com.goms.model.enum.BlackList
@@ -60,6 +54,7 @@ import com.goms.model.request.council.AuthorityRequestModel
 import com.goms.model.util.ResourceKeys
 import com.goms.ui.GomsRoleBackButton
 import com.goms.ui.SwitchSelectorBottomSheet
+import com.goms.ui.TrackScreenViewEvent
 import kotlinx.collections.immutable.toPersistentList
 import java.util.UUID
 
@@ -332,10 +327,10 @@ private fun StudentManagementScreen(
             }
         )
     }
+    TrackScreenViewEvent(screenName = stringResource(id = R.string.student_management_screen))
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@ThemeDevicePreviews
 @Composable
 private fun StudentManagementScreenPreview() {
     GomsTheme(ThemeType.SYSTEM.value) {

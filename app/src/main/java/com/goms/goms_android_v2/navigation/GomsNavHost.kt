@@ -154,7 +154,6 @@ fun GomsNavHost(
             qrcodeState = qrcodeState,
             onOutingStatusClick = navController::navigateToOutingStatus,
             onLateListClick = navController::navigateToLateList,
-            onStudentManagementClick = navController::navigateToStudentManagement,
             onQrcodeClick = { role ->
                 if (role == Authority.ROLE_STUDENT) {
                     navController.navigateToQrScan()

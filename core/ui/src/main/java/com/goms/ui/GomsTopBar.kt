@@ -1,6 +1,5 @@
 package com.goms.ui
 
-import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,7 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.goms.design_system.component.clickable.gomsClickable
 import com.goms.design_system.icon.GomsTextIcon
@@ -23,6 +21,7 @@ import com.goms.design_system.icon.SettingIcon
 import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.ThemeType
+import com.goms.design_system.util.ThemePreviews
 
 @Composable
 fun GomsTopBar(
@@ -56,8 +55,7 @@ fun GomsTopBar(
     }
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@ThemePreviews
 @Composable
 private fun GomsTopBarPreview() {
     GomsTheme(ThemeType.SYSTEM.value) {

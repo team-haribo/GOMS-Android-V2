@@ -16,6 +16,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:analytics"))
     implementation(project(":core:common"))
     implementation(project(":core:design-system"))
     implementation(project(":core:datastore"))
@@ -35,5 +36,5 @@ dependencies {
     androidTestImplementation(libs.androidx.test.ext)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.firebase.messaging)
-    implementation(libs.`in`.app.update)
+    implementation(libs.app.update.ktx)
 }
