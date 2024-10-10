@@ -9,7 +9,8 @@ import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.common.InputImage
 
 class QrcodeScanner(
-    val qrcodeData: (String?) -> Unit
+    val qrcodeData: (String?) -> Unit,
+    val isScanningEnabled: () -> Boolean
 ) : ImageAnalysis.Analyzer {
 
     private val scanner = BarcodeScanning.getClient(
@@ -19,6 +20,11 @@ class QrcodeScanner(
     )
     @androidx.annotation.OptIn(androidx.camera.core.ExperimentalGetImage::class)
     override fun analyze(imageProxy: ImageProxy) {
+        if (!isScanningEnabled()) {
+            imageProxy.close()
+            return
+        }
+
         val mediaImage = imageProxy.image
         mediaImage?.let {
             val image = InputImage.fromMediaImage(mediaImage, imageProxy.imageInfo.rotationDegrees)
