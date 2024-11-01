@@ -33,9 +33,7 @@ class QrcodeScanner(
             scanner.process(image)
                 .addOnSuccessListener { barcodes ->
                     for (barcode in barcodes) {
-                        Log.d("qrcode","ing..")
                         barcode.displayValue?.let {
-                            Log.d("qrcode",it)
                             if (it != null) qrcodeData(it)
                         }
                     }

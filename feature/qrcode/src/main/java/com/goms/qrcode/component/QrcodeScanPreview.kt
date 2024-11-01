@@ -62,6 +62,7 @@ internal fun QrcodeScanPreview(
                         .also {
                             it.setAnalyzer(cameraExecutor, QrcodeScanner(
                                 qrcodeData = { qrcodeData ->
+                                    Log.d("qrcode","lun")
                                     if (isScanningEnabled) {
                                         isScanningEnabled = false
                                         onQrcodeScan(qrcodeData)
