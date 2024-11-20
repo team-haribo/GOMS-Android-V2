@@ -34,7 +34,7 @@ class QrcodeScanner(
                 .addOnSuccessListener { barcodes ->
                     for (barcode in barcodes) {
                         barcode.displayValue?.let {
-                            if (it != null) qrcodeData(it)
+                            qrcodeData(it)
                         }
                     }
                 }
