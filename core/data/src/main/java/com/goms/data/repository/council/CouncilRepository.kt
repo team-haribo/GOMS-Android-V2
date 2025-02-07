@@ -9,6 +9,8 @@ import kotlinx.datetime.LocalDate
 import java.util.UUID
 
 interface CouncilRepository {
+    suspend fun forcingOuting(outingIdx: UUID): Flow<Unit>
+
     suspend fun getStudentList(): Flow<List<StudentResponseModel>>
 
     suspend fun changeAuthority(body: AuthorityRequestModel): Flow<Unit>
