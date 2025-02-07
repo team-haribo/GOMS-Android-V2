@@ -15,7 +15,8 @@ data class StudentData(
     val major: Major,
     val profileUrl: String?,
     val authority: Authority,
-    val isBlackList: Boolean
+    val isBlackList: Boolean,
+    val isOuting: Boolean
 )
 
 fun StudentResponseModel.toData() =
@@ -27,5 +28,6 @@ fun StudentResponseModel.toData() =
         major = major,
         profileUrl = profileUrl,
         authority = authority,
-        isBlackList = isBlackList
+        isBlackList = isBlackList,
+        isOuting = isOuting
     )
