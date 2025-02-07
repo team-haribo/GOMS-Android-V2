@@ -1,5 +1,7 @@
 package com.goms.main
 
+
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -31,6 +33,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goms.common.result.Result
 import com.goms.design_system.component.bottomsheet.ListData
 import com.goms.design_system.component.bottomsheet.MultipleSelectorBottomSheet
+import com.goms.design_system.component.dialog.GomsTwoButtonDialog
 import com.goms.design_system.component.spacer.GomsSpacer
 import com.goms.design_system.component.spacer.SpacerSize
 import com.goms.design_system.component.textfield.GomsSearchTextField
@@ -49,6 +52,7 @@ import com.goms.model.enum.BlackList
 import com.goms.model.enum.Gender
 import com.goms.model.enum.Grade
 import com.goms.model.enum.Major
+import com.goms.model.enum.OutingState
 import com.goms.model.enum.Status
 import com.goms.model.request.council.AuthorityRequestModel
 import com.goms.model.util.ResourceKeys
@@ -67,11 +71,13 @@ internal fun StudentManagementRoute(
     val role by viewModel.role.collectAsStateWithLifecycle(initialValue = ResourceKeys.EMPTY)
     val studentSearch by viewModel.studentSearch.collectAsStateWithLifecycle()
     val outingState by viewModel.outingState.collectAsStateWithLifecycle()
+    val airingState by viewModel.airingState.collectAsStateWithLifecycle()
     val roleState by viewModel.roleState.collectAsStateWithLifecycle()
     val filterStatus by viewModel.filterStatus.collectAsStateWithLifecycle()
     val filterGrade by viewModel.filterGrade.collectAsStateWithLifecycle()
     val filterGender by viewModel.filterGender.collectAsStateWithLifecycle()
     val filterMajor by viewModel.filterMajor.collectAsStateWithLifecycle()
+    val forceOutingUiState by viewModel.forceOutingUiState.collectAsStateWithLifecycle()
     val getStudentListUiState by viewModel.getStudentListUiState.collectAsStateWithLifecycle()
     val changeAuthorityUiState by viewModel.changeAuthorityUiState.collectAsStateWithLifecycle()
     val setBlackListUiState by viewModel.setBlackListUiState.collectAsStateWithLifecycle()
@@ -88,6 +94,15 @@ internal fun StudentManagementRoute(
             onErrorToast((changeAuthorityUiState as Result.Error).exception, R.string.error_change_authority)
         }
     }
+
+    when (forceOutingUiState) {
+        is Result.Success -> {
+            viewModel.getOutingCount()
+            viewModel.initPostOuting()
+        }
+        else -> Unit
+    }
+
 
     when (setBlackListUiState) {
         is Result.Loading -> Unit
@@ -117,6 +132,8 @@ internal fun StudentManagementRoute(
         role = if (role.isNotBlank()) Authority.valueOf(role) else Authority.ROLE_STUDENT,
         studentSearch = studentSearch,
         outingState = outingState,
+        airingState = airingState ,
+        PostOutingCallBack = viewModel::forceOuting,
         roleState = roleState,
         filterStatus = filterStatus,
         filterGrade = filterGrade,
@@ -124,6 +141,7 @@ internal fun StudentManagementRoute(
         filterMajor = filterMajor,
         onStudentSearchChange = viewModel::onStudentSearchChange,
         onOutingStateChange = viewModel::onOutingStateChange,
+        onForceOutingStateChange = viewModel::forceOutingStateChange,
         onRoleStateChange = viewModel::onRoleStateChange,
         onFilterStatusChange = viewModel::onFilterStatusChange,
         onFilterGradeChange = viewModel::onFilterGradeChange,
@@ -158,7 +176,9 @@ internal fun StudentManagementRoute(
             )
         },
         setBlackListCallBack = viewModel::setBlackList,
-        deleteBlackListCallBack = viewModel::deleteBlackList
+        deleteBlackListCallBack = viewModel::deleteBlackList,
+
+
     )
 }
 
@@ -167,14 +187,17 @@ private fun StudentManagementScreen(
     role: Authority,
     studentSearch: String,
     outingState: String,
+    airingState: String,
     roleState: String,
     filterStatus: String,
     filterGrade: String,
     filterGender: String,
+    PostOutingCallBack: (UUID) -> Unit,
     filterMajor: String,
     onStudentSearchChange: (String) -> Unit,
     onOutingStateChange: (String) -> Unit,
     onRoleStateChange: (String) -> Unit,
+    onForceOutingStateChange: (String) -> Unit,
     onFilterStatusChange: (String) -> Unit,
     onFilterGradeChange: (String) -> Unit,
     onFilterGenderChange: (String) -> Unit,
@@ -196,6 +219,7 @@ private fun StudentManagementScreen(
     val scrollState = rememberScrollState()
     val focusManager = LocalFocusManager.current
     val isKeyboardOpen by keyboardAsState()
+    var openDialog by remember { mutableStateOf(false) }
     var uuid by remember { mutableStateOf(UUID.randomUUID()) }
     var onStatusBottomSheetOpenClick by remember { mutableStateOf(false) }
     var onFilterBottomSheetOpenClick by remember { mutableStateOf(false) }
@@ -205,6 +229,22 @@ private fun StudentManagementScreen(
             focusManager.clearFocus()
         }
     }
+    if (openDialog) {
+        GomsTwoButtonDialog(
+            openDialog = openDialog,
+            onStateChange = { openDialog = it },
+            title = stringResource(id = R.string.title_outing),
+            content = stringResource(id = R.string.force_outing_noting),
+            dismissText = stringResource(id = R.string.cancel),
+            checkText = stringResource(id = R.string.return_force_outing),
+            onDismissClick = { openDialog = false },
+            onCheckClick = {
+                PostOutingCallBack(uuid)
+                openDialog = false
+            }
+        )
+    }
+
 
     Column(
         modifier = Modifier
@@ -244,9 +284,10 @@ private fun StudentManagementScreen(
                 studentSearchUiState = studentSearchUiState,
                 onBottomSheetOpenClick = { onFilterBottomSheetOpenClick = true },
                 onErrorToast = onErrorToast,
-                onClick = { accountIdx, outing, role ->
+                onClick = { accountIdx, outing, role, isOuting->
                     onStatusBottomSheetOpenClick = true
                     uuid = accountIdx
+                    onForceOutingStateChange(isOuting)
                     onOutingStateChange(outing)
                     onRoleStateChange(role)
                 }
@@ -258,16 +299,29 @@ private fun StudentManagementScreen(
             modifier = Modifier.fillMaxWidth(),
             title = stringResource(id = R.string.change_user_authority),
             outing = outingState,
+            airing = airingState,
             role = roleState,
-            closeSheet = { outingState, roleState ->
+            outingIdx = uuid,
+            closeSheet = { outingState, roleState, airingState->
                 onStatusBottomSheetOpenClick = false
                 changeAuthorityCallBack(uuid, roleState)
+                if (airingState== OutingState.GO_OUTING.name) {
+                    deleteBlackListCallBack(uuid)
+                }
                 if (outingState == BlackList.BLACK_LIST.name) {
                     setBlackListCallBack(uuid)
                 } else {
                     deleteBlackListCallBack(uuid)
                 }
+
+            },
+
+            onClick = {
+                selectUuid->
+                uuid = selectUuid
+                openDialog = true
             }
+
         )
     }
     if (onFilterBottomSheetOpenClick) {
@@ -358,6 +412,10 @@ private fun StudentManagementScreenPreview() {
             studentSearchCallBack = {},
             changeAuthorityCallBack = { _, _ -> },
             setBlackListCallBack = {},
+            PostOutingCallBack = {},
+            airingState = "GOMS",
+            onForceOutingStateChange = {}
+
         ) {}
     }
 }
