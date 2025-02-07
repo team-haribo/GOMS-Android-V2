@@ -16,6 +16,11 @@ import javax.inject.Inject
 class CouncilRepositoryImpl @Inject constructor(
     private val remoteCouncilDataSource: CouncilDataSource
 ) : CouncilRepository {
+
+    override suspend fun forcingOuting(outingIdx: UUID): Flow<Unit> {
+        return remoteCouncilDataSource.forcingOuting(outingIdx = outingIdx)
+    }
+
     override suspend fun getStudentList(): Flow<List<StudentResponseModel>> {
         return remoteCouncilDataSource.getStudentList().map { list -> list.map { it.toModel() } }
     }
