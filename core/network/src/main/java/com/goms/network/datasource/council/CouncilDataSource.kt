@@ -9,15 +9,17 @@ import kotlinx.datetime.LocalDate
 import java.util.UUID
 
 interface CouncilDataSource {
-    suspend fun getStudentList(): Flow<List<StudentResponse>>
+    fun getStudentList(): Flow<List<StudentResponse>>
 
-    suspend fun changeAuthority(body: AuthorityRequest): Flow<Unit>
+    fun changeAuthority(body: AuthorityRequest): Flow<Unit>
 
-    suspend fun setBlackList(accountIdx: UUID): Flow<Unit>
+    fun setBlackList(accountIdx: UUID): Flow<Unit>
 
-    suspend fun deleteBlackList(accountIdx: UUID): Flow<Unit>
+    fun deleteBlackList(accountIdx: UUID): Flow<Unit>
 
-    suspend fun studentSearch(
+    fun forcingOuting(outingIdx: UUID): Flow<Unit>
+
+    fun studentSearch(
         grade: Int?,
         gender: String?,
         major: String?,
@@ -26,9 +28,9 @@ interface CouncilDataSource {
         authority: String?
     ): Flow<List<StudentResponse>>
 
-    suspend fun getOutingUUID(): Flow<OutingUUIDResponse>
+    fun getOutingUUID(): Flow<OutingUUIDResponse>
 
-    suspend fun deleteOuting(accountIdx: UUID): Flow<Unit>
+    fun deleteOuting(accountIdx: UUID): Flow<Unit>
 
-    suspend fun getLateList(date: LocalDate): Flow<List<LateResponse>>
+    fun getLateList(date: LocalDate): Flow<List<LateResponse>>
 }
