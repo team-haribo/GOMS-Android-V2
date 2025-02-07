@@ -13,6 +13,7 @@ import com.goms.domain.auth.TokenRefreshUseCase
 import com.goms.domain.council.ChangeAuthorityUseCase
 import com.goms.domain.council.DeleteBlackListUseCase
 import com.goms.domain.council.DeleteOutingUseCase
+import com.goms.domain.council.ForcingOutingUseCase
 import com.goms.domain.council.GetLateListUseCase
 import com.goms.domain.council.GetStudentListUseCase
 import com.goms.domain.council.SetBlackListUseCase
@@ -65,6 +66,7 @@ class MainViewModel @Inject constructor(
     private val setBlackListUseCase: SetBlackListUseCase,
     private val deleteBlackListUseCase: DeleteBlackListUseCase,
     private val studentSearchUseCase: StudentSearchUseCase,
+    private val forcingOutingUseCase: ForcingOutingUseCase,
     private val authRepository: AuthRepository,
     private val settingRepository: SettingRepository
 ) : ViewModel() {
@@ -98,6 +100,9 @@ class MainViewModel @Inject constructor(
     private val _outingSearchUiState = MutableStateFlow<OutingSearchUiState>(OutingSearchUiState.Loading)
     internal val outingSearchUiState = _outingSearchUiState.asStateFlow()
 
+    private val _forceOutingUiState = MutableStateFlow<Result<Unit>>(Result.Loading)
+    internal val forceOutingUiState = _forceOutingUiState.asStateFlow()
+
     private val _deleteOutingUiState = MutableStateFlow<Result<Unit>>(Result.Loading)
     internal val deleteOutingUiState = _deleteOutingUiState.asStateFlow()
 
@@ -122,6 +127,7 @@ class MainViewModel @Inject constructor(
     internal var outingSearch = savedStateHandle.getStateFlow(key = OUTING_SEARCH, initialValue = ResourceKeys.EMPTY)
     internal var studentSearch = savedStateHandle.getStateFlow(key = STUDENT_SEARCH, initialValue = ResourceKeys.EMPTY)
     internal var outingState = savedStateHandle.getStateFlow(key = OUTING_STATE, initialValue = ResourceKeys.EMPTY)
+    internal var airingState = savedStateHandle.getStateFlow(key = FORCE_OUTING, initialValue = ResourceKeys.EMPTY)
     internal var roleState = savedStateHandle.getStateFlow(key = ROLE_STATE, initialValue = ResourceKeys.EMPTY)
     internal var filterStatus = savedStateHandle.getStateFlow(key = FILTER_STATUS, initialValue = ResourceKeys.EMPTY)
     internal var filterGrade = savedStateHandle.getStateFlow(key = FILTER_GRADE, initialValue = ResourceKeys.EMPTY)
@@ -217,6 +223,24 @@ class MainViewModel @Inject constructor(
                     is Result.Error -> _getOutingListUiState.value = GetOutingListUiState.Error(result.exception)
                 }
             }
+    }
+
+    internal fun forceOuting(outingIdx: UUID) = viewModelScope.launch {
+        forcingOutingUseCase(outingIdx = outingIdx)
+            .onSuccess {
+                it.catch {  remoteError ->
+                    _forceOutingUiState.value = Result.Error(remoteError)
+                }.collect { result ->
+                    _forceOutingUiState.value = Result.Success(result)
+                }
+            }.onFailure {
+                _forceOutingUiState.value = Result.Error(it)
+            }
+
+    }
+
+    internal fun initPostOuting() {
+        _forceOutingUiState.value = Result.Loading
     }
 
     internal fun getOutingCount() = viewModelScope.launch {
@@ -406,6 +430,10 @@ class MainViewModel @Inject constructor(
         savedStateHandle[OUTING_STATE] = value
     }
 
+    internal fun forceOutingStateChange(value: String) {
+        savedStateHandle[FORCE_OUTING] = value
+    }
+
     internal fun onRoleStateChange(value: String) {
         savedStateHandle[ROLE_STATE] = value
     }
@@ -428,6 +456,7 @@ class MainViewModel @Inject constructor(
 }
 
 private const val OUTING_SEARCH = "outing search"
+private const val FORCE_OUTING= "forceOuting State"
 private const val STUDENT_SEARCH = "student search"
 private const val OUTING_STATE = "outing state"
 private const val ROLE_STATE = "role state"
