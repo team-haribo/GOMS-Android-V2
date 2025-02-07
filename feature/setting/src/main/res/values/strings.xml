@@ -37,4 +37,7 @@
     <string name="withdrawal_content">GOMS를 이용해주셔서 감사합니다.\n 안녕히 가세요!</string>
     <string name="withdrawal_confirm">확인</string>
 
+    <string name="forceing_outing">강제외출</string>
+    <string name="students_can_outing">이 학생은 현재 외출시키시겠습니까?</string>
+
 </resources>

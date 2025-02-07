@@ -51,11 +51,24 @@
 
     <string name="error_refresh">새로고침이 실패했습니다</string>
 
+    <string name="error_force_change">강제외출변경이 실패했습니다.</string>
+    <string name="want_forced_outing">이 학생을 강제로 외출시키시겠습니까?</string>
+    <string name="forced_outing">이 학생은 현재 외출중 이에요</string>
+    <string name="cancel_outing">취소</string>
+    <string name="title_outing">강제외출</string>
+    <string name="return_force_outing">외출</string>
+    <string name="force_outing_noting">외출금지 를 해제하고\n이 학생을 외출시키시겠습니까?</string>
+
+
+
+
+
     <string name="forced_return_outing">외출 강제 복귀</string>
     <string name="want_forced_return_outing">외출자를 강제로 복귀시키시겠습니까?</string>
     <string name="cancel">취소</string>
     <string name="return_outing">복귀</string>
     <string name="student_search">학생 검색...</string>
+
 
     <string name="error_change_authority">권한 변경이 실패했습니다</string>
     <string name="error_set_blacklist">외출 금지 상태로 변경이 실패했습니다</string>
