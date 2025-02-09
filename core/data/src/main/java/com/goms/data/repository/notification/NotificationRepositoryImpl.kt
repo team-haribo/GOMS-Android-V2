@@ -7,11 +7,11 @@ import javax.inject.Inject
 class NotificationRepositoryImpl @Inject constructor(
     private val notificationDataSource: NotificationDataSource
 ) : NotificationRepository {
-    override suspend fun saveDeviceToken(deviceToken: String): Flow<Unit> {
+    override fun saveDeviceToken(deviceToken: String): Flow<Unit> {
         return notificationDataSource.saveDeviceToken(deviceToken = deviceToken)
     }
 
-    override suspend fun deleteDeviceToken(): Flow<Unit> {
+    override fun deleteDeviceToken(): Flow<Unit> {
         return notificationDataSource.deleteDeviceToken()
     }
 }
