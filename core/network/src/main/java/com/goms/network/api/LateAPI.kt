@@ -6,5 +6,5 @@ import retrofit2.http.GET
 
 interface LateAPI {
     @GET(RequestUrls.LATE.rank)
-    suspend fun getLateRankList(): List<RankResponse>
+    fun getLateRankList(): List<RankResponse>
 }
