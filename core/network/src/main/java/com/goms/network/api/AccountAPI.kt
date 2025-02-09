@@ -16,35 +16,35 @@ import retrofit2.http.Path
 
 interface AccountAPI {
     @GET(RequestUrls.ACCOUNT.profile)
-    suspend fun getProfile(): ProfileResponse
+    fun getProfile(): ProfileResponse
 
     @Multipart
     @PATCH(RequestUrls.ACCOUNT.image)
-    suspend fun updateProfileImage(
+    fun updateProfileImage(
         @Part file: MultipartBody.Part
     )
 
     @Multipart
     @POST(RequestUrls.ACCOUNT.image)
-    suspend fun setProfileImage(
+    fun setProfileImage(
         @Part file: MultipartBody.Part
     )
 
     @DELETE(RequestUrls.ACCOUNT.account)
-    suspend fun deleteProfileImage()
+    fun deleteProfileImage()
 
     @PATCH(RequestUrls.ACCOUNT.newPassword)
-    suspend fun findPassword(
+    fun findPassword(
         @Body body: FindPasswordRequest
     )
 
     @PATCH(RequestUrls.ACCOUNT.changePassword)
-    suspend fun rePassword(
+    fun rePassword(
         @Body body: RePasswordRequest
     )
 
     @DELETE(RequestUrls.ACCOUNT.withdraw)
-    suspend fun withdraw(
+    fun withdraw(
         @Path("password") password: String
     )
 }
