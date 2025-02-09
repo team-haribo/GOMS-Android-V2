@@ -96,11 +96,14 @@ internal fun StudentManagementRoute(
     }
 
     when (forceOutingUiState) {
+        is Result.Loading -> Unit
         is Result.Success -> {
             viewModel.getOutingCount()
             viewModel.initPostOuting()
         }
-        else -> Unit
+        is Result.Error -> {
+            onErrorToast((setBlackListUiState as Result.Error).exception, R.string.error_change_forceouting)
+        }
     }
 
 

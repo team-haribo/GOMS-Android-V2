@@ -71,6 +71,7 @@
 
 
     <string name="error_change_authority">권한 변경이 실패했습니다</string>
+    <string name="error_change_forceouting">강제외출이 실패했습니다</string>
     <string name="error_set_blacklist">외출 금지 상태로 변경이 실패했습니다</string>
     <string name="error_delete_blacklist">외출 금지 상태 해제가 실패했습니다</string>
     <string name="change_user_authority">유저 권한 변경</string>
