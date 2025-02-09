@@ -9,6 +9,6 @@ import javax.inject.Inject
 class GetLateListUseCase @Inject constructor(
     private val councilRepository: CouncilRepository
 ) {
-    suspend operator fun invoke(date: LocalDate): Flow<List<LateResponseModel>> =
+    operator fun invoke(date: LocalDate): Flow<List<LateResponseModel>> =
         councilRepository.getLateList(date = date)
 }
