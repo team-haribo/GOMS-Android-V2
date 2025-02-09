@@ -8,10 +8,10 @@ import retrofit2.http.Path
 
 interface NotificationAPI {
     @POST(RequestUrls.NOTIFICATION.saveToken)
-    fun saveDeviceToken(
+    suspend fun saveDeviceToken(
         @Path("deviceToken") deviceToken: String,
     )
 
     @DELETE(RequestUrls.NOTIFICATION.deleteToken)
-    fun deleteDeviceToken()
+    suspend fun deleteDeviceToken()
 }
