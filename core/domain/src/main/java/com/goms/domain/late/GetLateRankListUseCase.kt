@@ -8,6 +8,6 @@ import javax.inject.Inject
 class GetLateRankListUseCase @Inject constructor(
     private val lateRepository: LateRepository
 ) {
-    suspend operator fun invoke(): Flow<List<RankResponseModel>> =
+    operator fun invoke(): Flow<List<RankResponseModel>> =
         lateRepository.getLateRankList()
 }
