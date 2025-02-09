@@ -10,7 +10,7 @@ import javax.inject.Inject
 class LateRepositoryImpl @Inject constructor(
     private val remoteLateDataSource: LateDataSource
 ) : LateRepository {
-    override suspend fun getLateRankList(): Flow<List<RankResponseModel>> {
+    override fun getLateRankList(): Flow<List<RankResponseModel>> {
         return remoteLateDataSource.getLateRankList().map { list -> list.map { it.toModel() } }
     }
 }
