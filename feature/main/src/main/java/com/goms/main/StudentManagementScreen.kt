@@ -229,23 +229,21 @@ private fun StudentManagementScreen(
             focusManager.clearFocus()
         }
     }
-    if (openDialog) {
-        GomsTwoButtonDialog(
-            openDialog = openDialog,
-            onStateChange = { openDialog = it },
-            title = stringResource(id = R.string.title_outing),
-            content = stringResource(id = R.string.force_outing_noting),
-            dismissText = stringResource(id = R.string.cancel),
-            checkText = stringResource(id = R.string.return_force_outing),
-            onDismissClick = { openDialog = false },
-            onCheckClick = {
-                PostOutingCallBack(uuid)
-                openDialog = false
-            }
-        )
-    }
-
-
+        if (openDialog) {
+            GomsTwoButtonDialog(
+                openDialog = openDialog,
+                onStateChange = { openDialog = it },
+                title = stringResource(id = R.string.title_outing),
+                content = if (outingState == BlackList.NO_BLACK_LIST.name) stringResource(id = R.string.want_forced_outing) else stringResource(id = R.string.force_outing_noting),
+                dismissText = stringResource(id = R.string.cancel),
+                checkText = stringResource(id = R.string.return_force_outing),
+                onDismissClick = { openDialog = false },
+                onCheckClick = {
+                    PostOutingCallBack(uuid)
+                    openDialog = false
+                }
+            )
+        }
     Column(
         modifier = Modifier
             .fillMaxSize()

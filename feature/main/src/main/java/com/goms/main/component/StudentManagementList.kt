@@ -164,9 +164,6 @@ private fun StudentManagementListItem(
     data: StudentData,
     onClick: (UUID, String, String, String) -> Unit
 ) {
-
-    val outingState = if (data.isOuting) OutingState.GO_OUTING.name else OutingState.NOT_OUTING.name
-
     Row(
         modifier = modifier.padding(horizontal = 16.dp, vertical = 12.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -230,7 +227,7 @@ private fun StudentManagementListItem(
             onClick(
                 UUID.fromString(data.accountIdx),
                 if (data.isBlackList) BlackList.BLACK_LIST.name else BlackList.NO_BLACK_LIST.name,
-                outingState,
+                if (data.isOuting) OutingState.GO_OUTING.name else OutingState.NOT_OUTING.name,
                 if (data.authority == Authority.ROLE_STUDENT_COUNCIL) Authority.ROLE_STUDENT_COUNCIL.name else Authority.ROLE_STUDENT.name
             )
         }) {
