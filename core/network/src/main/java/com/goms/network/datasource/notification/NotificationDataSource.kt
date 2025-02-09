@@ -3,7 +3,7 @@ package com.goms.network.datasource.notification
 import kotlinx.coroutines.flow.Flow
 
 interface NotificationDataSource {
-    suspend fun saveDeviceToken(deviceToken: String): Flow<Unit>
+    fun saveDeviceToken(deviceToken: String): Flow<Unit>
 
-    suspend fun deleteDeviceToken(): Flow<Unit>
+    fun deleteDeviceToken(): Flow<Unit>
 }
