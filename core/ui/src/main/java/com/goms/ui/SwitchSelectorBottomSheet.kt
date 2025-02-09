@@ -110,16 +110,13 @@ fun SwitchSelectorBottomSheet(
                             fontWeight = FontWeight.Normal
                         )
                     }
-
-
-                    IconButton(onClick = {
-                        airingState = OutingState.GO_OUTING
-                        onClick(outingIdx)
-                        closeSheet(outingState.name, roleState.name, airingState.name)
-                    }) {
-                        ForceOutingIcon()
-                    }
-
+                        IconButton(onClick = {
+                            airingState = OutingState.GO_OUTING
+                            onClick(outingIdx)
+                            closeSheet(outingState.name, roleState.name, airingState.name)
+                        }) {
+                            ForceOutingIcon()
+                        }
                 }
             }
             GomsSpacer(size = SpacerSize.ExtraSmall)
@@ -202,7 +199,6 @@ private fun SwitchSelectorBottomSheetPreview() {
             airing = OutingState.NOT_OUTING.name,
             onClick = {},
             outingIdx = UUID.randomUUID(),
-
         )
     }
 }
