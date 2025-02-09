@@ -8,6 +8,6 @@ import javax.inject.Inject
 class GetStudentListUseCase @Inject constructor(
     private val councilRepository: CouncilRepository
 ) {
-    suspend operator fun invoke(): Flow<List<StudentResponseModel>> =
+    operator fun invoke(): Flow<List<StudentResponseModel>> =
         councilRepository.getStudentList()
 }
