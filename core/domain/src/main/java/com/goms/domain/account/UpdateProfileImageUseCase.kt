@@ -7,7 +7,7 @@ import javax.inject.Inject
 class UpdateProfileImageUseCase @Inject constructor(
     private val accountRepository: AccountRepository
 ) {
-    suspend operator fun invoke(file: MultipartBody.Part) = kotlin.runCatching {
+    operator fun invoke(file: MultipartBody.Part) = kotlin.runCatching {
         accountRepository.updateProfileImage(file)
     }
 }
