@@ -11,18 +11,18 @@ import java.util.UUID
 
 interface OutingAPI {
     @POST(RequestUrls.OUTING.outingUUID)
-    suspend fun outing(
+    fun outing(
         @Path("outingUUID") outingUUID: UUID
     )
 
     @GET(RequestUrls.OUTING.outing)
-    suspend fun getOutingList(): List<OutingResponse>
+    fun getOutingList(): List<OutingResponse>
 
     @GET(RequestUrls.OUTING.count)
-    suspend fun getOutingCount(): CountResponse
+    fun getOutingCount(): CountResponse
 
     @GET(RequestUrls.OUTING.search)
-    suspend fun outingSearch(
+    fun outingSearch(
         @Query("name") name: String
     ): List<OutingResponse>
 }
