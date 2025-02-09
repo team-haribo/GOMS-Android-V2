@@ -17,31 +17,31 @@ import java.util.UUID
 
 interface CouncilAPI {
     @GET(RequestUrls.COUNCIL.accounts)
-    suspend fun getStudentList(): List<StudentResponse>
+    fun getStudentList(): List<StudentResponse>
 
     @PATCH(RequestUrls.COUNCIL.authority)
-    suspend fun changeAuthority(
+    fun changeAuthority(
         @Body body: AuthorityRequest
     )
 
     @POST(RequestUrls.COUNCIL.blackList)
-    suspend fun setBlackList(
+    fun setBlackList(
         @Path("accountIdx") accountIdx: UUID
     )
 
     @POST(RequestUrls.COUNCIL.forcingouting)
-    suspend fun forcingOuting(
+    fun forcingOuting(
         @Path("outingIdx") outingIdx: UUID
     )
 
 
     @DELETE(RequestUrls.COUNCIL.blackList)
-    suspend fun deleteBlackList(
+    fun deleteBlackList(
         @Path("accountIdx") accountIdx: UUID
     )
 
     @GET(RequestUrls.COUNCIL.search)
-    suspend fun studentSearch(
+    fun studentSearch(
         @Query("grade") grade: Int?,
         @Query("gender") gender: String?,
         @Query("major") major: String?,
@@ -51,15 +51,15 @@ interface CouncilAPI {
     ): List<StudentResponse>
 
     @POST(RequestUrls.COUNCIL.outing)
-    suspend fun getOutingUUID(): OutingUUIDResponse
+    fun getOutingUUID(): OutingUUIDResponse
 
     @DELETE(RequestUrls.COUNCIL.deleteOuting)
-    suspend fun deleteOuting(
+    fun deleteOuting(
         @Path("accountIdx") accountIdx: UUID
     )
 
     @GET(RequestUrls.COUNCIL.late)
-    suspend fun getLateList(
+    fun getLateList(
         @Query("date") date: LocalDate
     ): List<LateResponse>
 }
