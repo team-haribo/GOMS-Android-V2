@@ -9,17 +9,17 @@ import kotlinx.datetime.LocalDate
 import java.util.UUID
 
 interface CouncilRepository {
-    suspend fun forcingOuting(outingIdx: UUID): Flow<Unit>
+    fun forcingOuting(outingIdx: UUID): Flow<Unit>
 
-    suspend fun getStudentList(): Flow<List<StudentResponseModel>>
+    fun getStudentList(): Flow<List<StudentResponseModel>>
 
-    suspend fun changeAuthority(body: AuthorityRequestModel): Flow<Unit>
+    fun changeAuthority(body: AuthorityRequestModel): Flow<Unit>
 
-    suspend fun setBlackList(accountIdx: UUID): Flow<Unit>
+    fun setBlackList(accountIdx: UUID): Flow<Unit>
 
-    suspend fun deleteBlackList(accountIdx: UUID): Flow<Unit>
+    fun deleteBlackList(accountIdx: UUID): Flow<Unit>
 
-    suspend fun studentSearch(
+    fun studentSearch(
         grade: Int?,
         gender: String?,
         major: String?,
@@ -28,9 +28,9 @@ interface CouncilRepository {
         authority: String?
     ): Flow<List<StudentResponseModel>>
 
-    suspend fun getOutingUUID(): Flow<OutingUUIDResponseModel>
+    fun getOutingUUID(): Flow<OutingUUIDResponseModel>
 
-    suspend fun deleteOuting(accountIdx: UUID): Flow<Unit>
+    fun deleteOuting(accountIdx: UUID): Flow<Unit>
 
-    suspend fun getLateList(date: LocalDate): Flow<List<LateResponseModel>>
+    fun getLateList(date: LocalDate): Flow<List<LateResponseModel>>
 }
