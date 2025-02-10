@@ -7,7 +7,7 @@ import javax.inject.Inject
 class ForcingOutingUseCase @Inject constructor(
     private val councilRepository: CouncilRepository
 ) {
-    operator fun invoke(outingIdx: UUID) = kotlin.runCatching {
+    operator fun invoke(outingIdx: UUID) = runCatching {
         councilRepository.forcingOuting(outingIdx = outingIdx)
     }
 }

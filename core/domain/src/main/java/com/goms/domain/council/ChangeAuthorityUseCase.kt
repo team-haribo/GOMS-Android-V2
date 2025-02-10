@@ -7,7 +7,7 @@ import javax.inject.Inject
 class ChangeAuthorityUseCase @Inject constructor(
     private val councilRepository: CouncilRepository
 ) {
-    operator fun invoke(body: AuthorityRequestModel) = kotlin.runCatching {
+    operator fun invoke(body: AuthorityRequestModel) = runCatching {
         councilRepository.changeAuthority(body = body)
     }
 }

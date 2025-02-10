@@ -7,7 +7,7 @@ import javax.inject.Inject
 class SendNumberUseCase @Inject constructor(
     private val authRepository: AuthRepository
 ) {
-    suspend operator fun invoke(body: SendNumberRequestModel) = kotlin.runCatching {
+    suspend operator fun invoke(body: SendNumberRequestModel) = runCatching {
         authRepository.sendNumber(body = body)
     }
 }

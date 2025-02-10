@@ -6,7 +6,7 @@ import javax.inject.Inject
 class VerifyNumberUseCase @Inject constructor(
     private val authRepository: AuthRepository
 ) {
-    suspend operator fun invoke(email: String, authCode: String) = kotlin.runCatching {
+    suspend operator fun invoke(email: String, authCode: String) = runCatching {
         authRepository.verifyNumber(email = email, authCode = authCode)
     }
 }

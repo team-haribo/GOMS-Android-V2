@@ -7,7 +7,7 @@ import javax.inject.Inject
 class DeleteOutingUseCase @Inject constructor(
     private val councilRepository: CouncilRepository
 ) {
-    operator fun invoke(accountIdx: UUID) = kotlin.runCatching {
+    operator fun invoke(accountIdx: UUID) = runCatching {
         councilRepository.deleteOuting(accountIdx = accountIdx)
     }
 }

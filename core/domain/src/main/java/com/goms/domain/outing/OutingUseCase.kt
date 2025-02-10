@@ -7,7 +7,7 @@ import javax.inject.Inject
 class OutingUseCase @Inject constructor(
     private val outingRepository: OutingRepository
 ) {
-    operator fun invoke(outingUUID: UUID) = kotlin.runCatching {
+    operator fun invoke(outingUUID: UUID) = runCatching {
         outingRepository.outing(outingUUID)
     }
 }

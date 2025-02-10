@@ -7,7 +7,7 @@ import javax.inject.Inject
 class RePasswordUseCase @Inject constructor(
     private val accountRepository: AccountRepository
 ) {
-    operator fun invoke(body: RePasswordRequestModel) = kotlin.runCatching {
+    operator fun invoke(body: RePasswordRequestModel) = runCatching {
         accountRepository.rePassword(body = body)
     }
 }

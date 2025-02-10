@@ -7,7 +7,7 @@ import javax.inject.Inject
 class SaveDeviceTokenUseCase @Inject constructor(
     private val notificationRepository: NotificationRepository
 ) {
-    operator fun invoke(deviceToken: String) = kotlin.runCatching {
+    operator fun invoke(deviceToken: String) = runCatching {
         notificationRepository.saveDeviceToken(deviceToken = deviceToken)
     }
 
