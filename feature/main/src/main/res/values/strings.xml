@@ -60,9 +60,6 @@
     <string name="force_outing_noting">외출금지 를 해제하고\n이 학생을 외출시키시겠습니까?</string>
 
 
-
-
-
     <string name="forced_return_outing">외출 강제 복귀</string>
     <string name="want_forced_return_outing">외출자를 강제로 복귀시키시겠습니까?</string>
     <string name="cancel">취소</string>

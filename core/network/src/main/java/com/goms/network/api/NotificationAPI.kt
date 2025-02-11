@@ -2,7 +2,6 @@ package com.goms.network.api
 
 import com.goms.network.di.RequestUrls
 import retrofit2.http.DELETE
-import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Path
 

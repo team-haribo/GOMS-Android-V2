@@ -17,5 +17,4 @@ data class StudentResponse(
     @Json(name = "authority") val authority: Authority,
     @Json(name = "isBlackList") val isBlackList: Boolean,
     @Json(name = "isOuting") val isOuting: Boolean
-
 )

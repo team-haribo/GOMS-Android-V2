@@ -24,6 +24,7 @@ class AccountDataSourceImpl @Inject constructor(
 
     override fun setProfileImage(file: MultipartBody.Part): Flow<Unit> =
         performApiRequest {accountAPI.setProfileImage(file = file) }
+
     override fun deleteProfileImage(): Flow<Unit> =
         performApiRequest { accountAPI.deleteProfileImage() }
 

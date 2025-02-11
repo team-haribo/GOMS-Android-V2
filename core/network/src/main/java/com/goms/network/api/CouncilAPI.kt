@@ -34,7 +34,6 @@ interface CouncilAPI {
         @Path("outingIdx") outingIdx: UUID
     )
 
-
     @DELETE(RequestUrls.COUNCIL.blackList)
     suspend fun deleteBlackList(
         @Path("accountIdx") accountIdx: UUID

@@ -236,7 +236,6 @@ class MainViewModel @Inject constructor(
             }.onFailure {
                 _forceOutingUiState.value = Result.Error(it)
             }
-
     }
 
     internal fun initPostOuting() {
@@ -456,7 +455,7 @@ class MainViewModel @Inject constructor(
 }
 
 private const val OUTING_SEARCH = "outing search"
-private const val FORCE_OUTING= "forceOuting State"
+private const val FORCE_OUTING= "airing State"
 private const val STUDENT_SEARCH = "student search"
 private const val OUTING_STATE = "outing state"
 private const val ROLE_STATE = "role state"
