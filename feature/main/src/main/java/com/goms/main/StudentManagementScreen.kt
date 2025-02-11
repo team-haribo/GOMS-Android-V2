@@ -1,7 +1,5 @@
 package com.goms.main
 
-
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -180,8 +178,6 @@ internal fun StudentManagementRoute(
         },
         setBlackListCallBack = viewModel::setBlackList,
         deleteBlackListCallBack = viewModel::deleteBlackList,
-
-
     )
 }
 
@@ -285,7 +281,7 @@ private fun StudentManagementScreen(
                 studentSearchUiState = studentSearchUiState,
                 onBottomSheetOpenClick = { onFilterBottomSheetOpenClick = true },
                 onErrorToast = onErrorToast,
-                onClick = { accountIdx, outing, role, isOuting->
+                onClick = { accountIdx, outing, isOuting, role,  ->
                     onStatusBottomSheetOpenClick = true
                     uuid = accountIdx
                     onForceOutingStateChange(isOuting)
@@ -303,26 +299,25 @@ private fun StudentManagementScreen(
             airing = airingState,
             role = roleState,
             outingIdx = uuid,
-            closeSheet = { outingState, roleState, airingState->
+            closeSheet = { outingState, roleState, airingState ->
                 onStatusBottomSheetOpenClick = false
                 changeAuthorityCallBack(uuid, roleState)
+
                 if (airingState== OutingState.GO_OUTING.name) {
                     deleteBlackListCallBack(uuid)
                 }
+
                 if (outingState == BlackList.BLACK_LIST.name) {
                     setBlackListCallBack(uuid)
                 } else {
                     deleteBlackListCallBack(uuid)
                 }
-
             },
-
             onClick = {
-                selectUuid->
+                selectUuid ->
                 uuid = selectUuid
                 openDialog = true
             }
-
         )
     }
     if (onFilterBottomSheetOpenClick) {
@@ -416,7 +411,6 @@ private fun StudentManagementScreenPreview() {
             PostOutingCallBack = {},
             airingState = "GOMS",
             onForceOutingStateChange = {}
-
         ) {}
     }
 }
