@@ -60,7 +60,7 @@ fun SwitchSelectorBottomSheet(
     var outingState by remember { mutableStateOf(BlackList.NO_BLACK_LIST) }
     var roleState by remember { mutableStateOf(Authority.ROLE_STUDENT) }
 
-    LaunchedEffect(outing, role, airing) {
+    LaunchedEffect(airing, outing, role, ) {
         airingState = if (airing == OutingState.GO_OUTING.name) OutingState.GO_OUTING else OutingState.NOT_OUTING
         outingState = if (outing == BlackList.BLACK_LIST.name) BlackList.BLACK_LIST else BlackList.NO_BLACK_LIST
         roleState = if (role == Authority.ROLE_STUDENT_COUNCIL.name) Authority.ROLE_STUDENT_COUNCIL else Authority.ROLE_STUDENT
@@ -110,13 +110,13 @@ fun SwitchSelectorBottomSheet(
                             fontWeight = FontWeight.Normal
                         )
                     }
-                        IconButton(onClick = {
-                            airingState = OutingState.GO_OUTING
-                            onClick(outingIdx)
-                            closeSheet(outingState.name, roleState.name, airingState.name)
-                        }) {
-                            ForceOutingIcon()
-                        }
+                    IconButton(onClick = {
+                        airingState = OutingState.GO_OUTING
+                        onClick(outingIdx)
+                        closeSheet(outingState.name, roleState.name, airingState.name)
+                    }) {
+                        ForceOutingIcon()
+                    }
                 }
             }
             GomsSpacer(size = SpacerSize.ExtraSmall)
