@@ -6,7 +6,7 @@ import javax.inject.Inject
 class SetThemeUseCase @Inject constructor(
     private val settingRepository: SettingRepository
 ) {
-    suspend operator fun invoke(theme: String) = kotlin.runCatching {
+    suspend operator fun invoke(theme: String) = runCatching {
         settingRepository.setThemeValue(theme)
     }
 }

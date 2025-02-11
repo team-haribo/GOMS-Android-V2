@@ -6,7 +6,7 @@ import javax.inject.Inject
 class DeleteProfileImageUseCase @Inject constructor(
     private val accountRepository: AccountRepository
 ) {
-    suspend operator fun invoke() = kotlin.runCatching {
+    operator fun invoke() = runCatching {
         accountRepository.deleteProfileImage()
     }
 }

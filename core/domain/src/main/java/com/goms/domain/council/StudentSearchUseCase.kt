@@ -8,7 +8,7 @@ import javax.inject.Inject
 class StudentSearchUseCase @Inject constructor(
     private val councilRepository: CouncilRepository
 ) {
-    suspend operator fun invoke(
+    operator fun invoke(
         grade: Int?,
         gender: String?,
         major: String?,

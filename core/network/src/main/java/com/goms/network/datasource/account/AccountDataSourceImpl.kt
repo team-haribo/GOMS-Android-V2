@@ -5,6 +5,7 @@ import com.goms.network.dto.request.account.FindPasswordRequest
 import com.goms.network.dto.request.account.RePasswordRequest
 import com.goms.network.dto.response.account.ProfileResponse
 import com.goms.network.util.GomsApiHandler
+import com.goms.network.util.performApiRequest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -15,59 +16,24 @@ import javax.inject.Inject
 class AccountDataSourceImpl @Inject constructor(
     private val accountAPI: AccountAPI
 ) : AccountDataSource {
-    override suspend fun getProfile(): Flow<ProfileResponse> = flow {
-        emit(
-            GomsApiHandler<ProfileResponse>()
-                .httpRequest { accountAPI.getProfile() }
-                .sendRequest()
-        )
-    }.flowOn(Dispatchers.IO)
+    override fun getProfile(): Flow<ProfileResponse> =
+        performApiRequest { accountAPI.getProfile() }
 
-    override suspend fun updateProfileImage(file: MultipartBody.Part): Flow<Unit> = flow {
-        emit(
-            GomsApiHandler<Unit>()
-                .httpRequest { accountAPI.updateProfileImage(file) }
-                .sendRequest()
-        )
-    }.flowOn(Dispatchers.IO)
+    override fun updateProfileImage(file: MultipartBody.Part): Flow<Unit> =
+        performApiRequest { accountAPI.updateProfileImage(file = file)}
 
-    override suspend fun setProfileImage(file: MultipartBody.Part): Flow<Unit> = flow {
-        emit(
-            GomsApiHandler<Unit>()
-                .httpRequest { accountAPI.setProfileImage(file) }
-                .sendRequest()
-        )
-    }.flowOn(Dispatchers.IO)
+    override fun setProfileImage(file: MultipartBody.Part): Flow<Unit> =
+        performApiRequest {accountAPI.setProfileImage(file = file) }
 
-    override suspend fun deleteProfileImage(): Flow<Unit> = flow {
-        emit(
-            GomsApiHandler<Unit>()
-                .httpRequest { accountAPI.deleteProfileImage() }
-                .sendRequest()
-        )
-    }.flowOn(Dispatchers.IO)
+    override fun deleteProfileImage(): Flow<Unit> =
+        performApiRequest { accountAPI.deleteProfileImage() }
 
-    override suspend fun findPassword(body: FindPasswordRequest): Flow<Unit> = flow {
-        emit(
-            GomsApiHandler<Unit>()
-                .httpRequest { accountAPI.findPassword(body = body) }
-                .sendRequest()
-        )
-    }.flowOn(Dispatchers.IO)
+    override fun findPassword(body: FindPasswordRequest): Flow<Unit> =
+        performApiRequest { accountAPI.findPassword(body = body)}
 
-    override suspend fun rePassword(body: RePasswordRequest): Flow<Unit> = flow {
-        emit(
-            GomsApiHandler<Unit>()
-                .httpRequest { accountAPI.rePassword(body = body) }
-                .sendRequest()
-        )
-    }.flowOn(Dispatchers.IO)
+    override  fun rePassword(body: RePasswordRequest): Flow<Unit> =
+        performApiRequest { accountAPI.rePassword(body = body) }
 
-    override suspend fun withdraw(password: String): Flow<Unit> = flow {
-        emit(
-            GomsApiHandler<Unit>()
-                .httpRequest { accountAPI.withdraw(password = password) }
-                .sendRequest()
-        )
-    }.flowOn(Dispatchers.IO)
+    override  fun withdraw(password: String): Flow<Unit> =
+        performApiRequest { accountAPI.withdraw(password = password) }
 }

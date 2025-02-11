@@ -271,6 +271,18 @@ fun DefaultImageIcon(
 }
 
 @Composable
+fun ForceOutingIcon(
+    modifier: Modifier = Modifier,
+    tint: Color = Color.Unspecified
+){
+    Image(
+        painter = painterResource(id = R.drawable.ic_forceouting),
+        contentDescription = stringResource(id = R.string.close_icon_description),
+        modifier = modifier,
+    )
+}
+
+@Composable
 fun OutingIcon(
     modifier: Modifier = Modifier,
     tint: Color = Color.Unspecified

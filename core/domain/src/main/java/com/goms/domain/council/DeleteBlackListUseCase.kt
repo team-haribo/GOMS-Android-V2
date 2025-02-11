@@ -7,7 +7,7 @@ import javax.inject.Inject
 class DeleteBlackListUseCase @Inject constructor(
     private val councilRepository: CouncilRepository
 ) {
-    suspend operator fun invoke(accountIdx: UUID) = kotlin.runCatching {
+    operator fun invoke(accountIdx: UUID) = runCatching {
         councilRepository.deleteBlackList(accountIdx = accountIdx)
     }
 }

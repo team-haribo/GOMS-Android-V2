@@ -4,4 +4,6 @@
     <string name="student_can_not_go_out">이 학생은 외출을 할 수 없어요</string>
     <string name="student_council_give_authority">학생회 권한 부여</string>
     <string name="student_is_a_student_council">이 학생은 학생회에요</string>
+    <string name="force_outing">강제외출</string>
+    <string name="student_can_outing">이 학생은 현재 외출중이에요</string>
 </resources>

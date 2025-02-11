@@ -8,6 +8,6 @@ import javax.inject.Inject
 class GetOutingListUseCase @Inject constructor(
     private val outingRepository: OutingRepository
 ) {
-    suspend operator fun invoke(): Flow<List<OutingResponseModel>> =
+    operator fun invoke(): Flow<List<OutingResponseModel>> =
         outingRepository.getOutingList()
 }

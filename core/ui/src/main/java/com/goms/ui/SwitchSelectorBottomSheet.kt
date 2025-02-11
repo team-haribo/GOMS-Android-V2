@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -27,6 +28,7 @@ import com.goms.design_system.component.bottomsheet.BottomSheetHeader
 import com.goms.design_system.component.button.GomsSwitchButton
 import com.goms.design_system.component.spacer.GomsSpacer
 import com.goms.design_system.component.spacer.SpacerSize
+import com.goms.design_system.icon.ForceOutingIcon
 import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.GomsTheme.colors
 import com.goms.design_system.theme.GomsTheme.typography
@@ -34,35 +36,43 @@ import com.goms.design_system.theme.ThemeType
 import com.goms.design_system.util.ThemePreviews
 import com.goms.model.enum.Authority
 import com.goms.model.enum.BlackList
+import com.goms.model.enum.OutingState
+import java.util.UUID
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SwitchSelectorBottomSheet(
+    onClick: (UUID) -> Unit,
     modifier: Modifier = Modifier,
+    outingIdx: UUID,
+    airing: String,
     title: String,
     outing: String,
     role: String,
-    closeSheet: (outingState: String, roleState: String) -> Unit
+    closeSheet: (outingState: String, roleState: String, airingState: String) -> Unit
 ) {
     var componentWidth by remember { mutableStateOf(0.dp) }
     val density = LocalDensity.current
 
     val sheetState = rememberModalBottomSheetState()
 
+    var airingState by remember { mutableStateOf(OutingState.NOT_OUTING) }
     var outingState by remember { mutableStateOf(BlackList.NO_BLACK_LIST) }
     var roleState by remember { mutableStateOf(Authority.ROLE_STUDENT) }
 
-    LaunchedEffect(outing, role) {
+    LaunchedEffect(airing, outing, role, ) {
+        airingState = if (airing == OutingState.GO_OUTING.name) OutingState.GO_OUTING else OutingState.NOT_OUTING
         outingState = if (outing == BlackList.BLACK_LIST.name) BlackList.BLACK_LIST else BlackList.NO_BLACK_LIST
         roleState = if (role == Authority.ROLE_STUDENT_COUNCIL.name) Authority.ROLE_STUDENT_COUNCIL else Authority.ROLE_STUDENT
     }
 
     ModalBottomSheet(
-        onDismissRequest = { closeSheet(outingState.name, roleState.name) },
+        onDismissRequest = { closeSheet(outingState.name, roleState.name, airingState.name) },
         sheetState = sheetState,
         shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
         containerColor = colors.G1
     ) {
+
         Column(
             modifier = modifier
                 .fillMaxWidth()
@@ -77,8 +87,39 @@ fun SwitchSelectorBottomSheet(
             BottomSheetHeader(
                 modifier = Modifier,
                 title = title,
-                closeSheet = { closeSheet(outingState.name, roleState.name) }
+                closeSheet = { closeSheet(outingState.name, roleState.name, airingState.name) }
             )
+            if (airingState != OutingState.GO_OUTING) {
+                Row(
+                    modifier = modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.Start
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.force_outing),
+                            style = typography.textMedium,
+                            color = colors.WHITE,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                        Text(
+                            text = stringResource(id = R.string.student_can_outing),
+                            style = typography.caption,
+                            color = colors.G4,
+                            fontWeight = FontWeight.Normal
+                        )
+                    }
+                    IconButton(onClick = {
+                        airingState = OutingState.GO_OUTING
+                        onClick(outingIdx)
+                        closeSheet(outingState.name, roleState.name, airingState.name)
+                    }) {
+                        ForceOutingIcon()
+                    }
+                }
+            }
+            GomsSpacer(size = SpacerSize.ExtraSmall)
             Row(
                 modifier = modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
@@ -153,7 +194,11 @@ private fun SwitchSelectorBottomSheetPreview() {
         SwitchSelectorBottomSheet(
             title = "GOMS",
             outing = BlackList.BLACK_LIST.name,
-            role = Authority.ROLE_STUDENT.name
-        ) { _, _ -> }
+            role = Authority.ROLE_STUDENT.name,
+            closeSheet = { _, _ , _-> },
+            airing = OutingState.NOT_OUTING.name,
+            onClick = {},
+            outingIdx = UUID.randomUUID(),
+        )
     }
 }

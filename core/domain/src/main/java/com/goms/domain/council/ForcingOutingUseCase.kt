@@ -4,10 +4,10 @@ import com.goms.data.repository.council.CouncilRepository
 import java.util.UUID
 import javax.inject.Inject
 
-class DeleteOutingUseCase @Inject constructor(
+class ForcingOutingUseCase @Inject constructor(
     private val councilRepository: CouncilRepository
 ) {
-    operator fun invoke(accountIdx: UUID) = runCatching {
-        councilRepository.deleteOuting(accountIdx = accountIdx)
+    operator fun invoke(outingIdx: UUID) = runCatching {
+        councilRepository.forcingOuting(outingIdx = outingIdx)
     }
 }

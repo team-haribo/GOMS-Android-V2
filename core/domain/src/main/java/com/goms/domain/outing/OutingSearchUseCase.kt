@@ -8,6 +8,6 @@ import javax.inject.Inject
 class OutingSearchUseCase @Inject constructor(
     private val outingRepository: OutingRepository
 ) {
-    suspend operator fun invoke(name: String): Flow<List<OutingResponseModel>> =
+    operator fun invoke(name: String): Flow<List<OutingResponseModel>> =
         outingRepository.outingSearch(name = name)
 }

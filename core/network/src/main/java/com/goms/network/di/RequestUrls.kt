@@ -5,6 +5,7 @@ internal object RequestUrls {
         const val accountIdx = "accountIdx"
         const val deviceToken = "deviceToken"
         const val outingUUID = "outingUUID"
+        const val outingIdx = "outingIdx"
         const val password = "password"
     }
 
@@ -34,6 +35,7 @@ internal object RequestUrls {
 
         const val council = path
         const val accounts = "$path/accounts"
+        const val forcingouting= "$path/outing/{${PATH.outingIdx}}"
         const val authority = "$path/authority"
         const val blackList = "$path/black-list/{${PATH.accountIdx}}"
         const val search = "$path/search"

@@ -4,5 +4,5 @@ import com.goms.model.response.late.RankResponseModel
 import kotlinx.coroutines.flow.Flow
 
 interface LateRepository {
-    suspend fun getLateRankList(): Flow<List<RankResponseModel>>
+    fun getLateRankList(): Flow<List<RankResponseModel>>
 }

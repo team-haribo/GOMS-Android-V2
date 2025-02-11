@@ -4,6 +4,7 @@ import com.goms.network.api.OutingAPI
 import com.goms.network.dto.response.outing.CountResponse
 import com.goms.network.dto.response.outing.OutingResponse
 import com.goms.network.util.GomsApiHandler
+import com.goms.network.util.performApiRequest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -14,35 +15,14 @@ import javax.inject.Inject
 class OutingDataSourceImpl @Inject constructor(
     private val outingAPI: OutingAPI
 ) : OutingDataSource {
-    override suspend fun outing(outingUUID: UUID): Flow<Unit> = flow {
-        emit(
-            GomsApiHandler<Unit>()
-                .httpRequest { outingAPI.outing(outingUUID) }
-                .sendRequest()
-        )
-    }.flowOn(Dispatchers.IO)
+    override fun outing(outingUUID: UUID): Flow<Unit> =
+        performApiRequest { outingAPI.outing(outingUUID = outingUUID) }
 
-    override suspend fun getOutingList(): Flow<List<OutingResponse>> = flow {
-        emit(
-            GomsApiHandler<List<OutingResponse>>()
-                .httpRequest { outingAPI.getOutingList() }
-                .sendRequest()
-        )
-    }.flowOn(Dispatchers.IO)
+    override fun getOutingList(): Flow<List<OutingResponse>> =
+        performApiRequest { outingAPI.getOutingList() }
 
-    override suspend fun getOutingCount(): Flow<CountResponse> = flow {
-        emit(
-            GomsApiHandler<CountResponse>()
-                .httpRequest { outingAPI.getOutingCount() }
-                .sendRequest()
-        )
-    }.flowOn(Dispatchers.IO)
+    override fun getOutingCount(): Flow<CountResponse> =
+        performApiRequest { outingAPI.getOutingCount() }
 
-    override suspend fun outingSearch(name: String): Flow<List<OutingResponse>> = flow {
-        emit(
-            GomsApiHandler<List<OutingResponse>>()
-                .httpRequest { outingAPI.outingSearch(name = name) }
-                .sendRequest()
-        )
-    }.flowOn(Dispatchers.IO)
-}
+    override fun outingSearch(name: String): Flow<List<OutingResponse>> =
+        performApiRequest { outingAPI.outingSearch(name = name) } }
