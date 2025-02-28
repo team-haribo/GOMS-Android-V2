@@ -2,6 +2,7 @@ package com.goms.qrcode
 
 import android.Manifest
 import android.content.pm.ActivityInfo
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -181,6 +182,7 @@ private fun QrcodeScanScreen(
                 if (outingUiState !is OutingUiState.Error) onSuccess()
             }
         )
+        Log.d("qrcode","dialog")
     }
     TrackScreenViewEvent(screenName = stringResource(id = R.string.qrcode_scan_screen))
 }
