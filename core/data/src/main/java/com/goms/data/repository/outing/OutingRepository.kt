@@ -6,11 +6,11 @@ import kotlinx.coroutines.flow.Flow
 import java.util.UUID
 
 interface OutingRepository {
-    suspend fun outing(outingUUID: UUID): Flow<Unit>
+    fun outing(outingUUID: UUID): Flow<Unit>
 
-    suspend fun getOutingList(): Flow<List<OutingResponseModel>>
+    fun getOutingList(): Flow<List<OutingResponseModel>>
 
-    suspend fun getOutingCount(): Flow<CountResponseModel>
+    fun getOutingCount(): Flow<CountResponseModel>
 
-    suspend fun outingSearch(name: String): Flow<List<OutingResponseModel>>
+    fun outingSearch(name: String): Flow<List<OutingResponseModel>>
 }

@@ -40,6 +40,7 @@ import com.goms.main.viewmodel.uistate.GetStudentListUiState
 import com.goms.main.viewmodel.uistate.StudentSearchUiState
 import com.goms.model.enum.Authority
 import com.goms.model.enum.BlackList
+import com.goms.model.enum.OutingState
 import com.goms.ui.toText
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
@@ -52,7 +53,7 @@ internal fun StudentManagementList(
     studentSearchUiState: StudentSearchUiState,
     onErrorToast: (throwable: Throwable?, message: Int?) -> Unit,
     onBottomSheetOpenClick: () -> Unit,
-    onClick: (UUID, String, String) -> Unit
+    onClick: (UUID, String, String, String) -> Unit
 ) {
     when (studentSearchUiState) {
         StudentSearchUiState.Loading -> {
@@ -121,7 +122,7 @@ private fun StudentManagementListComponent(
     modifier: Modifier,
     list: PersistentList<StudentData>,
     onBottomSheetOpenClick: () -> Unit,
-    onClick: (UUID, String, String) -> Unit
+    onClick: (UUID, String, String, String) -> Unit
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
         Row(
@@ -161,7 +162,7 @@ private fun StudentManagementListComponent(
 private fun StudentManagementListItem(
     modifier: Modifier = Modifier,
     data: StudentData,
-    onClick: (UUID, String, String) -> Unit
+    onClick: (UUID, String, String, String) -> Unit
 ) {
     Row(
         modifier = modifier.padding(horizontal = 16.dp, vertical = 12.dp),
@@ -226,6 +227,7 @@ private fun StudentManagementListItem(
             onClick(
                 UUID.fromString(data.accountIdx),
                 if (data.isBlackList) BlackList.BLACK_LIST.name else BlackList.NO_BLACK_LIST.name,
+                if (data.isOuting) OutingState.GO_OUTING.name else OutingState.NOT_OUTING.name,
                 if (data.authority == Authority.ROLE_STUDENT_COUNCIL) Authority.ROLE_STUDENT_COUNCIL.name else Authority.ROLE_STUDENT.name
             )
         }) {

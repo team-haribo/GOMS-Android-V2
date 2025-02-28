@@ -6,7 +6,7 @@ import javax.inject.Inject
 class SetTimeUseCase @Inject constructor(
     private val settingRepository: SettingRepository
 ) {
-    suspend operator fun invoke(time: String) = kotlin.runCatching {
+    suspend operator fun invoke(time: String) = runCatching {
         settingRepository.setTimeValue(time)
     }
 }

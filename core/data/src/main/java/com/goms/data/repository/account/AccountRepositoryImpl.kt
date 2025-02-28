@@ -14,31 +14,31 @@ import javax.inject.Inject
 class AccountRepositoryImpl @Inject constructor(
     private val remoteAccountDataSource: AccountDataSource
 ) : AccountRepository {
-    override suspend fun getProfile(): Flow<ProfileResponseModel> {
+    override fun getProfile(): Flow<ProfileResponseModel> {
         return remoteAccountDataSource.getProfile().map { it.toModel() }
     }
 
-    override suspend fun updateProfileImage(file: MultipartBody.Part): Flow<Unit> {
+    override fun updateProfileImage(file: MultipartBody.Part): Flow<Unit> {
         return remoteAccountDataSource.updateProfileImage(file)
     }
 
-    override suspend fun setProfileImage(file: MultipartBody.Part): Flow<Unit> {
+    override fun setProfileImage(file: MultipartBody.Part): Flow<Unit> {
         return remoteAccountDataSource.setProfileImage(file)
     }
 
-    override suspend fun deleteProfileImage(): Flow<Unit> {
+    override fun deleteProfileImage(): Flow<Unit> {
         return remoteAccountDataSource.deleteProfileImage()
     }
 
-    override suspend fun findPassword(body: FindPasswordRequestModel): Flow<Unit> {
+    override fun findPassword(body: FindPasswordRequestModel): Flow<Unit> {
         return remoteAccountDataSource.findPassword(body = body.toDto())
     }
 
-    override suspend fun rePassword(body: RePasswordRequestModel): Flow<Unit> {
+    override fun rePassword(body: RePasswordRequestModel): Flow<Unit> {
         return remoteAccountDataSource.rePassword(body = body.toDto())
     }
 
-    override suspend fun withdraw(password: String): Flow<Unit> {
+    override fun withdraw(password: String): Flow<Unit> {
         return remoteAccountDataSource.withdraw(password = password)
     }
 }

@@ -7,17 +7,17 @@ import kotlinx.coroutines.flow.Flow
 import okhttp3.MultipartBody
 
 interface AccountRepository {
-    suspend fun getProfile(): Flow<ProfileResponseModel>
+    fun getProfile(): Flow<ProfileResponseModel>
 
-    suspend fun updateProfileImage(file: MultipartBody.Part): Flow<Unit>
+    fun updateProfileImage(file: MultipartBody.Part): Flow<Unit>
 
-    suspend fun setProfileImage(file: MultipartBody.Part): Flow<Unit>
+    fun setProfileImage(file: MultipartBody.Part): Flow<Unit>
 
-    suspend fun deleteProfileImage(): Flow<Unit>
+    fun deleteProfileImage(): Flow<Unit>
 
-    suspend fun findPassword(body: FindPasswordRequestModel): Flow<Unit>
+    fun findPassword(body: FindPasswordRequestModel): Flow<Unit>
 
-    suspend fun rePassword(body: RePasswordRequestModel): Flow<Unit>
+    fun rePassword(body: RePasswordRequestModel): Flow<Unit>
 
-    suspend fun withdraw(password: String): Flow<Unit>
+    fun withdraw(password: String): Flow<Unit>
 }

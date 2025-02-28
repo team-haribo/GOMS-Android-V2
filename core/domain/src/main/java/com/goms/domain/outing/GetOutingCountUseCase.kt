@@ -8,6 +8,6 @@ import javax.inject.Inject
 class GetOutingCountUseCase @Inject constructor(
     private val outingRepository: OutingRepository
 ) {
-    suspend operator fun invoke(): Flow<CountResponseModel> =
+    operator fun invoke(): Flow<CountResponseModel> =
         outingRepository.getOutingCount()
 }

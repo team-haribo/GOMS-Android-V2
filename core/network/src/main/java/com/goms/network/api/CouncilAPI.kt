@@ -29,6 +29,11 @@ interface CouncilAPI {
         @Path("accountIdx") accountIdx: UUID
     )
 
+    @POST(RequestUrls.COUNCIL.forcingouting)
+    suspend fun forcingOuting(
+        @Path("outingIdx") outingIdx: UUID
+    )
+
     @DELETE(RequestUrls.COUNCIL.blackList)
     suspend fun deleteBlackList(
         @Path("accountIdx") accountIdx: UUID

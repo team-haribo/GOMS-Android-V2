@@ -8,6 +8,6 @@ import javax.inject.Inject
 class GetOutingUUIDUseCase @Inject constructor(
     private val councilRepository: CouncilRepository
 ) {
-    suspend operator fun invoke(): Flow<OutingUUIDResponseModel> =
+    operator fun invoke(): Flow<OutingUUIDResponseModel> =
         councilRepository.getOutingUUID()
 }

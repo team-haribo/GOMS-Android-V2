@@ -6,7 +6,7 @@ import javax.inject.Inject
 class SetAlarmUseCase @Inject constructor(
     private val settingRepository: SettingRepository
 ) {
-    suspend operator fun invoke(alarm: String) = kotlin.runCatching {
+    suspend operator fun invoke(alarm: String) = runCatching {
         settingRepository.setAlarmValue(alarm)
     }
 }

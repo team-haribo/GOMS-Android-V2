@@ -12,5 +12,6 @@ fun StudentResponse.toModel(): StudentResponseModel =
         major = this.major,
         profileUrl = this.profileUrl,
         authority = this.authority,
-        isBlackList = this.isBlackList
+        isBlackList = this.isBlackList,
+        isOuting = this.isOuting
     )

@@ -16,23 +16,28 @@ import javax.inject.Inject
 class CouncilRepositoryImpl @Inject constructor(
     private val remoteCouncilDataSource: CouncilDataSource
 ) : CouncilRepository {
-    override suspend fun getStudentList(): Flow<List<StudentResponseModel>> {
+
+    override fun forcingOuting(outingIdx: UUID): Flow<Unit> {
+        return remoteCouncilDataSource.forcingOuting(outingIdx = outingIdx)
+    }
+
+    override fun getStudentList(): Flow<List<StudentResponseModel>> {
         return remoteCouncilDataSource.getStudentList().map { list -> list.map { it.toModel() } }
     }
 
-    override suspend fun changeAuthority(body: AuthorityRequestModel): Flow<Unit> {
+    override fun changeAuthority(body: AuthorityRequestModel): Flow<Unit> {
         return remoteCouncilDataSource.changeAuthority(body = body.toDto())
     }
 
-    override suspend fun setBlackList(accountIdx: UUID): Flow<Unit> {
+    override fun setBlackList(accountIdx: UUID): Flow<Unit> {
         return remoteCouncilDataSource.setBlackList(accountIdx = accountIdx)
     }
 
-    override suspend fun deleteBlackList(accountIdx: UUID): Flow<Unit> {
+    override fun deleteBlackList(accountIdx: UUID): Flow<Unit> {
         return remoteCouncilDataSource.deleteBlackList(accountIdx = accountIdx)
     }
 
-    override suspend fun studentSearch(
+    override fun studentSearch(
         grade: Int?,
         gender: String?,
         major: String?,
@@ -50,15 +55,15 @@ class CouncilRepositoryImpl @Inject constructor(
         ).map { list -> list.map { it.toModel() } }
     }
 
-    override suspend fun getOutingUUID(): Flow<OutingUUIDResponseModel> {
+    override fun getOutingUUID(): Flow<OutingUUIDResponseModel> {
         return remoteCouncilDataSource.getOutingUUID().map { it.toModel() }
     }
 
-    override suspend fun deleteOuting(accountIdx: UUID): Flow<Unit> {
+    override fun deleteOuting(accountIdx: UUID): Flow<Unit> {
         return remoteCouncilDataSource.deleteOuting(accountIdx = accountIdx)
     }
 
-    override suspend fun getLateList(date: LocalDate): Flow<List<LateResponseModel>> {
+    override fun getLateList(date: LocalDate): Flow<List<LateResponseModel>> {
         return remoteCouncilDataSource.getLateList(date = date).map { list -> list.map { it.toModel() } }
     }
 }

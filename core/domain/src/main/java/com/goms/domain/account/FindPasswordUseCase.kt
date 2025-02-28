@@ -7,7 +7,7 @@ import javax.inject.Inject
 class FindPasswordUseCase @Inject constructor(
     private val accountRepository: AccountRepository
 ) {
-    suspend operator fun invoke(body: FindPasswordRequestModel) = kotlin.runCatching {
+    operator fun invoke(body: FindPasswordRequestModel) = runCatching {
         accountRepository.findPassword(body = body)
     }
 }

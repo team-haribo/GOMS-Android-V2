@@ -12,5 +12,6 @@ data class StudentResponseModel(
     val major: Major,
     val profileUrl: String?,
     val authority: Authority,
-    val isBlackList: Boolean
+    val isBlackList: Boolean,
+    val isOuting: Boolean
 )
