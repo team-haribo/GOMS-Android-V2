@@ -65,7 +65,6 @@ jobs:
           packageName: com.goms.goms_android_v2
           releaseFiles: app/build/outputs/bundle/release/app-release.aab
           track: production
-          changesNotSentForReview: true  # ✅ 추가
 
       - name: Goms Android CD Discord Notification (Success)
         uses: sarisia/actions-status-discord@v1
