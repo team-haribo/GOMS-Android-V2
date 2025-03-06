@@ -53,7 +53,7 @@ jobs:
           keyPassword: ${{ secrets.KEY_PASSWORD }}
 
       - name: Upload AAB
-        uses: actions/upload-artifact@v4  # ✅ 최신 버전으로 변경
+        uses: actions/upload-artifact@v4
         with:
           name: app
           path: app/build/outputs/bundle/release/app-release.aab
