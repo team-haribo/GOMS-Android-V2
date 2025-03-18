@@ -60,12 +60,16 @@ internal fun QrcodeScanPreview(
                         )
                         .build()
                         .also {
-                            it.setAnalyzer(cameraExecutor, QrcodeScanner { qrcodeData ->
-                                if (isScanningEnabled) {
-                                    onQrcodeScan(qrcodeData)
-                                    isScanningEnabled = false
-                                }
-                            })
+                            it.setAnalyzer(cameraExecutor, QrcodeScanner(
+                                qrcodeData = { qrcodeData ->
+                                    Log.d("qrcode","lun")
+                                    if (isScanningEnabled) {
+                                        isScanningEnabled = false
+                                        onQrcodeScan(qrcodeData)
+                                    }
+                                },
+                                isScanningEnabled = { isScanningEnabled }
+                            ))
                         }
 
                     val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
