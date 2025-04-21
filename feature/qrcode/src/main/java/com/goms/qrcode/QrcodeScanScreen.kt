@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.goms.design_system.theme.GomsTheme
 import com.goms.design_system.theme.ThemeType
@@ -27,8 +28,8 @@ import com.goms.design_system.util.lockScreenOrientation
 import com.goms.model.util.ResourceKeys
 import com.goms.qrcode.component.QrcodeResultDialog
 import com.goms.qrcode.component.QrcodeScanGuide
-import com.goms.qrcode.component.QrcodeScanPreview
 import com.goms.qrcode.component.QrcodeScanTopBar
+import com.goms.qrcode.component.QrcodeScanView
 import com.goms.qrcode.viewmodel.QrcodeViewModel
 import com.goms.qrcode.viewmodel.uistate.GetProfileUiState
 import com.goms.qrcode.viewmodel.uistate.OutingUiState
@@ -97,15 +98,18 @@ private fun QrcodeScanScreen(
     var dialogButtonText by remember { mutableStateOf(R.string.check) }
     var isOuting by remember { mutableStateOf(false) }
 
+    val lifecycleOwner = context as? LifecycleOwner
+        ?: throw IllegalStateException("Context is not a LifecycleOwner")
+
     LaunchedEffect("getProfile") {
         getProfile()
     }
 
     lockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
-    QrcodeScanPreview(
-        onQrcodeScan = { qrcodeData ->
-            onQrcodeScan(qrcodeData)
-        }
+
+    QrcodeScanView(
+        lifecycleOwner = lifecycleOwner,
+        onQrcodeScan = onQrcodeScan
     )
     Column(
         modifier = Modifier
@@ -195,6 +199,7 @@ private fun QrcodeScanScreenPreview() {
             onQrcodeScan = {},
             onBackClick = {},
             onSuccess = {},
-        ) {}
+            getProfile = {},
+        )
     }
 }
