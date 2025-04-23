@@ -18,7 +18,6 @@ internal class QrcodeAnalyzer(
             .build()
     )
 
-    // 마지막으로 인식된 시간 (ms)
     private var lastScanTime = 0L
 
     @androidx.annotation.OptIn(androidx.camera.core.ExperimentalGetImage::class)
@@ -35,7 +34,6 @@ internal class QrcodeAnalyzer(
                 val currentTime = System.currentTimeMillis()
                 val firstQrCode = barcodes.firstOrNull()?.displayValue
 
-                // 10초(=10000ms) 쿨타임 체크
                 if (firstQrCode != null && currentTime - lastScanTime > 10_000) {
                     Log.d("QrcodeAnalyzer", "QR 인식: $firstQrCode")
                     lastScanTime = currentTime
