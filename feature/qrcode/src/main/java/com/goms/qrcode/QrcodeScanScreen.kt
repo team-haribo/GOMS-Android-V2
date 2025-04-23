@@ -1,7 +1,9 @@
 package com.goms.qrcode
 
 import android.Manifest
+import android.content.ContentValues.TAG
 import android.content.pm.ActivityInfo
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -109,7 +111,9 @@ private fun QrcodeScanScreen(
 
     QrcodeScanView(
         lifecycleOwner = lifecycleOwner,
-        onQrcodeScan = onQrcodeScan
+        onQrcodeScan = { qrcodeData ->
+            onQrcodeScan(qrcodeData)
+        }
     )
     Column(
         modifier = Modifier
