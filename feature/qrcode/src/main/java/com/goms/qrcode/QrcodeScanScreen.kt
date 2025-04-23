@@ -109,7 +109,9 @@ private fun QrcodeScanScreen(
 
     QrcodeScanView(
         lifecycleOwner = lifecycleOwner,
-        onQrcodeScan = onQrcodeScan
+        onQrcodeScan = { qrcodeData ->
+            onQrcodeScan(qrcodeData)
+        }
     )
     Column(
         modifier = Modifier
