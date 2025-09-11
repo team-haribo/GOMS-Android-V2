@@ -16,6 +16,7 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
             }
 
             extensions.configure<ApplicationExtension> {
+                compileSdk = 34
                 configureKotlinAndroid(this)
                 defaultConfig {
                     applicationId = "com.goms.goms_android_v2"
