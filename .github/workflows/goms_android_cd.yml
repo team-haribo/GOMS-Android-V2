@@ -41,7 +41,7 @@ jobs:
         run: echo '${{ secrets.SERVICE_ACCOUNT_JSON }}' > service_account.json
 
       - name: Assemble Release Bundle
-        run: ./gradlew bundleRelease
+        run: ./gradlew clean bundleRelease --no-build-cache
 
       - name: Sign Release
         uses: r0adkll/sign-android-release@v1
