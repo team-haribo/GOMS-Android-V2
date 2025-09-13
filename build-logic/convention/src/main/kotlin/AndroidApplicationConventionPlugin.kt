@@ -16,12 +16,11 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
             }
 
             extensions.configure<ApplicationExtension> {
-                compileSdk = 34
                 configureKotlinAndroid(this)
                 defaultConfig {
                     applicationId = "com.goms.goms_android_v2"
                     minSdk = 26
-                    targetSdk = 34
+                    targetSdk = 35
                     versionCode = 27
                     versionName = "1.3.6"
                     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
