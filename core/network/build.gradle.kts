@@ -13,7 +13,7 @@ android {
     }
 
     defaultConfig {
-        buildConfigField("String", "BASE_URL",  getApiKey("BASE_URL"))
+        buildConfigField("String", "BASE_URL", "\"${getApiKey("BASE_URL")}\"")
     }
 
     namespace = "com.goms.network"
@@ -38,5 +38,5 @@ fun getApiKey(propertyKey: String): String {
     val propFile = rootProject.file("./local.properties")
     val properties = Properties()
     properties.load(FileInputStream(propFile))
-    return properties.getProperty(propertyKey)
+    return properties.getProperty(propertyKey)?.trim('"') ?: ""
 }
