@@ -67,7 +67,10 @@ internal fun QrcodeResultDialog(
                 QrcodeResultDescriptionText(text = description)
                 Spacer(modifier = Modifier.weight(1f))
                 GomsButton(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 60.dp)
+                        .navigationBarsPadding(),
                     text = buttonText,
                     state = ButtonState.Normal
                 ) {
